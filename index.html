@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PPA Assessment Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+:root{
+  --green:#087f5b;--green2:#18b981;--mint:#e7f8f0;--ink:#0b1f1a;
+  --muted:#64756f;--bg:#f4f8f6;--line:rgba(15,54,43,.09);
+  --card:#fff;--red:#dc2626;--amber:#d97706;--blue:#2563eb;
+  --shadow:0 12px 35px rgba(8,60,44,.08);
+}
+*{box-sizing:border-box}body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;background:
+radial-gradient(circle at 88% 5%,rgba(24,185,129,.11),transparent 24rem),var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{display:grid;grid-template-columns:255px 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;background:rgba(249,253,251,.92);border-right:1px solid var(--line);
+padding:20px 16px;display:flex;flex-direction:column;gap:18px;z-index:20}
+.brand{text-align:center;padding:8px 8px 18px;border-bottom:1px solid var(--line)}
+.logo{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#056b4d,#18b981);color:#fff;
+display:grid;place-items:center;margin:auto;font-size:24px;font-weight:900;box-shadow:0 10px 22px rgba(8,127,91,.2)}
+.brand h2{font-size:18px;margin:12px 0 3px}.brand span{font-size:9px;color:var(--green);font-weight:800;letter-spacing:1.2px}
+.user{padding:12px;border:1px solid var(--line);background:#fff;border-radius:15px}.user small{color:var(--muted);font-size:10px}
+.user b{display:block;margin-top:3px;font-size:13px}
+.nav-label{font-size:9px;color:#789087;font-weight:800;letter-spacing:1.2px;margin:4px 10px}
+.nav{display:flex;flex-direction:column;gap:5px}.nav button{border:0;background:transparent;padding:12px 14px;border-radius:13px;text-align:left;
+font-weight:700;color:var(--muted);display:flex;align-items:center;gap:10px}
+.nav button:hover{background:var(--mint);color:var(--green);transform:translateX(3px)}
+.nav button.active{background:linear-gradient(135deg,#056b4d,#14b981);color:#fff;box-shadow:0 10px 24px rgba(8,127,91,.2)}
+.main{padding:30px clamp(18px,3vw,42px);max-width:1600px;width:100%;margin:auto}
+.page{display:none}.page.active{display:block;animation:fade .25s ease}@keyframes fade{from{opacity:.2;transform:translateY(7px)}to{opacity:1;transform:none}}
+.topline{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:22px}
+.topline h1{font-size:clamp(26px,3vw,38px);letter-spacing:-1.5px;margin:0 0 6px}.topline p{margin:0;color:var(--muted);font-size:13px}
+.hero{border-radius:26px;padding:28px 30px;color:#fff;margin-bottom:20px;background:
+linear-gradient(100deg,rgba(3,55,40,.97),rgba(3,105,75,.88));box-shadow:0 22px 45px rgba(4,74,54,.18);position:relative;overflow:hidden}
+.hero:after{content:"PPA";position:absolute;right:30px;top:-28px;font-size:170px;font-weight:900;color:rgba(255,255,255,.05)}
+.hero h2{margin:0 0 8px;font-size:28px;position:relative;z-index:1}.hero p{margin:0;color:rgba(255,255,255,.76);max-width:720px;font-size:13px;line-height:1.6;position:relative;z-index:1}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;position:relative;z-index:1}.pill{padding:8px 11px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);font-size:10px;font-weight:800}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.kpi{background:#fff;border:1px solid var(--line);border-radius:20px;padding:19px;box-shadow:var(--shadow)}
+.kpi span{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase}.kpi strong{display:block;font-size:28px;margin-top:7px}.kpi em{font-style:normal;font-size:11px;color:var(--green);font-weight:700}
+.card{background:#fff;border:1px solid var(--line);border-radius:21px;padding:22px;box-shadow:var(--shadow);margin-bottom:18px}
+.card-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:16px}.card h3{margin:0;font-size:16px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:10px;color:var(--muted);font-weight:800;text-transform:uppercase}
+input,select,textarea{border:1px solid #dce8e2;background:#f8fbfa;border-radius:11px;padding:11px 12px;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(24,185,129,.1);background:#fff}
+.assessor-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:15px}
+table{width:100%;border-collapse:collapse;min-width:1050px}th,td{padding:13px 12px;border-bottom:1px solid #eef3f0;font-size:12px;vertical-align:top}
+th{background:#f6faf8;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.5px;position:sticky;top:0;z-index:2}
+.num{font-weight:900;color:var(--green);text-align:center}.ket{min-width:350px;line-height:1.55}
+.status-select{min-width:100px}.status-yes{background:#dcfce7!important;color:#166534!important;border-color:#bbf7d0!important;font-weight:800}
+.status-no{background:#fee2e2!important;color:#991b1b!important;border-color:#fecaca!important;font-weight:800}
+.score-box{display:flex;align-items:center;gap:14px}.progress{height:12px;background:#edf3f0;border-radius:99px;overflow:hidden;flex:1}.progress span{display:block;height:100%;background:linear-gradient(90deg,#087f5b,#18b981);border-radius:99px;width:0}
+.score-value{font-size:28px;font-weight:900;color:var(--green);min-width:95px;text-align:right}
+.btn{border:0;border-radius:12px;padding:12px 17px;font-weight:800}.primary{background:linear-gradient(135deg,#087f5b,#16b981);color:#fff;box-shadow:0 9px 20px rgba(8,127,91,.17)}.secondary{background:#fff;border:1px solid #dce8e2;color:var(--ink)}
+.actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}.note{font-size:11px;color:var(--muted);line-height:1.5}
+.badge{display:inline-flex;padding:6px 10px;border-radius:999px;font-size:10px;font-weight:900}.good{background:#dcfce7;color:#166534}.warn{background:#fef3c7;color:#92400e}.bad{background:#fee2e2;color:#991b1b}.neutral{background:#f1f5f9;color:#475569}
+.mobile-header{display:none}.toast{position:fixed;right:22px;top:22px;background:#0f172a;color:#fff;padding:13px 18px;border-radius:12px;opacity:0;transform:translateY(-8px);transition:.25s;z-index:100}.toast.show{opacity:1;transform:none}
+@media(max-width:1050px){.grid{grid-template-columns:1fr 1fr}.app{grid-template-columns:220px 1fr}}
+@media(max-width:800px){.app{display:block}.sidebar{display:none}.mobile-header{display:flex;position:sticky;top:0;z-index:30;background:#fff;padding:12px 16px;border-bottom:1px solid var(--line);justify-content:space-between;align-items:center}.mobile-header b{font-size:15px}.mobile-header button{border:0;background:var(--mint);padding:9px 12px;border-radius:10px}.main{padding:20px 14px}.grid{grid-template-columns:1fr 1fr}.assessor-grid{grid-template-columns:1fr}.topline{display:block}.topline .toolbar{margin-top:12px}.hero{padding:23px}.hero h2{font-size:23px}}
+@media(max-width:480px){.grid{grid-template-columns:1fr}.kpi strong{font-size:25px}.card{padding:15px}}
+</style>
+</head>
+<body>
+<div class="mobile-header"><b>🌿 PPA Assessment</b><button onclick="toggleMenu()">☰ Menu</button></div>
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="logo">P</div><h2>PPA Assessment</h2><span>PENILAIAN & MONITORING</span></div>
+  <div class="user"><small>MODE</small><b>Monitoring Kepatuhan</b></div>
+  <div class="nav-label">MENU UTAMA</div>
+  <nav class="nav">
+    <button class="active" data-page="dashboard" onclick="showPage('dashboard')">⌂ <span>Dashboard</span></button>
+    <button data-page="ppa" onclick="showPage('ppa')">✓ <span>PPA</span></button>
+    <button data-page="monitoring" onclick="showPage('monitoring')">◫ <span>Monitoring</span></button>
+    <button data-page="rekap" onclick="showPage('rekap')">▤ <span>Rekap Data</span></button>
+  </nav>
+  <div style="margin-top:auto" class="note">Form PPA tersimpan ke Google Sheet melalui Google Apps Script.</div>
+</aside>
+
+<main class="main">
+<section id="dashboard" class="page active">
+  <div class="topline"><div><h1>Dashboard PPA</h1><p>Ringkasan penilaian dan monitoring ketentuan teknis air limbah.</p></div>
+  <div class="toolbar"><button class="btn primary" onclick="showPage('ppa')">+ Isi Penilaian PPA</button></div></div>
+  <div class="hero"><h2>Penilaian Kepatuhan PPA</h2><p>Kelola penilaian IPAL GGP 1, IPAL GGP 2 dan IPAL PLTU dalam satu dashboard. Setiap jawaban YA/TIDAK dihitung otomatis menjadi persentase kepatuhan.</p>
+    <div class="pills"><span class="pill">11 Ketentuan Teknis</span><span class="pill">3 Lokasi IPAL</span><span class="pill">Real-time Submit</span></div>
+  </div>
+  <div class="grid">
+    <div class="kpi"><span>Total Ketentuan</span><strong>11</strong><em>Aspek penilaian</em></div>
+    <div class="kpi"><span>IPAL GGP 1</span><strong id="dashGgp1">0%</strong><em id="dashGgp1Sub">Belum ada data</em></div>
+    <div class="kpi"><span>IPAL GGP 2</span><strong id="dashGgp2">0%</strong><em id="dashGgp2Sub">Belum ada data</em></div>
+    <div class="kpi"><span>IPAL PLTU</span><strong id="dashPltu">0%</strong><em id="dashPltuSub">Belum ada data</em></div>
+  </div>
+  <div class="card"><div class="card-head"><h3>Status Penilaian Terakhir</h3><button class="btn secondary" onclick="loadData()">↻ Refresh</button></div>
+    <div id="dashboardTable" class="table-wrap"><table><thead><tr><th>Lokasi</th><th>Total Aspek</th><th>YA</th><th>TIDAK</th><th>Persentase</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+  </div>
+</section>
+
+<section id="ppa" class="page">
+  <div class="topline"><div><h1>Form Penilaian PPA</h1><p>Isi YA/TIDAK dan keterangan untuk setiap ketentuan teknis.</p></div></div>
+  <div class="card">
+    <div class="assessor-grid">
+      <div class="field"><label>Nama Penilai</label><input id="assessor" placeholder="Masukkan nama penilai"></div>
+      <div class="field"><label>Lokasi IPAL</label><select id="site" onchange="updateSiteTitle()"><option>IPAL GGP 1</option><option>IPAL GGP 2</option><option>IPAL PLTU</option></select></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h3 id="siteTitle">Penilaian — IPAL GGP 1</h3><span class="badge neutral" id="answerCount">0/11 terisi</span></div>
+    <div class="table-wrap">
+      <table><thead><tr><th style="width:55px">No.</th><th>Ketentuan Teknis</th><th style="width:120px">YA / TIDAK</th><th>Keterangan / Bukti Pendukung</th></tr></thead>
+      <tbody id="ppaBody"></tbody></table>
+    </div>
+    <div style="margin-top:18px"><div class="score-box"><div class="progress"><span id="scoreBar"></span></div><div class="score-value" id="scoreValue">0%</div></div>
+      <div class="note" style="margin-top:7px">Persentase = jumlah jawaban YA ÷ 11 ketentuan × 100.</div></div>
+    <div class="actions"><button class="btn secondary" onclick="resetForm()">Reset</button><button class="btn primary" onclick="submitPPA()">☁ Simpan ke Google Sheet</button></div>
+  </div>
+</section>
+
+<section id="monitoring" class="page">
+  <div class="topline"><div><h1>Monitoring</h1><p>Pantau hasil penilaian per lokasi IPAL.</p></div><button class="btn secondary" onclick="loadData()">↻ Refresh Data</button></div>
+  <div class="grid">
+    <div class="kpi"><span>GGP 1</span><strong id="mon1">0%</strong><em id="mon1s">0 YA</em></div>
+    <div class="kpi"><span>GGP 2</span><strong id="mon2">0%</strong><em id="mon2s">0 YA</em></div>
+    <div class="kpi"><span>PLTU</span><strong id="mon3">0%</strong><em id="mon3s">0 YA</em></div>
+    <div class="kpi"><span>Total Record</span><strong id="recordCount">0</strong><em>Data tersimpan</em></div>
+  </div>
+  <div class="card"><div class="card-head"><h3>Detail Monitoring</h3></div><div class="table-wrap"><table><thead><tr><th>Lokasi</th><th>Aspek</th><th>YA</th><th>TIDAK</th><th>%</th><th>Status</th><th>Penilai</th><th>Waktu</th></tr></thead><tbody id="monitorBody"></tbody></table></div></div>
+</section>
+
+<section id="rekap" class="page">
+  <div class="topline"><div><h1>Rekap Data</h1><p>Riwayat pengisian PPA yang telah dikirim ke server.</p></div><button class="btn secondary" onclick="loadData()">↻ Refresh</button></div>
+  <div class="card"><div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>Persentase</th><th>Status</th></tr></thead><tbody id="rekapBody"></tbody></table></div></div>
+</section>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* GANTI URL INI dengan URL Web App Google Apps Script Anda */
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxQsM02FPcePAyVHkiADiSspDtnRvJpUez9f7ekswnnJFrkeepU1Y56MRiU3ohyxp86/exec';
+
+const items = [
+'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
+'MEMISAHKAN SALURAN AIR LIMBAH DENGAN LIMPASAN AIR HUJAN (BUKTI/DOKUMEN: FOTO SALURAN AIR HUJAN, SALURAN AIR LIMBAH DAN SEBAGAINYA)',
+'MEMBUAT SALURAN AIR LIMBAH YANG KEDAP AIR (BUKTI/DOKUMEN: FOTO KONSTRUKSI SALURAN AIR LIMBAH)',
+'MEMASANG ALAT PENGUKUR DEBIT (FLOWMETER) (BUKTI/DOKUMEN: FOTO FLOWMETER/ALAT UKUR DEBIT)',
+'MENGGUNAKAN JASA LABORATORIUM TERAKREDITASI KAN DAN REGISTRASI KLHK (MELAMPIRKAN SURAT TEREGISTRASI KLHK / SERTIFIKAT TERAKREDITASI KAN SESUAI KETENTUAN)',
+'TIDAK MELAKUKAN PENGENCERAN (BUKTI/DOKUMEN: DENAH SALURAN AIR LIMBAH, AIR HUJAN, AIR PENDINGIN, IPAL)',
+'MELAKUKAN IDENTIFIKASI SELURUH JENIS AIR LIMBAH YANG DIHASILKAN (LIMBAH PROSES, AIR PENDINGIN, AIR LIMBAH DRAINASE, AIR LIMBAH UTILITAS, LIMBAH DOMESTIK, DAN LAINNYA)',
+'MELAKUKAN IDENTIFIKASI TERHADAP SUMBER AIR LIMBAH DAN CARA PENGOLAHANNYA',
+'MENCATAT BAHAN BAKU DAN PRODUKSI SENYATANYA HARIAN',
+'TIDAK MELAKUKAN BY PASS AIR LIMBAH (BUKTI/DOKUMEN: NERACA AIR)',
+'UNTUK PERUSAHAAN YANG TERKENA SANKSI ADMINISTRASI, MEMENUHI SELURUH KETENTUAN YANG DIPERSYARATKAN DALAM SANKSI ADMINISTRASI'
+];
+
+function $(id){return document.getElementById(id)}
+function showPage(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+ $(id).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'});
+ if(id==='monitoring'||id==='rekap') loadData();
+}
+function toggleMenu(){ $('sidebar').style.display=$('sidebar').style.display==='flex'?'none':'flex'; $('sidebar').style.position='fixed'; $('sidebar').style.width='260px'; $('sidebar').style.left='0'; $('sidebar').style.top='0';}
+function updateSiteTitle(){ $('siteTitle').textContent='Penilaian — '+$('site').value }
+function renderForm(){
+ $('ppaBody').innerHTML=items.map((x,i)=>`<tr>
+ <td class="num">${i+1}</td><td class="ket">${x}</td>
+ <td><select class="status-select" data-i="${i}" onchange="updateScore()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td>
+ <td><textarea rows="2" data-k="${i}" placeholder="Keterangan / bukti pendukung..."></textarea></td></tr>`).join('');
+}
+function updateScore(){
+ let yes=0,filled=0;
+ document.querySelectorAll('.status-select').forEach(s=>{if(s.value)filled++;if(s.value==='YA')yes++;
+   s.classList.toggle('status-yes',s.value==='YA');s.classList.toggle('status-no',s.value==='TIDAK');
+ });
+ let pct=Math.round(yes/items.length*100); $('scoreValue').textContent=pct+'%'; $('scoreBar').style.width=pct+'%'; $('answerCount').textContent=filled+'/'+items.length+' terisi';
+}
+function resetForm(){document.querySelectorAll('.status-select').forEach(s=>s.value='');document.querySelectorAll('textarea').forEach(t=>t.value='');updateScore()}
+function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2800)}
+async function submitPPA(){
+ if(SCRIPT_URL.startsWith('PASTE_')){toast('Masukkan URL Google Apps Script terlebih dahulu.');return}
+ const assessor=$('assessor').value.trim(), site=$('site').value;
+ const rows=[...document.querySelectorAll('.status-select')];
+ if(!assessor){toast('Nama penilai wajib diisi.');$('assessor').focus();return}
+ if(rows.some(s=>!s.value)){toast('Lengkapi semua 11 jawaban YA/TIDAK.');return}
+ const payload={action:'savePPA',assessor,site,items:rows.map((s,i)=>({no:i+1,ketentuan:items[i],status:s.value,keterangan:document.querySelector(`[data-k="${i}"]`).value.trim()}))};
+ const btn=document.querySelector('.actions .primary');btn.disabled=true;btn.textContent='⏳ Menyimpan...';
+ try{
+   const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+   const d=await r.json();
+   if(d.status==='success'){toast('✓ Penilaian berhasil tersimpan ke Google Sheet.');localStorage.setItem('ppaLastSubmit',JSON.stringify(payload));resetForm();loadData();showPage('monitoring')}
+   else throw new Error(d.message||'Gagal menyimpan');
+ }catch(e){toast('Gagal terhubung ke server: '+e.message)}
+ finally{btn.disabled=false;btn.textContent='☁ Simpan ke Google Sheet'}
+}
+async function loadData(){
+ if(SCRIPT_URL.startsWith('PASTE_')) return;
+ try{
+   const r=await fetch(SCRIPT_URL+'?action=getPPA',{cache:'no-store'});const d=await r.json();
+   if(d.status!=='success') throw new Error(d.message||'Invalid response');
+   renderData(d.data||[]);
+ }catch(e){console.warn(e)}
+}
+function statusBadge(p){return p>=90?'<span class="badge good">SANGAT BAIK</span>':p>=70?'<span class="badge warn">PERLU PERBAIKAN</span>':'<span class="badge bad">BELUM MEMENUHI</span>'}
+function aggregate(data){
+ const out={};
+ ['IPAL GGP 1','IPAL GGP 2','IPAL PLTU'].forEach(s=>out[s]={site:s,total:0,yes:0,no:0,pct:0,assessor:'-',time:'-'});
+ data.forEach(r=>{if(!out[r.site])out[r.site]={site:r.site,total:0,yes:0,no:0,pct:0,assessor:'-',time:'-'};out[r.site].total++;r.status==='YA'?out[r.site].yes++:out[r.site].no++;out[r.site].assessor=r.assessor||'-';out[r.site].time=r.timestamp||'-'});
+ Object.values(out).forEach(x=>x.pct=x.total?Math.round(x.yes/x.total*100):0);return out;
+}
+function renderData(data){
+ $('recordCount').textContent=data.length;
+ const a=aggregate(data),sites=['IPAL GGP 1','IPAL GGP 2','IPAL PLTU'];
+ const ids=[['dashGgp1','dashGgp1Sub'],['dashGgp2','dashGgp2Sub'],['dashPltu','dashPltuSub']];
+ sites.forEach((s,i)=>{$(ids[i][0]).textContent=a[s].pct+'%';$(ids[i][1]).textContent=a[s].yes+' YA dari '+a[s].total+' data'});
+ $('mon1').textContent=a[sites[0]].pct+'%';$('mon1s').textContent=a[sites[0]].yes+' YA';
+ $('mon2').textContent=a[sites[1]].pct+'%';$('mon2s').textContent=a[sites[1]].yes+' YA';
+ $('mon3').textContent=a[sites[2]].pct+'%';$('mon3s').textContent=a[sites[2]].yes+' YA';
+ $('dashboardTable').querySelector('tbody').innerHTML=sites.map(s=>`<tr><td><b>${s}</b></td><td>11</td><td>${a[s].yes}</td><td>${a[s].no}</td><td><b>${a[s].pct}%</b></td><td>${statusBadge(a[s].pct)}</td></tr>`).join('');
+ $('monitorBody').innerHTML=sites.map(s=>`<tr><td><b>${s}</b></td><td>${a[s].total||0}</td><td>${a[s].yes}</td><td>${a[s].no}</td><td>${a[s].pct}%</td><td>${statusBadge(a[s].pct)}</td><td>${a[s].assessor}</td><td>${a[s].time}</td></tr>`).join('');
+ $('rekapBody').innerHTML=data.slice().reverse().map(r=>`<tr><td>${r.timestamp||'-'}</td><td>${r.assessor||'-'}</td><td>${r.site||'-'}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join('');
+}
+renderForm();updateSiteTitle();loadData();
+</script>
+</body>
+</html>
