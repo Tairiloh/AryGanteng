@@ -61,6 +61,23 @@ th{background:#f6faf8;color:var(--muted);font-size:10px;text-transform:uppercase
 @media(max-width:1050px){.grid{grid-template-columns:1fr 1fr}.app{grid-template-columns:220px 1fr}}
 @media(max-width:800px){.app{display:block}.sidebar{display:none}.mobile-header{display:flex;position:sticky;top:0;z-index:30;background:#fff;padding:12px 16px;border-bottom:1px solid var(--line);justify-content:space-between;align-items:center}.mobile-header b{font-size:15px}.mobile-header button{border:0;background:var(--mint);padding:9px 12px;border-radius:10px}.main{padding:20px 14px}.grid{grid-template-columns:1fr 1fr}.assessor-grid{grid-template-columns:1fr}.topline{display:block}.topline .toolbar{margin-top:12px}.hero{padding:23px}.hero h2{font-size:23px}}
 @media(max-width:480px){.grid{grid-template-columns:1fr}.kpi strong{font-size:25px}.card{padding:15px}}
+
+.filter-active{background:#e7f8f0!important;border-color:#a9e6ce!important;color:#087f5b!important;font-weight:800}
+.kpi{position:relative;overflow:hidden}.kpi:after{content:"";position:absolute;width:80px;height:80px;border-radius:50%;right:-28px;top:-28px;background:rgba(24,185,129,.07)}
+.kpi strong{letter-spacing:-1px}.table-wrap{box-shadow:inset 0 0 0 1px rgba(15,54,43,.02)}
+#dashboardTable tbody tr,#monitorBody tr,#rekapBody tr{transition:.18s}
+#dashboardTable tbody tr:hover,#monitorBody tr:hover,#rekapBody tr:hover{background:#f7fbf9}
+
+.detail-panel{display:none}.detail-panel.open{display:block;animation:fade .22s ease}
+.metric-mini{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:15px 0}
+.metric-mini>div{background:#f7fbf9;border:1px solid var(--line);border-radius:14px;padding:13px}
+.metric-mini span{display:block;font-size:9px;color:var(--muted);font-weight:800;text-transform:uppercase}
+.metric-mini b{font-size:21px;display:block;margin-top:5px}
+.chart-box{height:280px;position:relative}.chart-box svg{width:100%;height:100%;overflow:visible}
+.chart-grid{stroke:#e7eeea;stroke-width:1}.chart-line{fill:none;stroke:#087f5b;stroke-width:3}.chart-dot{fill:#fff;stroke:#087f5b;stroke-width:3}
+.bar{fill:#18b981;rx:6}.bar-no{fill:#f1b34c;rx:6}
+.legend{display:flex;gap:15px;font-size:10px;color:var(--muted);font-weight:700}.legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px}
+@media(max-width:800px){.metric-mini{grid-template-columns:1fr 1fr}.chart-box{height:230px}}
 </style>
 </head>
 <body>
@@ -75,6 +92,7 @@ th{background:#f6faf8;color:var(--muted);font-size:10px;text-transform:uppercase
     <button data-page="ppa" onclick="showPage('ppa')">✓ <span>PPA</span></button>
     <button data-page="monitoring" onclick="showPage('monitoring')">◫ <span>Monitoring</span></button>
     <button data-page="rekap" onclick="showPage('rekap')">▤ <span>Rekap Data</span></button>
+    <button data-page="detail" id="detailNav" style="display:none" onclick="showPage('detail')">⌁ <span>Detail Lokasi</span></button>
   </nav>
   <div style="margin-top:auto" class="note">Form PPA tersimpan ke Google Sheet melalui Google Apps Script.</div>
 </aside>
@@ -83,14 +101,36 @@ th{background:#f6faf8;color:var(--muted);font-size:10px;text-transform:uppercase
 <section id="dashboard" class="page active">
   <div class="topline"><div><h1>Dashboard PPA</h1><p>Ringkasan penilaian dan monitoring ketentuan teknis air limbah.</p></div>
   <div class="toolbar"><button class="btn primary" onclick="showPage('ppa')">+ Isi Penilaian PPA</button></div></div>
-  <div class="hero"><h2>Penilaian Kepatuhan PPA</h2><p>Kelola penilaian IPAL GGP 1, IPAL GGP 2 dan IPAL PLTU dalam satu dashboard. Setiap jawaban YA/TIDAK dihitung otomatis menjadi persentase kepatuhan.</p>
+  <div class="hero"><h2>Penilaian & Monitoring Kepatuhan PPA</h2><p>Kelola seluruh penilaian PPA dalam satu pusat data. Filter berdasarkan lokasi, hari, bulan, dan tahun untuk mendapatkan gambaran kepatuhan yang cepat, jelas, dan mudah dipantau.</p>
     <div class="pills"><span class="pill">11 Ketentuan Teknis</span><span class="pill">3 Lokasi IPAL</span><span class="pill">Real-time Submit</span></div>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <div class="card-head"><div><h3>Filter Dashboard</h3><div class="note">Gunakan filter untuk melihat penilaian berdasarkan lokasi dan periode.</div></div><button class="btn secondary" onclick="clearFilters()">Reset Filter</button></div>
+    <div class="assessor-grid">
+      <div class="field"><label>Lokasi</label><select id="filterSite" onchange="applyFilters()"><option value="">Semua lokasi</option></select></div>
+      <div class="field"><label>Tahun</label><select id="filterYear" onchange="applyFilters()"><option value="">Semua tahun</option></select></div>
+      <div class="field"><label>Bulan</label><select id="filterMonth" onchange="applyFilters()"><option value="">Semua bulan</option>
+        <option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option><option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option><option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
+      </select></div>
+      <div class="field"><label>Hari</label><select id="filterDay" onchange="applyFilters()"><option value="">Semua hari</option></select></div>
+    </div>
   </div>
   <div class="grid">
     <div class="kpi"><span>Total Ketentuan</span><strong>11</strong><em>Aspek penilaian</em></div>
     <div class="kpi"><span>IPAL GGP 1</span><strong id="dashGgp1">0%</strong><em id="dashGgp1Sub">Belum ada data</em></div>
     <div class="kpi"><span>IPAL GGP 2</span><strong id="dashGgp2">0%</strong><em id="dashGgp2Sub">Belum ada data</em></div>
     <div class="kpi"><span>IPAL PLTU</span><strong id="dashPltu">0%</strong><em id="dashPltuSub">Belum ada data</em></div>
+  </div>
+  <div class="grid" style="grid-template-columns:1.35fr .65fr">
+    <div class="card" style="margin-bottom:0"><div class="card-head"><div><h3>Tren Kepatuhan Bulanan</h3><div class="note">Rata-rata persentase dari seluruh assessment pada periode terpilih.</div></div></div>
+      <div class="chart-box" id="trendChart"><div class="note" style="text-align:center;padding-top:100px">Belum ada data tren.</div></div>
+    </div>
+    <div class="card" style="margin-bottom:0"><div class="card-head"><div><h3>Ranking Lokasi</h3><div class="note">Lokasi dengan tingkat kepatuhan tertinggi.</div></div></div>
+      <div id="rankingList"><div class="note">Belum ada data.</div></div>
+    </div>
+  </div>
+  <div class="card"><div class="card-head"><div><h3>Heatmap Kepatuhan</h3><div class="note">Perbandingan YA dan TIDAK berdasarkan lokasi.</div></div></div>
+    <div class="table-wrap"><table id="heatmapTable"><thead><tr><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>Persentase</th><th>Visual</th></tr></thead><tbody></tbody></table></div>
   </div>
   <div class="card"><div class="card-head"><div><h3>Data Penilaian yang Sudah Diinput</h3><div class="note">Data ini berasal dari seluruh pengguna yang mengirim penilaian ke Google Sheet.</div></div><button class="btn secondary" onclick="loadData()">↻ Refresh</button></div>
     <div id="dashboardTable" class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>Persentase</th><th>Status</th></tr></thead><tbody></tbody></table></div>
@@ -102,11 +142,25 @@ th{background:#f6faf8;color:var(--muted);font-size:10px;text-transform:uppercase
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="assessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Lokasi IPAL</label><select id="site" onchange="updateSiteTitle()"><option>IPAL GGP 1</option><option>IPAL GGP 2</option><option>IPAL PLTU</option></select></div>
+      <div class="field"><label>Lokasi IPAL</label><input id="site" list="siteSuggestions" placeholder="Contoh: IPAL GGP 1" oninput="updateSiteTitle()"><datalist id="siteSuggestions"></datalist></div>
     </div>
   </div>
   <div class="card">
-    <div class="card-head"><h3 id="siteTitle">Penilaian — IPAL GGP 1</h3><span class="badge neutral" id="answerCount">0/11 terisi</span></div>
+    <div class="assessor-grid">
+      <div class="field"><label>Tanggal Penilaian</label><input id="assessmentDate" type="date"></div>
+      <div class="field"><label>Bulan</label><select id="assessmentMonth" onchange="syncDateFromParts()">
+        <option value="">Pilih bulan</option>
+        <option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option><option value="4">April</option>
+        <option value="5">Mei</option><option value="6">Juni</option><option value="7">Juli</option><option value="8">Agustus</option>
+        <option value="9">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
+      </select></div>
+      <div class="field"><label>Tahun</label><input id="assessmentYear" type="number" min="2000" max="2100" placeholder="2026" oninput="syncDateFromParts()"></div>
+      <div class="field"><label>Hari</label><select id="assessmentDay" onchange="syncDateFromParts()"><option value="">Pilih tanggal</option></select></div>
+    </div>
+    <div class="note" style="margin-top:10px">Tanggal utama tersimpan sebagai satu tanggal penilaian. Hari, bulan, dan tahun dapat dipilih untuk memudahkan pengisian.</div>
+  </div>
+  <div class="card">
+    <div class="card-head"><h3 id="siteTitle">Penilaian — Lokasi belum diisi</h3><span class="badge neutral" id="answerCount">0/11 terisi</span></div>
     <div class="table-wrap">
       <table><thead><tr><th style="width:55px">No.</th><th>Ketentuan Teknis</th><th style="width:120px">YA / TIDAK</th><th>Keterangan / Bukti Pendukung</th></tr></thead>
       <tbody id="ppaBody"></tbody></table>
@@ -114,6 +168,20 @@ th{background:#f6faf8;color:var(--muted);font-size:10px;text-transform:uppercase
     <div style="margin-top:18px"><div class="score-box"><div class="progress"><span id="scoreBar"></span></div><div class="score-value" id="scoreValue">0%</div></div>
       <div class="note" style="margin-top:7px">Persentase = jumlah jawaban YA ÷ 11 ketentuan × 100.</div></div>
     <div class="actions"><button class="btn secondary" onclick="resetForm()">Reset</button><button class="btn primary" onclick="submitPPA()">☁ Simpan ke Google Sheet</button></div>
+  </div>
+</section>
+
+<section id="detail" class="page">
+  <div class="topline"><div><h1>Detail Lokasi</h1><p>Detail penilaian dan riwayat assessment untuk lokasi yang dipilih.</p></div><button class="btn secondary" onclick="showPage('dashboard')">← Kembali</button></div>
+  <div class="hero"><h2 id="detailTitle">Lokasi</h2><p id="detailSubtitle">Detail kepatuhan</p></div>
+  <div class="grid">
+    <div class="kpi"><span>Rata-rata Kepatuhan</span><strong id="detailPct">0%</strong><em>Seluruh assessment</em></div>
+    <div class="kpi"><span>Total Assessment</span><strong id="detailCount">0</strong><em>Riwayat penilaian</em></div>
+    <div class="kpi"><span>Total YA</span><strong id="detailYes">0</strong><em>Ketentuan terpenuhi</em></div>
+    <div class="kpi"><span>Total TIDAK</span><strong id="detailNo">0</strong><em>Perlu perhatian</em></div>
+  </div>
+  <div class="card"><div class="card-head"><h3>Riwayat Assessment</h3></div>
+    <div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Penilai</th><th>YA</th><th>TIDAK</th><th>%</th><th>Status</th></tr></thead><tbody id="detailBody"></tbody></table></div>
   </div>
 </section>
 
@@ -138,7 +206,7 @@ th{background:#f6faf8;color:var(--muted);font-size:10px;text-transform:uppercase
 
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiGpeiM96tm_ZVOWCCuDJ-bQqk1tGuPp3OF9wACOBSQx2-VHq_9fd5eXD28Ascsi1c/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7lUm7LBsQlORKLdJAF_BE0isaMGf1mBgxAYoFTf4fL8oz6ROhQH7WhMibgf1GEB00/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -159,10 +227,44 @@ function showPage(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
  $(id).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'});
- if(id==='monitoring'||id==='rekap') loadData();
+ if(id==='monitoring'||id==='rekap'||id==='dashboard') { if(allPPAData.length===0) loadData(); }
 }
 function toggleMenu(){ $('sidebar').style.display=$('sidebar').style.display==='flex'?'none':'flex'; $('sidebar').style.position='fixed'; $('sidebar').style.width='260px'; $('sidebar').style.left='0'; $('sidebar').style.top='0';}
-function updateSiteTitle(){ $('siteTitle').textContent='Penilaian — '+$('site').value }
+function normalizeSite(name){
+ return String(name||'').trim().replace(/\s+/g,' ').toUpperCase();
+}
+function displaySite(name){
+ return String(name||'').trim().replace(/\s+/g,' ');
+}
+function updateSiteTitle(){
+ const val=displaySite($('site').value);
+ $('siteTitle').textContent='Penilaian — '+(val||'Lokasi belum diisi');
+}
+function populateDays(){
+ const d=$('assessmentDay'), fd=$('filterDay');
+ if(!d||!fd)return;
+ let a='<option value="">Pilih tanggal</option>', b='<option value="">Semua hari</option>';
+ for(let i=1;i<=31;i++){a+=`<option value="${i}">${i}</option>`;b+=`<option value="${i}">${i}</option>`}
+ d.innerHTML=a;fd.innerHTML=b;
+}
+function syncDateFromParts(){
+ const y=Number($('assessmentYear').value),m=Number($('assessmentMonth').value),day=Number($('assessmentDay').value);
+ if(y&&m&&day){
+   const max=new Date(y,m,0).getDate();
+   if(day<=max) $('assessmentDate').value=`${y}-${String(m).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+ }
+}
+function syncPartsFromDate(){
+ const v=$('assessmentDate').value;
+ if(!v)return;
+ const [y,m,d]=v.split('-').map(Number);
+ $('assessmentYear').value=y;$('assessmentMonth').value=m;$('assessmentDay').value=d;
+}
+function getDateParts(dateValue){
+ if(!dateValue)return {};
+ const p=String(dateValue).split('-');
+ return {year:p[0]||'',month:String(Number(p[1]||0)||''),day:String(Number(p[2]||0)||'')};
+}
 function renderForm(){
  $('ppaBody').innerHTML=items.map((x,i)=>`<tr>
  <td class="num">${i+1}</td><td class="ket">${x}</td>
@@ -176,15 +278,23 @@ function updateScore(){
  });
  let pct=Math.round(yes/items.length*100); $('scoreValue').textContent=pct+'%'; $('scoreBar').style.width=pct+'%'; $('answerCount').textContent=filled+'/'+items.length+' terisi';
 }
-function resetForm(){document.querySelectorAll('.status-select').forEach(s=>s.value='');document.querySelectorAll('textarea').forEach(t=>t.value='');updateScore()}
+function resetForm(){
+ document.querySelectorAll('.status-select').forEach(s=>s.value='');
+ document.querySelectorAll('textarea').forEach(t=>t.value='');
+ $('assessor').value='';$('site').value='';$('assessmentDate').value='';
+ $('assessmentMonth').value='';$('assessmentYear').value='';$('assessmentDay').value='';
+ updateSiteTitle();updateScore();
+}
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2800)}
 async function submitPPA(){
  if(SCRIPT_URL.startsWith('PASTE_')){toast('Masukkan URL Google Apps Script terlebih dahulu.');return}
- const assessor=$('assessor').value.trim(), site=$('site').value;
+ const assessor=$('assessor').value.trim(), site=displaySite($('site').value), date=$('assessmentDate').value;
  const rows=[...document.querySelectorAll('.status-select')];
  if(!assessor){toast('Nama penilai wajib diisi.');$('assessor').focus();return}
+ if(!site){toast('Lokasi IPAL wajib diisi.');$('site').focus();return}
+ if(!date){toast('Tanggal penilaian wajib diisi.');$('assessmentDate').focus();return}
  if(rows.some(s=>!s.value)){toast('Lengkapi semua 11 jawaban YA/TIDAK.');return}
- const payload={action:'savePPA',assessor,site,items:rows.map((s,i)=>({no:i+1,ketentuan:items[i],status:s.value,keterangan:document.querySelector(`[data-k="${i}"]`).value.trim()}))};
+ const payload={action:'savePPA',assessor,site,assessmentDate:date,items:rows.map((s,i)=>({no:i+1,ketentuan:items[i],status:s.value,keterangan:document.querySelector(`[data-k="${i}"]`).value.trim()}))};
  const btn=document.querySelector('.actions .primary');btn.disabled=true;btn.textContent='⏳ Menyimpan...';
  try{
    const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
@@ -209,80 +319,138 @@ async function loadData(){
  } 
 }
 function statusBadge(p){return p>=90?'<span class="badge good">SANGAT BAIK</span>':p>=70?'<span class="badge warn">PERLU PERBAIKAN</span>':'<span class="badge bad">BELUM MEMENUHI</span>'}
+function monthName(n){
+ return ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'][Number(n)]||'';
+}
+function rowDateParts(r){
+ const v=String(r.assessmentDate||'').trim();
+ if(/^\d{4}-\d{2}-\d{2}$/.test(v)){
+   const [y,m,d]=v.split('-').map(Number);return {year:y,month:m,day:d};
+ }
+ const ts=String(r.timestamp||'');
+ const m=ts.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+ if(m)return {year:Number(m[3]),month:Number(m[2]),day:Number(m[1])};
+ return {};
+}
+function normalizedRows(data){
+ return (Array.isArray(data)?data:[]).map(r=>({...r,siteKey:normalizeSite(r.site),...rowDateParts(r)}));
+}
 function aggregate(data){
  const out={};
- ['IPAL GGP 1','IPAL GGP 2','IPAL PLTU'].forEach(s=>out[s]={site:s,total:0,yes:0,no:0,pct:0});
- data.forEach(r=>{
-   const s=r.site||'Lainnya';
-   if(!out[s]) out[s]={site:s,total:0,yes:0,no:0,pct:0};
-   out[s].total += Number(r.total||11);
-   out[s].yes += Number(r.yes||0);
-   out[s].no += Number(r.no||0);
+ normalizedRows(data).forEach(r=>{
+   const key=r.siteKey||'LAINNYA';
+   if(!out[key])out[key]={site:r.site||key,total:0,yes:0,no:0,pct:0};
+   out[key].total+=Number(r.total||11);out[key].yes+=Number(r.yes||0);out[key].no+=Number(r.no||0);
  });
  Object.values(out).forEach(x=>x.pct=x.total?Math.round(x.yes/x.total*100):0);
  return out;
 }
-function renderData(data){
- data = Array.isArray(data) ? data : [];
- $('recordCount').textContent=data.length;
-
- const a=aggregate(data), sites=['IPAL GGP 1','IPAL GGP 2','IPAL PLTU'];
- const ids=[['dashGgp1','dashGgp1Sub'],['dashGgp2','dashGgp2Sub'],['dashPltu','dashPltuSub']];
- sites.forEach((s,i)=>{
-   $(ids[i][0]).textContent=a[s].pct+'%';
-   $(ids[i][1]).textContent=a[s].yes+' YA dari '+a[s].total+' aspek';
+function rebuildFilterOptions(data){
+ const rows=normalizedRows(data);
+ const sites={}; const years=new Set();
+ rows.forEach(r=>{if(r.siteKey)sites[r.siteKey]=displaySite(r.site);if(r.year)years.add(r.year)});
+ const fs=$('filterSite'), fy=$('filterYear');
+ const currentS=fs.value,currentY=fy.value;
+ fs.innerHTML='<option value="">Semua lokasi</option>'+Object.keys(sites).sort().map(k=>`<option value="${escapeHtml(k)}">${escapeHtml(sites[k])}</option>`).join('');
+ fy.innerHTML='<option value="">Semua tahun</option>'+[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('');
+ if([...fs.options].some(o=>o.value===currentS))fs.value=currentS;
+ if([...fy.options].some(o=>o.value===currentY))fy.value=currentY;
+ const list=$('siteSuggestions');
+ if(list)list.innerHTML=Object.values(sites).sort().map(s=>`<option value="${escapeHtml(s)}"></option>`).join('');
+}
+let allPPAData=[];
+function applyFilters(){
+ const sk=$('filterSite').value, y=$('filterYear').value, m=$('filterMonth').value, d=$('filterDay').value;
+ const filtered=normalizedRows(allPPAData).filter(r=>
+   (!sk||r.siteKey===sk)&&(!y||String(r.year)===String(y))&&(!m||String(r.month)===String(m))&&(!d||String(r.day)===String(d))
+ );
+ renderData(filtered,false);
+ document.querySelectorAll('#filterSite,#filterYear,#filterMonth,#filterDay').forEach(x=>x.classList.toggle('filter-active',!!x.value));
+}
+function clearFilters(){
+ $('filterSite').value='';$('filterYear').value='';$('filterMonth').value='';$('filterDay').value='';
+ applyFilters();
+}
+function renderTrend(data){
+ const box=$('trendChart');
+ if(!data.length){box.innerHTML='<div class="note" style="text-align:center;padding-top:100px">Belum ada data tren.</div>';return}
+ const groups={};
+ data.forEach(r=>{
+   const p=rowDateParts(r); if(!p.year||!p.month)return;
+   const key=`${p.year}-${String(p.month).padStart(2,'0')}`;
+   if(!groups[key])groups[key]={sum:0,n:0,label:monthName(p.month)+' '+p.year};
+   groups[key].sum+=Number(r.percentage||0);groups[key].n++;
  });
- $('mon1').textContent=a[sites[0]].pct+'%'; $('mon1s').textContent=a[sites[0]].yes+' YA';
- $('mon2').textContent=a[sites[1]].pct+'%'; $('mon2s').textContent=a[sites[1]].yes+' YA';
- $('mon3').textContent=a[sites[2]].pct+'%'; $('mon3s').textContent=a[sites[2]].yes+' YA';
-
- // DASHBOARD: tampilkan submission satu per satu, termasuk milik orang lain.
- $('dashboardTable').querySelector('tbody').innerHTML = data.length
-   ? data.slice().reverse().map(r=>`
-      <tr>
-        <td>${r.timestamp||'-'}</td>
-        <td><b>${escapeHtml(r.assessor||'-')}</b></td>
-        <td>${escapeHtml(r.site||'-')}</td>
-        <td>${r.yes||0}</td>
-        <td>${r.no||0}</td>
-        <td><b>${r.percentage||0}%</b></td>
-        <td>${statusBadge(Number(r.percentage||0))}</td>
-      </tr>`).join('')
-   : '<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data penilaian.</td></tr>';
-
- $('monitorBody').innerHTML = data.length
-   ? data.slice().reverse().map(r=>`
-      <tr>
-        <td><b>${escapeHtml(r.site||'-')}</b></td>
-        <td>${r.total||11}</td>
-        <td>${r.yes||0}</td>
-        <td>${r.no||0}</td>
-        <td>${r.percentage||0}%</td>
-        <td>${statusBadge(Number(r.percentage||0))}</td>
-        <td>${escapeHtml(r.assessor||'-')}</td>
-        <td>${r.timestamp||'-'}</td>
-      </tr>`).join('')
-   : '<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
-
- $('rekapBody').innerHTML = data.length
-   ? data.slice().reverse().map(r=>`
-      <tr>
-        <td>${r.timestamp||'-'}</td>
-        <td>${escapeHtml(r.assessor||'-')}</td>
-        <td>${escapeHtml(r.site||'-')}</td>
-        <td>${r.yes||0}</td>
-        <td>${r.no||0}</td>
-        <td>${r.percentage||0}%</td>
-        <td>${statusBadge(Number(r.percentage||0))}</td>
-      </tr>`).join('')
-   : '<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
-
- if($('lastSync')) $('lastSync').textContent='Sinkron terakhir: '+new Date().toLocaleString('id-ID');
+ const keys=Object.keys(groups).sort();
+ if(!keys.length){box.innerHTML='<div class="note" style="text-align:center;padding-top:100px">Tanggal assessment belum tersedia untuk membuat tren.</div>';return}
+ const w=720,h=250,pad=38, max=100,min=0;
+ const pts=keys.map((k,i)=>{const x=pad+(keys.length===1?(w-pad*2)/2:i*(w-pad*2)/(keys.length-1));const y=h-pad-(groups[k].sum/groups[k].n-min)/(max-min)*(h-pad*2);return {x,y,val:Math.round(groups[k].sum/groups[k].n),label:groups[k].label}});
+ const path=pts.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)).join(' ');
+ box.innerHTML=`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+   <line class="chart-grid" x1="${pad}" y1="${pad}" x2="${w-pad}" y2="${pad}"/><line class="chart-grid" x1="${pad}" y1="${h/2}" x2="${w-pad}" y2="${h/2}"/><line class="chart-grid" x1="${pad}" y1="${h-pad}" x2="${w-pad}" y2="${h-pad}"/>
+   <text x="4" y="${pad+4}" font-size="10" fill="#64756f">100%</text><text x="12" y="${h/2+4}" font-size="10" fill="#64756f">50%</text><text x="20" y="${h-pad+4}" font-size="10" fill="#64756f">0%</text>
+   <path class="chart-line" d="${path}"/>${pts.map(p=>`<circle class="chart-dot" cx="${p.x}" cy="${p.y}" r="5"><title>${p.label}: ${p.val}%</title></circle>`).join('')}
+   ${pts.map(p=>`<text x="${p.x}" y="${Math.max(13,p.y-11)}" text-anchor="middle" font-size="10" font-weight="800" fill="#087f5b">${p.val}%</text>`).join('')}
+   ${pts.map(p=>`<text x="${p.x}" y="${h-10}" text-anchor="middle" font-size="9" fill="#64756f">${p.label.replace(' ','\\n')}</text>`).join('')}
+ </svg>`;
 }
-function escapeHtml(value){
- return String(value??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+function renderRanking(data){
+ const map={};
+ data.forEach(r=>{const k=r.siteKey;if(!k)return;if(!map[k])map[k]={site:displaySite(r.site),sum:0,n:0};map[k].sum+=Number(r.percentage||0);map[k].n++});
+ const arr=Object.values(map).map(x=>({...x,pct:Math.round(x.sum/x.n)})).sort((a,b)=>b.pct-a.pct);
+ $('rankingList').innerHTML=arr.length?arr.map((x,i)=>`<div style="padding:11px 0;border-bottom:1px solid #eef3f0;cursor:pointer" onclick="openDetail('${escapeHtml(x.siteKey)}')">
+   <div style="display:flex;justify-content:space-between;gap:10px"><b>${i+1}. ${escapeHtml(x.site)}</b><strong style="color:var(--green)">${x.pct}%</strong></div>
+   <div class="progress" style="margin-top:7px"><span style="width:${x.pct}%"></span></div>
+ </div>`).join(''):'<div class="note">Belum ada data.</div>';
 }
-renderForm();updateSiteTitle();loadData();
+function renderHeatmap(data){
+ const map={};
+ data.forEach(r=>{const k=r.siteKey;if(!k)return;if(!map[k])map[k]={site:displaySite(r.site),yes:0,no:0};map[k].yes+=Number(r.yes||0);map[k].no+=Number(r.no||0)});
+ const arr=Object.values(map).sort((a,b)=>(b.yes/(b.yes+b.no))-(a.yes/(a.yes+a.no)));
+ $('heatmapTable').querySelector('tbody').innerHTML=arr.length?arr.map(x=>{const total=x.yes+x.no,p=Math.round(x.yes/total*100);return `<tr onclick="openDetail('${escapeHtml(normalizeSite(x.site))}')" style="cursor:pointer"><td><b>${escapeHtml(x.site)}</b></td><td><span class="badge good">${x.yes}</span></td><td><span class="badge bad">${x.no}</span></td><td><b>${p}%</b></td><td style="min-width:180px"><div class="progress"><span style="width:${p}%"></span></div></td></tr>`}).join(''):'<tr><td colspan="5" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+}
+function openDetail(siteKey){
+ const rows=normalizedRows(allPPAData).filter(r=>r.siteKey===siteKey);
+ if(!rows.length)return;
+ $('detailNav').style.display='flex';
+ $('detailTitle').textContent=displaySite(rows[0].site);
+ $('detailSubtitle').textContent=`${rows.length} assessment untuk lokasi ini`;
+ const avg=Math.round(rows.reduce((s,r)=>s+Number(r.percentage||0),0)/rows.length);
+ $('detailPct').textContent=avg+'%';$('detailCount').textContent=rows.length;
+ $('detailYes').textContent=rows.reduce((s,r)=>s+Number(r.yes||0),0);
+ $('detailNo').textContent=rows.reduce((s,r)=>s+Number(r.no||0),0);
+ $('detailBody').innerHTML=rows.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td>${r.assessmentDate||r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join('');
+ showPage('detail');
+}
+function renderData(data,rebuild=true){
+ data=Array.isArray(data)?data:[];
+ if(rebuild)rebuildFilterOptions(allPPAData);
+ $('recordCount').textContent=data.length;
+ const a=aggregate(data), keys=Object.keys(a), pick=n=>keys.find(k=>k===normalizeSite(n));
+ const vals=[pick('IPAL GGP 1'),pick('IPAL GGP 2'),pick('IPAL PLTU')];
+ [['dashGgp1','dashGgp1Sub'],['dashGgp2','dashGgp2Sub'],['dashPltu','dashPltuSub']].forEach((ids,i)=>{const x=vals[i]?a[vals[i]]:{pct:0,yes:0,total:0};$(ids[0]).textContent=x.pct+'%';$(ids[1]).textContent=x.yes+' YA dari '+x.total+' aspek'});
+ $('mon1').textContent=(vals[0]?a[vals[0]].pct:0)+'%';$('mon1s').textContent=(vals[0]?a[vals[0]].yes:0)+' YA';
+ $('mon2').textContent=(vals[1]?a[vals[1]].pct:0)+'%';$('mon2s').textContent=(vals[1]?a[vals[1]].yes:0)+' YA';
+ $('mon3').textContent=(vals[2]?a[vals[2]].pct:0)+'%';$('mon3s').textContent=(vals[2]?a[vals[2]].yes:0)+' YA';
+ renderTrend(data);renderRanking(data);renderHeatmap(data);
+ const rows=data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp)));
+ $('dashboardTable').querySelector('tbody').innerHTML=rows.length?rows.map(r=>`<tr><td>${r.timestamp||'-'}</td><td><b>${escapeHtml(r.assessor||'-')}</b></td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data penilaian.</td></tr>';
+ $('monitorBody').innerHTML=rows.length?rows.map(r=>`<tr><td><b>${escapeHtml(displaySite(r.site)||'-')}</b></td><td>${r.total||11}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.timestamp||'-'}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+ $('rekapBody').innerHTML=rows.length?rows.map(r=>`<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+ if($('lastSync'))$('lastSync').textContent='Sinkron terakhir: '+new Date().toLocaleString('id-ID');
+}
+async function loadData(){
+ if(SCRIPT_URL.startsWith('PASTE_'))return;
+ try{
+   const r=await fetch(SCRIPT_URL+'?action=getPPA&t='+Date.now(),{cache:'no-store'});const d=await r.json();
+   if(d.status!=='success')throw new Error(d.message||'Invalid response');
+   allPPAData=d.data||[];rebuildFilterOptions(allPPAData);applyFilters();
+ }catch(e){console.warn(e);toast('Data belum dapat diambil dari Google Sheet.')}
+}
+renderForm();populateDays();updateSiteTitle();
+$('assessmentDate').addEventListener('change',syncPartsFromDate);
+$('assessmentYear').value=new Date().getFullYear();
+loadData();
 setInterval(()=>{ if(!document.hidden) loadData(); },30000);
 </script>
 </body>
