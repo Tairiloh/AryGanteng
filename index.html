@@ -287,7 +287,7 @@ body{background:#f5f8f6}
 
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUe5DTI-Ou-k1MBIzXNlNzbVYMTnxl2-A1QuOcU11eyEv3L6mSsoM3HN3bp_96l4tG/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxvpB9xwV8BhVE52P_Hspm5t1q1K5oCVNfswfSyZpBww6vJ1DNedse6JiylxJiTPg9/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -384,20 +384,6 @@ async function submitPPA(){
    else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal terhubung ke server: '+e.message)}
  finally{btn.disabled=false;btn.textContent='☁ Simpan ke Google Sheet'}
-}
-async function loadData(){
- if(SCRIPT_URL.startsWith('PASTE_')) return;
- try{
-   const bodies=document.querySelectorAll('#dashboardTable tbody,#monitorBody,#rekapBody');
-   bodies.forEach(b=>b.innerHTML='<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">⏳ Mengambil data dari Google Sheet...</td></tr>');
-   const r=await fetch(SCRIPT_URL+'?action=getPPA&t='+Date.now(),{cache:'no-store'});
-   const d=await r.json();
-   if(d.status!=='success') throw new Error(d.message||'Invalid response');
-   renderData(d.data||[]);
- }catch(e){
-   console.warn(e);
-   toast('Data belum dapat diambil dari Google Sheet.');
- } 
 }
 function statusBadge(p){return p>=90?'<span class="badge good">SANGAT BAIK</span>':p>=70?'<span class="badge warn">PERLU PERBAIKAN</span>':'<span class="badge bad">BELUM MEMENUHI</span>'}
 function monthName(n){
@@ -558,13 +544,44 @@ function renderDonut(data){
    <span><i style="background:#f1b34c"></i>Perlu Perbaikan 70–84% <b>${total?Math.round(w):0}% (${counts.warn})</b></span>
    <span><i style="background:#dc3a3a"></i>Buruk &lt;70% <b>${total?Math.round(b):0}% (${counts.bad})</b></span>`;
 }
-async function loadData(){
- if(SCRIPT_URL.startsWith('PASTE_'))return;
- try{
-   const r=await fetch(SCRIPT_URL+'?action=getPPA&t='+Date.now(),{cache:'no-store'});const d=await r.json();
-   if(d.status!=='success')throw new Error(d.message||'Invalid response');
-   allPPAData=d.data||[];rebuildFilterOptions(allPPAData);applyFilters();
- }catch(e){console.warn(e);toast('Data belum dapat diambil dari Google Sheet.')}
+function loadData(){
+ if(!SCRIPT_URL || SCRIPT_URL.indexOf('/exec')===-1){
+   toast('URL Google Apps Script belum benar.');
+   return;
+ }
+ const bodies=document.querySelectorAll('#dashboardTable tbody,#monitorBody,#rekapBody');
+ bodies.forEach(b=>b.innerHTML='<tr><td colspan="9" style="text-align:center;padding:25px;color:#64756f">⏳ Mengambil semua data dari Google Sheet...</td></tr>');
+
+ const old=document.getElementById('ppaJsonpScript');
+ if(old) old.remove();
+
+ const callbackName='ppaDataCallback_'+Date.now();
+ window[callbackName]=function(d){
+   try{
+     if(!d || d.status!=='success') throw new Error((d&&d.message)||'Server mengembalikan error');
+     allPPAData=Array.isArray(d.data)?d.data:[];
+     rebuildFilterOptions(allPPAData);
+     applyFilters();
+     if($('topLastSync'))$('topLastSync').textContent='Semua data tersinkron: '+new Date().toLocaleTimeString('id-ID');
+   }catch(err){
+     console.error(err);
+     toast('Data Google Sheet gagal dibaca: '+err.message);
+   }finally{
+     delete window[callbackName];
+     const s=document.getElementById('ppaJsonpScript');
+     if(s)s.remove();
+   }
+ };
+
+ const script=document.createElement('script');
+ script.id='ppaJsonpScript';
+ script.src=SCRIPT_URL+'?action=getPPA&callback='+encodeURIComponent(callbackName)+'&t='+Date.now();
+ script.onerror=function(){
+   toast('Tidak dapat mengakses Google Apps Script. Periksa deployment Web App.');
+   delete window[callbackName];
+   script.remove();
+ };
+ document.body.appendChild(script);
 }
 renderForm();populateDays();updateSiteTitle();
 $('assessmentDate').addEventListener('change',syncPartsFromDate);
