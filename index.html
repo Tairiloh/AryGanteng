@@ -92,8 +92,8 @@ th{background:#f6faf8;color:var(--muted);font-size:10px;text-transform:uppercase
     <div class="kpi"><span>IPAL GGP 2</span><strong id="dashGgp2">0%</strong><em id="dashGgp2Sub">Belum ada data</em></div>
     <div class="kpi"><span>IPAL PLTU</span><strong id="dashPltu">0%</strong><em id="dashPltuSub">Belum ada data</em></div>
   </div>
-  <div class="card"><div class="card-head"><h3>Status Penilaian Terakhir</h3><button class="btn secondary" onclick="loadData()">↻ Refresh</button></div>
-    <div id="dashboardTable" class="table-wrap"><table><thead><tr><th>Lokasi</th><th>Total Aspek</th><th>YA</th><th>TIDAK</th><th>Persentase</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+  <div class="card"><div class="card-head"><div><h3>Data Penilaian yang Sudah Diinput</h3><div class="note">Data ini berasal dari seluruh pengguna yang mengirim penilaian ke Google Sheet.</div></div><button class="btn secondary" onclick="loadData()">↻ Refresh</button></div>
+    <div id="dashboardTable" class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>Persentase</th><th>Status</th></tr></thead><tbody></tbody></table></div>
   </div>
 </section>
 
@@ -125,7 +125,7 @@ th{background:#f6faf8;color:var(--muted);font-size:10px;text-transform:uppercase
     <div class="kpi"><span>PLTU</span><strong id="mon3">0%</strong><em id="mon3s">0 YA</em></div>
     <div class="kpi"><span>Total Record</span><strong id="recordCount">0</strong><em>Data tersimpan</em></div>
   </div>
-  <div class="card"><div class="card-head"><h3>Detail Monitoring</h3></div><div class="table-wrap"><table><thead><tr><th>Lokasi</th><th>Aspek</th><th>YA</th><th>TIDAK</th><th>%</th><th>Status</th><th>Penilai</th><th>Waktu</th></tr></thead><tbody id="monitorBody"></tbody></table></div></div>
+  <div class="card"><div class="card-head"><div><h3>Detail Monitoring</h3><div class="note" id="lastSync">Belum sinkron</div></div></div><div class="table-wrap"><table><thead><tr><th>Lokasi</th><th>Aspek</th><th>YA</th><th>TIDAK</th><th>%</th><th>Status</th><th>Penilai</th><th>Waktu</th></tr></thead><tbody id="monitorBody"></tbody></table></div></div>
 </section>
 
 <section id="rekap" class="page">
@@ -138,7 +138,7 @@ th{background:#f6faf8;color:var(--muted);font-size:10px;text-transform:uppercase
 
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxQsM02FPcePAyVHkiADiSspDtnRvJpUez9f7ekswnnJFrkeepU1Y56MRiU3ohyxp86/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiGpeiM96tm_ZVOWCCuDJ-bQqk1tGuPp3OF9wACOBSQx2-VHq_9fd5eXD28Ascsi1c/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -197,31 +197,93 @@ async function submitPPA(){
 async function loadData(){
  if(SCRIPT_URL.startsWith('PASTE_')) return;
  try{
-   const r=await fetch(SCRIPT_URL+'?action=getPPA',{cache:'no-store'});const d=await r.json();
+   const bodies=document.querySelectorAll('#dashboardTable tbody,#monitorBody,#rekapBody');
+   bodies.forEach(b=>b.innerHTML='<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">⏳ Mengambil data dari Google Sheet...</td></tr>');
+   const r=await fetch(SCRIPT_URL+'?action=getPPA&t='+Date.now(),{cache:'no-store'});
+   const d=await r.json();
    if(d.status!=='success') throw new Error(d.message||'Invalid response');
    renderData(d.data||[]);
- }catch(e){console.warn(e)}
+ }catch(e){
+   console.warn(e);
+   toast('Data belum dapat diambil dari Google Sheet.');
+ } 
 }
 function statusBadge(p){return p>=90?'<span class="badge good">SANGAT BAIK</span>':p>=70?'<span class="badge warn">PERLU PERBAIKAN</span>':'<span class="badge bad">BELUM MEMENUHI</span>'}
 function aggregate(data){
  const out={};
- ['IPAL GGP 1','IPAL GGP 2','IPAL PLTU'].forEach(s=>out[s]={site:s,total:0,yes:0,no:0,pct:0,assessor:'-',time:'-'});
- data.forEach(r=>{if(!out[r.site])out[r.site]={site:r.site,total:0,yes:0,no:0,pct:0,assessor:'-',time:'-'};out[r.site].total++;r.status==='YA'?out[r.site].yes++:out[r.site].no++;out[r.site].assessor=r.assessor||'-';out[r.site].time=r.timestamp||'-'});
- Object.values(out).forEach(x=>x.pct=x.total?Math.round(x.yes/x.total*100):0);return out;
+ ['IPAL GGP 1','IPAL GGP 2','IPAL PLTU'].forEach(s=>out[s]={site:s,total:0,yes:0,no:0,pct:0});
+ data.forEach(r=>{
+   const s=r.site||'Lainnya';
+   if(!out[s]) out[s]={site:s,total:0,yes:0,no:0,pct:0};
+   out[s].total += Number(r.total||11);
+   out[s].yes += Number(r.yes||0);
+   out[s].no += Number(r.no||0);
+ });
+ Object.values(out).forEach(x=>x.pct=x.total?Math.round(x.yes/x.total*100):0);
+ return out;
 }
 function renderData(data){
+ data = Array.isArray(data) ? data : [];
  $('recordCount').textContent=data.length;
- const a=aggregate(data),sites=['IPAL GGP 1','IPAL GGP 2','IPAL PLTU'];
+
+ const a=aggregate(data), sites=['IPAL GGP 1','IPAL GGP 2','IPAL PLTU'];
  const ids=[['dashGgp1','dashGgp1Sub'],['dashGgp2','dashGgp2Sub'],['dashPltu','dashPltuSub']];
- sites.forEach((s,i)=>{$(ids[i][0]).textContent=a[s].pct+'%';$(ids[i][1]).textContent=a[s].yes+' YA dari '+a[s].total+' data'});
- $('mon1').textContent=a[sites[0]].pct+'%';$('mon1s').textContent=a[sites[0]].yes+' YA';
- $('mon2').textContent=a[sites[1]].pct+'%';$('mon2s').textContent=a[sites[1]].yes+' YA';
- $('mon3').textContent=a[sites[2]].pct+'%';$('mon3s').textContent=a[sites[2]].yes+' YA';
- $('dashboardTable').querySelector('tbody').innerHTML=sites.map(s=>`<tr><td><b>${s}</b></td><td>11</td><td>${a[s].yes}</td><td>${a[s].no}</td><td><b>${a[s].pct}%</b></td><td>${statusBadge(a[s].pct)}</td></tr>`).join('');
- $('monitorBody').innerHTML=sites.map(s=>`<tr><td><b>${s}</b></td><td>${a[s].total||0}</td><td>${a[s].yes}</td><td>${a[s].no}</td><td>${a[s].pct}%</td><td>${statusBadge(a[s].pct)}</td><td>${a[s].assessor}</td><td>${a[s].time}</td></tr>`).join('');
- $('rekapBody').innerHTML=data.slice().reverse().map(r=>`<tr><td>${r.timestamp||'-'}</td><td>${r.assessor||'-'}</td><td>${r.site||'-'}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join('');
+ sites.forEach((s,i)=>{
+   $(ids[i][0]).textContent=a[s].pct+'%';
+   $(ids[i][1]).textContent=a[s].yes+' YA dari '+a[s].total+' aspek';
+ });
+ $('mon1').textContent=a[sites[0]].pct+'%'; $('mon1s').textContent=a[sites[0]].yes+' YA';
+ $('mon2').textContent=a[sites[1]].pct+'%'; $('mon2s').textContent=a[sites[1]].yes+' YA';
+ $('mon3').textContent=a[sites[2]].pct+'%'; $('mon3s').textContent=a[sites[2]].yes+' YA';
+
+ // DASHBOARD: tampilkan submission satu per satu, termasuk milik orang lain.
+ $('dashboardTable').querySelector('tbody').innerHTML = data.length
+   ? data.slice().reverse().map(r=>`
+      <tr>
+        <td>${r.timestamp||'-'}</td>
+        <td><b>${escapeHtml(r.assessor||'-')}</b></td>
+        <td>${escapeHtml(r.site||'-')}</td>
+        <td>${r.yes||0}</td>
+        <td>${r.no||0}</td>
+        <td><b>${r.percentage||0}%</b></td>
+        <td>${statusBadge(Number(r.percentage||0))}</td>
+      </tr>`).join('')
+   : '<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data penilaian.</td></tr>';
+
+ $('monitorBody').innerHTML = data.length
+   ? data.slice().reverse().map(r=>`
+      <tr>
+        <td><b>${escapeHtml(r.site||'-')}</b></td>
+        <td>${r.total||11}</td>
+        <td>${r.yes||0}</td>
+        <td>${r.no||0}</td>
+        <td>${r.percentage||0}%</td>
+        <td>${statusBadge(Number(r.percentage||0))}</td>
+        <td>${escapeHtml(r.assessor||'-')}</td>
+        <td>${r.timestamp||'-'}</td>
+      </tr>`).join('')
+   : '<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+
+ $('rekapBody').innerHTML = data.length
+   ? data.slice().reverse().map(r=>`
+      <tr>
+        <td>${r.timestamp||'-'}</td>
+        <td>${escapeHtml(r.assessor||'-')}</td>
+        <td>${escapeHtml(r.site||'-')}</td>
+        <td>${r.yes||0}</td>
+        <td>${r.no||0}</td>
+        <td>${r.percentage||0}%</td>
+        <td>${statusBadge(Number(r.percentage||0))}</td>
+      </tr>`).join('')
+   : '<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+
+ if($('lastSync')) $('lastSync').textContent='Sinkron terakhir: '+new Date().toLocaleString('id-ID');
+}
+function escapeHtml(value){
+ return String(value??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 }
 renderForm();updateSiteTitle();loadData();
+setInterval(()=>{ if(!document.hidden) loadData(); },30000);
 </script>
 </body>
 </html>
