@@ -385,6 +385,11 @@ async function submitPPA(){
  }catch(e){toast('Gagal terhubung ke server: '+e.message)}
  finally{btn.disabled=false;btn.textContent='☁ Simpan ke Google Sheet'}
 }
+function escapeHtml(value){
+  return String(value == null ? '' : value).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c];
+  });
+}
 function statusBadge(p){return p>=90?'<span class="badge good">SANGAT BAIK</span>':p>=70?'<span class="badge warn">PERLU PERBAIKAN</span>':'<span class="badge bad">BELUM MEMENUHI</span>'}
 function monthName(n){
  return ['','Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'][Number(n)]||'';
