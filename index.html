@@ -230,8 +230,354 @@ body{background:
 .b3-status,.darurat-status{min-width:100px!important;min-height:42px!important;font-weight:800!important;cursor:pointer!important}
 .b3-status:focus,.darurat-status:focus{outline:3px solid rgba(11,122,96,.12)!important;border-color:#0b7a60!important}
 
-.location-master-note{font-size:10px;color:#71827d;margin-top:7px}
+
 input[list$="LocationSuggestions"]{cursor:text}
+
+/* ============================================================
+   PROPER — PREMIUM GEN-Z CORPORATE UI
+   ============================================================ */
+:root{
+  --navy:#062746;
+  --navy2:#0a355b;
+  --teal:#008f73;
+  --teal2:#00a887;
+  --green:#169b67;
+  --blue:#1976d2;
+  --purple:#7250c8;
+  --orange:#f28b22;
+  --red:#e75b5b;
+  --cyan:#0796ae;
+  --bg:#f3f7f8;
+  --card:#ffffff;
+  --text:#0c2530;
+  --muted:#71828b;
+  --line:#e4ecef;
+  --shadow:0 8px 28px rgba(5,38,56,.07);
+  --shadow-lg:0 16px 45px rgba(5,38,56,.10);
+}
+
+/* ---------- Base ---------- */
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(circle at 85% 0%,rgba(0,168,135,.06),transparent 25%),
+    radial-gradient(circle at 15% 10%,rgba(25,118,210,.05),transparent 24%),
+    var(--bg)!important;
+  color:var(--text)!important;
+}
+body,button,input,select,textarea{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}
+*{box-sizing:border-box}
+button,input,select,textarea{transition:.18s ease}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+  outline:3px solid rgba(0,143,115,.14)!important;
+  outline-offset:1px;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar{
+  background:
+    radial-gradient(circle at 20% 10%,rgba(23,111,185,.17),transparent 24%),
+    linear-gradient(180deg,#05223e 0%,#062d4d 50%,#031c34 100%)!important;
+  border-right:1px solid rgba(255,255,255,.06)!important;
+  box-shadow:12px 0 40px rgba(0,22,40,.10)!important;
+}
+.brand{
+  padding:18px 16px 14px!important;
+}
+.brand .proper-logo{
+  background:#fff!important;
+  border-radius:14px!important;
+  box-shadow:0 8px 22px rgba(0,0,0,.10)!important;
+}
+.brand h1,.brand .title,.brand b{
+  letter-spacing:-.025em!important;
+}
+.nav{
+  padding:8px 12px!important;
+}
+.nav button{
+  border-radius:12px!important;
+  margin:3px 0!important;
+  color:#e9f3f7!important;
+  font-weight:750!important;
+  min-height:43px!important;
+}
+.nav button:hover{
+  background:rgba(255,255,255,.08)!important;
+  transform:translateX(2px);
+}
+.nav button.active{
+  background:linear-gradient(90deg,#0b5ca3,#126ab2)!important;
+  box-shadow:0 8px 20px rgba(0,91,160,.22)!important;
+}
+.mobile-header{
+  background:var(--navy)!important;
+}
+
+/* ---------- Page header ---------- */
+.page{
+  padding-top:4px!important;
+}
+.page > .topline,
+.page > .page-header{
+  margin-bottom:18px!important;
+}
+.page h1,.page h2{
+  color:var(--text)!important;
+  letter-spacing:-.045em!important;
+}
+.page h1{font-size:31px!important}
+.page h2{font-size:21px!important}
+.page p,.subtitle,.muted{
+  color:var(--muted)!important;
+}
+
+/* ---------- Cards ---------- */
+.card,.filter-card,.hero-pro,.viz-card,.exec-kpi,.module-mini{
+  background:rgba(255,255,255,.96)!important;
+  border:1px solid rgba(221,232,236,.95)!important;
+  box-shadow:var(--shadow)!important;
+}
+.card{
+  border-radius:20px!important;
+}
+.card:hover{
+  box-shadow:var(--shadow-lg)!important;
+}
+
+/* ---------- KPI cards ---------- */
+.kpi-pro{
+  border-radius:18px!important;
+  border:1px solid var(--line)!important;
+  box-shadow:var(--shadow)!important;
+  overflow:hidden;
+}
+.kpi-pro:hover{
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-lg)!important;
+}
+.kpi-pro .kpi-label,
+.kpi-pro small{
+  color:#7c8b92!important;
+}
+.kpi-pro .kpi-value{
+  color:var(--navy)!important;
+  letter-spacing:-.055em!important;
+}
+.kpi-icon{
+  border-radius:14px!important;
+}
+
+/* ---------- Buttons ---------- */
+.btn{
+  border-radius:11px!important;
+  font-weight:800!important;
+  min-height:39px;
+}
+.btn.primary{
+  background:linear-gradient(135deg,#087c66,#00a887)!important;
+  border:none!important;
+  box-shadow:0 8px 20px rgba(0,143,115,.18)!important;
+}
+.btn.primary:hover{filter:brightness(1.04);transform:translateY(-1px)}
+.btn.secondary{
+  background:#fff!important;
+  border:1px solid #dce7ea!important;
+}
+.btn.secondary:hover{background:#f5f9fa!important}
+
+/* ---------- Inputs ---------- */
+input,select,textarea{
+  border:1px solid #d9e6e9!important;
+  background:#fbfdfd!important;
+  border-radius:11px!important;
+  color:var(--text)!important;
+}
+input:hover,select:hover,textarea:hover{
+  border-color:#b9d4d0!important;
+  background:#fff!important;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:#008f73!important;
+  background:#fff!important;
+  box-shadow:0 0 0 3px rgba(0,143,115,.08)!important;
+}
+
+/* ---------- Main dashboard executive analytics ---------- */
+.executive-shell{margin-top:18px!important}
+.exec-head{
+  margin-bottom:13px!important;
+}
+.exec-head h2{
+  font-size:23px!important;
+  letter-spacing:-.045em!important;
+}
+.exec-kpis{
+  grid-template-columns:repeat(6,minmax(0,1fr))!important;
+  gap:11px!important;
+}
+.exec-kpi{
+  padding:15px!important;
+  border-radius:17px!important;
+}
+.exec-kpi strong{
+  color:var(--navy)!important;
+  font-size:26px!important;
+}
+.exec-kpi span{
+  color:#7b8a91!important;
+}
+.exec-grid,.exec-grid-3{
+  gap:12px!important;
+}
+.viz-card{
+  border-radius:18px!important;
+  padding:17px!important;
+}
+.viz-title h3{
+  font-size:13px!important;
+  letter-spacing:-.02em;
+}
+.viz-badge,.module-chip{
+  background:#eef8f5!important;
+  color:#007c64!important;
+}
+
+/* ---------- Module analytics ---------- */
+.module-analytics{
+  margin:17px 0 5px!important;
+}
+.module-analytics-head h2{
+  font-size:20px!important;
+}
+.module-kpis{
+  gap:10px!important;
+}
+.module-mini{
+  border-radius:15px!important;
+  padding:13px!important;
+}
+.module-mini strong{
+  color:var(--navy)!important;
+}
+.module-viz{
+  border-radius:17px!important;
+}
+
+/* ---------- Form header ---------- */
+.form-card,.assessment-card{
+  border-radius:20px!important;
+}
+.form-card h3,.assessment-card h3{
+  letter-spacing:-.03em!important;
+}
+label{
+  color:#526a73!important;
+  font-size:10px!important;
+  font-weight:850!important;
+  letter-spacing:.035em!important;
+  text-transform:uppercase!important;
+}
+
+/* ---------- Tables / checklists ---------- */
+.table-wrap,.matrix-wrap{
+  border:1px solid #dfe9ec!important;
+  border-radius:15px!important;
+  background:#fff!important;
+  overflow:auto;
+}
+table{
+  border-collapse:separate!important;
+  border-spacing:0!important;
+}
+thead th{
+  background:#f3f8f8!important;
+  color:#526d75!important;
+  font-size:9px!important;
+  font-weight:900!important;
+  text-transform:uppercase!important;
+  letter-spacing:.06em!important;
+}
+tbody td{
+  border-bottom:1px solid #edf2f3!important;
+  font-size:10px!important;
+}
+tbody tr:hover td{
+  background:#f8fcfb!important;
+}
+td.num,.num{
+  color:#087b63!important;
+  font-weight:900!important;
+  text-align:center!important;
+  min-width:45px;
+}
+select.status-select,
+.b3-status,.darurat-status{
+  min-height:40px!important;
+  font-weight:800!important;
+}
+
+/* Green section rows */
+.section-row td,.matrix-section td{
+  background:linear-gradient(90deg,#edf9f4,#f7fbfa)!important;
+  color:#08775f!important;
+  font-weight:900!important;
+}
+
+/* ---------- Progress / status ---------- */
+.progress,.meter{
+  background:#eaf1ef!important;
+  border-radius:999px!important;
+  overflow:hidden;
+}
+.progress > i,.meter i{
+  background:linear-gradient(90deg,#008f73,#19ad7f)!important;
+}
+
+/* ---------- Empty states ---------- */
+.module-empty{
+  border:1px dashed #d7e5e2!important;
+  background:#fbfdfc!important;
+  border-radius:14px!important;
+}
+
+/* ---------- Toast ---------- */
+.toast,.alert{
+  border-radius:13px!important;
+  box-shadow:0 12px 30px rgba(3,26,42,.18)!important;
+}
+
+/* ---------- Responsive ---------- */
+@media(max-width:1250px){
+  .exec-kpis{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:820px){
+  .exec-kpis,.module-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:600px){
+  .exec-kpis,.module-kpis{grid-template-columns:1fr!important}
+  .page h1{font-size:26px!important}
+}
+
+/* ---------- Clean location input ---------- */
+input[list$="LocationSuggestions"]{
+  cursor:text!important;
+}
+
+
+#emisi .card:first-of-type{border-top:3px solid #008f73!important}
+#plb3 .card:first-of-type{border-top:3px solid #7250c8!important}
+#plb3darurat .card:first-of-type{border-top:3px solid #f28b22!important}
+#b3 .card:first-of-type{border-top:3px solid #0796ae!important}
+#sampah .card:first-of-type{border-top:3px solid #169b67!important}
+#ppa .card:first-of-type{border-top:3px solid #1976d2!important}
+
+#emisi .page-icon{background:#eaf8f4!important;color:#008f73!important}
+#plb3 .page-icon{background:#f2edff!important;color:#7250c8!important}
+#plb3darurat .page-icon{background:#fff3e6!important;color:#f28b22!important}
+#b3 .page-icon{background:#e9f8fb!important;color:#0796ae!important}
+#sampah .page-icon{background:#eaf8ef!important;color:#169b67!important}
+
 </style>
 </head>
 <body>
@@ -382,7 +728,7 @@ input[list$="LocationSuggestions"]{cursor:text}
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="emisiAssessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Lokasi / Area</label><input id="emisiSite" list="emisiLocationSuggestions" placeholder="Ketik atau pilih lokasi"><div class="location-master-note">Pilihan lokasi Emisi berasal dari data Emisi sendiri. Bisa diketik manual.</div></div>
+      <div class="field"><label>Lokasi / Area</label><input id="emisiSite" list="emisiLocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="emisiDate" type="date"></div>
       <div class="field"><label>Jumlah Cerobong</label><input id="emisiStackCount" class="num-input" type="number" min="0" value="4"></div>
     </div>
@@ -451,7 +797,7 @@ input[list$="LocationSuggestions"]{cursor:text}
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="daruratAssessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Lokasi / Area</label><input id="daruratSite" list="daruratLocationSuggestions" placeholder="Ketik atau pilih lokasi"><div class="location-master-note">Pilihan lokasi Tanggap Darurat berasal dari data modul ini sendiri. Bisa diketik manual.</div></div>
+      <div class="field"><label>Lokasi / Area</label><input id="daruratSite" list="daruratLocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="daruratDate" type="date"></div>
     </div>
   </div>
@@ -471,7 +817,7 @@ input[list$="LocationSuggestions"]{cursor:text}
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="b3Assessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Lokasi / Area</label><input id="b3Site" list="b3LocationSuggestions" placeholder="Ketik atau pilih lokasi"><div class="location-master-note">Pilihan lokasi B3 berasal dari data B3 sendiri. Bisa diketik manual.</div></div>
+      <div class="field"><label>Lokasi / Area</label><input id="b3Site" list="b3LocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="b3Date" type="date"></div>
     </div>
   </div>
@@ -487,7 +833,7 @@ input[list$="LocationSuggestions"]{cursor:text}
   <div class="topline">
     <div>
       <h1>Sampah</h1>
-      <p>Matriks Aspek Kriteria Pengelolaan Sampah — pengurangan, penanganan, pengolahan, dan pelaporan.</p>
+      <p>Checklist kepatuhan pengurangan, penanganan, pengolahan, dan pelaporan sampah.</p>
     </div>
     <button class="btn secondary" onclick="loadSampah()">↻ Refresh Data</button>
   </div>
@@ -495,7 +841,7 @@ input[list$="LocationSuggestions"]{cursor:text}
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="sampahAssessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Lokasi / Area</label><input id="sampahSite" list="sampahLocationSuggestions" placeholder="Ketik atau pilih lokasi"><div class="location-master-note">Pilihan lokasi Sampah berasal dari data Sampah sendiri. Bisa diketik manual.</div></div>
+      <div class="field"><label>Lokasi / Area</label><input id="sampahSite" list="sampahLocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="sampahDate" type="date"></div>
     </div>
   </div>
@@ -503,7 +849,7 @@ input[list$="LocationSuggestions"]{cursor:text}
   <div class="card">
     <div class="card-head">
       <div>
-        <h3>MATRIKS ASPEK KRITERIA PENGELOLAAN SAMPAH</h3>
+        <h3>PENILAIAN KEPATUHAN PENGELOLAAN SAMPAH</h3>
         <div class="note">Isi YA/TIDAK dan keterangan untuk setiap aspek. Persentase ketaatan dihitung otomatis.</div>
       </div>
       <span class="badge neutral" id="sampahPct">0%</span>
@@ -899,7 +1245,7 @@ function renderB3Forms(){
  root.innerHTML=b3Sections.map((sec,si)=>`<div class="card">
    <div class="module-section-title"><h3>${escapeHtml(sec[0])}</h3><p>Checklist ketentuan B3</p></div>
    <div class="table-wrap"><table class="compact-table"><thead><tr><th style="width:55px">No</th><th>Aspek</th><th style="width:120px">YA/TIDAK</th><th>Dokumentasi / Keterangan</th></tr></thead>
-   <tbody>${sec[1].map((r,i)=>`<tr><td class="num">${escapeHtml(r[0])}</td><td class="ket">${escapeHtml(r[1])}</td><td><select class="b3-status" data-s="${si}" data-i="${i}" onchange="calcB3()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td><td><textarea class="b3-note" data-s="${si}" data-i="${i}" rows="3" placeholder="Foto / dokumen / keterangan"></textarea></td></tr>`).join('')}</tbody></table></div>
+   <tbody>${sec[1].map((r,i)=>`<tr><td class="num">${i+1}</td><td class="ket">${escapeHtml(r[1])}</td><td><select class="b3-status" data-s="${si}" data-i="${i}" onchange="calcB3()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td><td><textarea class="b3-note" data-s="${si}" data-i="${i}" rows="3" placeholder="Foto / dokumen / keterangan"></textarea></td></tr>`).join('')}</tbody></table></div>
    <div class="score-box" style="margin-top:14px"><div class="progress"><span id="b3bar-${si}"></span></div><div class="score-value" id="b3score-${si}">0%</div></div>
  </div>`).join('');
  calcB3();
@@ -953,7 +1299,7 @@ function renderSampahForm(){
     const section=r[1]!==lastSection ? `<tr><td colspan="4" class="module-section-title"><b>${escapeHtml(r[1])}</b></td></tr>` : '';
     lastSection=r[1];
     return section+`<tr>
-      <td class="num">${escapeHtml(r[0])}</td>
+      <td class="num">${i+1}</td>
       <td class="ket">${escapeHtml(r[2])}</td>
       <td>
         <select class="sampah-status" data-i="${i}" onchange="calcSampah()">
