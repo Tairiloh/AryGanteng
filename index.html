@@ -1486,7 +1486,7 @@ background-size:auto,18px 18px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPCYcFADi7GEpQVwnwd4D4eqtt1kFQg3JYPStNfx6-Fx2o4Hc2kGMBnalfat7m6wFw/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby62EWnV7UOV3WdYV5d0VaZn9xks6ekBsmbBJDF3Lc2O4wk5L7BJF2uPydFTxf6ypHz/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -1836,47 +1836,75 @@ async function submitResponseForm(payload){
   return new Promise((resolve,reject)=>{
     const stamp=Date.now()+'_'+Math.floor(Math.random()*100000);
     const frameName='properResponseFrame_'+stamp;
+    const requestId='properReq_'+stamp;
+
     const iframe=document.createElement('iframe');
-    iframe.name=frameName; iframe.id=frameName; iframe.style.display='none';
+    iframe.name=frameName; iframe.id=frameName;
+    iframe.style.display='none';
     document.body.appendChild(iframe);
 
     const form=document.createElement('form');
-    form.method='POST'; form.action=SCRIPT_URL; form.target=frameName; form.style.display='none';
+    form.method='POST';
+    form.action=SCRIPT_URL;
+    form.target=frameName;
+    form.style.display='none';
+
+    const body=Object.assign({},payload,{userToken:getAuthToken()});
+    const payloadJson=JSON.stringify(body);
 
     const add=(name,value)=>{
-      const input=document.createElement('input'); input.type='hidden'; input.name=name; input.value=String(value ?? ''); form.appendChild(input);
+      const input=document.createElement('input');
+      input.type='hidden';
+      input.name=name;
+      input.value=String(value ?? '');
+      form.appendChild(input);
     };
 
-    const body=Object.assign({},payload,{userToken:getAuthToken(),returnUrl:location.origin+location.pathname,payloadJson:JSON.stringify(Object.assign({},payload,{userToken:getAuthToken()}))});
-    // Kirim satu JSON utuh agar array/object tetap utuh saat fallback POST.
-    add('payloadJson',body.payloadJson);
-    add('returnUrl',body.returnUrl);
+    add('payloadJson',payloadJson);
+    add('requestId',requestId);
 
     document.body.appendChild(form);
 
     let settled=false;
     let timeout=null;
+
     const cleanup=()=>{
       if(timeout) clearTimeout(timeout);
-      setTimeout(()=>{try{form.remove()}catch(_){ } try{iframe.remove()}catch(_){ }},300);
-    };
-    const finish=(fn,val)=>{ if(settled)return; settled=true; cleanup(); fn(val); };
-
-    iframe.onload=()=>{
-      try{
-        const href=iframe.contentWindow.location.href;
-        const marker='#properResponse=';
-        const idx=href.indexOf(marker);
-        if(idx<0)return;
-        const encoded=href.slice(idx+marker.length);
-        const json=decodeURIComponent(encoded);
-        finish(resolve,JSON.parse(json));
-      }catch(_){}
+      try{window.removeEventListener('message',onMessage);}catch(_){}
+      setTimeout(()=>{
+        try{form.remove();}catch(_){}
+        try{iframe.remove();}catch(_){}
+      },300);
     };
 
-    timeout=setTimeout(()=>finish(reject,new Error('Server tidak merespons. Pastikan deployment Apps Script sudah versi terbaru.')),30000);
+    const finish=(fn,val)=>{
+      if(settled)return;
+      settled=true;
+      cleanup();
+      fn(val);
+    };
 
-    try{ form.submit(); }catch(e){ finish(reject,e); }
+    function onMessage(event){
+      const d=event && event.data;
+      if(!d || d.type!=='properResponse' || d.requestId!==requestId) return;
+      if(d.ok){
+        finish(resolve,d.data || {status:'success'});
+      }else{
+        finish(reject,new Error((d.data && d.data.message)||'Server menolak permintaan.'));
+      }
+    }
+
+    window.addEventListener('message',onMessage);
+
+    timeout=setTimeout(()=>{
+      finish(reject,new Error('Server tidak merespons. Pastikan deployment Apps Script sudah versi terbaru.'));
+    },30000);
+
+    try{
+      form.submit();
+    }catch(e){
+      finish(reject,e);
+    }
   });
 }
 
@@ -2813,42 +2841,152 @@ function previewAuthPhoto(input){
 function fileToDataURL(file){
  return new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(String(fr.result).split(',')[1]||'');fr.onerror=reject;fr.readAsDataURL(file);});
 }
+function jsonpRequest(action, params={}, timeoutMs=25000){
+  return new Promise((resolve,reject)=>{
+    const cb='authCB_'+Date.now()+'_'+Math.floor(Math.random()*100000);
+    const s=document.createElement('script');
+    s.id=cb;
+    const query=new URLSearchParams();
+    query.set('action',action);
+    query.set('callback',cb);
+    query.set('t',Date.now());
+    Object.keys(params||{}).forEach(k=>{
+      const v=params[k];
+      if(v!==undefined && v!==null) query.set(k,String(v));
+    });
+
+    let timer=setTimeout(()=>{
+      cleanup();
+      reject(new Error('Server tidak merespons. Cek URL Web App dan deployment Apps Script.'));
+    },timeoutMs);
+
+    function cleanup(){
+      clearTimeout(timer);
+      delete window[cb];
+      try{s.remove();}catch(_){}
+    }
+
+    window[cb]=(data)=>{
+      cleanup();
+      if(data && data.status==='success') resolve(data);
+      else reject(new Error((data&&data.message)||'Server menolak permintaan.'));
+    };
+
+    s.onerror=()=>{
+      cleanup();
+      reject(new Error('Server tidak merespons. Pastikan Apps Script sudah di-deploy sebagai Web App.'));
+    };
+
+    s.src=SCRIPT_URL+'?'+query.toString();
+    document.body.appendChild(s);
+  });
+}
+
 async function doRegister(){
- const name=$('regName').value.trim(),username=$('regUsername').value.trim().toLowerCase(),p=$('regPassword').value,p2=$('regPassword2').value,recovery=$('regRecovery').value.trim();
+ const name=$('regName').value.trim();
+ const username=$('regUsername').value.trim().toLowerCase();
+ const p=$('regPassword').value;
+ const p2=$('regPassword2').value;
+ const recovery=$('regRecovery').value.trim();
+
  setAuthMsg('regMsg','');
- if(name.length<2||username.length<3||p.length<8||p!==p2||recovery.length<6){setAuthMsg('regMsg','Lengkapi data. Password minimal 8 karakter dan password harus sama.');return}
- let profilePhoto=null;
- const f=$('regPhoto').files&&$('regPhoto').files[0];
- if(f){if(f.size>2500000){setAuthMsg('regMsg','Foto profil maksimal 2.5 MB.');return} profilePhoto={fileName:f.name,mimeType:f.type,data:await fileToDataURL(f)}}
+
+ if(name.length<2||username.length<3||p.length<8||p!==p2||recovery.length<6){
+   setAuthMsg('regMsg','Lengkapi data. Password minimal 8 karakter dan password harus sama.');
+   return;
+ }
+
+ /*
+  * Registrasi akun dibuat tanpa foto terlebih dahulu supaya
+  * proses akun tidak gagal karena ukuran upload.
+  * Foto profil dapat dipasang dari Edit Profil setelah login.
+  */
  try{
-  const r=await postJSON({action:'registerUser',name,username,password:p,recoveryCode:recovery,profilePhoto});
-  if(r.status!=='success')throw Error(r.message||'Pendaftaran gagal');
-  setAuthMsg('regMsg','Akun berhasil dibuat. Silakan masuk.');switchAuth('login');$('loginUsername').value=username;
- }catch(e){setAuthMsg('regMsg',e.message||'Pendaftaran gagal.');}
+   const r=await jsonpRequest('registerUser',{
+     name,
+     username,
+     password:p,
+     recoveryCode:recovery
+   });
+
+   setAuthMsg('regMsg','Akun berhasil dibuat. Silakan masuk.');
+   switchAuth('login');
+   $('loginUsername').value=username;
+
+ }catch(e){
+   setAuthMsg('regMsg',e.message||'Pendaftaran gagal.');
+ }
 }
+
 async function doLogin(){
- const username=$('loginUsername').value.trim().toLowerCase(),password=$('loginPassword').value;
+ const username=$('loginUsername').value.trim().toLowerCase();
+ const password=$('loginPassword').value;
+
  setAuthMsg('loginMsg','');
- if(!username||!password){setAuthMsg('loginMsg','Username dan password wajib diisi.');return}
+
+ if(!username||!password){
+   setAuthMsg('loginMsg','Username dan password wajib diisi.');
+   return;
+ }
+
  try{
-  const r=await postJSON({action:'loginUser',username,password});
-  if(r.status!=='success')throw Error(r.message||'Login gagal');
-  setCurrentUser(r.user,r.token);
-  $('authGate').classList.add('hidden');
-  updateLoggedUserUI();
-  applyAccountToForms();
-  loadAllAfterLogin();
- }catch(e){setAuthMsg('loginMsg',e.message||'Login gagal.');}
+   const r=await jsonpRequest('loginUser',{
+     username,
+     password
+   });
+
+   if(!r || r.status!=='success'){
+     throw new Error((r&&r.message)||'Login gagal.');
+   }
+
+   setCurrentUser(r.user,r.token);
+
+   $('authGate').classList.add('hidden');
+
+   updateLoggedUserUI();
+   applyAccountToForms();
+   loadAllAfterLogin();
+
+ }catch(e){
+   setAuthMsg('loginMsg',e.message||'Login gagal.');
+ }
 }
+
 async function doResetPassword(){
- const username=$('resetUsername').value.trim().toLowerCase(),recovery=$('resetRecovery').value.trim(),password=$('resetPassword').value;
+ const username=$('resetUsername').value.trim().toLowerCase();
+ const recovery=$('resetRecovery').value.trim();
+ const password=$('resetPassword').value;
+
  setAuthMsg('resetMsg','');
- if(!username||recovery.length<6||password.length<8){setAuthMsg('resetMsg','Username, kode pemulihan dan password baru wajib valid.');return}
+
+ if(!username||recovery.length<6||password.length<8){
+   setAuthMsg('resetMsg','Username, kode pemulihan dan password baru wajib valid.');
+   return;
+ }
+
  try{
-  const r=await postJSON({action:'resetPassword',username,recoveryCode:recovery,newPassword:password});
-  if(r.status!=='success')throw Error(r.message||'Reset gagal');
-  setAuthMsg('resetMsg','Password berhasil direset. Silakan masuk.');switchAuth('login');$('loginUsername').value=username;
- }catch(e){setAuthMsg('resetMsg',e.message||'Reset password gagal.');}
+   const r=await jsonpRequest('resetPassword',{
+     username,
+     recoveryCode:recovery,
+     newPassword:password
+   });
+
+   if(!r || r.status!=='success'){
+     throw new Error((r&&r.message)||'Reset password gagal.');
+   }
+
+   setAuthMsg('resetMsg','Password berhasil direset. Silakan masuk.');
+   switchAuth('login');
+   $('loginUsername').value=username;
+
+ }catch(e){
+   setAuthMsg('resetMsg',e.message||'Reset password gagal.');
+ }
+}
+
+function logoutUser(){
+ clearCurrentUser();
+ location.reload();
 }
 function logoutUser(){clearCurrentUser();location.reload()}
 function avatarFallback(name){const s=String(name||'U').trim().split(/\s+/).filter(Boolean);return (s[0]?.[0]||'U')+(s[1]?.[0]||'');}
