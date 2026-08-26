@@ -934,6 +934,9 @@ background-size:auto,18px 18px}
 .crop-stage{background:linear-gradient(135deg,#022c22,#0f766e)!important}
 </style>
 
+<style id="recap-checklist-ui">
+.recap-click-row{cursor:pointer;transition:background .2s,transform .2s}.recap-click-row:hover{background:#f0faf6!important}.assessment-checklist-panel{max-width:1180px!important;width:min(1180px,96vw)!important}.assessment-checklist-panel .exec-detail-body{max-height:65vh;overflow:auto}.checklist-result-table{min-width:880px}.checklist-result-table td,.checklist-result-table th{vertical-align:top}.check-status{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border-radius:999px;font-size:10px;font-weight:900}.check-status.yes{background:#dcfce7;color:#166534}.check-status.no{background:#fee2e2;color:#991b1b}.check-status.pending{background:#f1f5f9;color:#64748b}.evidence-link{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:8px;background:#ecfdf5;color:#087f5b;text-decoration:none;font-size:10px;font-weight:800}.evidence-link:hover{background:#d1fae5}.recap-help{font-size:10px;color:#7c8c87;margin-top:4px}.
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1025,12 +1028,12 @@ background-size:auto,18px 18px}
   <div class="nav-label">MENU UTAMA</div>
   <nav class="nav">
     <button class="active" data-page="dashboard" onclick="showPage('dashboard')">⌂ <span>Dashboard</span></button>
-    <button data-page="ppa" onclick="showPage('ppa')">✓ <span>Input Penilaian (PPA)</span></button>
-    <button data-page="emisi" onclick="showPage('emisi')">◉ <span>Emisi</span></button>
-    <button data-page="plb3" onclick="showPage('plb3')">▦ <span>Penyimpanan PLB3</span></button>
-    <button data-page="plb3darurat" onclick="showPage('plb3darurat')">⚠ <span>PLB3 Tanggap Darurat</span></button>
-    <button data-page="b3" onclick="showPage('b3')">▤ <span>B3</span></button>
-    <button data-page="sampah" onclick="showPage('sampah')">♻ <span>Sampah</span></button>
+    <button data-page="ppa" onclick="showPage('ppa')">✓ <span>Aspek PPA</span></button>
+    <button data-page="emisi" onclick="showPage('emisi')">◉ <span>Aspek PPU</span></button>
+    <button data-page="plb3" onclick="showPage('plb3')">▦ <span>Aspek Penyimpanan PLB3</span></button>
+    <button data-page="plb3darurat" onclick="showPage('plb3darurat')">⚠ <span>Aspek Sistem Tanggap Darurat PLB3</span></button>
+    <button data-page="b3" onclick="showPage('b3')">▤ <span>Aspek B3</span></button>
+    <button data-page="sampah" onclick="showPage('sampah')">♻ <span>Aspek Sampah</span></button>
     <button data-page="monitoring" onclick="showPage('monitoring')">◫ <span>Monitoring &amp; Rekap</span></button>
     <button data-page="rekap" onclick="showPage('rekap')">▤ <span>Rekap Data</span></button>
     <button data-page="chat" onclick="showPage('chat')">💬 <span>Chat Tim</span><span class="chat-unread" id="chatUnreadBadge">0</span></button>
@@ -1057,7 +1060,7 @@ background-size:auto,18px 18px}
 
   <div class="dashboard-filter-bar" id="dashboardFilterBar">
     <div class="filter-intro"><span class="filter-icon">⌁</span><div><b>Filter Dashboard</b><small>Gunakan filter untuk melihat keseluruhan atau lokasi tertentu.</small></div></div>
-    <label><span>Bagian</span><select id="execFilterModule" onchange="applyExecutiveFilters()"><option value="">Semua Bagian</option></select></label>
+    <label><span>Aspek</span><select id="execFilterModule" onchange="applyExecutiveFilters()"><option value="">Semua Aspek</option></select></label>
     <label><span>Lokasi / Area</span><select id="execFilterSite" onchange="applyExecutiveFilters()"><option value="">Semua Lokasi</option></select></label>
     <label><span>Tahun</span><select id="execFilterYear" onchange="applyExecutiveFilters()"><option value="">Semua Tahun</option></select></label>
     <label><span>Bulan</span><select id="execFilterMonth" onchange="applyExecutiveFilters()"><option value="">Semua Bulan</option></select></label>
@@ -1128,11 +1131,11 @@ background-size:auto,18px 18px}
       <div class="viz-title"><div><h3>Aksi Cepat</h3><p>Masuk langsung ke input penilaian</p></div></div>
       <div class="quick-actions">
         <button onclick="showPage('ppa')"><i class="qa-blue">✓</i><span>Input PPA</span></button>
-        <button onclick="showPage('emisi')"><i class="qa-green">◉</i><span>Input Emisi</span></button>
-        <button onclick="showPage('plb3')"><i class="qa-purple">▦</i><span>Input PLB3</span></button>
-        <button onclick="showPage('plb3darurat')"><i class="qa-orange">⚠</i><span>PLB3 T.Darurat</span></button>
-        <button onclick="showPage('b3')"><i class="qa-cyan">⚗</i><span>Input B3</span></button>
-        <button onclick="showPage('sampah')"><i class="qa-lime">♻</i><span>Input Sampah</span></button>
+        <button onclick="showPage('emisi')"><i class="qa-green">◉</i><span>Input Aspek PPU</span></button>
+        <button onclick="showPage('plb3')"><i class="qa-purple">▦</i><span>Input Aspek PLB3</span></button>
+        <button onclick="showPage('plb3darurat')"><i class="qa-orange">⚠</i><span>Aspek PLB3 T.Darurat</span></button>
+        <button onclick="showPage('b3')"><i class="qa-cyan">⚗</i><span>Input Aspek B3</span></button>
+        <button onclick="showPage('sampah')"><i class="qa-lime">♻</i><span>Input Aspek Sampah</span></button>
       </div>
     </div>
   </div>
@@ -1158,8 +1161,8 @@ background-size:auto,18px 18px}
 
   <div class="dash-bottom-grid">
     <div class="viz-card">
-      <div class="viz-title"><div><h3>Assessment Terbaru Semua Bagian</h3><p>Riwayat terbaru dari PPA, Emisi, PLB3, Tanggap Darurat, B3 dan Sampah.</p></div><span class="viz-badge">Live</span></div>
-      <div id="dashRecentAllTable" class="table-wrap"><table><thead><tr><th>Bagian</th><th>Lokasi</th><th>Penilai</th><th>Tanggal</th><th>%</th><th>Status</th></tr></thead><tbody></tbody></table></div>
+      <div class="viz-title"><div><h3>Assessment Terbaru Semua Aspek</h3><p>Riwayat terbaru dari seluruh aspek: PPA, PPU/Emisi, PLB3, Tanggap Darurat PLB3, B3 dan Sampah.</p></div><span class="viz-badge">Live</span></div>
+      <div id="dashRecentAllTable" class="table-wrap"><table><thead><tr><th>Aspek</th><th>Lokasi</th><th>Penilai</th><th>Tanggal</th><th>%</th><th>Status</th></tr></thead><tbody></tbody></table></div>
       <button class="btn secondary full-btn" onclick="showPage('rekap')">Buka Rekap Lengkap →</button>
     </div>
     <div class="viz-card reminders-card">
@@ -1169,7 +1172,7 @@ background-size:auto,18px 18px}
   </div>
 
   <div class="card all-module-dashboard" id="allModuleDashboard">
-    <div class="card-head"><div><h3>Ringkasan Semua Bagian</h3><div class="note">Summary otomatis dari seluruh data yang diinput pada PPA, Emisi, Penyimpanan PLB3, PLB3 Tanggap Darurat, B3 dan Sampah.</div></div><span class="viz-badge">6 Bagian</span></div>
+    <div class="card-head"><div><h3>Ringkasan Semua Aspek</h3><div class="note">Summary otomatis dari seluruh data yang diinput pada PPA, Emisi, Penyimpanan PLB3, PLB3 Tanggap Darurat, B3 dan Sampah.</div></div><span class="viz-badge">6 Aspek</span></div>
     <div id="allModuleCards" class="all-module-cards"></div>
   </div>
 
@@ -1440,35 +1443,42 @@ background-size:auto,18px 18px}
   </div>
 </section>
 <section id="monitoring" class="page">
-  <div class="topline"><div><h1>Monitoring</h1><p>Pantau hasil penilaian seluruh modul dan seluruh PIC secara cepat.</p></div><button class="btn secondary" onclick="loadAllModulesRecap(true)">↻ Refresh Data</button></div>
+  <div class="topline"><div><h1>Monitoring</h1><p>Pantau hasil inspeksi seluruh aspek dan seluruh PIC secara cepat.</p></div><button class="btn secondary" onclick="loadAllModulesRecap(true)">↻ Refresh Data</button></div>
   <div class="grid monitoring-kpi-grid">
     <div class="kpi"><span>Total Assessment</span><strong id="allRecapCount">0</strong><em>Semua modul</em></div>
     <div class="kpi"><span>Total Lokasi</span><strong id="allRecapSites">0</strong><em>Lintas modul</em></div>
     <div class="kpi"><span>Rata-rata Kepatuhan</span><strong id="allRecapAvg">0%</strong><em>Semua assessment</em></div>
     <div class="kpi"><span>Modul Aktif</span><strong id="allRecapModules">0/6</strong><em>Sudah terisi</em></div>
   </div>
-  <div class="card"><div class="card-head"><div><h3>Detail Monitoring Seluruh Modul</h3><div class="note" id="lastSync">Belum sinkron</div></div></div><div class="table-wrap"><table><thead><tr><th>Modul</th><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>%</th><th>Status</th></tr></thead><tbody id="monitorBody"></tbody></table></div></div>
+  <div class="card"><div class="card-head"><div><h3>Detail Monitoring Seluruh Aspek</h3><div class="note" id="lastSync">Belum sinkron</div></div></div><div class="table-wrap"><table><thead><tr><th>Modul</th><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>%</th><th>Status</th></tr></thead><tbody id="monitorBody"></tbody></table></div></div>
 </section>
 
 <section id="rekap" class="page">
-  <div class="topline"><div><h1>Rekap Data</h1><p>Riwayat penilaian seluruh modul: PPA, Emisi, PLB3, Tanggap Darurat, B3, dan Sampah.</p></div><button class="btn secondary" onclick="loadAllModulesRecap(true)">↻ Refresh</button></div>
-  <div class="card"><div class="card-head"><div><h3>Rekap Semua Penilaian</h3><div class="note">Semua assessment dari seluruh PIC dan seluruh modul ditampilkan di sini.</div></div><span class="badge neutral" id="rekapModuleBadge">0 assessment</span></div><div class="table-wrap"><table><thead><tr><th>Modul</th><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>Persentase</th><th>Status</th></tr></thead><tbody id="rekapBody"></tbody></table></div></div>
+  <div class="topline"><div><h1>Rekap Data</h1><p>Riwayat inspeksi seluruh aspek: PPA, PPU/Emisi, PLB3, Tanggap Darurat PLB3, B3, dan Sampah.</p></div><button class="btn secondary" onclick="loadAllModulesRecap(true)">↻ Refresh</button></div>
+  <div class="card"><div class="card-head"><div><h3>Rekap Semua Penilaian</h3><div class="note">Semua checklist/inspeksi dari seluruh PIC dan seluruh aspek ditampilkan di sini. Klik baris untuk melihat hasil YA/TIDAK per ketentuan.</div></div><span class="badge neutral" id="rekapModuleBadge">0 assessment</span></div><div class="table-wrap"><table><thead><tr><th>Modul</th><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>Persentase</th><th>Status</th></tr></thead><tbody id="rekapBody"></tbody></table></div></div>
 </section>
 </main>
 </div>
 <div class="toast" id="toast"></div>
 
 
+<div class="exec-detail-modal" id="assessmentChecklistModal" onclick="if(event.target===this)closeAssessmentChecklist()">
+  <div class="exec-detail-panel assessment-checklist-panel">
+    <div class="exec-detail-head"><div><h3 id="assessmentChecklistTitle">Hasil Checklist</h3><p id="assessmentChecklistSubtitle">Detail inspeksi</p></div><button class="exec-detail-close" onclick="closeAssessmentChecklist()">×</button></div>
+    <div class="exec-detail-kpis" id="assessmentChecklistKpis"></div>
+    <div class="exec-detail-body"><table class="exec-detail-table checklist-result-table"><thead><tr><th>No</th><th>Ketentuan / Pertanyaan</th><th>Status</th><th>Keterangan</th><th>Dokumentasi</th></tr></thead><tbody id="assessmentChecklistRows"></tbody></table></div>
+  </div>
+</div>
 <div class="exec-detail-modal" id="execDetailModal" onclick="if(event.target===this)closeExecutiveDetail()">
   <div class="exec-detail-panel">
     <div class="exec-detail-head"><div><h3 id="execDetailTitle">Detail</h3><p id="execDetailSubtitle">Ringkasan detail</p></div><button class="exec-detail-close" onclick="closeExecutiveDetail()">×</button></div>
     <div class="exec-detail-kpis" id="execDetailKpis"></div>
-    <div class="exec-detail-body"><table class="exec-detail-table"><thead><tr><th>Bagian</th><th>Lokasi</th><th>Penilai</th><th>Tanggal</th><th>YA</th><th>TIDAK</th><th>Kepatuhan</th></tr></thead><tbody id="execDetailRows"></tbody></table></div>
+    <div class="exec-detail-body"><table class="exec-detail-table"><thead><tr><th>Aspek</th><th>Lokasi</th><th>Penilai</th><th>Tanggal</th><th>YA</th><th>TIDAK</th><th>Kepatuhan</th></tr></thead><tbody id="execDetailRows"></tbody></table></div>
   </div>
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby5rCM67Glf0nvAlZ61YInZoeODnr2mUm3-1Ews0jNBblikO653GwTQa8G9hrVRWRRb/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzMqJCrs6fYs5c6T45agqiN1o0j06-6Gnn7tsiyJR-tf-H3q1Kqp4ZFyO1jXw3rflOr/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2566,8 +2576,8 @@ function renderAllModulesRecap(rows){
  if($('allRecapModules'))$('allRecapModules').textContent=modules.size+'/6';
  if($('rekapModuleBadge'))$('rekapModuleBadge').textContent=rows.length+' assessment';
  const sorted=rows.slice().sort((a,b)=>String(b.timestamp||b.assessmentDate||'').localeCompare(String(a.timestamp||a.assessmentDate||'')));
- if($('monitorBody'))$('monitorBody').innerHTML=sorted.length?sorted.map(r=>`<tr><td><b>${escapeHtml(r.module||'-')}</b></td><td>${escapeHtml(r.timestamp||r.assessmentDate||'-')}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${Number(r.yes||0)}</td><td>${Number(r.no||0)}</td><td><b>${Number(r.percentage||0)}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data dari modul manapun.</td></tr>';
- if($('rekapBody'))$('rekapBody').innerHTML=sorted.length?sorted.map(r=>`<tr><td><b>${escapeHtml(r.module||'-')}</b></td><td>${escapeHtml(r.timestamp||r.assessmentDate||'-')}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${Number(r.yes||0)}</td><td>${Number(r.no||0)}</td><td><b>${Number(r.percentage||0)}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data dari modul manapun.</td></tr>';
+ if($('monitorBody'))$('monitorBody').innerHTML=sorted.length?sorted.map(r=>`<tr class="recap-click-row" onclick='openAssessmentChecklist(${JSON.stringify(r).replace(/'/g,"&#39;")})'><td><b>${escapeHtml(r.module||'-')}</b></td><td>${escapeHtml(r.timestamp||r.assessmentDate||'-')}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${Number(r.yes||0)}</td><td>${Number(r.no||0)}</td><td><b>${Number(r.percentage||0)}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data dari aspek manapun.</td></tr>';
+ if($('rekapBody'))$('rekapBody').innerHTML=sorted.length?sorted.map(r=>`<tr class="recap-click-row" onclick='openAssessmentChecklist(${JSON.stringify(r).replace(/'/g,"&#39;")})'><td><b>${escapeHtml(r.module||'-')}</b></td><td>${escapeHtml(r.timestamp||r.assessmentDate||'-')}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${Number(r.yes||0)}</td><td>${Number(r.no||0)}</td><td><b>${Number(r.percentage||0)}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data dari aspek manapun.</td></tr>';
  if($('lastSync'))$('lastSync').textContent='Semua modul tersinkron: '+new Date().toLocaleString('id-ID');
 }
 
@@ -2928,7 +2938,7 @@ function buildExecutiveFilterOptions(dataMap){
     const sk=normalizeSite(siteOf(r)); if(sk&&!sites.has(sk))sites.set(sk,siteOf(r));
     const d=dateOf(r); if(d){years.add(d.getFullYear());months.add(d.getMonth()+1)}
   }));
-  moduleSel.innerHTML='<option value="">Semua Bagian</option>'+Object.entries(moduleMeta).map(([k,m])=>`<option value="${k}">${escapeHtml(m.label)}</option>`).join('');
+  moduleSel.innerHTML='<option value="">Semua Aspek</option>'+Object.entries(moduleMeta).map(([k,m])=>`<option value="${k}">${escapeHtml(m.label)}</option>`).join('');
   siteSel.innerHTML='<option value="">Semua Lokasi</option>'+[...sites.entries()].sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>`<option value="${escapeHtml(k)}">${escapeHtml(v)}</option>`).join('');
   yearSel.innerHTML='<option value="">Semua Tahun</option>'+[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('');
   monthSel.innerHTML='<option value="">Semua Bulan</option>'+[...months].sort((a,b)=>a-b).map(m=>`<option value="${m}">${monthName(m)}</option>`).join('');
@@ -2967,6 +2977,28 @@ function openExecutiveRecord(r){
   const rows=[r];const yes=Number(r.yes||0),no=Number(r.no||0);$('execDetailTitle').textContent=(moduleMeta[r._module]?.label||r._module||'Assessment')+' · '+siteOf(r);$('execDetailSubtitle').textContent='Detail assessment yang dipilih';$('execDetailKpis').innerHTML=[['Penilai',r.assessor||'PIC'],['Tanggal',r.assessmentDate||r.timestamp||'-'],['YA',yes],['Kepatuhan',scoreOf(r)+'%']].map(x=>`<div class="exec-mini-kpi"><span>${x[0]}</span><b>${escapeHtml(String(x[1]))}</b></div>`).join('');$('execDetailRows').innerHTML=`<tr><td>${escapeHtml(moduleMeta[r._module]?.label||r._module||'—')}</td><td>${escapeHtml(siteOf(r))}</td><td>${escapeHtml(r.assessor||'PIC')}</td><td>${escapeHtml(r.assessmentDate||r.timestamp||'-')}</td><td>${yes}</td><td>${no}</td><td><b>${scoreOf(r)}%</b></td></tr>`;$('execDetailModal').classList.add('show');
 }
 function closeExecutiveDetail(){$('execDetailModal')?.classList.remove('show')}
+function closeAssessmentChecklist(){ $('assessmentChecklistModal')?.classList.remove('show'); }
+async function openAssessmentChecklist(row){
+  const module=row?.module||row?.moduleKey||''; const submissionId=row?.submissionId||'';
+  if(!module||!submissionId){toast('Detail inspeksi tidak tersedia.');return;}
+  const modLabel=module==='Emisi'?'Aspek PPU':(moduleMeta[module]?.label||module);
+  $('assessmentChecklistTitle').textContent='Hasil Checklist · '+modLabel;
+  $('assessmentChecklistSubtitle').textContent=`${displaySite(row.site)||'-'} · ${row.assessor||'PIC'} · ${row.assessmentDate||row.timestamp||'-'}`;
+  $('assessmentChecklistKpis').innerHTML=[['YA',Number(row.yes||0)],['TIDAK',Number(row.no||0)],['Kepatuhan',Number(row.percentage||0)+'%'],['Aspek',modLabel]].map(x=>`<div class="exec-mini-kpi"><span>${escapeHtml(String(x[0]))}</span><b>${escapeHtml(String(x[1]))}</b></div>`).join('');
+  $('assessmentChecklistRows').innerHTML='<tr><td colspan="5" style="text-align:center;padding:35px;color:#7b8c96">Memuat hasil checklist...</td></tr>';
+  $('assessmentChecklistModal').classList.add('show');
+  try{
+    const d=await jsonpGet('getAssessmentDetails',{module:module,submissionId:submissionId});
+    const rows=Array.isArray(d.data?.details)?d.data.details:[];
+    $('assessmentChecklistRows').innerHTML=rows.length?rows.map((x,i)=>{
+      const st=String(x.status||'').toUpperCase(); const cls=st==='YA'?'yes':st==='TIDAK'?'no':'pending';
+      const doc=x.dokumentasi||x.documentation||'';
+      const docHtml=doc?`<a class="evidence-link" href="${escapeHtml(doc)}" target="_blank" rel="noopener">📷 Lihat</a>`:'<span style="color:#9aa9a3;font-size:10px">—</span>';
+      return `<tr><td><b>${escapeHtml(String(x.no||i+1))}</b></td><td><div style="font-weight:700;line-height:1.45">${escapeHtml(x.item||x.ketentuan||'')}</div>${x.section?`<div style="font-size:9px;color:#087f5b;margin-top:4px;font-weight:800">${escapeHtml(x.section)}</div>`:''}</td><td><span class="check-status ${cls}">${escapeHtml(st||'—')}</span></td><td>${escapeHtml(x.keterangan||'—')}</td><td>${docHtml}</td></tr>`;
+    }).join(''):'<tr><td colspan="5" style="text-align:center;padding:35px;color:#7b8c96">Detail checklist belum tersedia untuk assessment ini.</td></tr>';
+  }catch(e){$('assessmentChecklistRows').innerHTML=`<tr><td colspan="5" style="text-align:center;padding:35px;color:#b42318">Gagal membaca detail checklist: ${escapeHtml(e.message||String(e))}</td></tr>`;}
+}
+
 async function loadExecutiveAnalyticsV2(force=false){
   ensureExecutiveDashboard();
   const keys=Object.keys(moduleMeta), results=await Promise.all(keys.map(k=>fetchModule(k,force))), map={};
@@ -3219,14 +3251,14 @@ setTimeout(()=>loadExecutiveAnalyticsV2(false),1200);
     set('allRecapCount',rows.length); set('allRecapSites',sites.size); set('allRecapAvg',avg+'%'); set('allRecapModules',modules.size+'/6');
     set('rekapModuleBadge',rows.length+' assessment');
     const sorted=rows.slice().sort((a,b)=>String(b.timestamp||b.assessmentDate||'').localeCompare(String(a.timestamp||a.assessmentDate||'')));
-    const body=sorted.length?sorted.map(r=>`<tr>
+    const body=sorted.length?sorted.map(r=>`<tr class="recap-click-row" onclick='openAssessmentChecklist(${JSON.stringify(r).replace(/'/g,"&#39;")})'>
       <td><span class="mod-pill">${safeText(r.module||'-')}</span></td>
       <td>${safeText(r.timestamp||r.assessmentDate||'-')}</td>
       <td><b>${safeText(r.assessor||'-')}</b></td>
       <td>${safeText(displaySite(r.site)||'-')}</td>
       <td>${Number(r.yes||0)}</td><td>${Number(r.no||0)}</td>
       <td><b>${Number(r.percentage||0)}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td>
-    </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:35px;color:#64756f">Belum ada data dari modul manapun.</td></tr>';
+    </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:35px;color:#64756f">Belum ada data dari aspek manapun.</td></tr>';
     setHtml('monitorBody',body); setHtml('rekapBody',body);
     set('lastSync','Semua modul tersinkron: '+new Date().toLocaleString('id-ID'));
   };
