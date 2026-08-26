@@ -731,6 +731,103 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
 @media(max-width:1050px){.dashboard-filter-bar{grid-template-columns:1fr 1fr}.filter-intro{grid-column:1/-1}.exec-detail-kpis{grid-template-columns:1fr 1fr}}
 @media(max-width:680px){.dashboard-filter-bar{grid-template-columns:1fr}.filter-intro{grid-column:auto}.exec-detail-kpis{grid-template-columns:1fr 1fr}}
 </style>
+
+<style id="final-full-bleed-hero-emisi">
+/* ===== FULL-BLEED ENVIRONMENT HERO ===== */
+.hero-full-bleed{
+  position:relative!important;display:block!important;
+  min-height:265px!important;height:265px!important;padding:0!important;
+  overflow:hidden!important;border-radius:24px!important;
+  background:#062b42!important;isolation:isolate;
+}
+.hero-full-bleed .hero-photo-visual{
+  position:absolute!important;inset:0!important;width:100%!important;height:100%!important;
+  min-height:0!important;background:#062b42!important;overflow:hidden!important;
+}
+.hero-full-bleed .hero-photo-slides,
+.hero-full-bleed .hero-photo-slide{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
+.hero-full-bleed .hero-photo-slide{
+  background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important;
+  transform:scale(1.08)!important;opacity:0!important;
+  transition:opacity 1.15s ease,transform 7.5s cubic-bezier(.2,.65,.2,1)!important;
+  animation:none!important;filter:saturate(1.08) contrast(1.03);
+}
+.hero-full-bleed .hero-photo-slide.active{
+  opacity:1!important;transform:scale(1)!important;
+  animation:properHeroKenBurns 7.5s ease both!important;
+}
+@keyframes properHeroKenBurns{
+  0%{background-size:112%;background-position:43% 50%}
+  45%{background-size:118%;background-position:55% 47%}
+  100%{background-size:110%;background-position:50% 52%}
+}
+.hero-full-bleed .hero-photo-shade{
+  position:absolute!important;inset:0!important;z-index:2!important;
+  background:
+    linear-gradient(90deg,rgba(3,26,44,.92) 0%,rgba(3,39,58,.78) 30%,rgba(3,48,57,.32) 58%,rgba(0,40,48,.16) 100%),
+    linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.30))!important;
+  pointer-events:none!important;
+}
+.hero-overlay-content{
+  position:absolute!important;z-index:4!important;left:30px!important;top:50%!important;
+  transform:translateY(-50%)!important;width:min(600px,58%)!important;padding:8px 0!important;
+}
+.hero-overlay-content .hero-kicker{color:#7ee6c1!important;font-size:9px!important;letter-spacing:.15em!important;font-weight:900!important;margin-bottom:8px!important}
+.hero-overlay-content h2{
+  margin:0 0 10px!important;color:#fff!important;font-size:30px!important;line-height:1.1!important;
+  letter-spacing:-.045em!important;font-weight:900!important;text-shadow:0 4px 18px rgba(0,0,0,.20);
+}
+.hero-overlay-content h2 span{color:#79e1bc!important}
+.hero-overlay-content p{
+  margin:0!important;max-width:560px!important;color:rgba(255,255,255,.86)!important;
+  font-size:11px!important;line-height:1.7!important;text-shadow:0 2px 10px rgba(0,0,0,.18);
+}
+.hero-overlay-content .hero-tags{margin-top:16px!important}
+.hero-overlay-content .hero-tags span{
+  color:#f0fff9!important;background:rgba(255,255,255,.10)!important;
+  border:1px solid rgba(255,255,255,.22)!important;backdrop-filter:blur(10px)!important;
+}
+.hero-full-bleed .hero-score{
+  z-index:6!important;right:22px!important;bottom:20px!important;min-width:110px!important;
+  background:rgba(3,30,43,.50)!important;border:1px solid rgba(255,255,255,.24)!important;
+  backdrop-filter:blur(12px)!important;box-shadow:0 14px 30px rgba(0,0,0,.18)!important;
+}
+.hero-full-bleed .hero-slide-meta{z-index:6!important;right:22px!important;top:18px!important;bottom:auto!important}
+
+/* ===== EMISI CHECKLIST ===== */
+#emisi .emisi-checklist-table{min-width:900px!important}
+#emisi .emisi-checklist-table th{white-space:nowrap}
+#emisi .emisi-checklist-table td{vertical-align:middle!important}
+#emisi .emisi-status{min-width:105px!important;min-height:42px!important;font-weight:900!important;cursor:pointer!important}
+#emisi .emisi-status.status-yes{background:#dcfce7!important;color:#166534!important;border-color:#a7e3bf!important}
+#emisi .emisi-status.status-no{background:#fee2e2!important;color:#991b1b!important;border-color:#fecaca!important}
+#emisi .emisi-note{width:100%!important;min-height:76px!important;resize:vertical!important}
+#emisi .emisi-evidence-cell{min-width:250px!important}
+#emisi .emisi-photo-slot{display:flex;flex-direction:column;gap:3px;color:#087c63;font-size:9px;font-weight:900}
+#emisi .emisi-photo-slot small{color:#8a989e;font-size:8px;font-weight:600}
+#emisi .evidence-wrap{margin-top:6px!important;padding:8px!important;background:#f7fbfa!important;border:1px solid #e2ece9!important;border-radius:10px!important}
+#emisi .evidence-label{
+  display:block!important;margin-bottom:5px!important;color:#087c63!important;font-size:8px!important;
+  font-weight:900!important;text-transform:none!important;letter-spacing:0!important
+}
+#emisi .evidence-file{width:100%!important;font-size:8px!important;padding:5px!important;background:#fff!important}
+#emisi .evidence-hint{display:block!important;margin-top:4px!important;color:#8a989e!important;font-size:7px!important}
+#emisi .emisi-checklist-table tfoot th{background:#f0f8f5!important;color:#087c63!important;font-size:10px!important}
+@media(max-width:900px){
+  .hero-full-bleed{height:300px!important;min-height:300px!important}
+  .hero-overlay-content{left:22px!important;width:70%!important}
+  .hero-overlay-content h2{font-size:25px!important}
+}
+@media(max-width:620px){
+  .hero-full-bleed{height:340px!important;min-height:340px!important;border-radius:18px!important}
+  .hero-overlay-content{left:18px!important;right:18px!important;width:auto!important;top:42%!important}
+  .hero-overlay-content h2{font-size:24px!important}
+  .hero-overlay-content p{font-size:10px!important}
+  .hero-full-bleed .hero-score{left:18px!important;right:auto!important;bottom:17px!important}
+  .hero-full-bleed .hero-slide-meta{right:16px!important;top:15px!important}
+}
+</style>
+
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -833,24 +930,38 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
     <button class="filter-reset" onclick="resetExecutiveFilters()">Reset</button>
   </div>
 
-  <div class="dash-hero pro-hero" id="proHero">
-    <div class="hero-copy">
-      <div class="hero-kicker">PROPER • ENVIRONMENTAL COMPLIANCE</div>
-      <h2 id="heroSlideTitle">Kepatuhan lingkungan yang <span>terukur.</span></h2>
-      <p id="heroSlideText">Pantau performa pengelolaan lingkungan dari seluruh lokasi dalam satu dashboard yang ringkas, jelas, dan mudah ditindaklanjuti.</p>
-      <div class="hero-tags"><span>6 Modul</span><span>Multi-Lokasi</span><span>Live Data</span><span>Action Ready</span></div>
-    </div>
-    <div class="hero-visual hero-photo-visual">
+  <div class="dash-hero pro-hero hero-full-bleed" id="proHero">
+    <div class="hero-photo-visual">
       <div class="hero-photo-slides" id="heroPhotoSlides">
-        <div class="hero-photo-slide active" data-title="Kepatuhan lingkungan yang <span>terukur.</span>" data-text="Pantau performa pengelolaan lingkungan dari seluruh lokasi dalam satu dashboard yang ringkas, jelas, dan mudah ditindaklanjuti." data-img="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1800&q=88"></div>
-        <div class="hero-photo-slide" data-title="Jaga <span>air &amp; emisi.</span>" data-text="Pastikan pengendalian pencemaran, pemantauan emisi, dan kualitas lingkungan berjalan konsisten di setiap lokasi." data-img="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1800&q=88"></div>
-        <div class="hero-photo-slide" data-title="Kelola <span>limbah B3.</span>" data-text="Perkuat kepatuhan penyimpanan, tanggap darurat, dokumentasi, dan pengendalian risiko Limbah B3." data-img="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1800&q=88"></div>
-        <div class="hero-photo-slide" data-title="Menuju lingkungan <span>lebih hijau.</span>" data-text="Bangun budaya kepatuhan yang konsisten melalui data, evaluasi, tindak lanjut, dan perbaikan berkelanjutan." data-img="https://images.unsplash.com/photo-1619268005704-8e02ba0eaaaf?auto=format&fit=crop&w=1800&q=88"></div>
+        <div class="hero-photo-slide active"
+             data-title="Kepatuhan lingkungan yang <span>terukur.</span>"
+             data-text="Pantau performa pengelolaan lingkungan dari seluruh lokasi dalam satu dashboard yang ringkas, jelas, dan mudah ditindaklanjuti."
+             data-img="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=2200&q=90"></div>
+        <div class="hero-photo-slide"
+             data-title="Jaga <span>air &amp; emisi.</span>"
+             data-text="Pastikan pengendalian pencemaran, pemantauan emisi, dan kualitas lingkungan berjalan konsisten di setiap lokasi."
+             data-img="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=2200&q=90"></div>
+        <div class="hero-photo-slide"
+             data-title="Kelola <span>limbah B3.</span>"
+             data-text="Perkuat kepatuhan penyimpanan, tanggap darurat, dokumentasi, dan pengendalian risiko Limbah B3."
+             data-img="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=2200&q=90"></div>
+        <div class="hero-photo-slide"
+             data-title="Menuju lingkungan <span>lebih hijau.</span>"
+             data-text="Bangun budaya kepatuhan yang konsisten melalui data, evaluasi, tindak lanjut, dan perbaikan berkelanjutan."
+             data-img="https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=2200&q=90"></div>
       </div>
       <div class="hero-photo-shade"></div>
+
+      <div class="hero-overlay-content">
+        <div class="hero-kicker">PROPER • ENVIRONMENTAL COMPLIANCE</div>
+        <h2 id="heroSlideTitle">Kepatuhan lingkungan yang <span>terukur.</span></h2>
+        <p id="heroSlideText">Pantau performa pengelolaan lingkungan dari seluruh lokasi dalam satu dashboard yang ringkas, jelas, dan mudah ditindaklanjuti.</p>
+        <div class="hero-tags"><span>6 Modul</span><span>Multi-Lokasi</span><span>Live Data</span><span>Action Ready</span></div>
+      </div>
+
       <div class="hero-score"><small>OVERALL</small><b id="heroOverall">0%</b><span>Kepatuhan</span></div>
       <div class="hero-slide-meta"><span id="heroSlideIndex">01</span><div class="hero-dots" id="heroDots"></div></div>
-    </div>div>
+    </div>
   </div>
 
   <div class="exec-kpis dash-kpis" id="execKpis"></div>
@@ -967,22 +1078,21 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
       <div class="field"><label>Nama Penilai</label><input id="emisiAssessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Lokasi / Area</label><input id="emisiSite" list="emisiLocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="emisiDate" type="date"></div>
-      <div class="field"><label>Jumlah Cerobong</label><input id="emisiStackCount" class="num-input" type="number" min="0" value="4"></div>
     </div>
   </div>
   <div class="card">
     <div class="card-head"><div><h3>KETAATAN TERHADAP KETENTUAN TEKNIS</h3><div class="note">Isi data setiap ketentuan. Persentase dihitung otomatis.</div></div><span class="badge neutral" id="emisiPct">0%</span></div>
     <div class="table-wrap">
-      <table class="emisi-table">
-        <thead><tr><th>No</th><th>Ketentuan Teknis</th><th>Jumlah Cerobong</th><th>Data yang harus dilaporkan</th><th>Jumlah data yang Sesuai</th><th>Data Terlapor dan Sesuai</th><th>Prosentase</th></tr></thead>
+      <table class="emisi-table emisi-checklist-table">
+        <thead><tr><th style="width:55px">No</th><th>Ketentuan Teknis</th><th style="width:125px">YA / TIDAK</th><th style="width:250px">Dokumentasi Foto</th><th style="min-width:280px">Keterangan</th></tr></thead>
         <tbody id="emisiBody"></tbody>
-        <tfoot><tr><th colspan="6" style="text-align:right">Tingkat Ketaatan Terhadap Ketentuan Teknis</th><th id="emisiTotalPct">0%</th></tr></tfoot>
+        <tfoot><tr><th colspan="4" style="text-align:right">Tingkat Ketaatan Terhadap Ketentuan Teknis</th><th id="emisiTotalPct">0%</th></tr></tfoot>
       </table>
     </div>
     <div class="actions"><button class="btn secondary" onclick="resetEmisi()">Reset</button><button class="btn primary" onclick="submitEmisi()">☁ Simpan Emisi</button></div>
   </div>
   <div class="card"><div class="card-head"><h3>Riwayat Data Emisi</h3><span class="badge neutral" id="emisiCount">0 assessment</span></div>
-    <div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>Cerobong</th><th>Tingkat Ketaatan</th></tr></thead><tbody id="emisiHistory"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>Tingkat Ketaatan</th></tr></thead><tbody id="emisiHistory"></tbody></table></div>
   </div>
 </section>
 
@@ -1336,29 +1446,42 @@ const plb3Items = [
 
 function renderEmisiForm(){
  $('emisiBody').innerHTML=emisiItems.map((item,i)=>`<tr>
-   <td class="num">${i+1}</td><td class="ket">${escapeHtml(item)}</td>
-   <td><input class="small-input emisi-stack" type="number" min="0" value="0" oninput="calcEmisi()"></td>
-   <td><input class="small-input emisi-required" type="number" min="0" value="0" oninput="calcEmisi()"></td>
-   <td><input class="small-input emisi-sesuai" type="number" min="0" value="0" oninput="calcEmisi()"></td>
-   <td><input class="small-input emisi-terlapor" type="number" min="0" value="0" oninput="calcEmisi()"></td>
-   <td><textarea class="emisi-note" rows="2" placeholder="Keterangan / bukti"></textarea></td>
-   <td><b class="emisi-row-pct">0%</b></td>
+   <td class="num">${i+1}</td>
+   <td class="ket">${escapeHtml(item)}</td>
+   <td>
+     <select class="status-select emisi-status" data-row="${i}" onchange="calcEmisi()">
+       <option value="">Pilih</option>
+       <option value="YA">YA</option>
+       <option value="TIDAK">TIDAK</option>
+     </select>
+   </td>
+   <td class="emisi-evidence-cell">
+     <div class="emisi-photo-slot">
+       <span>📷 Dokumentasi Foto</span>
+       <small>JPG/PNG · maks. 1 foto</small>
+     </div>
+   </td>
+   <td><textarea class="emisi-note" data-row="${i}" rows="3" placeholder="Tuliskan keterangan / bukti pendukung..."></textarea></td>
  </tr>`).join('');
  enhanceEvidenceInputs('#emisiBody','emisi');
  calcEmisi();
 }
 function calcEmisi(){
  const rows=[...document.querySelectorAll('#emisiBody tr')];
- let sum=0,n=0;
+ let answered=0,yes=0;
  rows.forEach(tr=>{
-   const den=Number(tr.querySelector('.emisi-sesuai').value)||0;
-   const num=Number(tr.querySelector('.emisi-terlapor').value)||0;
-   const pct=den?Math.min(100,Math.max(0,num/den*100)):0;
-   tr.querySelector('.emisi-row-pct').textContent=Math.round(pct)+'%';
-   sum+=pct;n++;
+   const s=tr.querySelector('.emisi-status');
+   const value=s ? s.value : '';
+   if(value) answered++;
+   if(value==='YA') yes++;
+   if(s){
+     s.classList.toggle('status-yes',value==='YA');
+     s.classList.toggle('status-no',value==='TIDAK');
+   }
  });
- const pct=n?Math.round(sum/n):0;
- $('emisiPct').textContent=pct+'%';$('emisiTotalPct').textContent=pct+'%';
+ const pct=rows.length?Math.round(yes/rows.length*100):0;
+ $('emisiPct').textContent=pct+'%';
+ $('emisiTotalPct').textContent=pct+'%';
 }
 function renderPLB3Form(){
  const head=$('plb3Head');
@@ -1389,7 +1512,7 @@ function calcPLB3(){
 }
 function resetEmisi(){
  $('emisiAssessor').value=(getCurrentUser()||{}).name||'';$('emisiSite').value='';$('emisiDate').value='';
- $('emisiStackCount').value=0;renderEmisiForm();
+ renderEmisiForm();
 }
 function resetPLB3(){
  $('plb3Assessor').value=(getCurrentUser()||{}).name||'';$('plb3Site').value='';$('plb3Date').value='';
@@ -1401,21 +1524,41 @@ async function postJSON(payload){
  return await r.json();
 }
 async function submitEmisi(){
- const assessor=$('emisiAssessor').value.trim(),site=canonicalLocationFor('emisi',$('emisiSite').value),date=$('emisiDate').value;
- if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Emisi wajib diisi.');return}
- const rows=[...document.querySelectorAll('#emisiBody tr')].map((tr,i)=>({
-   no:i+1,ketentuan:emisiItems[i],
-   jumlahCerobong:Number(tr.querySelector('.emisi-stack').value)||0,
-   dataHarusDilaporkan:Number(tr.querySelector('.emisi-required').value)||0,
-   jumlahDataSesuai:Number(tr.querySelector('.emisi-sesuai').value)||0,
-   dataTerlaporSesuai:Number(tr.querySelector('.emisi-terlapor').value)||0,
-   prosentase:Number(tr.querySelector('.emisi-row-pct').textContent.replace('%',''))||0,keterangan:(tr.querySelector('.emisi-note')||{}).value||''
- }));
- try{
-   const d=await postJSON({action:'saveEmisi',assessor,site,assessmentDate:date,items:rows});
-   if(d.status==='success'){try{await uploadModuleEvidence('emisi',d.submissionId,collectEvidence('emisi'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}toast('✓ Data Emisi berhasil disimpan.');resetEmisi();loadEmisi();}
-   else throw new Error(d.message||'Gagal menyimpan');
- }catch(e){toast('Gagal menyimpan Emisi: '+e.message)}
+  const assessor=$('emisiAssessor').value.trim(),site=canonicalLocationFor('emisi',$('emisiSite').value),date=$('emisiDate').value;
+  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Emisi wajib diisi.');return}
+
+  const statusEls=[...document.querySelectorAll('#emisiBody .emisi-status')];
+  if(statusEls.some(s=>!s.value)){
+    toast('Lengkapi semua status YA/TIDAK pada penilaian Emisi.');
+    return;
+  }
+
+  const notes=[...document.querySelectorAll('#emisiBody .emisi-note')];
+  const rows=statusEls.map((s,i)=>{
+    const ok=s.value==='YA';
+    return {
+      no:i+1,
+      ketentuan:emisiItems[i],
+      // Kompatibilitas dengan Apps Script lama:
+      jumlahCerobong:0,
+      dataHarusDilaporkan:1,
+      jumlahDataSesuai:ok?1:0,
+      dataTerlaporSesuai:ok?1:0,
+      prosentase:ok?100:0,
+      status:s.value,
+      keterangan:notes[i]?notes[i].value.trim():''
+    };
+  });
+
+  try{
+    const d=await postJSON({action:'saveEmisi',assessor,site,assessmentDate:date,items:rows});
+    if(d.status==='success'){
+      try{await uploadModuleEvidence('emisi',d.submissionId,collectEvidence('emisi'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
+      toast('✓ Data Emisi berhasil disimpan.');
+      resetEmisi();
+      loadEmisi();
+    } else throw new Error(d.message||'Gagal menyimpan');
+  }catch(e){toast('Gagal menyimpan Emisi: '+e.message)}
 }
 async function submitPLB3(){
  const assessor=$('plb3Assessor').value.trim(),site=canonicalLocationFor('plb3',$('plb3Site').value),date=$('plb3Date').value;
@@ -1440,7 +1583,7 @@ function renderHistoryTable(id,data,type){
  const body=$(id);
  if(!body)return;
  body.innerHTML=data.length?data.slice().reverse().map(r=>{
-   if(type==='emisi') return `<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(r.site||'-')}</td><td>${r.stackCount||0}</td><td><b>${r.percentage||0}%</b></td></tr>`;
+   if(type==='emisi') return `<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(r.site||'-')}</td><td><b>${r.percentage||0}%</b></td></tr>`;
    return `<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(r.site||'-')}</td><td>${r.total||0}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td></tr>`;
  }).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
 }
@@ -2403,7 +2546,7 @@ setTimeout(()=>loadExecutiveAnalyticsV2(false),1200);
   }
   dotEls.forEach((d,i)=>d.addEventListener('click',()=>{go(i);restart()}));
   function restart(){clearInterval(timer);timer=setInterval(()=>go(current+1),6500)}
-  go(0);restart();root.parentElement.addEventListener('mouseenter',()=>clearInterval(timer));root.parentElement.addEventListener('mouseleave',restart);
+  go(0);restart();const hero=root.closest('.hero-full-bleed')||root.parentElement;hero.addEventListener('mouseenter',()=>clearInterval(timer));hero.addEventListener('mouseleave',restart);
 })();
 </script>
 </body>
