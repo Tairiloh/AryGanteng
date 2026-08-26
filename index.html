@@ -605,6 +605,46 @@ input[list$="LocationSuggestions"]{
 .sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.24);border-radius:99px}
 .sidebar::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.4)}
 @media(max-width:800px){.sidebar{height:100vh;max-height:100vh;overflow-y:auto}}
+
+/* ===== AUTHENTICATION / ACCOUNT SYSTEM ===== */
+.auth-gate{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#022c48,#006b52 70%,#0aa27a);display:flex;align-items:center;justify-content:center;padding:22px}
+.auth-gate.hidden{display:none}
+.auth-shell{width:min(1040px,100%);display:grid;grid-template-columns:1.05fr .95fr;background:#fff;border-radius:28px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.24)}
+.auth-visual{padding:40px;color:#fff;background:linear-gradient(155deg,#033b5b,#006a50);position:relative;overflow:hidden}
+.auth-visual:after{content:"PROPER";position:absolute;font-size:100px;font-weight:900;right:-20px;bottom:-10px;color:rgba(255,255,255,.06)}
+.auth-visual h1{font-size:35px;line-height:1.05;margin:25px 0 12px;letter-spacing:-1.5px}
+.auth-visual p{font-size:12px;line-height:1.7;color:rgba(255,255,255,.8);max-width:430px}
+.auth-logo{width:100px;height:75px;background:#fff;border-radius:14px;padding:8px;display:grid;place-items:center}
+.auth-logo img{max-width:100%;max-height:100%;object-fit:contain}
+.auth-pills{display:flex;gap:7px;flex-wrap:wrap;margin-top:22px}.auth-pills span{font-size:9px;font-weight:800;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14)}
+.auth-panel{padding:30px;background:#fff}
+.auth-tabs{display:flex;gap:5px;background:#f3f7f6;border-radius:11px;padding:4px;margin-bottom:18px}
+.auth-tabs button{flex:1;border:0;background:transparent;padding:9px;border-radius:8px;font-size:10px;font-weight:900;color:#71827d}
+.auth-tabs button.active{background:#fff;color:#006b52;box-shadow:0 3px 10px rgba(0,0,0,.06)}
+.auth-form{display:none}.auth-form.active{display:block}.auth-form h2{margin:0 0 5px;font-size:22px;color:#0a2a3b}.auth-form p{margin:0 0 17px;font-size:10px;color:#7a8b85}
+.auth-form .field{margin-bottom:10px}.auth-form label{font-size:9px}.auth-form input{width:100%;background:#f8fbfa}
+.auth-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.auth-submit{width:100%;margin-top:8px}
+.auth-link{border:0;background:none;color:#007b5d;font-size:10px;font-weight:800;padding:8px 0}
+.auth-photo{display:flex;align-items:center;gap:10px}.auth-avatar{width:46px;height:46px;border-radius:50%;object-fit:cover;background:#eaf7f2}
+.auth-msg{min-height:16px;font-size:10px;color:#d43b3b;font-weight:700;margin:8px 0}
+.user-profile-mini{display:flex;align-items:center;gap:9px}.user-profile-mini img{width:34px;height:34px;border-radius:50%;object-fit:cover;background:#eaf7f2}.user-profile-mini b{display:block}.user-profile-mini small{display:block}
+.sidebar{overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.25) transparent}
+.sidebar::-webkit-scrollbar{width:5px}.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.22);border-radius:999px}
+.user-contrib{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.contrib-card{background:#fff;border:1px solid #e2ebe7;border-radius:15px;padding:12px;display:flex;align-items:center;gap:10px}.contrib-card img{width:38px;height:38px;border-radius:50%;object-fit:cover;background:#eaf7f2}.contrib-card strong{display:block;font-size:18px;color:#087f5b}.contrib-card span{display:block;font-size:9px;color:#71827d}.contrib-card b{font-size:10px}
+@media(max-width:800px){.auth-shell{grid-template-columns:1fr}.auth-visual{display:none}.auth-panel{padding:22px}.user-contrib{grid-template-columns:1fr 1fr}}
+
+
+.evidence-wrap{margin-top:7px;padding-top:7px;border-top:1px dashed #dbe8e2}
+.evidence-label{display:block!important;text-transform:none!important;letter-spacing:0!important;font-size:8px!important;color:#087f5b!important;margin-bottom:4px}
+.evidence-file{width:100%!important;padding:6px!important;font-size:8px!important;min-height:32px!important;background:#f7fbf9!important}
+.evidence-hint{display:block;color:#8a9993;font-size:7px;margin-top:3px}
+
+
+.admin-chip{display:flex!important;align-items:center!important;gap:8px!important;padding:6px 10px!important}
+.admin-avatar-img{width:31px;height:31px;border-radius:50%;object-fit:cover;background:#eaf7f2}
+.admin-chip .admin-drop{border:0;background:#eef7f3;color:#087f5b;border-radius:7px;padding:6px 8px;font-size:8px;font-weight:900;cursor:pointer}
+
 </style>
 </head>
 <body>
@@ -616,14 +656,57 @@ input[list$="LocationSuggestions"]{
 <datalist id="sampahLocationSuggestions"></datalist>
 
 <div class="mobile-header"><b>Inspeksi Ketentuan Teknis PROPER</b><button onclick="toggleMenu()">☰ Menu</button></div>
+
+<div id="authGate" class="auth-gate">
+ <div class="auth-shell">
+  <section class="auth-visual">
+   <div class="auth-logo"><img src="logo.png" alt="PROPER"></div>
+   <h1>Inspeksi Ketentuan Teknis PROPER</h1>
+   <p>Platform monitoring kepatuhan lingkungan untuk PPA, Emisi, PLB3, Tanggap Darurat, B3, dan Sampah.</p>
+   <div class="auth-pills"><span>🔐 Akun Personal</span><span>📊 Monitoring Terpusat</span><span>📷 Dokumentasi</span><span>☁ Google Sheet</span></div>
+  </section>
+  <section class="auth-panel">
+   <div class="auth-tabs">
+    <button class="active" onclick="switchAuth('login')">MASUK</button>
+    <button onclick="switchAuth('register')">BUAT AKUN</button>
+    <button onclick="switchAuth('reset')">RESET PASSWORD</button>
+   </div>
+   <div id="auth-login" class="auth-form active">
+    <h2>Selamat datang 👋</h2><p>Masuk menggunakan akun PROPER Anda.</p>
+    <div class="field"><label>Username</label><input id="loginUsername" autocomplete="username" placeholder="username"></div>
+    <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
+    <div id="loginMsg" class="auth-msg"></div>
+    <button class="btn primary auth-submit" onclick="doLogin()">Masuk ke Dashboard</button>
+   </div>
+   <div id="auth-register" class="auth-form">
+    <h2>Buat akun baru</h2><p>Username dan nama harus unik. Simpan kode pemulihan Anda.</p>
+    <div class="auth-row"><div class="field"><label>Nama Lengkap</label><input id="regName" placeholder="Nama lengkap"></div><div class="field"><label>Username</label><input id="regUsername" placeholder="username unik"></div></div>
+    <div class="auth-row"><div class="field"><label>Password</label><input id="regPassword" type="password" placeholder="Min. 8 karakter"></div><div class="field"><label>Ulangi Password</label><input id="regPassword2" type="password" placeholder="Ulangi password"></div></div>
+    <div class="field"><label>Kode Pemulihan</label><input id="regRecovery" placeholder="Minimal 6 karakter"></div>
+    <div class="field auth-photo"><img id="regAvatar" class="auth-avatar" src="logo.png"><input id="regPhoto" type="file" accept="image/*" onchange="previewAuthPhoto(this)"></div>
+    <div id="regMsg" class="auth-msg"></div>
+    <button class="btn primary auth-submit" onclick="doRegister()">Daftar Akun</button>
+   </div>
+   <div id="auth-reset" class="auth-form">
+    <h2>Reset password</h2><p>Untuk keamanan, gunakan username + kode pemulihan yang Anda buat saat registrasi.</p>
+    <div class="field"><label>Username</label><input id="resetUsername" placeholder="username"></div>
+    <div class="field"><label>Kode Pemulihan</label><input id="resetRecovery" placeholder="Kode pemulihan"></div>
+    <div class="field"><label>Password Baru</label><input id="resetPassword" type="password" placeholder="Min. 8 karakter"></div>
+    <div id="resetMsg" class="auth-msg"></div>
+    <button class="btn primary auth-submit" onclick="doResetPassword()">Reset Password</button>
+   </div>
+  </section>
+ </div>
+</div>
+
 <div class="app">
 <aside class="sidebar" id="sidebar">
   <div class="brand">
-      <div class="proper-logo"><img src="data:image/jpeg;base64,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" alt="PROPER"></div>
+      <div class="proper-logo"><img src="logo.png" alt="PROPER" onerror="this.style.opacity=.15"></div>
       <h2>Inspeksi Ketentuan Teknis PROPER</h2>
-      <span>PENILAIAN &amp; MONITORING PPA</span>
+      
     </div>
-    <div class="user-mini"><span>●</span> Sistem Terhubung</div>
+    <div class="user-profile-mini"><img id="sidebarAvatar" src="logo.png" alt=""><div><b id="sidebarUserName">Guest</b><small id="sidebarUserRole">Belum masuk</small></div></div>
     
   <div class="nav-label">MENU UTAMA</div>
   <nav class="nav">
@@ -638,7 +721,7 @@ input[list$="LocationSuggestions"]{
     <button data-page="rekap" onclick="showPage('rekap')">▤ <span>Rekap Data</span></button>
     <button data-page="detail" id="detailNav" style="display:none" onclick="showPage('detail')">⌁ <span>Detail Lokasi</span></button>
   </nav>
-  <div class="note sidebar-note">Form tersimpan ke Google Sheet melalui Google Apps Script.</div>
+  <div class="note sidebar-note">Form tersimpan ke Google Sheet melalui Google Apps Script.<button class="btn secondary" style="width:100%;margin-top:10px;font-size:10px" onclick="logoutUser()">Keluar Akun</button></div>
 </aside>
 
 <main class="main">
@@ -652,7 +735,7 @@ input[list$="LocationSuggestions"]{
     <div class="dash-actions">
       <div class="date-chip">▣ <span id="dashToday">26 Agustus 2026</span></div>
       <button class="icon-btn" onclick="loadExecutiveAnalytics(true)" title="Refresh data">↻</button>
-      <div class="admin-chip"><span class="admin-avatar">●</span><div><b>Admin</b><small>Administrator</small></div><span>⌄</span></div>
+      <div class="admin-chip"><img id="topUserAvatar" class="admin-avatar-img" src="logo.png"><div><b id="topUserName">User</b><small id="topUserRole">PIC</small></div><button class="admin-drop" onclick="logoutUser()">Keluar</button></div>
     </div>
   </div>
 
@@ -977,7 +1060,7 @@ input[list$="LocationSuggestions"]{
 
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzR1E7o82xYU-vCEOLG81Rs6YmF8JdzZntayRSdqCw5IVxJvmG0XQYM_Z6IRyyeiQ3S/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby-B5TLAQfzDEfpgXmUyyjigCjOmXzS664yzgGYZaCHwPjXVRIxpLTAOZIVM3HTrAQh/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -993,7 +1076,14 @@ const items = [
 'UNTUK PERUSAHAAN YANG TERKENA SANKSI ADMINISTRASI, MEMENUHI SELURUH KETENTUAN YANG DIPERSYARATKAN DALAM SANKSI ADMINISTRASI'
 ];
 
-function $(id){return document.getElementById(id)}
+const __nullEl={
+  value:'',textContent:'',innerHTML:'',
+  style:{width:'',display:'',background:'',color:''},
+  classList:{add(){},remove(){},toggle(){}},
+  focus(){},click(){},remove(){},appendChild(){},querySelector(){return null},
+  querySelectorAll(){return []},addEventListener(){},setAttribute(){},getAttribute(){return null}
+};
+function $(id){return document.getElementById(id)||__nullEl}
 function showPage(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
@@ -1147,8 +1237,10 @@ function renderEmisiForm(){
    <td><input class="small-input emisi-required" type="number" min="0" value="0" oninput="calcEmisi()"></td>
    <td><input class="small-input emisi-sesuai" type="number" min="0" value="0" oninput="calcEmisi()"></td>
    <td><input class="small-input emisi-terlapor" type="number" min="0" value="0" oninput="calcEmisi()"></td>
+   <td><textarea class="emisi-note" rows="2" placeholder="Keterangan / bukti"></textarea></td>
    <td><b class="emisi-row-pct">0%</b></td>
  </tr>`).join('');
+ enhanceEvidenceInputs('#emisiBody','emisi');
  calcEmisi();
 }
 function calcEmisi(){
@@ -1173,6 +1265,7 @@ function renderPLB3Form(){
    <td><select class="plb3-status" data-row="${i}" onchange="calcPLB3()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td>
    <td><textarea class="plb3-note" data-row="${i}" rows="3" placeholder="Dokumen / keterangan / bukti pendukung"></textarea></td>
  </tr>`).join('');
+ enhanceEvidenceInputs('#plb3Body','plb3');
  calcPLB3();
 }
 function calcPLB3(){
@@ -1190,14 +1283,15 @@ function calcPLB3(){
  $('lb3Foot').innerHTML=foot;
 }
 function resetEmisi(){
- $('emisiAssessor').value='';$('emisiSite').value='';$('emisiDate').value='';
+ $('emisiAssessor').value=(getCurrentUser()||{}).name||'';$('emisiSite').value='';$('emisiDate').value='';
  $('emisiStackCount').value=0;renderEmisiForm();
 }
 function resetPLB3(){
- $('plb3Assessor').value='';$('plb3Site').value='';$('plb3Date').value='';
+ $('plb3Assessor').value=(getCurrentUser()||{}).name||'';$('plb3Site').value='';$('plb3Date').value='';
  renderPLB3Form();
 }
 async function postJSON(payload){
+ payload=Object.assign({},payload,{userToken:getAuthToken()});
  const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
  return await r.json();
 }
@@ -1210,11 +1304,11 @@ async function submitEmisi(){
    dataHarusDilaporkan:Number(tr.querySelector('.emisi-required').value)||0,
    jumlahDataSesuai:Number(tr.querySelector('.emisi-sesuai').value)||0,
    dataTerlaporSesuai:Number(tr.querySelector('.emisi-terlapor').value)||0,
-   prosentase:Number(tr.querySelector('.emisi-row-pct').textContent.replace('%',''))||0
+   prosentase:Number(tr.querySelector('.emisi-row-pct').textContent.replace('%',''))||0,keterangan:(tr.querySelector('.emisi-note')||{}).value||''
  }));
  try{
    const d=await postJSON({action:'saveEmisi',assessor,site,assessmentDate:date,items:rows});
-   if(d.status==='success'){toast('✓ Data Emisi berhasil disimpan.');resetEmisi();loadEmisi();}
+   if(d.status==='success'){try{await uploadModuleEvidence('emisi',d.submissionId,collectEvidence('emisi'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}toast('✓ Data Emisi berhasil disimpan.');resetEmisi();loadEmisi();}
    else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan Emisi: '+e.message)}
 }
@@ -1246,13 +1340,13 @@ function loadEmisi(){
  const old=document.getElementById('emisiJsonp');if(old)old.remove();
  const cb='emisiCallback_'+Date.now();
  window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('emisiHistory',d.data||[],'emisi');populateModuleLocationMaster('emisi',d.data||[]);if($('emisiCount'))$('emisiCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('emisi',d.data||[]);}catch(e){toast('Data Emisi gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('emisiJsonp');if(s)s.remove();}};
- const s=document.createElement('script');s.id='emisiJsonp';s.src=SCRIPT_URL+'?action=getEmisi&callback='+cb+'&t='+Date.now();s.onerror=()=>{toast('Data Emisi gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+ const s=document.createElement('script');s.id='emisiJsonp';s.src=SCRIPT_URL+'?action=getEmisi&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{toast('Data Emisi gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 function loadPLB3(){
  const old=document.getElementById('plb3Jsonp');if(old)old.remove();
  const cb='plb3Callback_'+Date.now();
  window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('lb3History',d.data||[],'lb3');populateModuleLocationMaster('plb3',d.data||[]);if($('plb3Count'))$('plb3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('plb3',d.data||[]);}catch(e){toast('Data PLB3 gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('plb3Jsonp');if(s)s.remove();}};
- const s=document.createElement('script');s.id='plb3Jsonp';s.src=SCRIPT_URL+'?action=getPLB3&callback='+cb+'&t='+Date.now();s.onerror=()=>{toast('Data PLB3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+ const s=document.createElement('script');s.id='plb3Jsonp';s.src=SCRIPT_URL+'?action=getPLB3&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{toast('Data PLB3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 
 
@@ -1269,6 +1363,7 @@ function renderPLB3DaruratForm(){
    <td><textarea class="darurat-doc" data-i="${i}" rows="3" placeholder="Dokumentasi / bukti dukung">${escapeHtml(r[3])}</textarea></td>
    <td><textarea class="darurat-note" data-i="${i}" rows="3" placeholder="Keterangan"></textarea></td>
  </tr>`).join('');
+ enhanceEvidenceInputs('#daruratBody','darurat');
  calcPLB3Darurat();
 }
 function calcPLB3Darurat(){
@@ -1276,7 +1371,7 @@ function calcPLB3Darurat(){
  s.forEach(x=>{if(x.value)filled++;if(x.value==='YA')yes++;x.classList.toggle('status-yes',x.value==='YA');x.classList.toggle('status-no',x.value==='TIDAK')});
  const pct=s.length?Math.round(yes/s.length*100):0;$('daruratPct').textContent=pct+'%';$('daruratScore').textContent=pct+'%';$('daruratBar').style.width=pct+'%';
 }
-function resetPLB3Darurat(){$('daruratAssessor').value='';$('daruratSite').value='';$('daruratDate').value='';renderPLB3DaruratForm();}
+function resetPLB3Darurat(){$('daruratAssessor').value=(getCurrentUser()||{}).name||'';$('daruratSite').value='';$('daruratDate').value='';renderPLB3DaruratForm();}
 async function submitPLB3Darurat(){
  const assessor=$('daruratAssessor').value.trim(),site=canonicalLocationFor('darurat',$('daruratSite').value),date=$('daruratDate').value;
  const statuses=[...document.querySelectorAll('.darurat-status')];
@@ -1296,6 +1391,7 @@ function renderB3Forms(){
    <tbody>${sec[1].map((r,i)=>`<tr><td class="num">${i+1}</td><td class="ket">${escapeHtml(r[1])}</td><td><select class="b3-status" data-s="${si}" data-i="${i}" onchange="calcB3()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td><td><textarea class="b3-note" data-s="${si}" data-i="${i}" rows="3" placeholder="Foto / dokumen / keterangan"></textarea></td></tr>`).join('')}</tbody></table></div>
    <div class="score-box" style="margin-top:14px"><div class="progress"><span id="b3bar-${si}"></span></div><div class="score-value" id="b3score-${si}">0%</div></div>
  </div>`).join('');
+ enhanceEvidenceInputs('#b3Forms','b3');
  calcB3();
 }
 function calcB3(){
@@ -1307,7 +1403,7 @@ function calcB3(){
    if($(`b3bar-${si}`))$(`b3bar-${si}`).style.width=pct+'%';
  });
 }
-function resetB3(){$('b3Assessor').value='';$('b3Site').value='';$('b3Date').value='';renderB3Forms();}
+function resetB3(){$('b3Assessor').value=(getCurrentUser()||{}).name||'';$('b3Site').value='';$('b3Date').value='';renderB3Forms();}
 async function submitB3(){
  const assessor=$('b3Assessor').value.trim(),site=canonicalLocationFor('b3',$('b3Site').value),date=$('b3Date').value;
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal B3 wajib diisi.');return}
@@ -1318,7 +1414,7 @@ async function submitB3(){
  }));
  if(items.length===0){toast('Isi minimal satu status YA/TIDAK pada B3.');return}
  try{const d=await postJSON({action:'saveB3',assessor,site,assessmentDate:date,items});
-   if(d.status==='success'){toast('✓ Data B3 berhasil disimpan.');resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
+   if(d.status==='success'){try{await uploadModuleEvidence('b3',d.submissionId,collectEvidence('b3'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}toast('✓ Data B3 berhasil disimpan.');resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan B3: '+e.message)}
 }
 function renderGenericHistory(id,data){
@@ -1328,12 +1424,12 @@ function renderGenericHistory(id,data){
 function loadPLB3Darurat(){
  const old=$('plb3DaruratJsonp');if(old)old.remove();const cb='plb3DaruratCB_'+Date.now();
  window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('daruratHistory',d.data||[]);populateModuleLocationMaster('darurat',d.data||[]);if($('daruratCount'))$('daruratCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('darurat',d.data||[]);}catch(e){toast('Data PLB3 Tanggap Darurat gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('plb3DaruratJsonp');if(s)s.remove();}};
- const s=document.createElement('script');s.id='plb3DaruratJsonp';s.src=SCRIPT_URL+'?action=getPLB3Darurat&callback='+cb+'&t='+Date.now();s.onerror=()=>{toast('Data PLB3 Tanggap Darurat gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+ const s=document.createElement('script');s.id='plb3DaruratJsonp';s.src=SCRIPT_URL+'?action=getPLB3Darurat&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{toast('Data PLB3 Tanggap Darurat gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 function loadB3(){
  const old=$('b3Jsonp');if(old)old.remove();const cb='b3CB_'+Date.now();
  window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('b3History',d.data||[]);populateModuleLocationMaster('b3',d.data||[]);if($('b3Count'))$('b3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('b3',d.data||[]);}catch(e){toast('Data B3 gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('b3Jsonp');if(s)s.remove();}};
- const s=document.createElement('script');s.id='b3Jsonp';s.src=SCRIPT_URL+'?action=getB3&callback='+cb+'&t='+Date.now();s.onerror=()=>{toast('Data B3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+ const s=document.createElement('script');s.id='b3Jsonp';s.src=SCRIPT_URL+'?action=getB3&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{toast('Data B3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 
 
@@ -1361,6 +1457,7 @@ function renderSampahForm(){
       </td>
     </tr>`;
   }).join('');
+  enhanceEvidenceInputs('#sampahBody','sampah');
   calcSampah();
 }
 
@@ -1379,7 +1476,7 @@ function calcSampah(){
 }
 
 function resetSampah(){
-  if($('sampahAssessor'))$('sampahAssessor').value='';
+  if($('sampahAssessor'))$('sampahAssessor').value=(getCurrentUser()||{}).name||'';
   if($('sampahSite'))$('sampahSite').value='';
   if($('sampahDate'))$('sampahDate').value='';
   renderSampahForm();
@@ -1425,7 +1522,7 @@ function loadSampah(){
   };
   const s=document.createElement('script');
   s.id='sampahJsonp';
-  s.src=SCRIPT_URL+'?action=getSampah&callback='+cb+'&t='+Date.now();
+  s.src=SCRIPT_URL+'?action=getSampah&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();
   s.onerror=()=>{toast('Data Sampah gagal dibaca dari Google Sheet');s.remove();};
   document.body.appendChild(s);
 }
@@ -1452,7 +1549,7 @@ function fetchAction(action){
     function cleanup(){clearTimeout(timer);delete window[cb];if(s.parentNode)s.parentNode.removeChild(s);}
     window[cb]=d=>{cleanup();if(d&&d.status==='success')resolve(Array.isArray(d.data)?d.data:[]);else reject(new Error((d&&d.message)||'Server error'));};
     s.onerror=()=>{cleanup();reject(new Error('Google Sheet tidak dapat diakses'));};
-    s.src=SCRIPT_URL+'?action='+encodeURIComponent(action)+'&callback='+encodeURIComponent(cb)+'&t='+Date.now();
+    s.src=SCRIPT_URL+'?action='+encodeURIComponent(action)+'&callback='+encodeURIComponent(cb)+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();
     document.body.appendChild(s);
   });
 }
@@ -1616,6 +1713,68 @@ function refreshModuleAnalyticsFor(key,data){
   loadExecutiveAnalytics(false);
 }
 
+
+function enhanceEvidenceInputs(rootSelector,module){
+  const root=document.querySelector(rootSelector);
+  if(!root)return;
+  root.querySelectorAll('textarea').forEach((ta)=>{
+    if(ta.parentElement && ta.parentElement.querySelector('.evidence-file'))return;
+    const wrap=document.createElement('div');
+    wrap.className='evidence-wrap';
+    const label=document.createElement('label');
+    label.className='evidence-label';
+    label.textContent='📷 Dokumentasi Foto';
+    const input=document.createElement('input');
+    input.type='file'; input.accept='image/*'; input.className='evidence-file';
+    input.dataset.module=module;
+    // derive item number from the closest row
+    const row=ta.closest('tr');
+    input.dataset.no=row ? String((row.querySelector('.num')||{}).textContent||'').trim() : '';
+    const hint=document.createElement('small');
+    hint.className='evidence-hint';
+    hint.textContent='Maks. 1 foto/item · JPG/PNG';
+    wrap.append(label,input,hint);
+    ta.parentElement.appendChild(wrap);
+  });
+}
+function collectEvidence(module){
+  return [...document.querySelectorAll(`.evidence-file[data-module="${module}"]`)].filter(x=>x.files&&x.files[0]);
+}
+async function compressImage(file){
+  if(!file)return null;
+  if(!file.type.startsWith('image/'))throw new Error('File harus berupa gambar.');
+  const maxBytes=1800000;
+  if(file.size<=maxBytes)return file;
+  return await new Promise((resolve,reject)=>{
+    const img=new Image(),url=URL.createObjectURL(file);
+    img.onload=()=>{
+      URL.revokeObjectURL(url);
+      const max=1600,scale=Math.min(1,max/img.width,max/img.height);
+      const c=document.createElement('canvas');c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+      c.toBlob(b=>b?resolve(new File([b],'evidence.jpg',{type:'image/jpeg'})):reject(new Error('Gagal memproses foto')),'image/jpeg',.76);
+    };
+    img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Foto tidak dapat dibaca'))};
+    img.src=url;
+  });
+}
+async function uploadModuleEvidence(module,submissionId,files){
+  const out=[];
+  for(const input of files){
+    const file=await compressImage(input.files[0]);
+    const data=await new Promise((resolve,reject)=>{
+      const fr=new FileReader();fr.onload=()=>resolve(String(fr.result).split(',')[1]||'');fr.onerror=reject;fr.readAsDataURL(file);
+    });
+    const r=await postJSON({
+      action:'uploadEvidence',module,submissionId,no:input.dataset.no||'',
+      fileName:file.name,mimeType:file.type,data
+    });
+    if(r.status!=='success')throw new Error(r.message||'Upload dokumentasi gagal');
+    out.push(r.url);
+  }
+  return out;
+}
+
 function renderForm(){
  $('ppaBody').innerHTML=items.map((x,i)=>`<tr>
  <td class="num">${i+1}</td><td class="ket">${x}</td>
@@ -1632,7 +1791,7 @@ function updateScore(){
 function resetForm(){
  document.querySelectorAll('.status-select').forEach(s=>s.value='');
  document.querySelectorAll('textarea').forEach(t=>t.value='');
- $('assessor').value='';$('site').value='';$('assessmentDate').value='';
+ $('assessor').value=(getCurrentUser()||{}).name||'';$('site').value='';$('assessmentDate').value='';
  $('assessmentMonth').value='';$('assessmentYear').value='';$('assessmentDay').value='';
  updateSiteTitle();updateScore();
 }
@@ -1648,10 +1807,11 @@ async function submitPPA(){
  const payload={action:'savePPA',assessor,site,assessmentDate:date,items:rows.map((s,i)=>({no:i+1,ketentuan:items[i],status:s.value,keterangan:document.querySelector(`[data-k="${i}"]`).value.trim()}))};
  const btn=document.querySelector('.actions .primary');btn.disabled=true;btn.textContent='⏳ Menyimpan...';
  try{
-   const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
-   const d=await r.json();
-   if(d.status==='success'){toast('✓ Penilaian berhasil tersimpan ke Google Sheet.');localStorage.setItem('ppaLastSubmit',JSON.stringify(payload));resetForm();loadData();showPage('monitoring')}
-   else throw new Error(d.message||'Gagal menyimpan');
+   const d=await postJSON(payload);
+   if(d.status==='success'){
+     try{await uploadModuleEvidence('ppa',d.submissionId,collectEvidence('ppa'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
+     toast('✓ Penilaian berhasil tersimpan ke Google Sheet.');localStorage.setItem('ppaLastSubmit',JSON.stringify(payload));resetForm();loadData();showPage('monitoring')
+   } else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal terhubung ke server: '+e.message)}
  finally{btn.disabled=false;btn.textContent='☁ Simpan ke Google Sheet'}
 }
@@ -1852,7 +2012,7 @@ function loadData(){
 
  const script=document.createElement('script');
  script.id='ppaJsonpScript';
- script.src=SCRIPT_URL+'?action=getPPA&callback='+encodeURIComponent(callbackName)+'&t='+Date.now();
+ script.src=SCRIPT_URL+'?action=getPPA&callback='+encodeURIComponent(callbackName)+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();
  script.onerror=function(){
    toast('Tidak dapat mengakses Google Apps Script. Periksa deployment Web App.');
    delete window[callbackName];
@@ -1860,15 +2020,113 @@ function loadData(){
  };
  document.body.appendChild(script);
 }
-renderSampahForm();renderForm();renderEmisiForm();renderPLB3Form();renderPLB3DaruratForm();renderB3Forms();populateDays();updateSiteTitle();populateAllModuleLocationMasters();
-$('emisiDate').value=new Date().toISOString().slice(0,10);
-$('plb3Date').value=new Date().toISOString().slice(0,10);
-$('assessmentDate').addEventListener('change',syncPartsFromDate);
-$('assessmentYear').value=new Date().getFullYear();
-ensureExecutiveDashboard();
-loadData();
-setTimeout(()=>loadExecutiveAnalytics(false),700);
-setInterval(()=>{ if(!document.hidden){ loadData(); loadExecutiveAnalytics(true); } },60000);
+
+/* =========================
+   ACCOUNT / AUTHENTICATION
+   ========================= */
+let currentUser=null;
+function getAuthToken(){return localStorage.getItem('properAuthToken')||''}
+function getCurrentUser(){try{return JSON.parse(localStorage.getItem('properCurrentUser')||'null')}catch(_){return null}}
+function setCurrentUser(u,t){currentUser=u;localStorage.setItem('properCurrentUser',JSON.stringify(u));localStorage.setItem('properAuthToken',t||'')}
+function clearCurrentUser(){currentUser=null;localStorage.removeItem('properCurrentUser');localStorage.removeItem('properAuthToken')}
+function switchAuth(which){
+ document.querySelectorAll('.auth-tabs button').forEach((b,i)=>b.classList.toggle('active',['login','register','reset'][i]===which));
+ document.querySelectorAll('.auth-form').forEach(x=>x.classList.remove('active'));
+ $('auth-'+which).classList.add('active');
+}
+function setAuthMsg(id,msg){if($(id))$(id).textContent=msg||''}
+function previewAuthPhoto(input){
+ const f=input.files&&input.files[0]; if(!f)return;
+ const url=URL.createObjectURL(f);$('regAvatar').src=url;
+}
+function fileToDataURL(file){
+ return new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(String(fr.result).split(',')[1]||'');fr.onerror=reject;fr.readAsDataURL(file);});
+}
+async function doRegister(){
+ const name=$('regName').value.trim(),username=$('regUsername').value.trim().toLowerCase(),p=$('regPassword').value,p2=$('regPassword2').value,recovery=$('regRecovery').value.trim();
+ setAuthMsg('regMsg','');
+ if(name.length<2||username.length<3||p.length<8||p!==p2||recovery.length<6){setAuthMsg('regMsg','Lengkapi data. Password minimal 8 karakter dan password harus sama.');return}
+ let profilePhoto=null;
+ const f=$('regPhoto').files&&$('regPhoto').files[0];
+ if(f){if(f.size>2500000){setAuthMsg('regMsg','Foto profil maksimal 2.5 MB.');return} profilePhoto={fileName:f.name,mimeType:f.type,data:await fileToDataURL(f)}}
+ try{
+  const r=await postJSON({action:'registerUser',name,username,password:p,recoveryCode:recovery,profilePhoto});
+  if(r.status!=='success')throw Error(r.message||'Pendaftaran gagal');
+  setAuthMsg('regMsg','Akun berhasil dibuat. Silakan masuk.');switchAuth('login');$('loginUsername').value=username;
+ }catch(e){setAuthMsg('regMsg',e.message)}
+}
+async function doLogin(){
+ const username=$('loginUsername').value.trim().toLowerCase(),password=$('loginPassword').value;
+ setAuthMsg('loginMsg','');
+ if(!username||!password){setAuthMsg('loginMsg','Username dan password wajib diisi.');return}
+ try{
+  const r=await postJSON({action:'loginUser',username,password});
+  if(r.status!=='success')throw Error(r.message||'Login gagal');
+  setCurrentUser(r.user,r.token);
+  $('authGate').classList.add('hidden');
+  updateLoggedUserUI();
+  applyAccountToForms();
+  loadAllAfterLogin();
+ }catch(e){setAuthMsg('loginMsg',e.message)}
+}
+async function doResetPassword(){
+ const username=$('resetUsername').value.trim().toLowerCase(),recovery=$('resetRecovery').value.trim(),password=$('resetPassword').value;
+ setAuthMsg('resetMsg','');
+ if(!username||recovery.length<6||password.length<8){setAuthMsg('resetMsg','Username, kode pemulihan dan password baru wajib valid.');return}
+ try{
+  const r=await postJSON({action:'resetPassword',username,recoveryCode:recovery,newPassword:password});
+  if(r.status!=='success')throw Error(r.message||'Reset gagal');
+  setAuthMsg('resetMsg','Password berhasil direset. Silakan masuk.');switchAuth('login');$('loginUsername').value=username;
+ }catch(e){setAuthMsg('resetMsg',e.message)}
+}
+function logoutUser(){clearCurrentUser();location.reload()}
+function updateLoggedUserUI(){
+ const u=getCurrentUser()||{};
+ if($('sidebarUserName'))$('sidebarUserName').textContent=u.name||u.username||'User';
+ if($('sidebarUserRole'))$('sidebarUserRole').textContent='@'+(u.username||'user');
+ if($('sidebarAvatar'))$('sidebarAvatar').src=u.profilePhotoUrl||'logo.png'; if($('topUserAvatar'))$('topUserAvatar').src=u.profilePhotoUrl||'logo.png'; if($('topUserName'))$('topUserName').textContent=u.name||u.username||'User'; if($('topUserRole'))$('topUserRole').textContent='@'+(u.username||'user');
+}
+function requireLogin(){if(!getAuthToken()){ $('authGate').classList.remove('hidden'); return false;}return true}
+
+function applyAccountToForms(){
+ const u=getCurrentUser()||{};
+ const ids=['assessor','emisiAssessor','plb3Assessor','daruratAssessor','b3Assessor','sampahAssessor'];
+ ids.forEach(id=>{const el=$(id);if(el&&el!==__nullEl){el.value=u.name||'';el.readOnly=true;el.title='Nama penilai mengikuti akun yang sedang login';}});
+}
+
+function loadAllAfterLogin(){
+ if(!requireLogin())return;
+ applyAccountToForms();
+ populateDays();updateSiteTitle();populateAllModuleLocationMasters();
+ renderSampahForm();renderForm();renderEmisiForm();renderPLB3Form();renderPLB3DaruratForm();renderB3Forms();
+ if($('emisiDate'))$('emisiDate').value=new Date().toISOString().slice(0,10);
+ if($('plb3Date'))$('plb3Date').value=new Date().toISOString().slice(0,10);
+ if($('assessmentDate'))$('assessmentDate').addEventListener('change',syncPartsFromDate);
+ if($('assessmentYear'))$('assessmentYear').value=new Date().getFullYear();
+ ensureExecutiveDashboard();loadData();setTimeout(()=>loadExecutiveAnalytics(false),500);loadUserContributions();
+}
+async function loadUserContributions(){
+ try{
+  const r=await postJSON({action:'getUserStats'});
+  if(r.status!=='success')throw Error(r.message||'Gagal mengambil statistik PIC');
+  const users=r.users||[];
+  if($('userCountBadge'))$('userCountBadge').textContent=users.length+' PIC';
+  $('userContribList').innerHTML=users.length?users.sort((a,b)=>b.percentage-a.percentage).map(u=>`
+   <div class="contrib-card">
+    <img src="${escapeHtml(u.profilePhotoUrl||'logo.png')}" alt="">
+    <div style="flex:1"><b>${escapeHtml(u.name)}</b><span>@${escapeHtml(u.username)}</span><strong>${Number(u.percentage||0)}%</strong><span>${u.assessments||0} assessment · ${u.modules||0} modul</span></div>
+   </div>`).join(''):'<div class="module-empty">Belum ada pengguna.</div>';
+ }catch(e){if($('userContribList'))$('userContribList').innerHTML='<div class="module-empty">Statistik PIC belum tersedia.</div>'}
+}
+
+if(getAuthToken()){
+  $('authGate').classList.add('hidden');
+  updateLoggedUserUI();
+  loadAllAfterLogin();
+}else{
+  $('authGate').classList.remove('hidden');
+}
+setInterval(()=>{ if(!document.hidden && getAuthToken()){ loadData(); loadExecutiveAnalytics(true); loadUserContributions(); } },60000);
 
 /* ===== DASHBOARD V2 RENDERER ===== */
 function setDashDate(){
