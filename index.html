@@ -844,6 +844,95 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
 @media(max-width:900px){.monitoring-kpi-grid{grid-template-columns:repeat(2,1fr)!important}}
 @media(max-width:560px){.monitoring-kpi-grid{grid-template-columns:1fr!important}}
 </style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+
+<style id="proper-jejak-chat-ui">
+:root{
+  --jk-green:#059669;--jk-green2:#10b981;--jk-dark:#022c22;--jk-mint:#d1fae5;
+  --jk-bg:#f1f5f9;--jk-card:#fff;--jk-line:#e2e8f0;--jk-muted:#64748b;
+}
+.nav button{position:relative}
+.chat-unread{display:none;margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:#ef4444;color:#fff;font-size:10px;line-height:20px;text-align:center;font-weight:900}
+.proper-chat-layout{
+  display:flex;min-height:640px;height:calc(100vh - 185px);max-height:760px;
+  background:#fff;border:1px solid var(--jk-line);border-radius:22px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(2,44,34,.08);
+}
+.proper-chat-sidebar{width:320px;display:flex;flex-direction:column;background:#f8fafc;border-right:1px solid var(--jk-line)}
+.proper-chat-search{padding:14px;background:#fff;border-bottom:1px solid var(--jk-line)}
+.proper-chat-search input{width:100%;padding:11px 13px;border-radius:12px;background:#f1f5f9;border:1px solid transparent;color:#0f172a;font-size:12px}
+.proper-chat-search input:focus{background:#fff;border-color:#86efac;box-shadow:0 0 0 3px rgba(16,185,129,.1)}
+.proper-chat-room-head{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:#fff;border-bottom:1px solid var(--jk-line);font-size:10px;font-weight:900;letter-spacing:1px;color:#64748b}
+.proper-chat-rooms{flex:1;overflow:auto;padding:10px}
+.proper-chat-room{
+  display:flex;align-items:center;gap:11px;padding:12px;border-radius:14px;background:#fff;border:1px solid #e9eef1;
+  margin-bottom:7px;cursor:pointer;transition:.2s
+}
+.proper-chat-room:hover{border-color:#86efac;box-shadow:0 5px 16px rgba(0,0,0,.04)}
+.proper-chat-room.active{background:#059669;border-color:#059669;color:#fff;box-shadow:0 8px 22px rgba(5,150,105,.2)}
+.proper-chat-room-icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#ecfdf5;color:#059669;font-size:18px;flex:0 0 auto}
+.proper-chat-room.active .proper-chat-room-icon{background:rgba(255,255,255,.14);color:#fff}
+.proper-chat-room-info{min-width:0;flex:1}.proper-chat-room-title{font-size:12.5px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.proper-chat-room-sub{font-size:9.5px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.proper-chat-room.active .proper-chat-room-sub{color:rgba(255,255,255,.8)}
+.proper-chat-main{min-width:0;flex:1;display:flex;flex-direction:column;background:#eef4f1}
+.proper-chat-header{height:68px;display:flex;align-items:center;gap:11px;padding:0 18px;background:#fff;border-bottom:1px solid var(--jk-line)}
+.proper-chat-room-avatar{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:#dff8ee;color:#087f5b;font-size:19px}
+.proper-chat-header b{font-size:13px;color:#0f172a}.proper-chat-header small{display:block;font-size:9.5px;color:#64748b;margin-top:2px}
+.proper-chat-refresh,.proper-chat-back{border:0;background:#f8fafc;color:#64748b;width:34px;height:34px;border-radius:10px;cursor:pointer}
+.proper-chat-back{display:none}
+.proper-chat-messages{flex:1;padding:20px;overflow:auto;display:flex;flex-direction:column;gap:11px;background:
+linear-gradient(rgba(236,246,241,.74),rgba(236,246,241,.74)),
+radial-gradient(circle at 20% 20%,rgba(16,185,129,.06) 1px,transparent 1px);
+background-size:auto,18px 18px}
+.proper-chat-empty{margin:auto;text-align:center;color:#64748b;display:flex;flex-direction:column;gap:5px}
+.proper-chat-empty div{font-size:40px}.proper-chat-empty b{font-size:14px;color:#0f172a}.proper-chat-empty span{font-size:10px}
+.proper-chat-msg{display:flex;gap:8px;align-items:flex-end;max-width:82%}
+.proper-chat-msg.me{align-self:flex-end;flex-direction:row-reverse}.proper-chat-msg.other{align-self:flex-start}
+.proper-chat-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;background:#dbeafe;flex:0 0 auto;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.proper-chat-stack{display:flex;flex-direction:column;gap:3px;min-width:0}
+.proper-chat-sender{font-size:9px;font-weight:900;color:#64748b;padding:0 4px}
+.proper-chat-msg.me .proper-chat-sender{text-align:right}
+.proper-chat-bubble{padding:9px 12px;border-radius:16px;box-shadow:0 2px 7px rgba(0,0,0,.05);background:#fff;color:#0f172a;font-size:12.5px;line-height:1.45}
+.proper-chat-msg.me .proper-chat-bubble{background:#d8f8e8;border-bottom-right-radius:4px}
+.proper-chat-msg.other .proper-chat-bubble{border-bottom-left-radius:4px}
+.proper-chat-meta{font-size:8px;color:#94a3b8;padding:0 5px}
+.proper-chat-msg.me .proper-chat-meta{text-align:right}
+.proper-chat-reply{display:none;padding:9px 14px;background:#fff;border-top:1px solid var(--jk-line);border-left:4px solid #10b981;justify-content:space-between;align-items:center}
+.proper-chat-reply b{display:block;font-size:10px;color:#087f5b}.proper-chat-reply span{font-size:10px;color:#64748b}
+.proper-chat-reply button{border:0;background:transparent;color:#94a3b8;font-size:18px}
+.proper-chat-inputbar{display:flex;gap:8px;padding:10px 12px;background:#fff;border-top:1px solid var(--jk-line);align-items:flex-end}
+.proper-chat-emoji{border:0;background:#f1f5f9;color:#64748b;width:40px;height:40px;border-radius:50%}
+.proper-chat-compose{flex:1;position:relative}.proper-chat-compose input{width:100%;height:40px;padding:0 14px;border-radius:20px;background:#f1f5f9;border:1px solid transparent;font-size:12px}
+.proper-chat-compose input:focus{background:#fff;border-color:#86efac;box-shadow:0 0 0 3px rgba(16,185,129,.08)}
+.proper-chat-send{width:40px;height:40px;border:0;border-radius:50%;background:linear-gradient(135deg,#059669,#10b981);color:#fff;font-size:16px;box-shadow:0 8px 18px rgba(5,150,105,.2)}
+.proper-emoji-panel{display:none;position:absolute;bottom:50px;left:0;padding:9px;background:#fff;border:1px solid var(--jk-line);border-radius:14px;box-shadow:0 15px 35px rgba(0,0,0,.13);grid-template-columns:repeat(6,1fr);gap:8px;z-index:30}
+.proper-emoji-panel.show{display:grid}.proper-emoji-panel span{font-size:20px;cursor:pointer}
+.proper-chat-photo{max-width:220px;max-height:220px;border-radius:12px;display:block;margin-bottom:6px}
+@media(max-width:900px){
+  .proper-chat-layout{height:calc(100vh - 155px);min-height:560px}
+  .proper-chat-sidebar{width:100%}
+  .proper-chat-main{display:none}
+  #chat.chat-mobile-open .proper-chat-sidebar{display:none}
+  #chat.chat-mobile-open .proper-chat-main{display:flex}
+  .proper-chat-back{display:block}
+}
+</style>
+
+
+<style id="proper-jejak-profile-ui">
+.profile-panel{max-width:720px!important;border-radius:26px!important;box-shadow:0 28px 70px rgba(2,44,34,.22)!important}
+.profile-head{background:linear-gradient(135deg,#f8fffb,#fff)!important}
+.profile-body{gap:28px!important}
+.profile-avatar-wrap{box-shadow:0 14px 28px rgba(5,150,105,.14)!important;border:5px solid #fff!important;background:#dff8ee!important}
+.profile-upload-btn{border-color:#a7f3d0!important;color:#047857!important;background:#f0fdf4!important}
+.crop-panel{max-width:620px!important;border-radius:26px!important;box-shadow:0 28px 70px rgba(2,44,34,.22)!important}
+.crop-stage{background:linear-gradient(135deg,#022c22,#0f766e)!important}
+</style>
+
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -943,6 +1032,8 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
     <button data-page="sampah" onclick="showPage('sampah')">♻ <span>Sampah</span></button>
     <button data-page="monitoring" onclick="showPage('monitoring')">◫ <span>Monitoring &amp; Rekap</span></button>
     <button data-page="rekap" onclick="showPage('rekap')">▤ <span>Rekap Data</span></button>
+    <button data-page="chat" onclick="showPage('chat')">💬 <span>Chat Tim</span><span class="chat-unread" id="chatUnreadBadge">0</span></button>
+    <button data-page="profil" onclick="openProfileModal()">◉ <span>Profil Saya</span></button>
     <button data-page="detail" id="detailNav" style="display:none" onclick="showPage('detail')">⌁ <span>Detail Lokasi</span></button>
   </nav>
   <div class="note sidebar-note">Form tersimpan ke Google Sheet melalui Google Apps Script.<button class="btn secondary" style="width:100%;margin-top:10px;font-size:10px" onclick="logoutUser()">Keluar Akun</button></div>
@@ -1165,6 +1256,67 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
   </div>
 </section>
 
+
+<section id="chat" class="page">
+  <div class="topline">
+    <div>
+      <h1>Chat Tim PROPER</h1>
+      <p>Ruang komunikasi untuk koordinasi PPA, Emisi, PLB3, B3, Sampah, dan tindak lanjut lapangan.</p>
+    </div>
+    <button class="btn secondary" onclick="refreshProperChat()">↻ Refresh Chat</button>
+  </div>
+
+  <div class="proper-chat-layout">
+    <aside class="proper-chat-sidebar">
+      <div class="proper-chat-search">
+        <input id="properChatSearch" placeholder="Cari ruang..." oninput="renderProperChatRooms()">
+      </div>
+      <div class="proper-chat-room-head">
+        <span>RUANG OBROLAN</span><span id="properChatRoomCount">0</span>
+      </div>
+      <div class="proper-chat-rooms" id="properChatRooms"></div>
+    </aside>
+
+    <section class="proper-chat-main">
+      <header class="proper-chat-header">
+        <button class="proper-chat-back" onclick="chatBackToRooms()">‹</button>
+        <div class="proper-chat-room-avatar" id="properChatRoomAvatar">💬</div>
+        <div style="min-width:0;flex:1">
+          <b id="properChatRoomTitle">Pilih ruang</b>
+          <small id="properChatRoomSubtitle">Belum ada ruang dipilih</small>
+        </div>
+        <button class="proper-chat-refresh" onclick="refreshProperChat()">↻</button>
+      </header>
+
+      <div class="proper-chat-messages" id="properChatMessages">
+        <div class="proper-chat-empty">
+          <div>💬</div>
+          <b>Mulai percakapan</b>
+          <span>Pilih ruang di sebelah kiri untuk melihat pesan.</span>
+        </div>
+      </div>
+
+      <div class="proper-chat-reply" id="properChatReply">
+        <div><b id="properChatReplyName">Membalas</b><span id="properChatReplyText"></span></div>
+        <button onclick="cancelProperChatReply()">×</button>
+      </div>
+
+      <div class="proper-chat-inputbar">
+        <button class="proper-chat-emoji" onclick="toggleProperEmoji()">😊</button>
+        <div class="proper-chat-compose">
+          <div id="properEmojiPanel" class="proper-emoji-panel">
+            <span onclick="insertProperEmoji('👍')">👍</span><span onclick="insertProperEmoji('✅')">✅</span><span onclick="insertProperEmoji('📸')">📸</span>
+            <span onclick="insertProperEmoji('⚠️')">⚠️</span><span onclick="insertProperEmoji('🌱')">🌱</span><span onclick="insertProperEmoji('💧')">💧</span>
+            <span onclick="insertProperEmoji('♻️')">♻️</span><span onclick="insertProperEmoji('👏')">👏</span><span onclick="insertProperEmoji('🙏')">🙏</span>
+          </div>
+          <input id="properChatInput" type="text" placeholder="Ketik pesan..." onkeydown="handleProperChatKey(event)">
+        </div>
+        <button class="proper-chat-send" onclick="sendProperChatMessage()">➤</button>
+      </div>
+    </section>
+  </div>
+</section>
+
 <section id="detail" class="page">
   <div class="topline"><div><h1>Detail Lokasi</h1><p>Detail penilaian dan riwayat assessment untuk lokasi yang dipilih.</p></div><button class="btn secondary" onclick="showPage('dashboard')">← Kembali</button></div>
   <div class="hero"><h2 id="detailTitle">Lokasi</h2><p id="detailSubtitle">Detail kepatuhan</p></div>
@@ -1315,7 +1467,7 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwL4P5R7dYF8iGHh17PdX79SDvVax6YQ6iS8ZfMzBngPawmfpaNUhNfBkMblQdrj8xb/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3HzY2cKB40CPqg7NkzHHpPQ4FLySx8TibeKPxoj5cbasJRItc10GP5_yW8U_Vrskm/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2543,36 +2695,32 @@ function applyProfileCrop(){
 async function saveProfileChanges(){
  const current=getCurrentUser()||{};
  const name=String($('profileEditName').value||'').trim();
- const input=$('profileEditPhoto');
- const f=input.files&&input.files[0];
+ const f=$('profileEditPhoto').files&&$('profileEditPhoto').files[0];
  if(!current.id){$('profileMsg').textContent='Identitas akun tidak ditemukan.';return;}
  if(name.length<2){$('profileMsg').textContent='Nama lengkap minimal 2 karakter.';return;}
  $('profileMsg').textContent='Menyimpan perubahan...';
  try{
-   let profilePhoto=null;
-   if(f){
-     if(f.__croppedData){
-       profilePhoto={fileName:f.__croppedName||'profile.jpg',mimeType:f.__croppedType||'image/jpeg',data:f.__croppedData};
-     }else{
-       const raw=await fileToDataURL(f);
-       profilePhoto={fileName:'profile-'+Date.now()+'.jpg',mimeType:'image/jpeg',data:raw};
-     }
-   }
-
-   const r=await postJSON({action:'updateProfile',name,profilePhoto});
-   if(!r || r.status!=='success') throw Error((r&&r.message)||'Profil gagal diperbarui.');
-
-   const updatedUser=Object.assign({},current,r.user||{}, {name:name});
-   setCurrentUser(updatedUser,r.token||getAuthToken());
-   updateLoggedUserUI();
-   applyAccountToForms();
-   input.value='';
-   closeProfileModal();
-   toast('✓ Profil berhasil diperbarui.');
-
+  let profilePhoto=null;
+  if(f){
+    if(f.__croppedData){
+      profilePhoto={fileName:f.__croppedName||'profile.jpg',mimeType:f.__croppedType||'image/jpeg',data:f.__croppedData};
+    }else{
+      const raw=await fileToDataURL(f);
+      profilePhoto={fileName:f.name,mimeType:f.type||'image/jpeg',data:raw};
+    }
+  }
+  const payload={action:'updateProfile',name,profilePhoto};
+  const r=await postJSON(payload);
+  if(!r || r.status!=='success') throw Error((r&&r.message)||'Profil gagal diperbarui');
+  setCurrentUser(r.user,r.token||getAuthToken());
+  updateLoggedUserUI();
+  applyAccountToForms();
+  $('profileEditPhoto').value='';
+  closeProfileModal();
+  toast('✓ Profil berhasil diperbarui.');
  }catch(e){
-   console.error('saveProfileChanges',e);
-   $('profileMsg').textContent=e&&e.message?e.message:'Profil gagal diperbarui.';
+  console.error('saveProfileChanges',e);
+  $('profileMsg').textContent=e.message||'Profil gagal diperbarui.';
  }
 }
 
@@ -2751,5 +2899,248 @@ setTimeout(()=>loadExecutiveAnalyticsV2(false),1200);
   go(0);restart();const hero=root.closest('.hero-full-bleed')||root.parentElement;hero.addEventListener('mouseenter',()=>clearInterval(timer));hero.addEventListener('mouseleave',restart);
 })();
 </script>
+
+<script>
+/* ===== PROPER • JEJAK-STYLE UX + ROBUST DATA LAYER ===== */
+(() => {
+  const rooms = [
+    {id:'umum',title:'Umum PROPER',sub:'Koordinasi umum tim',icon:'💬'},
+    {id:'ppa',title:'PPA',sub:'Pengendalian pencemaran air',icon:'💧'},
+    {id:'emisi',title:'Emisi',sub:'Cerobong & pemantauan emisi',icon:'🏭'},
+    {id:'plb3',title:'PLB3',sub:'Penyimpanan & tanggap darurat',icon:'🧰'},
+    {id:'b3',title:'B3 & PCBs',sub:'Pengelolaan bahan berbahaya',icon:'⚗️'},
+    {id:'sampah',title:'Sampah',sub:'Pengurangan & pengelolaan sampah',icon:'♻️'}
+  ];
+  let activeRoom = localStorage.getItem('properChatRoom') || 'umum';
+  let activeReply = null;
+  let chatPollTimer = null;
+  let chatBusy = false;
+
+  window.__properChatRooms = rooms;
+
+  function safeText(v){ return escapeHtml(String(v ?? '')); }
+
+  window.renderProperChatRooms = function(){
+    const root = document.getElementById('properChatRooms');
+    if(!root) return;
+    const q = String(document.getElementById('properChatSearch')?.value || '').trim().toLowerCase();
+    const list = rooms.filter(r=>!q || (r.title+' '+r.sub).toLowerCase().includes(q));
+    const count = document.getElementById('properChatRoomCount');
+    if(count) count.textContent = list.length;
+    root.innerHTML = list.map(r=>`
+      <div class="proper-chat-room ${r.id===activeRoom?'active':''}" onclick="openProperChatRoom('${r.id}')">
+        <div class="proper-chat-room-icon">${r.icon}</div>
+        <div class="proper-chat-room-info">
+          <div class="proper-chat-room-title">${safeText(r.title)}</div>
+          <div class="proper-chat-room-sub">${safeText(r.sub)}</div>
+        </div>
+      </div>`).join('') || '<div class="proper-chat-empty" style="padding:30px 10px"><div>🔎</div><span>Ruang tidak ditemukan.</span></div>';
+  };
+
+  window.openProperChatRoom = async function(roomId){
+    if(!rooms.some(r=>r.id===roomId)) return;
+    activeRoom = roomId; localStorage.setItem('properChatRoom', roomId);
+    const room = rooms.find(r=>r.id===activeRoom);
+    const title=document.getElementById('properChatRoomTitle'), sub=document.getElementById('properChatRoomSubtitle'), av=document.getElementById('properChatRoomAvatar');
+    if(title) title.textContent=room.title; if(sub) sub.textContent=room.sub; if(av) av.textContent=room.icon;
+    const section=document.getElementById('chat'); if(section) section.classList.add('chat-mobile-open');
+    renderProperChatRooms();
+    await fetchProperChatMessages();
+  };
+
+  window.chatBackToRooms = function(){
+    const section=document.getElementById('chat'); if(section) section.classList.remove('chat-mobile-open');
+  };
+
+  function renderProperMessages(rows){
+    const box=document.getElementById('properChatMessages'); if(!box) return;
+    const list=Array.isArray(rows)?rows:[];
+    if(!list.length){
+      box.innerHTML='<div class="proper-chat-empty"><div>🌱</div><b>Belum ada pesan</b><span>Jadilah yang pertama mengawali percakapan di ruang ini.</span></div>';
+      return;
+    }
+    box.innerHTML=list.map(m=>{
+      const isMe=String(m.senderId||'')===String((getCurrentUser()||{}).id||'');
+      const body=safeText(m.text||'').replace(/\n/g,'<br>');
+      const time=safeText(m.time||m.timestamp||'');
+      return `<div class="proper-chat-msg ${isMe?'me':'other'}">
+        <img class="proper-chat-avatar" src="${safeText(m.profilePhotoUrl||'')}" onerror="this.style.display='none'" alt="">
+        <div class="proper-chat-stack">
+          <div class="proper-chat-sender">${safeText(m.name||m.username||'User')}</div>
+          <div class="proper-chat-bubble">
+            ${m.imageUrl?`<img class="proper-chat-photo" src="${safeText(m.imageUrl)}" onclick="window.open(this.src,'_blank')" alt="Lampiran">`:''}
+            ${body}
+          </div>
+          <div class="proper-chat-meta">${time}</div>
+        </div>
+      </div>`;
+    }).join('');
+    box.scrollTop=box.scrollHeight;
+  }
+
+  async function fetchProperChatMessages(){
+    if(!getAuthToken()) return;
+    try{
+      const data=await jsonpGet('getChatMessages',{room:activeRoom,limit:100});
+      if(data.status!=='success') throw Error(data.message||'Gagal mengambil pesan');
+      renderProperMessages(data.data||[]);
+      const badge=document.getElementById('chatUnreadBadge'); if(badge) badge.style.display='none';
+    }catch(err){
+      const box=document.getElementById('properChatMessages');
+      if(box) box.innerHTML=`<div class="proper-chat-empty"><div>⚠️</div><b>Chat belum dapat dimuat</b><span>${safeText(err.message)}</span></div>`;
+    }
+  }
+  window.refreshProperChat=function(){ fetchProperChatMessages(); renderProperChatRooms(); };
+
+  window.toggleProperEmoji=function(){document.getElementById('properEmojiPanel')?.classList.toggle('show')};
+  window.insertProperEmoji=function(e){const i=document.getElementById('properChatInput');if(i){i.value+=(i.value?' ':'')+e;i.focus();}document.getElementById('properEmojiPanel')?.classList.remove('show')};
+  window.handleProperChatKey=function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendProperChatMessage();}};
+
+  window.sendProperChatMessage = async function(){
+    if(chatBusy||!getAuthToken()) return;
+    const input=document.getElementById('properChatInput'); const text=String(input?.value||'').trim();
+    if(!text) return;
+    chatBusy=true;
+    try{
+      let data;
+      try{
+        data=await postJSON({action:'sendChatMessage',room:activeRoom,text});
+      }catch(firstErr){
+        // Fallback avoids fetch/CORS failure: fire-and-forget and verify on refresh.
+        await postJSONNoCors({action:'sendChatMessage',room:activeRoom,text});
+        data={status:'success',message:'Pesan dikirim.'};
+      }
+      if(data.status!=='success') throw Error(data.message||'Pesan gagal dikirim');
+      input.value=''; cancelProperChatReply(); await fetchProperChatMessages();
+    }catch(err){toast('Chat: '+err.message)}
+    finally{chatBusy=false;}
+  };
+
+  window.cancelProperChatReply=function(){activeReply=null;const x=document.getElementById('properChatReply');if(x)x.style.display='none'};
+
+  // More reliable profile save: normal POST first, no-cors fallback, then verify by JSONP.
+  window.saveProfileChanges = async function(){
+    const current=getCurrentUser()||{};
+    const name=String(document.getElementById('profileEditName')?.value||'').trim();
+    const input=document.getElementById('profileEditPhoto');
+    const f=input?.files?.[0];
+    if(!current.id){document.getElementById('profileMsg').textContent='Identitas akun tidak ditemukan.';return;}
+    if(name.length<2){document.getElementById('profileMsg').textContent='Nama lengkap minimal 2 karakter.';return;}
+    const btn=document.querySelector('#profileModal .profile-foot .btn.primary');
+    if(btn){btn.disabled=true;btn.textContent='Menyimpan...'}
+    document.getElementById('profileMsg').textContent='Menyimpan perubahan...';
+    try{
+      let profilePhoto=null;
+      if(f){
+        if(f.__croppedData) profilePhoto={fileName:f.__croppedName||'profile.jpg',mimeType:'image/jpeg',data:f.__croppedData};
+        else profilePhoto={fileName:'profile-'+Date.now()+'.jpg',mimeType:f.type||'image/jpeg',data:(await fileToDataURL(f)).split(',').pop()};
+      }
+      let result=null;
+      try{
+        result=await postJSON({action:'updateProfile',name,profilePhoto});
+      }catch(firstErr){
+        await postJSONNoCors({action:'updateProfile',name,profilePhoto});
+        // Wait briefly for Drive + Sheet write, then verify through JSONP.
+        await new Promise(r=>setTimeout(r,1400));
+        result=await jsonpGet('getProfile',{});
+      }
+      if(!result||result.status!=='success') throw Error(result?.message||'Perubahan belum tersimpan. Pastikan deployment Apps Script sudah versi terbaru.');
+      const updated=Object.assign({},current,result.user||{},{name});
+      setCurrentUser(updated,result.token||getAuthToken());
+      updateLoggedUserUI(); applyAccountToForms();
+      if(input) input.value='';
+      closeProfileModal(); toast('✓ Profil berhasil diperbarui.');
+    }catch(err){
+      console.error(err);
+      const msg=String(err?.message||err);
+      document.getElementById('profileMsg').textContent=msg.includes('Failed to fetch')
+        ? 'Koneksi penyimpanan gagal. Perubahan belum dikonfirmasi oleh server.'
+        : msg;
+    }finally{
+      if(btn){btn.disabled=false;btn.textContent='Simpan Perubahan'}
+    }
+  };
+
+  function loadChatOnPage(){
+    renderProperChatRooms();
+    if(!chatPollTimer){
+      chatPollTimer=setInterval(()=>{if(document.getElementById('chat')?.classList.contains('active'))fetchProperChatMessages();},12000);
+    }
+  }
+  const oldShowPage=window.showPage;
+  if(typeof oldShowPage==='function'){
+    window.showPage=function(id){
+      oldShowPage(id);
+      if(id==='chat') loadChatOnPage();
+      if(id==='monitoring'||id==='rekap') setTimeout(()=>loadAllModulesRecap(false),80);
+    };
+  }
+
+  // Robust recap: no hard dependency on optional DOM nodes.
+  window.renderAllModulesRecap=function(rows){
+    rows=Array.isArray(rows)?rows:[];
+    const set=(id,val)=>{const el=document.getElementById(id); if(el) el.textContent=val;};
+    const setHtml=(id,val)=>{const el=document.getElementById(id); if(el) el.innerHTML=val;};
+    const sites=new Set(rows.map(r=>normalizeSite(r.site)).filter(Boolean));
+    const modules=new Set(rows.map(r=>r.moduleKey||r.module).filter(Boolean));
+    const avg=rows.length?Math.round(rows.reduce((s,r)=>s+Number(r.percentage||0),0)/rows.length):0;
+    set('allRecapCount',rows.length); set('allRecapSites',sites.size); set('allRecapAvg',avg+'%'); set('allRecapModules',modules.size+'/6');
+    set('rekapModuleBadge',rows.length+' assessment');
+    const sorted=rows.slice().sort((a,b)=>String(b.timestamp||b.assessmentDate||'').localeCompare(String(a.timestamp||a.assessmentDate||'')));
+    const body=sorted.length?sorted.map(r=>`<tr>
+      <td><span class="mod-pill">${safeText(r.module||'-')}</span></td>
+      <td>${safeText(r.timestamp||r.assessmentDate||'-')}</td>
+      <td><b>${safeText(r.assessor||'-')}</b></td>
+      <td>${safeText(displaySite(r.site)||'-')}</td>
+      <td>${Number(r.yes||0)}</td><td>${Number(r.no||0)}</td>
+      <td><b>${Number(r.percentage||0)}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td>
+    </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:35px;color:#64756f">Belum ada data dari modul manapun.</td></tr>';
+    setHtml('monitorBody',body); setHtml('rekapBody',body);
+    set('lastSync','Semua modul tersinkron: '+new Date().toLocaleString('id-ID'));
+  };
+
+  // Safer GET for JSONP. Existing jsonpGet can be used by the rest of the app.
+  const oldLoadAll=window.loadAllModulesRecap;
+  window.loadAllModulesRecap=async function(force=false){
+    if(window.__allRecapLoading && !force) return window.__allRecapLoading;
+    try{
+      return await oldLoadAll(force);
+    }catch(e){
+      // Final fallback: load each module independently and merge summaries.
+      const actions=['getPPA','getEmisi','getPLB3','getPLB3Darurat','getB3','getSampah'];
+      const labels={getPPA:'PPA',getEmisi:'Emisi',getPLB3:'PLB3',getPLB3Darurat:'PLB3 Tanggap Darurat',getB3:'B3',getSampah:'Sampah'};
+      const results=[];
+      for(const action of actions){
+        try{
+          const d=await jsonpGet(action,{});
+          (d.data||[]).forEach(r=>results.push({...r,module:labels[action],moduleKey:labels[action]}));
+        }catch(_){}
+      }
+      renderAllModulesRecap(results);
+      return results;
+    }
+  };
+
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('.proper-chat-emoji')&&!e.target.closest('.proper-emoji-panel')) document.getElementById('properEmojiPanel')?.classList.remove('show');
+  });
+})();
+</script>
+
+
+<script>
+async function postJSONNoCors(payload){
+  payload=Object.assign({},payload,{userToken:getAuthToken()});
+  await fetch(SCRIPT_URL,{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(payload),
+    keepalive:true
+  });
+  return {status:'success',message:'Request dikirim.'};
+}
+</script>
+
 </body>
 </html>
