@@ -123,6 +123,108 @@ body{background:#f5f8f6}
 @media(max-width:480px){.kpi-grid-pro{grid-template-columns:1fr}.filter-grid{grid-template-columns:1fr}.top-status{flex-wrap:wrap}}
 
 .muted-small{font-size:10px;color:#81918b;font-weight:600}.full-btn{width:100%;margin-top:14px;padding:10px;font-size:10px}.recent-card{min-width:0}
+
+.module-kicker{font-size:10px;color:#087f5b;font-weight:900;letter-spacing:1px;text-transform:uppercase}
+.module-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:20px}
+.module-card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:var(--shadow);cursor:pointer;transition:.2s}
+.module-card:hover{transform:translateY(-3px);box-shadow:0 18px 42px rgba(8,60,44,.12)}
+.module-card h3{margin:8px 0 6px;font-size:18px}.module-card p{margin:0;color:var(--muted);font-size:12px;line-height:1.6}
+.module-icon{width:42px;height:42px;border-radius:13px;background:var(--mint);display:grid;place-items:center;font-weight:900;color:var(--green);font-size:19px}
+.emisi-table{min-width:1000px}.lb3-table{min-width:2100px}
+.sticky-left{position:sticky;left:0;background:#fff;z-index:3}
+.sticky-left-head{position:sticky;left:0;background:#f6faf8;z-index:4}
+.small-input{width:95px}.num-input{width:90px}
+.section-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:end}
+.success-box{background:#e7f8f0;border:1px solid #b9ead7;color:#087f5b;border-radius:14px;padding:12px 14px;font-size:11px;font-weight:700}
+@media(max-width:800px){.module-grid{grid-template-columns:1fr}.lb3-table{min-width:1900px}}
+
+.module-section-title{background:linear-gradient(135deg,#eff9f4,#ffffff);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:18px 0 10px}
+.module-section-title h3{margin:0;font-size:15px;color:var(--green)}
+.module-section-title p{margin:4px 0 0;font-size:10px;color:var(--muted)}
+.compact-table textarea{min-width:220px}.compact-table select{min-width:100px}
+
+/* =========================================================
+   PREMIUM GEN-Z CORPORATE UI — EXECUTIVE COMPLIANCE COCKPIT
+   ========================================================= */
+:root{
+  --g1:#005b46;--g2:#0b7a60;--g3:#13a77d;--ink:#0d211c;--muted:#71827d;
+  --soft:#f3f8f6;--line:#e4ece8;--white:#fff;--shadow:0 18px 55px rgba(0,72,55,.10);
+  --shadow2:0 8px 24px rgba(0,72,55,.08);
+}
+body{background:
+ radial-gradient(circle at 10% 0%,rgba(19,167,125,.08),transparent 28%),
+ radial-gradient(circle at 90% 10%,rgba(74,120,255,.07),transparent 26%),
+ #f5f8f7!important;
+}
+.page{animation:pageIn .35s ease both}
+@keyframes pageIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.topbar-pro h1,.topline h1{letter-spacing:-.035em}
+.card,.kpi-pro,.hero-pro,.filter-card{box-shadow:var(--shadow2);border-color:rgba(0,91,70,.08)!important}
+.card{border-radius:22px!important}
+.kpi-pro{border-radius:22px!important;transition:.25s transform,.25s box-shadow}
+.kpi-pro:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.kpi-icon{box-shadow:inset 0 0 0 7px rgba(255,255,255,.6)}
+.pill{border:1px solid rgba(255,255,255,.2)!important;background:rgba(255,255,255,.12)!important;backdrop-filter:blur(12px)}
+.btn{border-radius:13px!important;font-weight:800;letter-spacing:-.01em}
+.btn.primary{box-shadow:0 8px 22px rgba(0,91,70,.18)}
+.nav button{transition:.22s ease}
+.nav button:hover{transform:translateX(3px);background:rgba(255,255,255,.09)}
+.executive-shell{margin-top:20px}
+.exec-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:14px}
+.exec-head h2{margin:0;font-size:25px;letter-spacing:-.04em;color:var(--ink)}
+.exec-head p{margin:5px 0 0;color:var(--muted);font-size:12px}
+.exec-live{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;color:#52716a}
+.exec-live i{width:8px;height:8px;border-radius:50%;background:#18b27e;box-shadow:0 0 0 5px rgba(24,178,126,.12)}
+.exec-kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.exec-kpi{position:relative;overflow:hidden;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow2)}
+.exec-kpi:after{content:"";position:absolute;width:90px;height:90px;border-radius:50%;right:-42px;top:-42px;background:linear-gradient(135deg,rgba(19,167,125,.16),rgba(19,167,125,0))}
+.exec-kpi span{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:#82918d}
+.exec-kpi strong{display:block;font-size:27px;line-height:1.1;margin-top:8px;letter-spacing:-.05em;color:var(--ink)}
+.exec-kpi small{display:block;margin-top:5px;color:#82918d;font-size:10px}
+.exec-grid{display:grid;grid-template-columns:1.45fr .95fr;gap:14px;margin-top:14px}
+.exec-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}
+.viz-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow2);min-width:0}
+.viz-title{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px}
+.viz-title h3{margin:0;font-size:14px;color:var(--ink);letter-spacing:-.025em}
+.viz-title p{margin:4px 0 0;color:var(--muted);font-size:10px}
+.viz-badge{font-size:10px;font-weight:900;padding:7px 9px;border-radius:999px;background:#eef8f4;color:var(--g1);white-space:nowrap}
+.svg-chart{width:100%;height:245px;display:block}
+.module-board{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.module-tile{border:1px solid var(--line);border-radius:16px;padding:13px;background:linear-gradient(145deg,#fff,#f8fbfa);transition:.2s}
+.module-tile:hover{transform:translateY(-2px);box-shadow:var(--shadow2)}
+.module-tile .mtop{display:flex;justify-content:space-between;align-items:center;gap:6px}
+.module-tile b{font-size:11px;color:var(--ink)}
+.module-tile strong{font-size:20px;letter-spacing:-.04em;color:var(--g1)}
+.module-tile small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+.meter{height:7px;background:#edf2ef;border-radius:99px;overflow:hidden;margin-top:10px}
+.meter i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#005b46,#18b27e)}
+.module-analytics{margin:18px 0 4px}
+.module-analytics-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:12px}
+.module-analytics-head h2{margin:0;font-size:20px;letter-spacing:-.035em}
+.module-analytics-head p{margin:4px 0 0;color:var(--muted);font-size:10px}
+.module-chip{padding:7px 10px;border-radius:999px;background:#edf8f4;color:var(--g1);font-size:10px;font-weight:900}
+.module-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.module-mini{background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px;box-shadow:var(--shadow2)}
+.module-mini span{font-size:9px;color:#84938f;text-transform:uppercase;font-weight:900;letter-spacing:.07em}
+.module-mini strong{display:block;font-size:22px;letter-spacing:-.04em;margin-top:5px}
+.module-viz-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:12px}
+.module-viz{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:var(--shadow2)}
+.module-viz h4{margin:0;font-size:12px;color:var(--ink)}
+.module-viz p{margin:4px 0 8px;color:var(--muted);font-size:9px}
+.module-viz .svg-chart{height:205px}
+.module-empty{height:205px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;border:1px dashed #dce6e1;border-radius:14px;background:#fbfdfc}
+.detail-pill{display:inline-flex;align-items:center;gap:5px;padding:6px 8px;border-radius:999px;background:#f2f7f5;font-size:9px;font-weight:800;color:#58716a}
+.exec-table-wrap{overflow:auto}
+.exec-table{width:100%;border-collapse:separate;border-spacing:0 7px}
+.exec-table th{font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:#83928e;text-align:left;padding:0 9px 4px}
+.exec-table td{background:#f8fbfa;padding:10px 9px;font-size:10px;color:#334741;border-top:1px solid #edf2ef;border-bottom:1px solid #edf2ef}
+.exec-table td:first-child{border-left:1px solid #edf2ef;border-radius:11px 0 0 11px;font-weight:900}
+.exec-table td:last-child{border-right:1px solid #edf2ef;border-radius:0 11px 11px 0}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px}
+.status-dot.good{background:#16a777}.status-dot.warn{background:#e7a51a}.status-dot.bad{background:#df5b5b}
+@media(max-width:1200px){.exec-kpis{grid-template-columns:repeat(3,1fr)}.exec-grid,.module-viz-grid{grid-template-columns:1fr}.exec-grid-3{grid-template-columns:1fr}.module-board{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){.exec-kpis,.module-kpis{grid-template-columns:repeat(2,1fr)}.module-board{grid-template-columns:1fr}.exec-head{display:block}.exec-live{margin-top:10px}}
+
 </style>
 </head>
 <body>
@@ -141,6 +243,11 @@ body{background:#f5f8f6}
   <nav class="nav">
     <button class="active" data-page="dashboard" onclick="showPage('dashboard')">⌂ <span>Dashboard</span></button>
     <button data-page="ppa" onclick="showPage('ppa')">✓ <span>Input Penilaian (PPA)</span></button>
+    <button data-page="emisi" onclick="showPage('emisi')">◉ <span>Emisi</span></button>
+    <button data-page="plb3" onclick="showPage('plb3')">▦ <span>Penyimpanan PLB3</span></button>
+    <button data-page="plb3darurat" onclick="showPage('plb3darurat')">⚠ <span>PLB3 Tanggap Darurat</span></button>
+    <button data-page="b3" onclick="showPage('b3')">▤ <span>B3</span></button>
+    <button data-page="sampah" onclick="showPage('sampah')">♻ <span>Sampah</span></button>
     <button data-page="monitoring" onclick="showPage('monitoring')">◫ <span>Monitoring &amp; Rekap</span></button>
     <button data-page="rekap" onclick="showPage('rekap')">▤ <span>Rekap Data</span></button>
     <button data-page="detail" id="detailNav" style="display:none" onclick="showPage('detail')">⌁ <span>Detail Lokasi</span></button>
@@ -157,10 +264,10 @@ body{background:#f5f8f6}
 
   <div class="hero-pro">
     <div class="hero-copy">
-      <div class="eyebrow">PENILAIAN KETENTUAN TEKNIS PPA</div>
-      <h2>Penilaian Ketentuan Teknis PPA</h2>
-      <p>Penilaian terhadap kepatuhan perusahaan dalam melaksanakan pengendalian pencemaran air melalui pengelolaan dan pengoperasian IPAL, pemantauan kualitas dan kuantitas air limbah, pemenuhan baku mutu, serta kelengkapan dokumentasi dan pelaporan sesuai ketentuan yang berlaku.</p>
-      <div class="pills"><span class="pill">11 Ketentuan Teknis</span><span class="pill">Monitoring Multi-Lokasi</span><span class="pill">Terintegrasi Google Sheet</span></div>
+      <div class="eyebrow">EXECUTIVE COMPLIANCE COCKPIT</div>
+      <h2>PROPER Environmental Compliance</h2>
+      <p>Ringkasan eksekutif untuk memantau kepatuhan PPA, Emisi, PLB3, Tanggap Darurat, B3, dan Sampah secara terintegrasi dari seluruh lokasi dan seluruh PIC.</p>
+      <div class="pills"><span class="pill">6 Modul Compliance</span><span class="pill">Multi-Lokasi & Multi-PIC</span><span class="pill">Live Google Sheet</span></div>
     </div>
     <div class="hero-visual">
       <div class="water-orb"></div><div class="water-wave"></div>
@@ -252,6 +359,65 @@ body{background:#f5f8f6}
   </div>
 </section>
 
+
+<section id="emisi" class="page">
+  <div class="topline">
+    <div><h1>Emisi</h1><p>Ketaatan terhadap ketentuan teknis emisi dan kelengkapan data cerobong.</p></div>
+    <button class="btn secondary" onclick="loadEmisi()">↻ Refresh Data</button>
+  </div>
+  <div class="card">
+    <div class="assessor-grid">
+      <div class="field"><label>Nama Penilai</label><input id="emisiAssessor" placeholder="Masukkan nama penilai"></div>
+      <div class="field"><label>Lokasi / Area</label><input id="emisiSite" list="globalSiteSuggestions" placeholder="Ketik atau pilih lokasi"></div>
+      <div class="field"><label>Tanggal Penilaian</label><input id="emisiDate" type="date"></div>
+      <div class="field"><label>Jumlah Cerobong</label><input id="emisiStackCount" class="num-input" type="number" min="0" value="4"></div>
+    </div>
+    <datalist id="globalSiteSuggestions"></datalist>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><h3>KETAATAN TERHADAP KETENTUAN TEKNIS</h3><div class="note">Isi data setiap ketentuan. Persentase dihitung otomatis.</div></div><span class="badge neutral" id="emisiPct">0%</span></div>
+    <div class="table-wrap">
+      <table class="emisi-table">
+        <thead><tr><th>No</th><th>Ketentuan Teknis</th><th>Jumlah Cerobong</th><th>Data yang harus dilaporkan</th><th>Jumlah data yang Sesuai</th><th>Data Terlapor dan Sesuai</th><th>Prosentase</th></tr></thead>
+        <tbody id="emisiBody"></tbody>
+        <tfoot><tr><th colspan="6" style="text-align:right">Tingkat Ketaatan Terhadap Ketentuan Teknis</th><th id="emisiTotalPct">0%</th></tr></tfoot>
+      </table>
+    </div>
+    <div class="actions"><button class="btn secondary" onclick="resetEmisi()">Reset</button><button class="btn primary" onclick="submitEmisi()">☁ Simpan Emisi</button></div>
+  </div>
+  <div class="card"><div class="card-head"><h3>Riwayat Data Emisi</h3><span class="badge neutral" id="emisiCount">0 assessment</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>Cerobong</th><th>Tingkat Ketaatan</th></tr></thead><tbody id="emisiHistory"></tbody></table></div>
+  </div>
+</section>
+
+<section id="plb3" class="page">
+  <div class="topline">
+    <div><h1>Penyimpanan PLB3</h1><p>Checklist ketentuan teknis fasilitas penyimpanan Limbah B3.</p></div>
+    <button class="btn secondary" onclick="loadPLB3()">↻ Refresh Data</button>
+  </div>
+  <div class="card">
+    <div class="assessor-grid">
+      <div class="field"><label>Nama Penilai</label><input id="plb3Assessor" placeholder="Masukkan nama penilai"></div>
+      <div class="field"><label>Lokasi / Area</label><input id="plb3Site" list="globalSiteSuggestions" placeholder="Ketik atau pilih lokasi"></div>
+      <div class="field"><label>Tanggal Penilaian</label><input id="plb3Date" type="date"></div>
+      <div class="field"><label>TPS yang dinilai</label><input id="pplb3TpsCustom" placeholder="Opsional: TPS tambahan / kode TPS"></div>
+    </div>
+    <div class="note" style="margin-top:10px">Lokasi/Area dapat diketik manual atau dipilih dari lokasi yang sudah pernah digunakan. Kode TPS pada tabel dapat dinilai satu per satu.</div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><h3>Ketaatan Ketentuan Penyimpanan PLB3</h3><div class="note">Pilih YA/TIDAK dan isi dokumen & keterangan pada setiap TPS.</div></div><span class="badge neutral" id="lb3Pct">0%</span></div>
+    <div class="table-wrap">
+      <table class="lb3-table">
+        <thead id="plb3Head"></thead><tbody id="plb3Body"></tbody><tfoot id="lb3Foot"></tfoot>
+      </table>
+    </div>
+    <div class="actions"><button class="btn secondary" onclick="resetPLB3()">Reset</button><button class="btn primary" onclick="submitPLB3()">☁ Simpan LB3</button></div>
+  </div>
+  <div class="card"><div class="card-head"><h3>Riwayat Data Penyimpanan PLB3</h3><span class="badge neutral" id="plb3Count">0 assessment</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>Total Status</th><th>YA</th><th>TIDAK</th><th>%</th></tr></thead><tbody id="plb3History"></tbody></table></div>
+  </div>
+</section>
+
 <section id="detail" class="page">
   <div class="topline"><div><h1>Detail Lokasi</h1><p>Detail penilaian dan riwayat assessment untuk lokasi yang dipilih.</p></div><button class="btn secondary" onclick="showPage('dashboard')">← Kembali</button></div>
   <div class="hero"><h2 id="detailTitle">Lokasi</h2><p id="detailSubtitle">Detail kepatuhan</p></div>
@@ -266,6 +432,113 @@ body{background:#f5f8f6}
   </div>
 </section>
 
+
+<section id="plb3darurat" class="page">
+  <div class="topline"><div><h1>PLB3 — Tanggap Darurat</h1><p>Aspek ketentuan tanggap darurat pengelolaan Limbah B3.</p></div><button class="btn secondary" onclick="loadPLB3Darurat()">↻ Refresh Data</button></div>
+  <div class="card">
+    <div class="assessor-grid">
+      <div class="field"><label>Nama Penilai</label><input id="daruratAssessor" placeholder="Masukkan nama penilai"></div>
+      <div class="field"><label>Lokasi / Area</label><input id="daruratSite" list="globalSiteSuggestions" placeholder="Ketik atau pilih lokasi"></div>
+      <div class="field"><label>Tanggal Penilaian</label><input id="daruratDate" type="date"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-head"><div><h3>ASPEK KETENTUAN TANGGAP DARURAT</h3><div class="note">Jawab YA/TIDAK dan lengkapi dokumentasi serta keterangan.</div></div><span class="badge neutral" id="daruratPct">0%</span></div>
+    <div class="table-wrap"><table><thead><tr><th>No</th><th>Ketentuan / Pertanyaan</th><th>Ya/Tidak</th><th>Dokumentasi</th><th>Keterangan</th></tr></thead><tbody id="daruratBody"></tbody></table></div>
+    <div class="score-box" style="margin-top:16px"><div class="progress"><span id="daruratBar"></span></div><div class="score-value" id="daruratScore">0%</div></div>
+    <div class="actions"><button class="btn secondary" onclick="resetPLB3Darurat()">Reset</button><button class="btn primary" onclick="submitPLB3Darurat()">☁ Simpan ke Google Sheet</button></div>
+  </div>
+  <div class="card"><div class="card-head"><h3>Riwayat PLB3 Tanggap Darurat</h3><span class="badge neutral" id="daruratCount">0 assessment</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>Aspek</th><th>YA</th><th>TIDAK</th><th>%</th></tr></thead><tbody id="daruratHistory"></tbody></table></div>
+  </div>
+</section>
+
+<section id="b3" class="page">
+  <div class="topline"><div><h1>B3</h1><p>Aspek penilaian pengangkutan, penyimpanan, pelaporan B3 serta pengelolaan PCBs.</p></div><button class="btn secondary" onclick="loadB3()">↻ Refresh Data</button></div>
+  <div class="card">
+    <div class="assessor-grid">
+      <div class="field"><label>Nama Penilai</label><input id="b3Assessor" placeholder="Masukkan nama penilai"></div>
+      <div class="field"><label>Lokasi / Area</label><input id="b3Site" list="globalSiteSuggestions" placeholder="Ketik atau pilih lokasi"></div>
+      <div class="field"><label>Tanggal Penilaian</label><input id="b3Date" type="date"></div>
+    </div>
+  </div>
+  <div id="b3Forms"></div>
+  <div class="card"><div class="actions"><button class="btn secondary" onclick="resetB3()">Reset</button><button class="btn primary" onclick="submitB3()">☁ Simpan B3 ke Google Sheet</button></div></div>
+  <div class="card">
+    <div class="card-head"><h3>Riwayat Penilaian B3</h3><span class="badge neutral" id="b3Count">0 assessment</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>Aspek</th><th>YA</th><th>TIDAK</th><th>%</th></tr></thead><tbody id="b3History"></tbody></table></div>
+  </div>
+</section>
+
+<section id="sampah" class="page">
+  <div class="topline">
+    <div>
+      <h1>Sampah</h1>
+      <p>Matriks Aspek Kriteria Pengelolaan Sampah — pengurangan, penanganan, pengolahan, dan pelaporan.</p>
+    </div>
+    <button class="btn secondary" onclick="loadSampah()">↻ Refresh Data</button>
+  </div>
+
+  <div class="card">
+    <div class="assessor-grid">
+      <div class="field"><label>Nama Penilai</label><input id="sampahAssessor" placeholder="Masukkan nama penilai"></div>
+      <div class="field"><label>Lokasi / Area</label><input id="sampahSite" list="globalSiteSuggestions" placeholder="Ketik atau pilih lokasi"></div>
+      <div class="field"><label>Tanggal Penilaian</label><input id="sampahDate" type="date"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <h3>MATRIKS ASPEK KRITERIA PENGELOLAAN SAMPAH</h3>
+        <div class="note">Isi YA/TIDAK dan keterangan untuk setiap aspek. Persentase ketaatan dihitung otomatis.</div>
+      </div>
+      <span class="badge neutral" id="sampahPct">0%</span>
+    </div>
+
+    <div class="table-wrap">
+      <table class="compact-table">
+        <thead>
+          <tr>
+            <th style="width:70px">No</th>
+            <th>Aspek</th>
+            <th style="width:120px">YA/TIDAK</th>
+            <th style="min-width:360px">Keterangan</th>
+          </tr>
+        </thead>
+        <tbody id="sampahBody"></tbody>
+      </table>
+    </div>
+
+    <div class="score-box" style="margin-top:16px">
+      <div class="progress"><span id="sampahBar"></span></div>
+      <div class="score-value" id="sampahScore">0%</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn secondary" onclick="resetSampah()">Reset</button>
+      <button class="btn primary" onclick="submitSampah()">☁ Simpan ke Google Sheet</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <h3>Riwayat Penilaian Sampah</h3>
+        <div class="note">Semua assessment dari seluruh PIC ditampilkan di sini.</div>
+      </div>
+      <span class="badge neutral" id="sampahCount">0 assessment</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>Aspek</th><th>YA</th><th>TIDAK</th><th>%</th></tr>
+        </thead>
+        <tbody id="sampahHistory"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
 <section id="monitoring" class="page">
   <div class="topline"><div><h1>Monitoring</h1><p>Pantau hasil penilaian per lokasi IPAL.</p></div><button class="btn secondary" onclick="loadData()">↻ Refresh Data</button></div>
   <div class="grid">
@@ -287,7 +560,7 @@ body{background:#f5f8f6}
 
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxxvpB9xwV8BhVE52P_Hspm5t1q1K5oCVNfswfSyZpBww6vJ1DNedse6JiylxJiTPg9/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzR1E7o82xYU-vCEOLG81Rs6YmF8JdzZntayRSdqCw5IVxJvmG0XQYM_Z6IRyyeiQ3S/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -309,6 +582,13 @@ function showPage(id){
  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
  $(id).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'});
  if(id==='monitoring'||id==='rekap'||id==='dashboard') { if(allPPAData.length===0) loadData(); }
+ if(id==='plb3') loadPLB3();
+ if(id==='plb3darurat') loadPLB3Darurat();
+ if(id==='b3') loadB3();
+ if(id==='sampah') loadSampah();
+ if(id==='emisi') loadEmisi();
+ if(id==='dashboard') loadExecutiveAnalytics(false);
+ if(id==='lb3') loadPLB3();
 }
 function toggleMenu(){ $('sidebar').style.display=$('sidebar').style.display==='flex'?'none':'flex'; $('sidebar').style.position='fixed'; $('sidebar').style.width='260px'; $('sidebar').style.left='0'; $('sidebar').style.top='0';}
 function normalizeSite(name){
@@ -346,6 +626,510 @@ function getDateParts(dateValue){
  const p=String(dateValue).split('-');
  return {year:p[0]||'',month:String(Number(p[1]||0)||''),day:String(Number(p[2]||0)||'')};
 }
+
+const emisiItems = [
+ 'Foto cerobong dengan identitas kode cerobong dan titik ordinat penaatan',
+ 'Cerobong dilengkapi dengan tangga pengaman dan landasan kerja',
+ 'Terdapat lubang pengambilan sampel',
+ 'Terdapat sumber listrik',
+ 'Menampilkan kegiatan sampling dari petugas pengambil sampel dengan foto geotaging'
+];
+
+const plb3Tps = [
+ 'TPS LB3 01A','TPS LB3 01B','TPS LB3 02','TPS LB3 03','TPS LB3 04A','TPS LB3 04B','TPS LB3 04C',
+ 'TPS LB3 05','TPS LB3 06','TPS LB3 07','TPS LB3 08','TPS LB3 09','TPS LB3 Klinik','TPS Klinik'
+];
+
+const plb3Items = [
+ 'Apakah lokasi Penyimpanan Limbah B3: A. Bebas banjir; B. tidak rawan bencana longsoran, bahaya gunung api, gempa bumi, sesar, sink hole, amblesan (land subsidence), tsunami, mud volcano; apakah telah dilakukan rekayasa teknologi?',
+ 'Apakah lokasi Tempat Penyimpanan Limbah B3 berada di dalam Area yang menghasilkan limbah B3',
+ 'Apakah bagian luar bangunan diberi papan nama dan titik koordinat serta diberi simbol limbah B3 sesuai dengan karakteristik limbah B3 yang disimpan?',
+ 'Apakah terdapat fasilitas penerangan?',
+ 'Apakah TPS terlindungan dari hujan, tempias atau semacamnya?',
+ 'Apakah terdapat sistem ventilasi udara?',
+ 'Apakah dinding dan atap terbuat dari bahan yang tidak mudah terbakar?',
+ 'Apakah bangunan memiliki saluran dan bak penampung tumpahan?',
+ 'Apakah kapasitas bak penampung mampu untuk menampung tumpahan/ceceran?',
+ 'Apakah lantai: a. kedap air; b. tidak bergelombang; c. kuat; d. tidak retak; dibuat melandai turun ke arah bak penampungan dengan kemiringan minimum 1% (satu persen)?',
+ 'Apakah memiliki tanggul atau tembok pemisah antar jenis Limbah B3?',
+ 'Apakah tata letak lokasi fasilitas Penyimpanan Limbah B3 sesuai dengan lay out lokasi Penyimpanan Limbah B3 sesuai dengan izin/Rincian Teknis Penyimpanan Limbah B3?',
+ 'Apakah fasilitas Penyimpanan Limbah B3 dilengkapi dengan saluran drainase di sekeliling lantai yang mengalir menuju bak penampung tumpahan?',
+ 'Apakah kemasan yang disusun telah diberi palet dan susunan tidak lebih dari 3 susun dan/atau jarak antara tumpukan kemasan dengan atap paling rendah 1 meter supaya memudahkan penanganan? (jika menggunakan kemasan drum, jumbo bag, IBC tank)',
+ 'Apakah kemasan yang digunakan sesuai dengan jenis, karakteristik dan/atau kompatibilitas Limbah B3 yang disimpan?',
+ 'Apakah kemasan limbah B3 tidak berkarat, tidak bocor dan tidak rusak dan memiliki penutup yang kuat untuk mencegah terjadinya tumpahan serta mampu mengungkung Limbah B3 sesuai dengan karakteristik Limbah B3?',
+ 'Apakah pengemasan limbah B3 dilengkapi dengan simbol label limbah B3 dan sesuai dengan jenis dan karakteristik limbah B3 yang disimpan dan label paling sedikit memuat nama limbah B3, identitas penghasil, tanggal dihasilkan dan tanggal pengemasan?',
+ 'SOP Penyimpanan Limbah B3',
+ 'SOP tanggap darurat',
+ 'SOP bongkar muat dan/atau SOP pengemasan Limbah B3',
+ 'Apakah fasilitas Penyimpanan Limbah B3 dilengkapi dengan peralatan tanggap darurat?'
+];
+
+function renderEmisiForm(){
+ $('emisiBody').innerHTML=emisiItems.map((item,i)=>`<tr>
+   <td class="num">${i+1}</td><td class="ket">${escapeHtml(item)}</td>
+   <td><input class="small-input emisi-stack" type="number" min="0" value="${i===0?4:4}" oninput="calcEmisi()"></td>
+   <td><input class="small-input emisi-required" type="number" min="0" value="2" oninput="calcEmisi()"></td>
+   <td><input class="small-input emisi-sesuai" type="number" min="0" value="8" oninput="calcEmisi()"></td>
+   <td><input class="small-input emisi-terlapor" type="number" min="0" value="8" oninput="calcEmisi()"></td>
+   <td><b class="emisi-row-pct">100%</b></td>
+ </tr>`).join('');
+ calcEmisi();
+}
+function calcEmisi(){
+ const rows=[...document.querySelectorAll('#emisiBody tr')];
+ let sum=0,n=0;
+ rows.forEach(tr=>{
+   const den=Number(tr.querySelector('.emisi-sesuai').value)||0;
+   const num=Number(tr.querySelector('.emisi-terlapor').value)||0;
+   const pct=den?Math.min(100,Math.max(0,num/den*100)):0;
+   tr.querySelector('.emisi-row-pct').textContent=Math.round(pct)+'%';
+   sum+=pct;n++;
+ });
+ const pct=n?Math.round(sum/n):0;
+ $('emisiPct').textContent=pct+'%';$('emisiTotalPct').textContent=pct+'%';
+}
+function renderPLB3Form(){
+ const head=$('plb3Head');
+ head.innerHTML='<tr><th class="sticky-left-head">No</th><th class="sticky-left-head">Ketentuan</th>'+
+   plb3Tps.map(t=>`<th colspan="2">${escapeHtml(t)}</th>`).join('')+'</tr>'+
+   '<tr><th class="sticky-left-head">YA/TIDAK</th><th class="sticky-left-head">Dokumen & Keterangan</th>'+
+   plb3Tps.map(()=>'<th>YA/TIDAK</th><th>Dokumen & Keterangan</th>').join('')+'</tr>';
+ $('plb3Body').innerHTML=plb3Items.map((item,i)=>`<tr>
+   <td class="num sticky-left">${i+1}</td><td class="ket sticky-left">${escapeHtml(item)}</td>
+   ${plb3Tps.map((t,j)=>`<td><select class="plb3-status" data-row="${i}" data-tps="${j}" onchange="calcPLB3()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td><td><textarea class="plb3-note" data-row="${i}" data-tps="${j}" rows="2" placeholder="Dokumen / keterangan"></textarea></td>`).join('')}
+ </tr>`).join('');
+ calcPLB3();
+}
+function calcPLB3(){
+ const statuses=[...document.querySelectorAll('.plb3-status')];
+ let yes=0,answered=0;
+ statuses.forEach(s=>{
+   if(s.value)answered++;
+   if(s.value==='YA')yes++;
+   s.classList.toggle('status-yes',s.value==='YA');s.classList.toggle('status-no',s.value==='TIDAK');
+ });
+ const pct=answered?Math.round(yes/answered*100):0;
+ $('lb3Pct').textContent=pct+'%';
+ const foot='<tr><th colspan="2" class="sticky-left-head">Jumlah Status / Jumlah Status "YA" / Prosentase Ketaatan</th><th colspan="'+(plb3Tps.length*2)+'" style="text-align:left">'+answered+' terisi • '+yes+' YA • '+pct+'%</th></tr>';
+ $('lb3Foot').innerHTML=foot;
+}
+function resetEmisi(){
+ $('emisiAssessor').value='';$('emisiSite').value='';$('emisiDate').value='';
+ $('emisiStackCount').value=4;renderEmisiForm();
+}
+function resetPLB3(){
+ $('plb3Assessor').value='';$('plb3Site').value='';$('plb3Date').value='';$('pplb3TpsCustom').value='';
+ renderPLB3Form();
+}
+async function postJSON(payload){
+ const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+ return await r.json();
+}
+async function submitEmisi(){
+ const assessor=$('emisiAssessor').value.trim(),site=displaySite($('emisiSite').value),date=$('emisiDate').value;
+ if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Emisi wajib diisi.');return}
+ const rows=[...document.querySelectorAll('#emisiBody tr')].map((tr,i)=>({
+   no:i+1,ketentuan:emisiItems[i],
+   jumlahCerobong:Number(tr.querySelector('.emisi-stack').value)||0,
+   dataHarusDilaporkan:Number(tr.querySelector('.emisi-required').value)||0,
+   jumlahDataSesuai:Number(tr.querySelector('.emisi-sesuai').value)||0,
+   dataTerlaporSesuai:Number(tr.querySelector('.emisi-terlapor').value)||0,
+   prosentase:Number(tr.querySelector('.emisi-row-pct').textContent.replace('%',''))||0
+ }));
+ try{
+   const d=await postJSON({action:'saveEmisi',assessor,site,assessmentDate:date,items:rows});
+   if(d.status==='success'){toast('✓ Data Emisi berhasil disimpan.');resetEmisi();loadEmisi();}
+   else throw new Error(d.message||'Gagal menyimpan');
+ }catch(e){toast('Gagal menyimpan Emisi: '+e.message)}
+}
+async function submitPLB3(){
+ const assessor=$('plb3Assessor').value.trim(),site=displaySite($('plb3Site').value),date=$('plb3Date').value;
+ if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal PLB3 wajib diisi.');return}
+ const items=[];
+ plb3Items.forEach((ketentuan,i)=>{
+   plb3Tps.forEach((tps,j)=>{
+     const s=document.querySelector(`.plb3-status[data-row="${i}"][data-tps="${j}"]`);
+     const n=document.querySelector(`.plb3-note[data-row="${i}"][data-tps="${j}"]`);
+     if(s && s.value) items.push({no:i+1,tps,ketentuan,status:s.value,keterangan:n?n.value.trim():''});
+   });
+ });
+ if(!items.length){toast('Isi minimal satu status YA/TIDAK pada LB3.');return}
+ try{
+   const d=await postJSON({action:'savePLB3',assessor,site,assessmentDate:date,items});
+   if(d.status==='success'){toast('✓ Data Penyimpanan PLB3 berhasil disimpan.');resetPLB3();loadPLB3();}
+   else throw new Error(d.message||'Gagal menyimpan');
+ }catch(e){toast('Gagal menyimpan LB3: '+e.message)}
+}
+function renderHistoryTable(id,data,type){
+ const body=$(id);
+ if(!body)return;
+ body.innerHTML=data.length?data.slice().reverse().map(r=>{
+   if(type==='emisi') return `<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(r.site||'-')}</td><td>${r.stackCount||0}</td><td><b>${r.percentage||0}%</b></td></tr>`;
+   return `<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(r.site||'-')}</td><td>${r.total||0}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td></tr>`;
+ }).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+}
+function loadEmisi(){
+ const old=document.getElementById('emisiJsonp');if(old)old.remove();
+ const cb='emisiCallback_'+Date.now();
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('emisiHistory',d.data||[],'emisi');$('emisiCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('emisi',d.data||[]);}catch(e){toast('Data Emisi gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('emisiJsonp');if(s)s.remove();}};
+ const s=document.createElement('script');s.id='emisiJsonp';s.src=SCRIPT_URL+'?action=getEmisi&callback='+cb+'&t='+Date.now();s.onerror=()=>{toast('Data Emisi gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+}
+function loadPLB3(){
+ const old=document.getElementById('plb3Jsonp');if(old)old.remove();
+ const cb='plb3Callback_'+Date.now();
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('lb3History',d.data||[],'lb3');$('lb3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('plb3',d.data||[]);}catch(e){toast('Data PLB3 gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('plb3Jsonp');if(s)s.remove();}};
+ const s=document.createElement('script');s.id='plb3Jsonp';s.src=SCRIPT_URL+'?action=getPLB3&callback='+cb+'&t='+Date.now();s.onerror=()=>{toast('Data PLB3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+}
+
+
+const plb3DaruratItems = [["1", "PROGRAM KEDARURATAN PENGELOLAAN LIMBAH B3", "Apakah tersedia dokumen program kedaruratan pengelolaan Limbah B3?", "Dibuktikan dengan dokumen Program Kedaruratan PLB3 berdasarkan identifikasi risiko kedaruratan PLB3 yang memuat infrastruktur dan fungsi penanggulangan sesuai Format Permen LHK Nomor 74 Tahun 2019."], ["2a", "PELATIHAN DAN GELADI KEDARURATAN PLB3", "Apakah melaksanakan pelatihan dan geladi kedaruratan?", "Dibuktikan dengan absensi, foto pelaksanaan, notulensi, laporan atau bukti lain."], ["2b", "PELATIHAN DAN GELADI KEDARURATAN PLB3", "Jika Iya, apakah pelatihan dan geladi kedaruratan dilaksanakan minimal satu kali dalam satu tahun?", "Dibuktikan dengan absensi, foto pelaksanaan, notulensi, laporan atau bukti lain."], ["2c", "PELATIHAN DAN GELADI KEDARURATAN PLB3", "Apakah memiliki jadwal dan agenda pelatihan geladi kedaruratan?", "Dibuktikan dengan jadwal dan agenda pelatihan dan geladi kedaruratan minimal satu kali dalam satu tahun."], ["2d", "PELATIHAN DAN GELADI KEDARURATAN PLB3", "Adakah peralatan pelatihan dan geladi kedaruratan?", "Dibuktikan dengan adanya peralatan pelatihan dan geladi kedaruratan."], ["3a", "INFRASTRUKTUR — ORGANISASI", "Adakah tim kedaruratan pengelolaan Limbah B3?", "Dokumen pembentukan tim kedaruratan oleh pimpinan tertinggi perusahaan, struktur organisasi, pembagian tugas, tanggung jawab dan kewenangan."], ["3b", "INFRASTRUKTUR — KOORDINASI", "Adakah mekanisme koordinasi penanggulangan kedaruratan dan/atau alur komunikasi ketika terjadi situasi darurat di internal perusahaan dan/atau melibatkan pihak eksternal?", "Dibuktikan dengan informasi mekanisme koordinasi dan alur komunikasi pada Program Kedaruratan Pengelolaan B3 dan/atau Limbah B3."], ["3c1", "INFRASTRUKTUR — PROSEDUR KEDARURATAN", "Prosedur kedaruratan merupakan tata kerja, instruksi kerja atau tata laksana penanggulangan kedaruratan sesuai jenis kecelakaan dan B3/Limbah B3 yang ditemui.", "Dibuktikan dengan SOP/Prosedur/Instruksi Kerja/Tata Kerja dan bukti sosialisasi seperti safety talk atau safety induction."], ["3c2", "INFRASTRUKTUR — PROSEDUR KEDARURATAN", "Apakah melakukan sosialisasi prosedur penanggulangan ke seluruh karyawan/pekerja?", "Dibuktikan dengan absensi, foto pelaksanaan, notulensi, laporan atau bukti lain."], ["3d1", "INFRASTRUKTUR — FASILITAS KEDARURATAN", "Adakah ruang, tempat kerja, posko atau tempat lain yang dapat dijadikan posko kedaruratan pengelolaan Limbah B3 apabila terjadi keadaan darurat?", "Dibuktikan dengan keberadaan ruang/posko yang didedikasikan sebagai pusat komando."], ["3d2", "INFRASTRUKTUR — FASILITAS KEDARURATAN", "Adakah fasilitas pelayanan kesehatan seperti klinik, ruang tindakan medis, tandu, pusat kesehatan, P3K dan/atau emergency kit?", "Dibuktikan dengan keberadaan fasilitas pelayanan kesehatan."], ["3d3", "INFRASTRUKTUR — FASILITAS KEDARURATAN", "Adakah tempat evakuasi dan jalur evakuasi darurat serta informasi muster point/titik kumpul?", "Dibuktikan dengan keberadaan tempat dan jalur evakuasi."], ["3d4", "INFRASTRUKTUR — FASILITAS KEDARURATAN", "Adakah alat pelindung diri?", "Dibuktikan dengan APD sesuai potensi bahaya yang dihadapi."], ["3d5", "INFRASTRUKTUR — FASILITAS KEDARURATAN", "Adakah sistem peringatan dini kedaruratan pengelolaan limbah B3 seperti alarm/sirine/petunjuk komunikasi yang berfungsi baik?", "Dibuktikan dengan adanya sistem peringatan dini kedaruratan."], ["3d6", "INFRASTRUKTUR — FASILITAS KEDARURATAN", "Adakah alat untuk tindakan tanggap darurat seperti oil boom, spill kit, APAR, absorben dan alat isolasi area berbahaya sesuai risiko?", "Dibuktikan dengan alat penanggulangan sesuai jenis potensi bahaya dan risiko pada Program Kedaruratan PLB3."], ["3d7", "INFRASTRUKTUR — FASILITAS KEDARURATAN", "Adakah petunjuk arah angin seperti wind sock?", "Dibuktikan dengan wind sock atau alat petunjuk arah angin lainnya."], ["3d8", "INFRASTRUKTUR — FASILITAS KEDARURATAN", "Adakah alat komunikasi dalam rangka kedaruratan pengelolaan limbah B3?", "Alat komunikasi untuk menginformasikan kejadian kedaruratan dan aktivasi tim tanggap darurat."], ["3d9", "INFRASTRUKTUR — FASILITAS KEDARURATAN", "Adakah jadwal perawatan fasilitas dan peralatan kedaruratan secara berkala?", "Dibuktikan dengan dokumen rencana/laporan perawatan berkala fasilitas, peralatan dan sistem peringatan dini."], ["4a", "PENANGGULANGAN KEDARURATAN PLB3", "Jika pernah mengalami kedaruratan PLB3, apakah telah dilaksanakan penanggulangan berdasarkan Program Kedaruratan PLB3?", "Dibuktikan dengan laporan penanggulangan kedaruratan Pengelolaan B3 dan/atau Limbah B3."], ["4b", "PENANGGULANGAN KEDARURATAN PLB3", "Apakah terdapat laporan pelaksanaan penanggulangan kedaruratan PLB3 tersebut?", "Dibuktikan dengan laporan penanggulangan kedaruratan."], ["4c", "PENANGGULANGAN KEDARURATAN PLB3", "Apakah laporan pelaksanaan penanggulangan kedaruratan PLB3 tersebut disampaikan kepada instansi terkait, pemda dan/atau KLHK?", "Dibuktikan dengan laporan penanggulangan kedaruratan yang disampaikan kepada instansi terkait."]];
+const b3Sections = [["PENGANGKUTAN B3", [["1", "Apakah melakukan kegiatan pengangkutan B3? Bila Ya lampirkan: Izin pengangkutan B3 dari Kemenhub; Rekomendasi KLH/BPLH; Foto armada Pengangkutan B3."], ["2", "Apakah dalam melakukan pengadaan B3 atau pengedaran B3 dilakukan Pengangkutan oleh Pihak Ketiga? Bila Ya lampirkan: Izin pengangkutan B3 milik pihak ketiga; Rekomendasi KLH/BPLH pihak ketiga; Kontrak kerjasama dengan pihak ketiga."], ["3", "Apakah melakukan pencatatan kegiatan Pengangkutan B3 (bagi yang melakukan kegiatan Pengangkutan B3 sendiri)? Bila Ya lampirkan dokumen pencatatan dan dokumen bukti pelaporan."]]], ["PENYIMPANAN B3", [["1", "Apakah kegiatan Penyimpanan B3 dilakukan di Tempat Penyimpanan B3? Bila Ya lampirkan denah lokasi sesuai dokumen lingkungan."], ["2", "Apakah Tempat Penyimpanan B3 telah dilengkapi papan nama dan simbol B3? Bila Ya lampirkan foto tampak luar, dalam, samping, foto papan nama, foto simbol B3 dan titik koordinat (GPS)."], ["3", "Apakah Tempat Penyimpanan B3 memenuhi ketentuan teknis Penyimpanan B3? Bila Ya lampirkan checklist ketentuan teknis disertai dokumentasi: penerangan, sirkulasi udara, lantai kedap, saluran ceceran, simbol/label B3, kapasitas dan kompatibilitas."], ["4", "Apakah Tempat Penyimpanan B3 memiliki sarana tanggap darurat berupa eye washer, shower, hand washer, peralatan K3/kotak P3K, APD, APAR, hydrant dan/atau spill kit sesuai karakteristik B3?"], ["5", "Apakah dalam kegiatan Penyimpanan B3 dilakukan pencatatan keluar masuk B3? Bila Ya lampirkan dokumen log book."], ["6", "Apakah Penyimpanan B3 dilakukan berdasarkan SOP Penyimpanan B3 dan SOP tanggap darurat B3? Bila Ya lampirkan dokumen SOP Penyimpanan B3 dan SOP tanggap darurat B3."], ["7", "Apakah memiliki SOP penanganan B3 kadaluwarsa? Bila Ya lampirkan dokumen SOP penanganan B3 kadaluwarsa."], ["8", "Apakah menerapkan Sistem Manajemen Keselamatan dan Kesehatan Kerja (SMK3)? Bila Ya lampirkan dokumen bukti penerapan SMK3."]]], ["PELAPORAN B3", [["1", "Apakah melakukan kegiatan pencatatan dan pelaporan untuk kegiatan Pengelolaan B3? Lampirkan dokumen pencatatan pengadaan, pengedaran, pengangkutan, pemanfaatan/penggunaan B3. Periode pelaporan sekurang-kurangnya setiap 6 bulan."], ["2", "Apakah menghasilkan (memproduksi) B3, melakukan impor B3, dan/atau ekspor B3? Bila Ya lampirkan dokumen surat keterangan Registrasi B3 dan/atau surat persetujuan Notifikasi B3."], ["3", "Apakah seluruh kegiatan Pengelolaan B3 dilengkapi Lembar Data Keselamatan (LDK) dan/atau MSDS? Bila Ya lampirkan LDK/MSDS untuk B3 yang dikelola."], ["4", "Apabila tidak melakukan Pengelolaan B3 untuk B3 sebagaimana Lampiran PP No. 74 Tahun 2001, lampirkan Surat Pernyataan."]]], ["PERENCANAAN PENGELOLAAN PCBs", [["1", "Apakah memiliki Transformator/Kapasitor/Minyak Dielektrik? Bila Tidak lampirkan Surat Pernyataan. Bila Ya lampirkan tabel inventarisasi dan identifikasi transformator yang masih digunakan, sudah tidak digunakan, kapasitor dan minyak dielektrik."], ["2", "Apakah memiliki dokumen peta jalan (roadmap) Pengelolaan transformator, kapasitor dan minyak dielektrik mengandung PCBs yang memuat inventarisasi/identifikasi, perawatan, strategi dan rencana aksi penghapusan, manajemen penyimpanan, pelatihan, pendanaan, monitoring, evaluasi dan pelaporan?"]]], ["PENGURANGAN PCBs", [["1", "Apakah melakukan Pengurangan PCBs? Bila Ya lampirkan Tabel Pengurangan PCBs."]]], ["PENYIMPANAN PCBs", [["1", "Apakah memiliki Transformator Sudah Tidak Digunakan/Kapasitor/Minyak Dielektrik? Bila Ya lampirkan Tabel neraca Penyimpanan PCBs dan Ketentuan Teknis Penyimpanan PCBs."]]], ["PENGOLAHAN PCBs", [["1", "Apakah menyampaikan kegiatan Pengolahan PCBs? Bila Ya lampirkan Tabel Neraca Pengolahan PCBs dan Ketentuan Teknis Pengolahan PCBs."]]], ["PELAPORAN PCBs", [["1", "Apakah menyampaikan Pelaporan PCBs? Lampirkan laporan inventarisasi dan identifikasi, pengurangan PCBs, penyimpanan PCBs (logbook dan neraca Limbah B3), serta pengolahan PCBs termasuk perizinan, kontrak, rekomendasi/perizinan pengangkutan dan manifest elektronik."]]]];
+
+function renderPLB3DaruratForm(){
+ const body=$('daruratBody');
+ body.innerHTML=plb3DaruratItems.map((r,i)=>`<tr>
+   <td class="num">${escapeHtml(r[0])}</td>
+   <td class="ket"><b>${escapeHtml(r[1])}</b><br>${escapeHtml(r[2])}</td>
+   <td><select class="darurat-status" data-i="${i}" onchange="calcPLB3Darurat()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td>
+   <td><textarea class="darurat-doc" data-i="${i}" rows="3" placeholder="Dokumentasi / bukti dukung">${escapeHtml(r[3])}</textarea></td>
+   <td><textarea class="darurat-note" data-i="${i}" rows="3" placeholder="Keterangan"></textarea></td>
+ </tr>`).join('');
+ calcPLB3Darurat();
+}
+function calcPLB3Darurat(){
+ const s=[...document.querySelectorAll('.darurat-status')];let yes=0,filled=0;
+ s.forEach(x=>{if(x.value)filled++;if(x.value==='YA')yes++;x.classList.toggle('status-yes',x.value==='YA');x.classList.toggle('status-no',x.value==='TIDAK')});
+ const pct=s.length?Math.round(yes/s.length*100):0;$('daruratPct').textContent=pct+'%';$('daruratScore').textContent=pct+'%';$('daruratBar').style.width=pct+'%';
+}
+function resetPLB3Darurat(){$('daruratAssessor').value='';$('daruratSite').value='';$('daruratDate').value='';renderPLB3DaruratForm();}
+async function submitPLB3Darurat(){
+ const assessor=$('daruratAssessor').value.trim(),site=displaySite($('daruratSite').value),date=$('daruratDate').value;
+ const statuses=[...document.querySelectorAll('.darurat-status')];
+ if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal PLB3 Tanggap Darurat wajib diisi.');return}
+ if(statuses.some(s=>!s.value)){toast('Lengkapi semua status YA/TIDAK PLB3 Tanggap Darurat.');return}
+ const items=statuses.map((s,i)=>({no:plb3DaruratItems[i][0],ketentuan:plb3DaruratItems[i][2],section:plb3DaruratItems[i][1],status:s.value,documentation:$(`.darurat-doc[data-i="${i}"]`).value.trim(),keterangan:$(`.darurat-note[data-i="${i}"]`).value.trim()}));
+ try{const d=await postJSON({action:'savePLB3Darurat',assessor,site,assessmentDate:date,items});
+   if(d.status==='success'){toast('✓ PLB3 Tanggap Darurat tersimpan.');resetPLB3Darurat();loadPLB3Darurat();} else throw new Error(d.message||'Gagal menyimpan');
+ }catch(e){toast('Gagal menyimpan PLB3 Tanggap Darurat: '+e.message)}
+}
+function renderB3Forms(){
+ const root=$('b3Forms');
+ root.innerHTML=b3Sections.map((sec,si)=>`<div class="card">
+   <div class="module-section-title"><h3>${escapeHtml(sec[0])}</h3><p>Checklist ketentuan B3</p></div>
+   <div class="table-wrap"><table class="compact-table"><thead><tr><th style="width:55px">No</th><th>Aspek</th><th style="width:120px">YA/TIDAK</th><th>Dokumentasi / Keterangan</th></tr></thead>
+   <tbody>${sec[1].map((r,i)=>`<tr><td class="num">${escapeHtml(r[0])}</td><td class="ket">${escapeHtml(r[1])}</td><td><select class="b3-status" data-s="${si}" data-i="${i}" onchange="calcB3()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td><td><textarea class="b3-note" data-s="${si}" data-i="${i}" rows="3" placeholder="Foto / dokumen / keterangan"></textarea></td></tr>`).join('')}</tbody></table></div>
+   <div class="score-box" style="margin-top:14px"><div class="progress"><span id="b3bar-${si}"></span></div><div class="score-value" id="b3score-${si}">0%</div></div>
+ </div>`).join('');
+ calcB3();
+}
+function calcB3(){
+ b3Sections.forEach((sec,si)=>{
+   const s=[...document.querySelectorAll(`.b3-status[data-s="${si}"]`)];let yes=0;
+   s.forEach(x=>{if(x.value==='YA')yes++;x.classList.toggle('status-yes',x.value==='YA');x.classList.toggle('status-no',x.value==='TIDAK')});
+   const pct=s.length?Math.round(yes/s.length*100):0;
+   if($(`b3score-${si}`))$(`b3score-${si}`).textContent=pct+'%';
+   if($(`b3bar-${si}`))$(`b3bar-${si}`).style.width=pct+'%';
+ });
+}
+function resetB3(){$('b3Assessor').value='';$('b3Site').value='';$('b3Date').value='';renderB3Forms();}
+async function submitB3(){
+ const assessor=$('b3Assessor').value.trim(),site=displaySite($('b3Site').value),date=$('b3Date').value;
+ if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal B3 wajib diisi.');return}
+ const items=[];
+ b3Sections.forEach((sec,si)=>[...document.querySelectorAll(`.b3-status[data-s="${si}"]`)].forEach((s,i)=>{
+   if(!s.value)return;
+   items.push({section:sec[0],no:sec[1][i][0],ketentuan:sec[1][i][1],status:s.value,keterangan:$(`.b3-note[data-s="${si}"][data-i="${i}"]`).value.trim()});
+ }));
+ if(items.length===0){toast('Isi minimal satu status YA/TIDAK pada B3.');return}
+ try{const d=await postJSON({action:'saveB3',assessor,site,assessmentDate:date,items});
+   if(d.status==='success'){toast('✓ Data B3 berhasil disimpan.');resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
+ }catch(e){toast('Gagal menyimpan B3: '+e.message)}
+}
+function renderGenericHistory(id,data){
+ const body=$(id);if(!body)return;
+ body.innerHTML=data.length?data.slice().reverse().map(r=>`<tr><td>${r.timestamp||'-'}</td><td><b>${escapeHtml(r.assessor||'-')}</b></td><td>${escapeHtml(r.site||'-')}</td><td>${r.total||0}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+}
+function loadPLB3Darurat(){
+ const old=$('plb3DaruratJsonp');if(old)old.remove();const cb='plb3DaruratCB_'+Date.now();
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('daruratHistory',d.data||[]);$('daruratCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('darurat',d.data||[]);}catch(e){toast('Data PLB3 Tanggap Darurat gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('plb3DaruratJsonp');if(s)s.remove();}};
+ const s=document.createElement('script');s.id='plb3DaruratJsonp';s.src=SCRIPT_URL+'?action=getPLB3Darurat&callback='+cb+'&t='+Date.now();s.onerror=()=>{toast('Data PLB3 Tanggap Darurat gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+}
+function loadB3(){
+ const old=$('b3Jsonp');if(old)old.remove();const cb='b3CB_'+Date.now();
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('b3History',d.data||[]);$('b3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('b3',d.data||[]);}catch(e){toast('Data B3 gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('b3Jsonp');if(s)s.remove();}};
+ const s=document.createElement('script');s.id='b3Jsonp';s.src=SCRIPT_URL+'?action=getB3&callback='+cb+'&t='+Date.now();s.onerror=()=>{toast('Data B3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+}
+
+
+const sampahItems = [["1a", "PENGURANGAN", "Melakukan pembatasan, pendauran ulang, dan/atau pemanfaatan kembali Sampah dengan cara: 1) memiliki dokumen kebijakan; 2) tidak menggunakan produk atau kemasan plastik sekali pakai; 3) menggunakan bahan yang dapat diguna ulang dan/atau mudah diurai oleh proses alam; dan/atau 4) mengumpulkan dan menyerahkan kembali Sampah dari produk dan/atau kemasan yang sudah digunakan.", ""], ["1b", "PENGURANGAN", "Melakukan upaya pencegahan kehilangan pangan (food loss) dan/atau terjadinya timbulan sampah makanan (food waste).", ""], ["1c", "PENGURANGAN", "Memiliki program pengurangan Sampah.", ""], ["2a", "PEMILAHAN", "Memiliki tempat/wadah Sampah minimal terpilah 3 (tiga) jenis, antara lain: sampah yang mengandung B3/Limbah B3; sampah mudah terurai (organik); sampah dapat digunakan kembali (guna ulang); sampah dapat didaur ulang; dan sampah lainnya.", "Contoh keterangan: Fasilitas tempat sampah sudah tersedia minimal 3 jenis dan sudah diberi identitas Perusahaan masing-masing tempat sampah."], ["2b", "PEMILAHAN", "Memiliki sarana pemilahan Sampah di setiap kelompok fungsi area (sumber sampah), terpilah, tertutup, dan sesuai dengan jumlah timbulan sampahnya.", "Contoh keterangan: Area factory keeping untuk TPS (Tempat Pengumpulan Sampah) anorganik."], ["2c", "PEMILAHAN", "Memiliki SOP pengelolaan Sampah.", "Contoh keterangan: SOP Pengelolaan sampah akan direview lagi."], ["3", "PENGUMPULAN", "Memiliki TPS (Tempat Penampungan Sementara) sampah; TPS Sampah mempunyai landasan permanen; dan TPS Sampah dalam keadaan tertutup, terpilah dan sesuai dengan jumlah timbulan sampahnya.", "Contoh keterangan: Factory keeping menjadi TPS Factory Keeping."], ["4a", "PENGANGKUTAN", "Pengangkutan tertutup.", ""], ["4b", "PENGANGKUTAN", "Memiliki log book pengangkutan sampah.", ""], ["4c", "PENGANGKUTAN", "Sampah organik dikelola secara mandiri atau diangkut ke fasilitas pengelolaan sampah, dengan dokumen/perjanjian kerjasama pengangkutan kepada fasilitas pengolahan sampah organik.", ""], ["4d", "PENGANGKUTAN", "Sampah anorganik terpilah (sampah yang dapat diguna ulang/didaur ulang) dikelola secara mandiri atau diangkut ke fasilitas pengolahan sampah, dengan dokumen/perjanjian kerjasama pengangkutan kepada fasilitas pengolahan sampah.", ""], ["4e", "PENGANGKUTAN", "Sampah lainnya dan/atau residu dikelola secara mandiri atau diangkut ke fasilitas pengolahan sampah yang dikelola instansi terkait/pihak ketiga pengolah sampah, dengan dokumen/perjanjian kerjasama pengangkutan.", ""], ["4f", "PENGANGKUTAN", "Untuk sampah lainnya dan/atau residu jika bekerjasama dengan instansi terkait/pihak ketiga pengolah sampah, melampirkan bukti pembayaran sampah.", ""], ["5a", "PENGOLAHAN", "Memiliki neraca pengelolaan sampah.", ""], ["5b", "PENGOLAHAN", "Sampah organik dan anorganik terkelola >= 60% (antara lain: sampah dikelola secara mandiri atau di fasilitas pengolahan sampah seperti Bank Sampah/TPS 3R/Rumah Kompos/fasilitas pengolahan sampah dengan penyebutan nama lain). <40% sampah residu diangkut dan dikelola di Tempat Pemrosesan Akhir (TPA).", "Contoh keterangan: Area kompos diberi keterangan Rumah Kompos."], ["5c", "PENGOLAHAN", "Memiliki dokumen/perjanjian kerjasama pengolahan sampah dengan fasilitas pengolahan sampah.", ""], ["6", "PELAPORAN", "Melaporkan neraca pengelolaan sampah kepada instansi yang membidangi lingkungan hidup kabupaten/kota.", ""]];
+
+function renderSampahForm(){
+  const body=$('sampahBody');
+  if(!body)return;
+  let lastSection='';
+  body.innerHTML=sampahItems.map((r,i)=>{
+    const section=r[1]!==lastSection ? `<tr><td colspan="4" class="module-section-title"><b>${escapeHtml(r[1])}</b></td></tr>` : '';
+    lastSection=r[1];
+    return section+`<tr>
+      <td class="num">${escapeHtml(r[0])}</td>
+      <td class="ket">${escapeHtml(r[2])}</td>
+      <td>
+        <select class="sampah-status" data-i="${i}" onchange="calcSampah()">
+          <option value="">Pilih</option>
+          <option value="YA">YA</option>
+          <option value="TIDAK">TIDAK</option>
+        </select>
+      </td>
+      <td>
+        <textarea class="sampah-note" data-i="${i}" rows="3" placeholder="${escapeHtml(r[3]||'Keterangan / bukti pendukung...')}"></textarea>
+      </td>
+    </tr>`;
+  }).join('');
+  calcSampah();
+}
+
+function calcSampah(){
+  const statuses=[...document.querySelectorAll('.sampah-status')];
+  let yes=0;
+  statuses.forEach(s=>{
+    if(s.value==='YA')yes++;
+    s.classList.toggle('status-yes',s.value==='YA');
+    s.classList.toggle('status-no',s.value==='TIDAK');
+  });
+  const pct=statuses.length?Math.round(yes/statuses.length*100):0;
+  if($('sampahPct'))$('sampahPct').textContent=pct+'%';
+  if($('sampahScore'))$('sampahScore').textContent=pct+'%';
+  if($('sampahBar'))$('sampahBar').style.width=pct+'%';
+}
+
+function resetSampah(){
+  if($('sampahAssessor'))$('sampahAssessor').value='';
+  if($('sampahSite'))$('sampahSite').value='';
+  if($('sampahDate'))$('sampahDate').value='';
+  renderSampahForm();
+}
+
+async function submitSampah(){
+  const assessor=$('sampahAssessor').value.trim();
+  const site=displaySite($('sampahSite').value);
+  const date=$('sampahDate').value;
+  const statuses=[...document.querySelectorAll('.sampah-status')];
+  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Sampah wajib diisi.');return;}
+  if(statuses.some(s=>!s.value)){toast('Lengkapi semua status YA/TIDAK pada penilaian Sampah.');return;}
+  const items=statuses.map((s,i)=>({
+    no:sampahItems[i][0],
+    section:sampahItems[i][1],
+    ketentuan:sampahItems[i][2],
+    status:s.value,
+    keterangan:$(`.sampah-note[data-i="${i}"]`).value.trim()
+  }));
+  try{
+    const d=await postJSON({action:'saveSampah',assessor,site,assessmentDate:date,items});
+    if(d.status==='success'){
+      toast('✓ Penilaian Sampah berhasil disimpan.');
+      resetSampah();
+      loadSampah();
+    }else throw new Error(d.message||'Gagal menyimpan');
+  }catch(e){toast('Gagal menyimpan Sampah: '+e.message);}
+}
+
+function loadSampah(){
+  const old=$('sampahJsonp');if(old)old.remove();
+  const cb='sampahCB_'+Date.now();
+  window[cb]=d=>{
+    try{
+      if(d.status!=='success')throw Error(d.message||'Error');
+      renderGenericHistory('sampahHistory',d.data||[]);refreshModuleAnalyticsFor('sampah',d.data||[]);
+      if($('sampahCount'))$('sampahCount').textContent=(d.data||[]).length+' assessment';
+    }catch(e){toast('Data Sampah gagal dibaca: '+e.message);}
+    finally{
+      delete window[cb];
+      const s=$('sampahJsonp');if(s)s.remove();
+    }
+  };
+  const s=document.createElement('script');
+  s.id='sampahJsonp';
+  s.src=SCRIPT_URL+'?action=getSampah&callback='+cb+'&t='+Date.now();
+  s.onerror=()=>{toast('Data Sampah gagal dibaca dari Google Sheet');s.remove();};
+  document.body.appendChild(s);
+}
+
+
+/* =========================================================
+   EXECUTIVE ANALYTICS ENGINE
+   ========================================================= */
+const executiveCache={};
+const moduleMeta={
+  ppa:{label:'PPA',action:'getPPA',page:'ppa',desc:'Pengendalian pencemaran air'},
+  emisi:{label:'Emisi',action:'getEmisi',page:'emisi',desc:'Ketaatan ketentuan teknis cerobong'},
+  plb3:{label:'PLB3',action:'getPLB3',page:'plb3',desc:'Penyimpanan Limbah B3'},
+  darurat:{label:'PLB3 Tanggap Darurat',action:'getPLB3Darurat',page:'plb3darurat',desc:'Kesiapsiagaan dan penanggulangan kedaruratan'},
+  b3:{label:'B3',action:'getB3',page:'b3',desc:'Pengangkutan, penyimpanan, pelaporan B3 & PCBs'},
+  sampah:{label:'Sampah',action:'getSampah',page:'sampah',desc:'Pengurangan, penanganan, pengolahan & pelaporan sampah'}
+};
+
+function fetchAction(action){
+  return new Promise((resolve,reject)=>{
+    const cb='execCB_'+action.replace(/\W/g,'')+'_'+Date.now()+'_'+Math.floor(Math.random()*9999);
+    const s=document.createElement('script');s.id=cb;
+    const timer=setTimeout(()=>{cleanup();reject(new Error('Timeout mengambil '+action));},20000);
+    function cleanup(){clearTimeout(timer);delete window[cb];if(s.parentNode)s.parentNode.removeChild(s);}
+    window[cb]=d=>{cleanup();if(d&&d.status==='success')resolve(Array.isArray(d.data)?d.data:[]);else reject(new Error((d&&d.message)||'Server error'));};
+    s.onerror=()=>{cleanup();reject(new Error('Google Sheet tidak dapat diakses'));};
+    s.src=SCRIPT_URL+'?action='+encodeURIComponent(action)+'&callback='+encodeURIComponent(cb)+'&t='+Date.now();
+    document.body.appendChild(s);
+  });
+}
+
+async function fetchModule(key,force=false){
+  if(!force && executiveCache[key])return executiveCache[key];
+  const meta=moduleMeta[key];
+  try{executiveCache[key]=await fetchAction(meta.action);return executiveCache[key];}
+  catch(e){console.warn('Analytics '+key,e);executiveCache[key]=[];return [];}
+}
+
+function scoreOf(r){
+  const p=Number(r.percentage);
+  if(Number.isFinite(p))return p;
+  const t=Number(r.total||0),y=Number(r.yes||0);
+  return t?Math.round(y/t*100):0;
+}
+function siteOf(r){return displaySite(r.site||'Lokasi belum diisi')||'Lokasi belum diisi'}
+function dateOf(r){
+  const raw=String(r.assessmentDate||r.date||r.timestamp||'');
+  const m=raw.match(/(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+  if(m)return new Date(Number(m[1]),Number(m[2])-1,Number(m[3]));
+  const d=new Date(raw);return isNaN(d)?null:d;
+}
+function monthKey(r){const d=dateOf(r);return d?(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')):''}
+function monthLabel(k){if(!k)return '-';const [y,m]=k.split('-');return ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'][Number(m)-1]+' '+y}
+function avg(arr){return arr.length?Math.round(arr.reduce((s,x)=>s+scoreOf(x),0)/arr.length):0}
+function uniqueSites(arr){return new Set(arr.map(r=>normalizeSite(siteOf(r))).filter(Boolean)).size}
+
+function svgLine(data,w=720,h=220){
+  if(!data.length)return '<div class="module-empty">Belum ada data tren.</div>';
+  const pad={l:38,r:14,t:20,b:34}, iw=w-pad.l-pad.r, ih=h-pad.t-pad.b;
+  const vals=data.map(x=>Number(x.value)||0), max=100,min=0;
+  const pts=data.map((x,i)=>({x:pad.l+(data.length===1?iw/2:i*iw/(data.length-1)),y:pad.t+ih-(x.value-min)/(max-min)*ih,v:x.value,l:x.label}));
+  const path=pts.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)).join(' ');
+  const area=path+' L '+pts[pts.length-1].x+' '+(pad.t+ih)+' L '+pts[0].x+' '+(pad.t+ih)+' Z';
+  const grid=[0,25,50,75,100].map(v=>{const y=pad.t+ih-v/100*ih;return `<line x1="${pad.l}" y1="${y}" x2="${w-pad.r}" y2="${y}" stroke="#edf2ef"/><text x="${pad.l-7}" y="${y+3}" text-anchor="end" font-size="8" fill="#8a9994">${v}</text>`}).join('');
+  const labels=pts.map(p=>`<text x="${p.x}" y="${h-10}" text-anchor="middle" font-size="8" fill="#80908b">${escapeHtml(p.l)}</text>`).join('');
+  const dots=pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="4" fill="#fff" stroke="#0b7a60" stroke-width="3"><title>${escapeHtml(p.l)}: ${p.v}%</title></circle>`).join('');
+  return `<svg class="svg-chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><defs><linearGradient id="gradLine" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#0b7a60" stop-opacity=".25"/><stop offset="100%" stop-color="#0b7a60" stop-opacity="0"/></linearGradient></defs>${grid}<path d="${area}" fill="url(#gradLine)"/><path d="${path}" fill="none" stroke="#0b7a60" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
+}
+function svgBars(data,w=720,h=220){
+  if(!data.length)return '<div class="module-empty">Belum ada data.</div>';
+  const pad={l:42,r:14,t:18,b:42}, iw=w-pad.l-pad.r, ih=h-pad.t-pad.b;
+  const bw=Math.max(10,Math.min(48,(iw/data.length)*.58)), max=Math.max(100,...data.map(x=>x.value));
+  const bars=data.map((x,i)=>{const cx=pad.l+(i+.5)*iw/data.length;const bh=x.value/max*ih;const y=pad.t+ih-bh;return `<rect x="${cx-bw/2}" y="${y}" width="${bw}" height="${bh}" rx="7" fill="#0b7a60"><title>${escapeHtml(x.label)}: ${x.value}%</title></rect><text x="${cx}" y="${h-14}" text-anchor="middle" font-size="8" fill="#71827d">${escapeHtml(x.label)}</text>`}).join('');
+  return `<svg class="svg-chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><line x1="${pad.l}" y1="${pad.t+ih}" x2="${w-pad.r}" y2="${pad.t+ih}" stroke="#dfe8e4"/>${bars}</svg>`;
+}
+function statusClass(p){return p>=85?'good':p>=70?'warn':'bad'}
+function moduleTrend(data){
+  const g={};
+  data.forEach(r=>{const k=monthKey(r);if(!k)return;if(!g[k])g[k]={sum:0,n:0};g[k].sum+=scoreOf(r);g[k].n++;});
+  return Object.keys(g).sort().map(k=>({label:monthLabel(k),value:Math.round(g[k].sum/g[k].n)}));
+}
+function siteRanking(data){
+  const g={};
+  data.forEach(r=>{const k=normalizeSite(siteOf(r));if(!g[k])g[k]={label:siteOf(r),sum:0,n:0};g[k].sum+=scoreOf(r);g[k].n++;});
+  return Object.values(g).map(x=>({label:x.label,value:Math.round(x.sum/x.n)})).sort((a,b)=>b.value-a.value);
+}
+function moduleAnalyticsMarkup(key,data){
+  const meta=moduleMeta[key], total=data.length, a=avg(data), yes=data.reduce((s,r)=>s+Number(r.yes||0),0), no=data.reduce((s,r)=>s+Number(r.no||0),0);
+  const trend=moduleTrend(data), ranking=siteRanking(data).slice(0,6);
+  return `<div class="module-analytics" id="analytics-${key}">
+    <div class="module-analytics-head"><div><h2>Analytics ${escapeHtml(meta.label)}</h2><p>${escapeHtml(meta.desc)} · insight per assessment</p></div><span class="module-chip">${total} assessment</span></div>
+    <div class="module-kpis">
+      <div class="module-mini"><span>Assessment</span><strong>${total}</strong></div>
+      <div class="module-mini"><span>Rata-rata</span><strong>${a}%</strong></div>
+      <div class="module-mini"><span>YA</span><strong>${yes}</strong></div>
+      <div class="module-mini"><span>TIDAK</span><strong>${no}</strong></div>
+    </div>
+    <div class="module-viz-grid">
+      <div class="module-viz"><h4>Trend kepatuhan</h4><p>Rata-rata kepatuhan per bulan</p>${svgLine(trend)}</div>
+      <div class="module-viz"><h4>Ranking lokasi</h4><p>Rata-rata kepatuhan lokasi</p>${svgBars(ranking)}</div>
+    </div>
+  </div>`;
+}
+function ensureModuleAnalytics(key,data){
+  const page=$(moduleMeta[key].page);if(!page)return;
+  let old=$('analytics-'+key);if(old)old.remove();
+  const wrap=document.createElement('div');wrap.innerHTML=moduleAnalyticsMarkup(key,data);
+  const node=wrap.firstElementChild;
+  const cards=page.querySelectorAll(':scope > .card');
+  if(cards.length)cards[cards.length-1].before(node);else page.appendChild(node);
+}
+function renderModuleAnalytics(key,data){ensureModuleAnalytics(key,data)}
+
+function execSummary(dataMap){
+  const all=Object.values(dataMap).flat(), assessments=all.length, sites=new Set();
+  all.forEach(r=>sites.add(normalizeSite(siteOf(r))));
+  const overall=avg(all), yes=all.reduce((s,r)=>s+Number(r.yes||0),0), no=all.reduce((s,r)=>s+Number(r.no||0),0);
+  const modules=Object.keys(moduleMeta).map(k=>({key:k,label:moduleMeta[k].label,count:(dataMap[k]||[]).length,pct:avg(dataMap[k]||[]),sites:uniqueSites(dataMap[k]||[])}));
+  const monthMap={};
+  all.forEach(r=>{const k=monthKey(r);if(!k)return;if(!monthMap[k])monthMap[k]={sum:0,n:0};monthMap[k].sum+=scoreOf(r);monthMap[k].n++;});
+  const trend=Object.keys(monthMap).sort().map(k=>({label:monthLabel(k),value:Math.round(monthMap[k].sum/monthMap[k].n)}));
+  return {all,assessments,siteCount:[...sites].filter(Boolean).length,overall,yes,no,modules,trend};
+}
+function ensureExecutiveDashboard(){
+  const dash=$('dashboard');if(!dash)return;
+  if($('executiveCockpit'))return;
+  const anchor=dash.querySelector('.analytics-grid');
+  if(!anchor)return;
+  const shell=document.createElement('div');shell.id='executiveCockpit';shell.className='executive-shell';
+  shell.innerHTML=`<div class="exec-head"><div><h2>Executive Compliance Cockpit</h2><p>Ringkasan lintas PPA, Emisi, PLB3, Tanggap Darurat, B3 dan Sampah.</p></div><div class="exec-live"><i></i><span id="execSync">Menyiapkan data...</span></div></div>
+  <div class="exec-kpis" id="execKpis"></div>
+  <div class="exec-grid">
+    <div class="viz-card"><div class="viz-title"><div><h3>Enterprise compliance trend</h3><p>Rata-rata seluruh assessment lintas modul</p></div><span class="viz-badge" id="execAvg">0%</span></div><div id="execTrend"></div></div>
+    <div class="viz-card"><div class="viz-title"><div><h3>Module performance</h3><p>Rata-rata kepatuhan per modul</p></div></div><div id="execModules" class="module-board"></div></div>
+  </div>
+  <div class="exec-grid-3">
+    <div class="viz-card"><div class="viz-title"><div><h3>Lokasi paling konsisten</h3><p>Ranking lintas seluruh modul</p></div></div><div id="execLocations"></div></div>
+    <div class="viz-card"><div class="viz-title"><div><h3>Risk snapshot</h3><p>Assessment yang membutuhkan perhatian</p></div></div><div id="execRisk"></div></div>
+    <div class="viz-card"><div class="viz-title"><div><h3>Coverage matrix</h3><p>Jumlah assessment per modul</p></div></div><div id="execCoverage"></div></div>
+  </div>`;
+  anchor.before(shell);
+}
+function renderExecutive(dataMap){
+  ensureExecutiveDashboard();
+  const s=execSummary(dataMap);
+  $('execSync').textContent='Synced '+new Date().toLocaleTimeString('id-ID');
+  $('execAvg').textContent=s.overall+'%';
+  $('execKpis').innerHTML=[
+    ['Total Lokasi',s.siteCount,'lintas semua modul'],
+    ['Total Assessment',s.assessments,'semua PIC'],
+    ['Overall Compliance',s.overall+'%','rata-rata'],
+    ['Total YA',s.yes,'ketentuan terpenuhi'],
+    ['Total TIDAK',s.no,'ketentuan belum terpenuhi'],
+    ['Modul Aktif',s.modules.filter(x=>x.count>0).length+'/6','coverage']
+  ].map(x=>`<div class="exec-kpi"><span>${escapeHtml(x[0])}</span><strong>${x[1]}</strong><small>${escapeHtml(x[2])}</small></div>`).join('');
+  $('execTrend').innerHTML=svgLine(s.trend,760,245);
+  $('execModules').innerHTML=s.modules.map(m=>`<div class="module-tile"><div class="mtop"><b>${escapeHtml(m.label)}</b><strong>${m.pct}%</strong></div><small>${m.count} assessment · ${m.sites} lokasi</small><div class="meter"><i style="width:${Math.max(0,Math.min(100,m.pct))}%"></i></div></div>`).join('');
+  const loc={};
+  s.all.forEach(r=>{const k=normalizeSite(siteOf(r));if(!k)return;if(!loc[k])loc[k]={label:siteOf(r),sum:0,n:0};loc[k].sum+=scoreOf(r);loc[k].n++;});
+  const lr=Object.values(loc).map(x=>({label:x.label,value:Math.round(x.sum/x.n),n:x.n})).sort((a,b)=>b.value-a.value).slice(0,6);
+  $('execLocations').innerHTML=lr.length?lr.map((x,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #edf2ef"><div><b style="font-size:10px">${i+1}. ${escapeHtml(x.label)}</b><small style="display:block;color:#82918d;font-size:9px">${x.n} assessment</small></div><span class="detail-pill"><i class="status-dot ${statusClass(x.value)}"></i>${x.value}%</span></div>`).join(''):'<div class="module-empty">Belum ada data.</div>';
+  const risk=s.all.filter(r=>scoreOf(r)<70).sort((a,b)=>scoreOf(a)-scoreOf(b)).slice(0,6);
+  $('execRisk').innerHTML=risk.length?risk.map(r=>`<div style="padding:9px 0;border-bottom:1px solid #edf2ef"><div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:10px">${escapeHtml(siteOf(r))}</b><span class="detail-pill"><i class="status-dot bad"></i>${scoreOf(r)}%</span></div><small style="color:#82918d;font-size:9px">${escapeHtml(r.assessor||'PIC')} · ${escapeHtml(r.timestamp||r.assessmentDate||'-')}</small></div>`).join(''):'<div class="module-empty">Tidak ada assessment di bawah 70%.</div>';
+  $('execCoverage').innerHTML=s.modules.map(m=>`<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;font-size:10px"><b>${escapeHtml(m.label)}</b><span>${m.count}</span></div><div class="meter"><i style="width:${Math.min(100,m.count?Math.max(12,m.pct):0)}%"></i></div></div>`).join('');
+}
+
+async function loadExecutiveAnalytics(force=false){
+  ensureExecutiveDashboard();
+  const keys=Object.keys(moduleMeta);
+  const results=await Promise.all(keys.map(k=>fetchModule(k,force)));
+  const map={};keys.forEach((k,i)=>{map[k]=results[i];renderModuleAnalytics(k,results[i]);});
+  renderExecutive(map);
+}
+
+function refreshModuleAnalyticsFor(key,data){
+  executiveCache[key]=data||[];
+  renderModuleAnalytics(key,executiveCache[key]);
+  loadExecutiveAnalytics(false);
+}
+
 function renderForm(){
  $('ppaBody').innerHTML=items.map((x,i)=>`<tr>
  <td class="num">${i+1}</td><td class="ket">${x}</td>
@@ -428,7 +1212,10 @@ function rebuildFilterOptions(data){
  if([...fs.options].some(o=>o.value===currentS))fs.value=currentS;
  if([...fy.options].some(o=>o.value===currentY))fy.value=currentY;
  const list=$('siteSuggestions');
- if(list)list.innerHTML=Object.values(sites).sort().map(s=>`<option value="${escapeHtml(s)}"></option>`).join('');
+ const glist=$('globalSiteSuggestions');
+ const opts=Object.values(sites).sort().map(s=>`<option value="${escapeHtml(s)}"></option>`).join('');
+ if(list)list.innerHTML=opts;
+ if(glist)glist.innerHTML=opts;
 }
 let allPPAData=[];
 function applyFilters(){
@@ -565,6 +1352,8 @@ function loadData(){
    try{
      if(!d || d.status!=='success') throw new Error((d&&d.message)||'Server mengembalikan error');
      allPPAData=Array.isArray(d.data)?d.data:[];
+     executiveCache.ppa=allPPAData;
+     renderModuleAnalytics('ppa',allPPAData);
      rebuildFilterOptions(allPPAData);
      applyFilters();
      if($('topLastSync'))$('topLastSync').textContent='Semua data tersinkron: '+new Date().toLocaleTimeString('id-ID');
@@ -588,11 +1377,15 @@ function loadData(){
  };
  document.body.appendChild(script);
 }
-renderForm();populateDays();updateSiteTitle();
+renderSampahForm();renderForm();renderEmisiForm();renderPLB3Form();populateDays();updateSiteTitle();
+$('emisiDate').value=new Date().toISOString().slice(0,10);
+$('plb3Date').value=new Date().toISOString().slice(0,10);
 $('assessmentDate').addEventListener('change',syncPartsFromDate);
 $('assessmentYear').value=new Date().getFullYear();
+ensureExecutiveDashboard();
 loadData();
-setInterval(()=>{ if(!document.hidden) loadData(); },30000);
+setTimeout(()=>loadExecutiveAnalytics(false),700);
+setInterval(()=>{ if(!document.hidden){ loadData(); loadExecutiveAnalytics(true); } },60000);
 </script>
 </body>
 </html>
