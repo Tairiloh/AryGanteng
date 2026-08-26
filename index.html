@@ -645,6 +645,26 @@ input[list$="LocationSuggestions"]{
 .admin-avatar-img{width:31px;height:31px;border-radius:50%;object-fit:cover;background:#eaf7f2}
 .admin-chip .admin-drop{border:0;background:#eef7f3;color:#087f5b;border-radius:7px;padding:6px 8px;font-size:8px;font-weight:900;cursor:pointer}
 
+
+/* ===== FINAL FIXES: INPUT, DOCUMENTATION & ALL-MODULE DASHBOARD ===== */
+.lb3-table{min-width:1250px!important}
+.lb3-table th,.lb3-table td{vertical-align:top!important}
+.photo-cell{min-width:175px!important;background:#fbfdfd}
+.photo-cell input[type=file]{width:100%;font-size:10px;padding:7px;background:#fff;border:1px dashed #cfe0dc;border-radius:10px}
+.photo-cell small{display:block;margin-top:5px;color:#82918d;font-size:8px}
+.evidence-wrap{margin-top:8px;padding-top:8px;border-top:1px dashed #dce8e4}
+.evidence-label{display:block!important;font-size:8px!important;text-transform:none!important;letter-spacing:0!important;margin-bottom:5px;color:#087b63!important}
+.evidence-file{max-width:100%}
+#ppaBody .ket,#plb3Body .ket,#daruratBody .ket{line-height:1.55}
+#ppaBody textarea,#plb3Body textarea,#daruratBody textarea{min-width:220px;min-height:76px}
+.all-module-dashboard{margin-top:14px}
+.all-module-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.all-module-card{border:1px solid #e1eaed;border-radius:16px;padding:14px;background:linear-gradient(145deg,#fff,#f8fbfa);transition:.2s}
+.all-module-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(5,38,56,.08)}
+.all-module-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}.all-module-top b{font-size:11px;color:#0b2f43}.all-module-pct{font-size:21px;font-weight:900;color:#087b63}.all-module-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:7px;font-size:8px;color:#7b8b91}.all-module-meta strong{color:#193f4f}.all-module-bar{height:6px;background:#eaf0f2;border-radius:99px;overflow:hidden;margin-top:10px}.all-module-bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#087b63,#19ad7f)}
+.all-module-status{margin-top:9px;font-size:8px;font-weight:900}
+@media(max-width:900px){.all-module-cards{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.all-module-cards{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -809,8 +829,8 @@ input[list$="LocationSuggestions"]{
 
   <div class="dash-bottom-grid">
     <div class="viz-card">
-      <div class="viz-title"><div><h3>Data Assessment Terbaru</h3><p>Riwayat penilaian PPA</p></div><button class="btn secondary" onclick="loadData()">↻ Refresh</button></div>
-      <div id="dashboardTable" class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>Total</th><th>YA</th><th>TIDAK</th><th>%</th><th>Status</th><th>Aksi</th></tr></thead><tbody></tbody></table></div>
+      <div class="viz-title"><div><h3>Assessment Terbaru Semua Bagian</h3><p>Riwayat terbaru dari PPA, Emisi, PLB3, Tanggap Darurat, B3 dan Sampah.</p></div><span class="viz-badge">Live</span></div>
+      <div id="dashRecentAllTable" class="table-wrap"><table><thead><tr><th>Bagian</th><th>Lokasi</th><th>Penilai</th><th>Tanggal</th><th>%</th><th>Status</th></tr></thead><tbody></tbody></table></div>
       <button class="btn secondary full-btn" onclick="showPage('rekap')">Buka Rekap Lengkap →</button>
     </div>
     <div class="viz-card reminders-card">
@@ -819,12 +839,11 @@ input[list$="LocationSuggestions"]{
     </div>
   </div>
 
-  <div class="card dash-ppa-detail">
-    <div class="card-head"><div><h3>Analitik Detail PPA</h3><div class="note">Filter dan analitik khusus data PPA.</div></div><span class="viz-badge">PPA</span></div>
-    <div class="filter-grid dash-filter"><div class="field"><label>Lokasi</label><select id="filterSite" onchange="applyFilters()"><option value="">Semua lokasi</option></select></div><div class="field"><label>Hari</label><select id="filterDay" onchange="applyFilters()"><option value="">Semua hari</option></select></div><div class="field"><label>Bulan</label><select id="filterMonth" onchange="applyFilters()"><option value="">Semua bulan</option><option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option><option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option><option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option></select></div><div class="field"><label>Tahun</label><select id="filterYear" onchange="applyFilters()"><option value="">Semua tahun</option></select></div></div>
-    <div class="analytics-grid ppa-analytics-row"><div class="card"><div class="card-head"><div><h3>Trend PPA</h3><div class="note">Rata-rata persentase PPA per bulan.</div></div></div><div class="chart-box" id="trendChart"><div class="note" style="text-align:center;padding-top:100px">Belum ada data tren.</div></div></div><div class="card"><div class="card-head"><div><h3>Ranking Lokasi PPA</h3><div class="note">Klik lokasi untuk detail.</div></div></div><div id="rankingList"><div class="note">Belum ada data.</div></div></div></div>
-    <div class="card heat-card"><div class="card-head"><div><h3>Heatmap Kepatuhan PPA</h3><div class="note">Perbandingan YA dan TIDAK berdasarkan lokasi.</div></div></div><div class="table-wrap"><table id="heatmapTable"><thead><tr><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>Kepatuhan</th><th>Visual</th></tr></thead><tbody></tbody></table></div></div>
+  <div class="card all-module-dashboard" id="allModuleDashboard">
+    <div class="card-head"><div><h3>Ringkasan Semua Bagian</h3><div class="note">Summary otomatis dari seluruh data yang diinput pada PPA, Emisi, Penyimpanan PLB3, PLB3 Tanggap Darurat, B3 dan Sampah.</div></div><span class="viz-badge">6 Bagian</span></div>
+    <div id="allModuleCards" class="all-module-cards"></div>
   </div>
+
 </section>
 
 <section id="ppa" class="page">
@@ -1088,8 +1107,9 @@ function showPage(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
  $(id).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'});
+ if(id==='ppa') renderForm();
  if(id==='monitoring'||id==='rekap'||id==='dashboard') { if(allPPAData.length===0) loadData(); }
- if(id==='plb3') loadPLB3();
+ if(id==='plb3'){renderPLB3Form();loadPLB3();}
  if(id==='plb3darurat'){renderPLB3DaruratForm();if(!$('daruratDate').value)$('daruratDate').value=new Date().toISOString().slice(0,10);loadPLB3Darurat();}
  if(id==='b3'){renderB3Forms();if(!$('b3Date').value)$('b3Date').value=new Date().toISOString().slice(0,10);loadB3();}
  if(id==='sampah') loadSampah();
@@ -1258,14 +1278,15 @@ function calcEmisi(){
 }
 function renderPLB3Form(){
  const head=$('plb3Head');
- head.innerHTML='<tr><th class="sticky-left-head">No</th><th class="sticky-left-head">Ketentuan</th><th>YA / TIDAK</th><th>Dokumen &amp; Keterangan</th></tr>';
+ if(!head)return;
+ head.innerHTML='<tr><th class="sticky-left-head">No</th><th class="sticky-left-head">Ketentuan Teknis</th><th>YA / TIDAK</th><th>Keterangan</th><th>Dokumentasi Foto</th></tr>';
  $('plb3Body').innerHTML=plb3Items.map((item,i)=>`<tr>
    <td class="num sticky-left">${i+1}</td>
    <td class="ket sticky-left">${escapeHtml(item)}</td>
    <td><select class="plb3-status" data-row="${i}" onchange="calcPLB3()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td>
-   <td><textarea class="plb3-note" data-row="${i}" rows="3" placeholder="Dokumen / keterangan / bukti pendukung"></textarea></td>
+   <td><textarea class="plb3-note" data-row="${i}" rows="3" placeholder="Masukkan keterangan / bukti pendukung"></textarea></td>
+   <td class="photo-cell"><input type="file" accept="image/*" class="evidence-file" data-module="plb3" data-no="${i+1}"><small>Maks. 1 foto · JPG/PNG</small></td>
  </tr>`).join('');
- enhanceEvidenceInputs('#plb3Body','plb3');
  calcPLB3();
 }
 function calcPLB3(){
@@ -1324,7 +1345,10 @@ async function submitPLB3(){
  });
  try{
    const d=await postJSON({action:'savePLB3',assessor,site,assessmentDate:date,items});
-   if(d.status==='success'){toast('✓ Data Penyimpanan PLB3 berhasil disimpan.');resetPLB3();loadPLB3();}
+   if(d.status==='success'){
+     try{await uploadModuleEvidence('plb3',d.submissionId,collectEvidence('plb3'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
+     toast('✓ Data Penyimpanan PLB3 berhasil disimpan.');resetPLB3();loadPLB3();
+   }
    else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan LB3: '+e.message)}
 }
@@ -1357,13 +1381,12 @@ function renderPLB3DaruratForm(){
  const body=$('daruratBody');
  if(!body){console.warn('daruratBody tidak ditemukan');return;}
  body.innerHTML=plb3DaruratItems.map((r,i)=>`<tr>
-   <td class="num">${i+1}</td>
+   <td class="num">${escapeHtml(r[0])}</td>
    <td class="ket"><b>${escapeHtml(r[1])}</b><br>${escapeHtml(r[2])}</td>
    <td><select class="darurat-status" data-i="${i}" onchange="calcPLB3Darurat()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td>
-   <td><textarea class="darurat-doc" data-i="${i}" rows="3" placeholder="Dokumentasi / bukti dukung">${escapeHtml(r[3])}</textarea></td>
-   <td><textarea class="darurat-note" data-i="${i}" rows="3" placeholder="Keterangan"></textarea></td>
+   <td class="photo-cell"><input type="file" accept="image/*" class="evidence-file" data-module="darurat" data-no="${i+1}"><small>Maks. 1 foto · JPG/PNG</small></td>
+   <td><textarea class="darurat-note" data-i="${i}" rows="3" placeholder="Keterangan tambahan">${escapeHtml(r[3])}</textarea></td>
  </tr>`).join('');
- enhanceEvidenceInputs('#daruratBody','darurat');
  calcPLB3Darurat();
 }
 function calcPLB3Darurat(){
@@ -1377,9 +1400,12 @@ async function submitPLB3Darurat(){
  const statuses=[...document.querySelectorAll('.darurat-status')];
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal PLB3 Tanggap Darurat wajib diisi.');return}
  if(statuses.some(s=>!s.value)){toast('Lengkapi semua status YA/TIDAK PLB3 Tanggap Darurat.');return}
- const items=statuses.map((s,i)=>({no:plb3DaruratItems[i][0],ketentuan:plb3DaruratItems[i][2],section:plb3DaruratItems[i][1],status:s.value,documentation:$(`.darurat-doc[data-i="${i}"]`).value.trim(),keterangan:$(`.darurat-note[data-i="${i}"]`).value.trim()}));
+ const items=statuses.map((s,i)=>({no:plb3DaruratItems[i][0],ketentuan:plb3DaruratItems[i][2],section:plb3DaruratItems[i][1],status:s.value,documentation:'',keterangan:$(`.darurat-note[data-i="${i}"]`).value.trim()}));
  try{const d=await postJSON({action:'savePLB3Darurat',assessor,site,assessmentDate:date,items});
-   if(d.status==='success'){toast('✓ PLB3 Tanggap Darurat tersimpan.');resetPLB3Darurat();loadPLB3Darurat();} else throw new Error(d.message||'Gagal menyimpan');
+   if(d.status==='success'){
+   try{await uploadModuleEvidence('darurat',d.submissionId,collectEvidence('darurat'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
+   toast('✓ PLB3 Tanggap Darurat tersimpan.');resetPLB3Darurat();loadPLB3Darurat();
+ } else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan PLB3 Tanggap Darurat: '+e.message)}
 }
 function renderB3Forms(){
@@ -1777,9 +1803,10 @@ async function uploadModuleEvidence(module,submissionId,files){
 
 function renderForm(){
  $('ppaBody').innerHTML=items.map((x,i)=>`<tr>
- <td class="num">${i+1}</td><td class="ket">${x}</td>
+ <td class="num">${i+1}</td><td class="ket">${escapeHtml(x)}</td>
  <td><select class="status-select" data-i="${i}" onchange="updateScore()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td>
  <td><textarea rows="2" data-k="${i}" placeholder="Keterangan / bukti pendukung..."></textarea></td></tr>`).join('');
+ enhanceEvidenceInputs('#ppaBody','ppa');
 }
 function updateScore(){
  let yes=0,filled=0;
@@ -2143,6 +2170,17 @@ function renderFollowupChart(all){
   const line=(key,color)=>{const pts=ks.map((k,i)=>{const x=p+(ks.length===1?iw/2:i*iw/(ks.length-1));const y=p+ih-(g[k][key]/max)*ih;return [x,y,g[k][key]]});return `<path d="${pts.map((q,i)=>(i?'L':'M')+q[0]+' '+q[1]).join(' ')}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round"/>${pts.map(q=>`<circle cx="${q[0]}" cy="${q[1]}" r="3.5" fill="#fff" stroke="${color}" stroke-width="2"><title>${q[2]}</title></circle>`).join('')}`};
   box.innerHTML=`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><line x1="${p}" y1="${p}" x2="${p}" y2="${h-p}" stroke="#e7eef0"/><line x1="${p}" y1="${h-p}" x2="${w-p}" y2="${h-p}" stroke="#e7eef0"/>${line('yes','#14975f')}${line('no','#e75b5b')}${ks.map((k,i)=>{const x=p+(ks.length===1?iw/2:i*iw/(ks.length-1));return `<text x="${x}" y="${h-8}" text-anchor="middle" font-size="8" fill="#7d8c92">${monthLabel(k).split(' ')[0]}</text>`}).join('')}</svg><div class="legend-pro" style="justify-content:center;margin-top:0"><span><i style="background:#14975f"></i>YA</span><span><i style="background:#e75b5b"></i>TIDAK</span></div>`;
 }
+function renderAllModuleDashboard(dataMap){
+ const root=$('allModuleCards');if(!root)return;
+ const cards=Object.keys(moduleMeta).map(key=>{
+   const meta=moduleMeta[key], data=dataMap[key]||[], pct=avg(data);
+   const yes=data.reduce((a,r)=>a+Number(r.yes||0),0), no=data.reduce((a,r)=>a+Number(r.no||0),0), sites=uniqueSites(data);
+   const status=pct>=90?'Sangat Baik':pct>=70?'Perlu Perbaikan':'Belum Memenuhi';
+   return `<div class="all-module-card"><div class="all-module-top"><div><b>${escapeHtml(meta.label)}</b><div class="muted-small">${escapeHtml(meta.desc)}</div></div><span class="all-module-pct">${pct}%</span></div><div class="all-module-meta"><span>Assessment <strong>${data.length}</strong></span><span>Lokasi <strong>${sites}</strong></span><span>YA <strong>${yes}</strong></span><span>TIDAK <strong>${no}</strong></span></div><div class="all-module-bar"><i style="width:${pct}%"></i></div><div class="all-module-status">${statusBadge(pct)}</div></div>`;
+ }).join('');
+ root.innerHTML=cards||'<div class="module-empty">Belum ada data dari modul.</div>';
+}
+
 function renderDashboardV2(dataMap){
   const s=execSummary(dataMap), all=s.all;
   if($('heroOverall'))$('heroOverall').textContent=s.overall+'%';
@@ -2160,9 +2198,12 @@ function renderDashboardV2(dataMap){
   if($('dashModuleTable'))$('dashModuleTable').innerHTML=s.modules.map(m=>`<tr><td><b>${escapeHtml(m.label)}</b></td><td>${m.sites}</td><td>${m.count}</td><td><b>${m.pct}%</b></td><td>${(dataMap[m.key]||[]).reduce((a,r)=>a+Number(r.yes||0),0)}</td><td>${(dataMap[m.key]||[]).reduce((a,r)=>a+Number(r.no||0),0)}</td><td>${statusBadge(m.pct)}</td></tr>`).join('');
   const recent=all.slice().sort((a,b)=>String(b.timestamp||b.assessmentDate).localeCompare(String(a.timestamp||a.assessmentDate))).slice(0,5);
   if($('dashActivity'))$('dashActivity').innerHTML=recent.length?recent.map(r=>`<div class="activity-item"><div class="activity-icon">✓</div><div><b>${escapeHtml(siteOf(r))}</b><small>${escapeHtml(r.assessor||'PIC')} · ${escapeHtml(r.timestamp||r.assessmentDate||'-')}</small></div><span class="activity-ok">${scoreOf(r)}%</span></div>`).join(''):'<div class="module-empty">Belum ada aktivitas.</div>';
+  const recentAll=Object.keys(dataMap).flatMap(key=>(dataMap[key]||[]).map(r=>({...r,_module:moduleMeta[key].label}))).sort((a,b)=>String(b.timestamp||b.assessmentDate||'').localeCompare(String(a.timestamp||a.assessmentDate||''))).slice(0,8);
+  if($('dashRecentAllTable'))$('dashRecentAllTable').querySelector('tbody').innerHTML=recentAll.length?recentAll.map(r=>`<tr><td><b>${escapeHtml(r._module)}</b></td><td>${escapeHtml(siteOf(r))}</td><td>${escapeHtml(r.assessor||'PIC')}</td><td>${escapeHtml(r.assessmentDate||r.timestamp||'-')}</td><td><b>${scoreOf(r)}%</b></td><td>${statusBadge(scoreOf(r))}</td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;padding:22px">Belum ada data.</td></tr>';
   const risks=all.filter(r=>scoreOf(r)<70).sort((a,b)=>scoreOf(a)-scoreOf(b)).slice(0,3);
   if($('dashReminders'))$('dashReminders').innerHTML=risks.length?risks.map(r=>`<div class="reminder"><div class="reminder-icon">!</div><div><b>Perlu tindak lanjut — ${escapeHtml(siteOf(r))}</b><small>${scoreOf(r)}% · ${escapeHtml(r.assessor||'PIC')}</small></div></div>`).join(''):`<div class="reminder"><div class="reminder-icon">✓</div><div><b>Tidak ada risiko kritis</b><small>Semua assessment berada pada kondisi terpantau.</small></div></div>`;
   renderFollowupChart(all);
+  renderAllModuleDashboard(dataMap);
 }
 async function loadExecutiveAnalyticsV2(force=false){
   ensureExecutiveDashboard();
