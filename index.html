@@ -725,7 +725,7 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
 <style>
 .dashboard-filter-bar{display:grid;grid-template-columns:minmax(250px,1.5fr) 180px minmax(190px,1fr) 140px auto;gap:10px;align-items:end;background:#fff;border:1px solid rgba(15,54,43,.08);box-shadow:0 8px 24px rgba(8,60,44,.06);border-radius:18px;padding:12px 14px;margin:0 0 16px}
 .filter-intro{display:flex;align-items:center;gap:10px}.filter-intro b{display:block;font-size:12px;color:#09283d}.filter-intro small{display:block;font-size:10px;color:#7b8c96;margin-top:2px}.filter-icon{width:34px;height:34px;border-radius:11px;background:#e8f7f1;color:#087f5b;display:grid;place-items:center;font-weight:900;font-size:18px}.dashboard-filter-bar label{display:flex;flex-direction:column;gap:5px}.dashboard-filter-bar label span{font-size:9px;font-weight:800;color:#70818b;text-transform:uppercase;letter-spacing:.08em}.dashboard-filter-bar select{height:38px;border:1px solid #dce7e3;background:#f9fcfb;border-radius:10px;padding:0 11px;color:#17333f;font-weight:700;font-size:11px;outline:none}.dashboard-filter-bar select:focus{border-color:#18a978;box-shadow:0 0 0 3px rgba(24,169,120,.1)}.filter-reset{height:38px;border:1px solid #dce7e3;background:#fff;border-radius:10px;padding:0 14px;color:#0b5d49;font-weight:800;font-size:11px}.filter-reset:hover{background:#eef9f5}
-.hero-photo-visual{position:relative;overflow:hidden;background:#082d42!important}.hero-photo-slides{position:absolute;inset:0}.hero-photo-slide{position:absolute;inset:0;background-image:var(--hero-img);background-size:cover;background-position:center;opacity:0;transform:scale(1.045);transition:opacity 1s ease,transform 7s ease;will-change:opacity,transform}.hero-photo-slide.active{opacity:1;transform:scale(1)}.hero-photo-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,35,55,.97) 0%,rgba(4,48,66,.84) 38%,rgba(3,64,64,.3) 70%,rgba(2,50,54,.12) 100%)}.hero-photo-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.2));pointer-events:none}.hero-photo-visual .hero-score,.hero-photo-visual .hero-slide-meta{z-index:4}.hero-photo-visual .hero-slide-meta{right:18px;bottom:16px}.hero-photo-visual .hero-score{right:18px;bottom:65px}
+.hero-photo-visual{position:relative;overflow:hidden;background:#082d42!important}.hero-photo-slides{position:absolute;inset:0}.hero-photo-slide{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;transform:scale(1.045);transition:opacity 1s ease,transform 7s ease;will-change:opacity,transform}.hero-photo-slide.active{opacity:1;transform:scale(1);animation:heroPan 7s ease-in-out both}@keyframes heroPan{0%{background-size:108%;background-position:42% 50%}50%{background-size:115%;background-position:58% 48%}100%{background-size:108%;background-position:48% 52%}}.hero-photo-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,35,55,.97) 0%,rgba(4,48,66,.84) 38%,rgba(3,64,64,.3) 70%,rgba(2,50,54,.12) 100%)}.hero-photo-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.2));pointer-events:none}.hero-photo-visual .hero-score,.hero-photo-visual .hero-slide-meta{z-index:4}.hero-photo-visual .hero-slide-meta{right:18px;bottom:16px}.hero-photo-visual .hero-score{right:18px;bottom:65px}
 .clickable-card{cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.clickable-card:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(7,73,53,.12);border-color:rgba(8,127,91,.22)}.module-tile.clickable-card{cursor:pointer}.exec-kpi.clickable-card{cursor:pointer}
 .exec-detail-modal{position:fixed;inset:0;background:rgba(4,24,35,.58);backdrop-filter:blur(7px);z-index:9999;display:none;align-items:center;justify-content:center;padding:24px}.exec-detail-modal.show{display:flex}.exec-detail-panel{width:min(980px,96vw);max-height:88vh;overflow:auto;background:#fff;border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.25);border:1px solid rgba(15,54,43,.1)}.exec-detail-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;padding:22px 24px;border-bottom:1px solid #edf2ef}.exec-detail-head h3{margin:0;font-size:19px;color:#082d42}.exec-detail-head p{margin:6px 0 0;color:#7b8c96;font-size:11px}.exec-detail-close{border:0;background:#eff5f3;color:#31535f;width:34px;height:34px;border-radius:10px;font-size:18px}.exec-detail-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:18px 24px}.exec-mini-kpi{padding:14px;border:1px solid #e4eeea;border-radius:14px;background:#fbfdfc}.exec-mini-kpi span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#7b8c96;font-weight:800}.exec-mini-kpi b{display:block;font-size:22px;margin-top:5px;color:#09283d}.exec-detail-body{padding:0 24px 24px}.exec-detail-table{width:100%;border-collapse:collapse;font-size:11px}.exec-detail-table th,.exec-detail-table td{padding:11px 10px;border-bottom:1px solid #edf2ef;text-align:left}.exec-detail-table th{font-size:9px;color:#70818b;text-transform:uppercase;background:#f6faf8}.exec-detail-table tbody tr{cursor:pointer}.exec-detail-table tbody tr:hover{background:#f8fcfa}
 @media(max-width:1050px){.dashboard-filter-bar{grid-template-columns:1fr 1fr}.filter-intro{grid-column:1/-1}.exec-detail-kpis{grid-template-columns:1fr 1fr}}
@@ -829,6 +829,7 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
     <label><span>Bagian</span><select id="execFilterModule" onchange="applyExecutiveFilters()"><option value="">Semua Bagian</option></select></label>
     <label><span>Lokasi / Area</span><select id="execFilterSite" onchange="applyExecutiveFilters()"><option value="">Semua Lokasi</option></select></label>
     <label><span>Tahun</span><select id="execFilterYear" onchange="applyExecutiveFilters()"><option value="">Semua Tahun</option></select></label>
+    <label><span>Bulan</span><select id="execFilterMonth" onchange="applyExecutiveFilters()"><option value="">Semua Bulan</option></select></label>
     <button class="filter-reset" onclick="resetExecutiveFilters()">Reset</button>
   </div>
 
@@ -841,10 +842,10 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
     </div>
     <div class="hero-visual hero-photo-visual">
       <div class="hero-photo-slides" id="heroPhotoSlides">
-        <div class="hero-photo-slide active" data-title="Kepatuhan lingkungan yang <span>terukur.</span>" data-text="Pantau performa pengelolaan lingkungan dari seluruh lokasi dalam satu dashboard yang ringkas, jelas, dan mudah ditindaklanjuti." style="--hero-img:url("https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1800&q=88")"></div>
-        <div class="hero-photo-slide" data-title="Jaga <span>air &amp; emisi.</span>" data-text="Pastikan pengendalian pencemaran, pemantauan emisi, dan kualitas lingkungan berjalan konsisten di setiap lokasi." style="--hero-img:url("https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1800&q=88")"></div>
-        <div class="hero-photo-slide" data-title="Kelola <span>limbah B3.</span>" data-text="Perkuat kepatuhan penyimpanan, tanggap darurat, dokumentasi, dan pengendalian risiko Limbah B3." style="--hero-img:url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1800&q=88")"></div>
-        <div class="hero-photo-slide" data-title="Menuju lingkungan <span>lebih hijau.</span>" data-text="Bangun budaya kepatuhan yang konsisten melalui data, evaluasi, tindak lanjut, dan perbaikan berkelanjutan." style="--hero-img:url("https://images.unsplash.com/photo-1619268005704-8e02ba0eaaaf?auto=format&fit=crop&w=1800&q=88")"></div>
+        <div class="hero-photo-slide active" data-title="Kepatuhan lingkungan yang <span>terukur.</span>" data-text="Pantau performa pengelolaan lingkungan dari seluruh lokasi dalam satu dashboard yang ringkas, jelas, dan mudah ditindaklanjuti." data-img="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1800&q=88"></div>
+        <div class="hero-photo-slide" data-title="Jaga <span>air &amp; emisi.</span>" data-text="Pastikan pengendalian pencemaran, pemantauan emisi, dan kualitas lingkungan berjalan konsisten di setiap lokasi." data-img="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1800&q=88"></div>
+        <div class="hero-photo-slide" data-title="Kelola <span>limbah B3.</span>" data-text="Perkuat kepatuhan penyimpanan, tanggap darurat, dokumentasi, dan pengendalian risiko Limbah B3." data-img="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1800&q=88"></div>
+        <div class="hero-photo-slide" data-title="Menuju lingkungan <span>lebih hijau.</span>" data-text="Bangun budaya kepatuhan yang konsisten melalui data, evaluasi, tindak lanjut, dan perbaikan berkelanjutan." data-img="https://images.unsplash.com/photo-1619268005704-8e02ba0eaaaf?auto=format&fit=crop&w=1800&q=88"></div>
       </div>
       <div class="hero-photo-shade"></div>
       <div class="hero-score"><small>OVERALL</small><b id="heroOverall">0%</b><span>Kepatuhan</span></div>
@@ -940,16 +941,8 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Tanggal Penilaian</label><input id="assessmentDate" type="date"></div>
-      <div class="field"><label>Bulan</label><select id="assessmentMonth" onchange="syncDateFromParts()">
-        <option value="">Pilih bulan</option>
-        <option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option><option value="4">April</option>
-        <option value="5">Mei</option><option value="6">Juni</option><option value="7">Juli</option><option value="8">Agustus</option>
-        <option value="9">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option>
-      </select></div>
-      <div class="field"><label>Tahun</label><input id="assessmentYear" type="number" min="2000" max="2100" placeholder="2026" oninput="syncDateFromParts()"></div>
-      <div class="field"><label>Hari</label><select id="assessmentDay" onchange="syncDateFromParts()"><option value="">Pilih tanggal</option></select></div>
     </div>
-    <div class="note" style="margin-top:10px">Tanggal utama tersimpan sebagai satu tanggal penilaian. Hari, bulan, dan tahun dapat dipilih untuk memudahkan pengisian.</div>
+    <div class="note" style="margin-top:10px">Gunakan satu tanggal penilaian. Bulan, tahun, dan hari otomatis mengikuti tanggal tersebut.</div>
   </div>
   <div class="card">
     <div class="card-head"><h3 id="siteTitle">Penilaian — Lokasi belum diisi</h3><span class="badge neutral" id="answerCount">0/11 terisi</span></div>
@@ -2333,24 +2326,38 @@ function renderDashboardV2(dataMap){
 let executiveRawMap={};
 let executiveFilteredMap={};
 function buildExecutiveFilterOptions(dataMap){
-  const moduleSel=$('execFilterModule'),siteSel=$('execFilterSite'),yearSel=$('execFilterYear');
-  if(!moduleSel||!siteSel||!yearSel)return;
-  const currentM=moduleSel.value,currentS=siteSel.value,currentY=yearSel.value;
-  const sites=new Map(),years=new Set();
-  Object.entries(dataMap).forEach(([key,rows])=>rows.forEach(r=>{const sk=normalizeSite(siteOf(r));if(sk&&!sites.has(sk))sites.set(sk,siteOf(r));const d=dateOf(r);if(d)years.add(d.getFullYear())}));
+  const moduleSel=$('execFilterModule'),siteSel=$('execFilterSite'),yearSel=$('execFilterYear'),monthSel=$('execFilterMonth');
+  if(!moduleSel||!siteSel||!yearSel||!monthSel)return;
+  const currentM=moduleSel.value,currentS=siteSel.value,currentY=yearSel.value,currentMo=monthSel.value;
+  const sites=new Map(),years=new Set(),months=new Set();
+  Object.entries(dataMap).forEach(([key,rows])=>rows.forEach(r=>{
+    const sk=normalizeSite(siteOf(r)); if(sk&&!sites.has(sk))sites.set(sk,siteOf(r));
+    const d=dateOf(r); if(d){years.add(d.getFullYear());months.add(d.getMonth()+1)}
+  }));
   moduleSel.innerHTML='<option value="">Semua Bagian</option>'+Object.entries(moduleMeta).map(([k,m])=>`<option value="${k}">${escapeHtml(m.label)}</option>`).join('');
   siteSel.innerHTML='<option value="">Semua Lokasi</option>'+[...sites.entries()].sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>`<option value="${escapeHtml(k)}">${escapeHtml(v)}</option>`).join('');
   yearSel.innerHTML='<option value="">Semua Tahun</option>'+[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('');
+  monthSel.innerHTML='<option value="">Semua Bulan</option>'+[...months].sort((a,b)=>a-b).map(m=>`<option value="${m}">${monthName(m)}</option>`).join('');
   if([...moduleSel.options].some(o=>o.value===currentM))moduleSel.value=currentM;
   if([...siteSel.options].some(o=>o.value===currentS))siteSel.value=currentS;
   if([...yearSel.options].some(o=>o.value===currentY))yearSel.value=currentY;
+  if([...monthSel.options].some(o=>o.value===currentMo))monthSel.value=currentMo;
 }
 function applyExecutiveFilters(){
-  const mk=$('execFilterModule')?.value||'',sk=$('execFilterSite')?.value||'',yr=$('execFilterYear')?.value||'';
-  const out={};Object.entries(executiveRawMap).forEach(([key,rows])=>{if(mk&&key!==mk){out[key]=[];return}out[key]=(rows||[]).filter(r=>(!sk||normalizeSite(siteOf(r))===sk)&&(!yr||String(dateOf(r)?.getFullYear()||'')===String(yr)));});
+  const mk=$('execFilterModule')?.value||'',sk=$('execFilterSite')?.value||'',yr=$('execFilterYear')?.value||'',mo=$('execFilterMonth')?.value||'';
+  const out={};Object.entries(executiveRawMap).forEach(([key,rows])=>{
+    if(mk&&key!==mk){out[key]=[];return}
+    out[key]=(rows||[]).filter(r=>{const d=dateOf(r);return (!sk||normalizeSite(siteOf(r))===sk)&&(!yr||String(d?.getFullYear()||'')===String(yr))&&(!mo||String((d?.getMonth()??-1)+1)===String(mo));});
+  });
   executiveFilteredMap=out;renderExecutive(out);renderDashboardV2(out);
 }
-function resetExecutiveFilters(){if($('execFilterModule'))$('execFilterModule').value='';if($('execFilterSite'))$('execFilterSite').value='';if($('execFilterYear'))$('execFilterYear').value='';applyExecutiveFilters()}
+function resetExecutiveFilters(){
+  if($('execFilterModule'))$('execFilterModule').value='';
+  if($('execFilterSite'))$('execFilterSite').value='';
+  if($('execFilterYear'))$('execFilterYear').value='';
+  if($('execFilterMonth'))$('execFilterMonth').value='';
+  applyExecutiveFilters();
+}
 function openExecutiveDetail(type,value){
   const map=executiveFilteredMap||executiveRawMap;let rows=[];let title='Detail Dashboard';
   if(type==='module'){rows=map[value]||[];title=moduleMeta[value]?.label||'Detail Modul'}
@@ -2384,10 +2391,16 @@ setTimeout(()=>loadExecutiveAnalyticsV2(false),1200);
 (function initRealHero(){
   const root=document.getElementById('heroPhotoSlides');if(!root)return;
   const slides=[...root.querySelectorAll('.hero-photo-slide')];const dots=document.getElementById('heroDots');const idx=document.getElementById('heroSlideIndex');const title=document.getElementById('heroSlideTitle');const text=document.getElementById('heroSlideText');if(!slides.length)return;
+  slides.forEach((s,i)=>{const img=s.dataset.img;if(img){s.style.backgroundImage=`url("${img}")`;s.style.setProperty('--hero-x',`${45+(i%3)*10}%`);}});
   let current=0,timer=null;
   dots.innerHTML=slides.map((_,i)=>`<button type="button" aria-label="Slide ${i+1}" style="width:${i===0?22:7}px;height:7px;border:0;border-radius:9px;background:${i===0?'#6ce0b2':'rgba(255,255,255,.45)'};padding:0;margin:0 3px;transition:.3s"></button>`).join('');
   const dotEls=[...dots.children];
-  function go(n){current=(n+slides.length)%slides.length;slides.forEach((s,i)=>s.classList.toggle('active',i===current));dotEls.forEach((d,i)=>{d.style.width=i===current?'22px':'7px';d.style.background=i===current?'#6ce0b2':'rgba(255,255,255,.45)'});idx.textContent=String(current+1).padStart(2,'0');const s=slides[current];title.innerHTML=s.dataset.title||'';text.textContent=s.dataset.text||'';}
+  function go(n){
+    current=(n+slides.length)%slides.length;
+    slides.forEach((s,i)=>{s.classList.toggle('active',i===current);s.style.backgroundPosition=i===current?'var(--hero-x,50%) center':'50% center';});
+    dotEls.forEach((d,i)=>{d.style.width=i===current?'22px':'7px';d.style.background=i===current?'#6ce0b2':'rgba(255,255,255,.45)'});
+    idx.textContent=String(current+1).padStart(2,'0');const s=slides[current];title.innerHTML=s.dataset.title||'';text.textContent=s.dataset.text||'';
+  }
   dotEls.forEach((d,i)=>d.addEventListener('click',()=>{go(i);restart()}));
   function restart(){clearInterval(timer);timer=setInterval(()=>go(current+1),6500)}
   go(0);restart();root.parentElement.addEventListener('mouseenter',()=>clearInterval(timer));root.parentElement.addEventListener('mouseleave',restart);
