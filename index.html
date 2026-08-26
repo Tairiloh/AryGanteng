@@ -721,6 +721,16 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
 @media(max-width:900px){.all-module-cards{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.all-module-cards{grid-template-columns:1fr}}
 </style>
+
+<style>
+.dashboard-filter-bar{display:grid;grid-template-columns:minmax(250px,1.5fr) 180px minmax(190px,1fr) 140px auto;gap:10px;align-items:end;background:#fff;border:1px solid rgba(15,54,43,.08);box-shadow:0 8px 24px rgba(8,60,44,.06);border-radius:18px;padding:12px 14px;margin:0 0 16px}
+.filter-intro{display:flex;align-items:center;gap:10px}.filter-intro b{display:block;font-size:12px;color:#09283d}.filter-intro small{display:block;font-size:10px;color:#7b8c96;margin-top:2px}.filter-icon{width:34px;height:34px;border-radius:11px;background:#e8f7f1;color:#087f5b;display:grid;place-items:center;font-weight:900;font-size:18px}.dashboard-filter-bar label{display:flex;flex-direction:column;gap:5px}.dashboard-filter-bar label span{font-size:9px;font-weight:800;color:#70818b;text-transform:uppercase;letter-spacing:.08em}.dashboard-filter-bar select{height:38px;border:1px solid #dce7e3;background:#f9fcfb;border-radius:10px;padding:0 11px;color:#17333f;font-weight:700;font-size:11px;outline:none}.dashboard-filter-bar select:focus{border-color:#18a978;box-shadow:0 0 0 3px rgba(24,169,120,.1)}.filter-reset{height:38px;border:1px solid #dce7e3;background:#fff;border-radius:10px;padding:0 14px;color:#0b5d49;font-weight:800;font-size:11px}.filter-reset:hover{background:#eef9f5}
+.hero-photo-visual{position:relative;overflow:hidden;background:#082d42!important}.hero-photo-slides{position:absolute;inset:0}.hero-photo-slide{position:absolute;inset:0;background-image:var(--hero-img);background-size:cover;background-position:center;opacity:0;transform:scale(1.045);transition:opacity 1s ease,transform 7s ease;will-change:opacity,transform}.hero-photo-slide.active{opacity:1;transform:scale(1)}.hero-photo-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,35,55,.97) 0%,rgba(4,48,66,.84) 38%,rgba(3,64,64,.3) 70%,rgba(2,50,54,.12) 100%)}.hero-photo-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.2));pointer-events:none}.hero-photo-visual .hero-score,.hero-photo-visual .hero-slide-meta{z-index:4}.hero-photo-visual .hero-slide-meta{right:18px;bottom:16px}.hero-photo-visual .hero-score{right:18px;bottom:65px}
+.clickable-card{cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}.clickable-card:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(7,73,53,.12);border-color:rgba(8,127,91,.22)}.module-tile.clickable-card{cursor:pointer}.exec-kpi.clickable-card{cursor:pointer}
+.exec-detail-modal{position:fixed;inset:0;background:rgba(4,24,35,.58);backdrop-filter:blur(7px);z-index:9999;display:none;align-items:center;justify-content:center;padding:24px}.exec-detail-modal.show{display:flex}.exec-detail-panel{width:min(980px,96vw);max-height:88vh;overflow:auto;background:#fff;border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.25);border:1px solid rgba(15,54,43,.1)}.exec-detail-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;padding:22px 24px;border-bottom:1px solid #edf2ef}.exec-detail-head h3{margin:0;font-size:19px;color:#082d42}.exec-detail-head p{margin:6px 0 0;color:#7b8c96;font-size:11px}.exec-detail-close{border:0;background:#eff5f3;color:#31535f;width:34px;height:34px;border-radius:10px;font-size:18px}.exec-detail-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:18px 24px}.exec-mini-kpi{padding:14px;border:1px solid #e4eeea;border-radius:14px;background:#fbfdfc}.exec-mini-kpi span{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:#7b8c96;font-weight:800}.exec-mini-kpi b{display:block;font-size:22px;margin-top:5px;color:#09283d}.exec-detail-body{padding:0 24px 24px}.exec-detail-table{width:100%;border-collapse:collapse;font-size:11px}.exec-detail-table th,.exec-detail-table td{padding:11px 10px;border-bottom:1px solid #edf2ef;text-align:left}.exec-detail-table th{font-size:9px;color:#70818b;text-transform:uppercase;background:#f6faf8}.exec-detail-table tbody tr{cursor:pointer}.exec-detail-table tbody tr:hover{background:#f8fcfa}
+@media(max-width:1050px){.dashboard-filter-bar{grid-template-columns:1fr 1fr}.filter-intro{grid-column:1/-1}.exec-detail-kpis{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.dashboard-filter-bar{grid-template-columns:1fr}.filter-intro{grid-column:auto}.exec-detail-kpis{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -814,6 +824,14 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
     </div>
   </div>
 
+  <div class="dashboard-filter-bar" id="dashboardFilterBar">
+    <div class="filter-intro"><span class="filter-icon">⌁</span><div><b>Filter Dashboard</b><small>Gunakan filter untuk melihat keseluruhan atau lokasi tertentu.</small></div></div>
+    <label><span>Bagian</span><select id="execFilterModule" onchange="applyExecutiveFilters()"><option value="">Semua Bagian</option></select></label>
+    <label><span>Lokasi / Area</span><select id="execFilterSite" onchange="applyExecutiveFilters()"><option value="">Semua Lokasi</option></select></label>
+    <label><span>Tahun</span><select id="execFilterYear" onchange="applyExecutiveFilters()"><option value="">Semua Tahun</option></select></label>
+    <button class="filter-reset" onclick="resetExecutiveFilters()">Reset</button>
+  </div>
+
   <div class="dash-hero pro-hero" id="proHero">
     <div class="hero-copy">
       <div class="hero-kicker">PROPER • ENVIRONMENTAL COMPLIANCE</div>
@@ -821,23 +839,17 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
       <p id="heroSlideText">Pantau performa pengelolaan lingkungan dari seluruh lokasi dalam satu dashboard yang ringkas, jelas, dan mudah ditindaklanjuti.</p>
       <div class="hero-tags"><span>6 Modul</span><span>Multi-Lokasi</span><span>Live Data</span><span>Action Ready</span></div>
     </div>
-    <div class="hero-visual">
-      <div class="hero-slide active" data-title="Kepatuhan lingkungan yang <span>terukur.</span>" data-text="Pantau performa pengelolaan lingkungan dari seluruh lokasi dalam satu dashboard yang ringkas, jelas, dan mudah ditindaklanjuti.">
-        <svg viewBox="0 0 700 300" role="img" aria-label="Ilustrasi lingkungan hijau"><defs><linearGradient id="sky1" x1="0" x2="1"><stop stop-color="#08395b"/><stop offset="1" stop-color="#0b7d70"/></linearGradient><linearGradient id="hill1" x1="0" x2="1"><stop stop-color="#2fc28f"/><stop offset="1" stop-color="#8ee7bf"/></linearGradient></defs><rect width="700" height="300" fill="url(#sky1)"/><circle cx="545" cy="78" r="55" fill="#a9f0d4" opacity=".9"/><circle cx="545" cy="78" r="78" fill="#a9f0d4" opacity=".12"/><path d="M0 220 Q150 145 290 215 T700 185 V300H0Z" fill="url(#hill1)" opacity=".95"/><path d="M0 255 Q160 195 310 250 T700 230 V300H0Z" fill="#0d6c63" opacity=".8"/><g fill="#e6fff5"><circle cx="105" cy="202" r="13"/><circle cx="129" cy="194" r="17"/><circle cx="156" cy="202" r="12"/></g><g fill="#74ddb0"><rect x="120" y="202" width="7" height="40"/><rect x="151" y="201" width="7" height="40"/></g><g transform="translate(390 145)"><rect x="0" y="28" width="110" height="70" rx="7" fill="#f5fbf8" opacity=".92"/><rect x="12" y="40" width="28" height="25" rx="3" fill="#7fcfc1"/><rect x="47" y="40" width="20" height="25" rx="3" fill="#7fcfc1"/><rect x="74" y="40" width="24" height="25" rx="3" fill="#7fcfc1"/><path d="M-14 28 L55 -15 L124 28Z" fill="#dceee8"/><rect x="45" y="68" width="20" height="30" rx="2" fill="#0a5365"/></g></svg>
+    <div class="hero-visual hero-photo-visual">
+      <div class="hero-photo-slides" id="heroPhotoSlides">
+        <div class="hero-photo-slide active" data-title="Kepatuhan lingkungan yang <span>terukur.</span>" data-text="Pantau performa pengelolaan lingkungan dari seluruh lokasi dalam satu dashboard yang ringkas, jelas, dan mudah ditindaklanjuti." style="--hero-img:url("https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=1800&q=88")"></div>
+        <div class="hero-photo-slide" data-title="Jaga <span>air &amp; emisi.</span>" data-text="Pastikan pengendalian pencemaran, pemantauan emisi, dan kualitas lingkungan berjalan konsisten di setiap lokasi." style="--hero-img:url("https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=1800&q=88")"></div>
+        <div class="hero-photo-slide" data-title="Kelola <span>limbah B3.</span>" data-text="Perkuat kepatuhan penyimpanan, tanggap darurat, dokumentasi, dan pengendalian risiko Limbah B3." style="--hero-img:url("https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=1800&q=88")"></div>
+        <div class="hero-photo-slide" data-title="Menuju lingkungan <span>lebih hijau.</span>" data-text="Bangun budaya kepatuhan yang konsisten melalui data, evaluasi, tindak lanjut, dan perbaikan berkelanjutan." style="--hero-img:url("https://images.unsplash.com/photo-1619268005704-8e02ba0eaaaf?auto=format&fit=crop&w=1800&q=88")"></div>
       </div>
-      <div class="hero-slide" data-title="Jaga <span>air &amp; emisi.</span>" data-text="Pastikan pengendalian pencemaran, pemantauan emisi, dan kualitas lingkungan berjalan konsisten di setiap lokasi.">
-        <svg viewBox="0 0 700 300" role="img" aria-label="Ilustrasi air dan emisi"><defs><linearGradient id="sky2" x1="0" x2="1"><stop stop-color="#0b3a5c"/><stop offset="1" stop-color="#3ca7b5"/></linearGradient></defs><rect width="700" height="300" fill="url(#sky2)"/><circle cx="545" cy="60" r="40" fill="#e4fff5" opacity=".9"/><path d="M0 205 Q120 180 240 205 T480 205 T700 190 V300H0Z" fill="#55c9d0"/><path d="M0 238 Q150 210 290 240 T700 225 V300H0Z" fill="#0c7e7c"/><g transform="translate(95 78)"><rect x="0" y="78" width="210" height="92" rx="10" fill="#e9f3f3"/><rect x="25" y="110" width="50" height="60" fill="#78aeb1"/><rect x="88" y="110" width="50" height="60" fill="#78aeb1"/><rect x="151" y="110" width="35" height="60" fill="#78aeb1"/><rect x="175" y="10" width="25" height="80" rx="4" fill="#d8e6e5"/><path d="M187 5 C165 -10 178 -30 197 -38 C205 -24 211 -10 187 5Z" fill="#dffaf1" opacity=".8"/><path d="M190 -15 C175 -27 186 -43 203 -48 C211 -34 210 -22 190 -15Z" fill="#dffaf1" opacity=".55"/></g><g fill="#d8fff5" opacity=".8"><circle cx="430" cy="188" r="5"/><circle cx="452" cy="173" r="3"/><circle cx="474" cy="193" r="6"/></g></svg>
-      </div>
-      <div class="hero-slide" data-title="Kelola <span>limbah B3.</span>" data-text="Perkuat kepatuhan penyimpanan, tanggap darurat, dokumentasi, dan pengendalian risiko Limbah B3.">
-        <svg viewBox="0 0 700 300" role="img" aria-label="Ilustrasi pengelolaan limbah B3"><defs><linearGradient id="bg3" x1="0" x2="1"><stop stop-color="#153752"/><stop offset="1" stop-color="#4b7664"/></linearGradient></defs><rect width="700" height="300" fill="url(#bg3)"/><circle cx="545" cy="70" r="75" fill="#d7f5e6" opacity=".16"/><g transform="translate(130 45)"><rect x="0" y="70" width="90" height="120" rx="10" fill="#f6d35c"/><rect x="105" y="50" width="90" height="140" rx="10" fill="#e8a83b"/><rect x="210" y="80" width="90" height="110" rx="10" fill="#63c6a0"/><g fill="#183c4d" font-family="Arial" font-weight="900" font-size="28"><text x="28" y="142">B3</text><text x="133" y="130">B3</text><text x="238" y="145">♻</text></g><path d="M-20 205 H330" stroke="#dff9ef" stroke-width="5" stroke-linecap="round" opacity=".6"/><path d="M30 210 V240 M105 210 V240 M180 210 V240 M255 210 V240" stroke="#dff9ef" stroke-width="4" opacity=".5"/></g><g fill="#b9f0d8"><circle cx="500" cy="208" r="14"/><circle cx="528" cy="198" r="18"/><circle cx="558" cy="210" r="12"/></g></svg>
-      </div>
-      <div class="hero-slide" data-title="Menuju lingkungan <span>lebih hijau.</span>" data-text="Bangun budaya kepatuhan yang konsisten melalui data, evaluasi, tindak lanjut, dan perbaikan berkelanjutan.">
-        <svg viewBox="0 0 700 300" role="img" aria-label="Ilustrasi kota hijau"><defs><linearGradient id="bg4" x1="0" x2="1"><stop stop-color="#082f4c"/><stop offset="1" stop-color="#0c816d"/></linearGradient></defs><rect width="700" height="300" fill="url(#bg4)"/><circle cx="530" cy="70" r="48" fill="#b7f3d6"/><path d="M0 215 Q130 170 260 215 T520 205 T700 190 V300H0Z" fill="#58d39f"/><g fill="#e8fff5"><rect x="95" y="122" width="65" height="95" rx="4"/><rect x="175" y="95" width="75" height="122" rx="4"/><rect x="265" y="140" width="55" height="77" rx="4"/></g><g fill="#3c9b86"><rect x="110" y="138" width="14" height="14"/><rect x="140" y="138" width="14" height="14"/><rect x="190" y="111" width="14" height="14"/><rect x="220" y="111" width="14" height="14"/><rect x="190" y="140" width="14" height="14"/><rect x="220" y="140" width="14" height="14"/></g><g stroke="#dffbf0" stroke-width="6" fill="none" stroke-linecap="round"><path d="M400 215 C430 165 465 160 500 210"/><path d="M500 210 C530 160 565 165 600 215"/></g><g fill="#d8fff2"><circle cx="400" cy="210" r="12"/><circle cx="500" cy="210" r="12"/><circle cx="600" cy="210" r="12"/></g></svg>
-      </div>
-      <div class="hero-overlay"></div>
+      <div class="hero-photo-shade"></div>
       <div class="hero-score"><small>OVERALL</small><b id="heroOverall">0%</b><span>Kepatuhan</span></div>
       <div class="hero-slide-meta"><span id="heroSlideIndex">01</span><div class="hero-dots" id="heroDots"></div></div>
-    </div>
+    </div>div>
   </div>
 
   <div class="exec-kpis dash-kpis" id="execKpis"></div>
@@ -1148,6 +1160,14 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
 </div>
 <div class="toast" id="toast"></div>
 
+
+<div class="exec-detail-modal" id="execDetailModal" onclick="if(event.target===this)closeExecutiveDetail()">
+  <div class="exec-detail-panel">
+    <div class="exec-detail-head"><div><h3 id="execDetailTitle">Detail</h3><p id="execDetailSubtitle">Ringkasan detail</p></div><button class="exec-detail-close" onclick="closeExecutiveDetail()">×</button></div>
+    <div class="exec-detail-kpis" id="execDetailKpis"></div>
+    <div class="exec-detail-body"><table class="exec-detail-table"><thead><tr><th>Bagian</th><th>Lokasi</th><th>Penilai</th><th>Tanggal</th><th>YA</th><th>TIDAK</th><th>Kepatuhan</th></tr></thead><tbody id="execDetailRows"></tbody></table></div>
+  </div>
+</div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxB0AxBjzyym7oYDMJ4diiBRiXfxPXfVPOBnnwxQCHqNuaury8tmb0ETF-3ThObEPMO/exec';
@@ -1775,25 +1795,26 @@ function ensureExecutiveDashboard(){
 function renderExecutive(dataMap){
   ensureExecutiveDashboard();
   const s=execSummary(dataMap);
-  $('execSync').textContent='Synced '+new Date().toLocaleTimeString('id-ID');
-  $('execAvg').textContent=s.overall+'%';
+  if($('execSync'))$('execSync').textContent='Synced '+new Date().toLocaleTimeString('id-ID');
+  if($('execAvg'))$('execAvg').textContent=s.overall+'%';
+  if($('heroOverall'))$('heroOverall').textContent=s.overall+'%';
   $('execKpis').innerHTML=[
-    ['Total Lokasi',s.siteCount,'lintas semua modul'],
-    ['Total Assessment',s.assessments,'semua PIC'],
-    ['Overall Compliance',s.overall+'%','rata-rata'],
-    ['Total YA',s.yes,'ketentuan terpenuhi'],
-    ['Total TIDAK',s.no,'ketentuan belum terpenuhi'],
-    ['Modul Aktif',s.modules.filter(x=>x.count>0).length+'/6','coverage']
-  ].map(x=>`<div class="exec-kpi"><span>${escapeHtml(x[0])}</span><strong>${x[1]}</strong><small>${escapeHtml(x[2])}</small></div>`).join('');
+    ['Total Lokasi',s.siteCount,'lintas semua modul','location'],
+    ['Total Assessment',s.assessments,'semua PIC','assessment'],
+    ['Overall Compliance',s.overall+'%','rata-rata','overall'],
+    ['Total YA',s.yes,'ketentuan terpenuhi','yes'],
+    ['Total TIDAK',s.no,'ketentuan belum terpenuhi','no'],
+    ['Modul Aktif',s.modules.filter(x=>x.count>0).length+'/6','coverage','modules']
+  ].map(x=>`<div class="exec-kpi clickable-card" onclick="openExecutiveDetail('kpi','${x[3]}')"><span>${escapeHtml(x[0])}</span><strong>${x[1]}</strong><small>${escapeHtml(x[2])}</small></div>`).join('');
   $('execTrend').innerHTML=svgLine(s.trend,760,245);
-  $('execModules').innerHTML=s.modules.map(m=>`<div class="module-tile"><div class="mtop"><b>${escapeHtml(m.label)}</b><strong>${m.pct}%</strong></div><small>${m.count} assessment · ${m.sites} lokasi</small><div class="meter"><i style="width:${Math.max(0,Math.min(100,m.pct))}%"></i></div></div>`).join('');
+  $('execModules').innerHTML=s.modules.map(m=>`<div class="module-tile clickable-card" onclick="openExecutiveDetail('module','${m.key}')"><div class="mtop"><b>${escapeHtml(m.label)}</b><strong>${m.pct}%</strong></div><small>${m.count} assessment · ${m.sites} lokasi</small><div class="meter"><i style="width:${Math.max(0,Math.min(100,m.pct))}%"></i></div><small style="display:block;margin-top:6px;color:#087f5b;font-weight:800">Lihat detail →</small></div>`).join('');
   const loc={};
   s.all.forEach(r=>{const k=normalizeSite(siteOf(r));if(!k)return;if(!loc[k])loc[k]={label:siteOf(r),sum:0,n:0};loc[k].sum+=scoreOf(r);loc[k].n++;});
-  const lr=Object.values(loc).map(x=>({label:x.label,value:Math.round(x.sum/x.n),n:x.n})).sort((a,b)=>b.value-a.value).slice(0,6);
-  $('execLocations').innerHTML=lr.length?lr.map((x,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #edf2ef"><div><b style="font-size:10px">${i+1}. ${escapeHtml(x.label)}</b><small style="display:block;color:#82918d;font-size:9px">${x.n} assessment</small></div><span class="detail-pill"><i class="status-dot ${statusClass(x.value)}"></i>${x.value}%</span></div>`).join(''):'<div class="module-empty">Belum ada data.</div>';
+  const lr=Object.entries(loc).map(([key,x])=>({key,label:x.label,value:Math.round(x.sum/x.n),n:x.n})).sort((a,b)=>b.value-a.value).slice(0,6);
+  $('execLocations').innerHTML=lr.length?lr.map((x,i)=>`<div class="clickable-card" onclick="openExecutiveDetail('location','${escapeHtml(x.key)}')" style="display:flex;justify-content:space-between;align-items:center;padding:11px 8px;border-bottom:1px solid #edf2ef;border-radius:10px"><div><b style="font-size:10px">${i+1}. ${escapeHtml(x.label)}</b><small style="display:block;color:#82918d;font-size:9px">${x.n} assessment · klik untuk detail</small></div><span class="detail-pill"><i class="status-dot ${statusClass(x.value)}"></i>${x.value}%</span></div>`).join(''):'<div class="module-empty">Belum ada data.</div>';
   const risk=s.all.filter(r=>scoreOf(r)<70).sort((a,b)=>scoreOf(a)-scoreOf(b)).slice(0,6);
-  $('execRisk').innerHTML=risk.length?risk.map(r=>`<div style="padding:9px 0;border-bottom:1px solid #edf2ef"><div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:10px">${escapeHtml(siteOf(r))}</b><span class="detail-pill"><i class="status-dot bad"></i>${scoreOf(r)}%</span></div><small style="color:#82918d;font-size:9px">${escapeHtml(r.assessor||'PIC')} · ${escapeHtml(r.timestamp||r.assessmentDate||'-')}</small></div>`).join(''):'<div class="module-empty">Tidak ada assessment di bawah 70%.</div>';
-  $('execCoverage').innerHTML=s.modules.map(m=>`<div style="margin-bottom:11px"><div style="display:flex;justify-content:space-between;font-size:10px"><b>${escapeHtml(m.label)}</b><span>${m.count}</span></div><div class="meter"><i style="width:${Math.min(100,m.count?Math.max(12,m.pct):0)}%"></i></div></div>`).join('');
+  $('execRisk').innerHTML=risk.length?risk.map(r=>`<div class="clickable-card" onclick="openExecutiveRecord(${JSON.stringify(r).replace(/</g,'&lt;')})" style="padding:9px;border-bottom:1px solid #edf2ef;border-radius:10px"><div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:10px">${escapeHtml(siteOf(r))}</b><span class="detail-pill"><i class="status-dot bad"></i>${scoreOf(r)}%</span></div><small style="color:#82918d;font-size:9px">${escapeHtml(r.assessor||'PIC')} · ${escapeHtml(r.timestamp||r.assessmentDate||'-')}</small></div>`).join(''):'<div class="module-empty">Tidak ada assessment di bawah 70%.</div>';
+  $('execCoverage').innerHTML=s.modules.map(m=>`<div class="clickable-card" onclick="openExecutiveDetail('module','${m.key}')" style="margin-bottom:11px;padding:8px;border-radius:10px"><div style="display:flex;justify-content:space-between;font-size:10px"><b>${escapeHtml(m.label)}</b><span>${m.count} assessment</span></div><div class="meter"><i style="width:${Math.min(100,m.count?Math.max(12,m.pct):0)}%"></i></div></div>`).join('');
 }
 
 async function loadExecutiveAnalytics(force=false){
@@ -2299,20 +2320,58 @@ function renderDashboardV2(dataMap){
   const loc={};all.forEach(r=>{const k=normalizeSite(siteOf(r));if(!k)return;if(!loc[k])loc[k]={label:siteOf(r),sum:0,n:0};loc[k].sum+=scoreOf(r);loc[k].n++});
   const lr=Object.values(loc).map(x=>({label:x.label,value:Math.round(x.sum/x.n)})).sort((a,b)=>b.value-a.value).slice(0,6);
   if($('dashLocationBars'))$('dashLocationBars').innerHTML=lr.length?lr.map(x=>`<div class="loc-row"><b>${escapeHtml(x.label)}</b><div class="loc-track"><i style="width:${x.value}%"></i></div><strong>${x.value}%</strong></div>`).join(''):'<div class="module-empty">Belum ada data lokasi.</div>';
-  if($('dashModuleTable'))$('dashModuleTable').innerHTML=s.modules.map(m=>`<tr><td><b>${escapeHtml(m.label)}</b></td><td>${m.sites}</td><td>${m.count}</td><td><b>${m.pct}%</b></td><td>${(dataMap[m.key]||[]).reduce((a,r)=>a+Number(r.yes||0),0)}</td><td>${(dataMap[m.key]||[]).reduce((a,r)=>a+Number(r.no||0),0)}</td><td>${statusBadge(m.pct)}</td></tr>`).join('');
+  if($('dashModuleTable'))$('dashModuleTable').innerHTML=s.modules.map(m=>`<tr class="clickable-card" onclick="openExecutiveDetail('module','${m.key}')"><td><b>${escapeHtml(m.label)}</b></td><td>${m.sites}</td><td>${m.count}</td><td><b>${m.pct}%</b></td><td>${(dataMap[m.key]||[]).reduce((a,r)=>a+Number(r.yes||0),0)}</td><td>${(dataMap[m.key]||[]).reduce((a,r)=>a+Number(r.no||0),0)}</td><td>${statusBadge(m.pct)}</td></tr>`).join('');
   const recent=all.slice().sort((a,b)=>String(b.timestamp||b.assessmentDate).localeCompare(String(a.timestamp||a.assessmentDate))).slice(0,5);
   if($('dashActivity'))$('dashActivity').innerHTML=recent.length?recent.map(r=>`<div class="activity-item"><div class="activity-icon">✓</div><div><b>${escapeHtml(siteOf(r))}</b><small>${escapeHtml(r.assessor||'PIC')} · ${escapeHtml(r.timestamp||r.assessmentDate||'-')}</small></div><span class="activity-ok">${scoreOf(r)}%</span></div>`).join(''):'<div class="module-empty">Belum ada aktivitas.</div>';
   const recentAll=Object.keys(dataMap).flatMap(key=>(dataMap[key]||[]).map(r=>({...r,_module:moduleMeta[key].label}))).sort((a,b)=>String(b.timestamp||b.assessmentDate||'').localeCompare(String(a.timestamp||a.assessmentDate||''))).slice(0,8);
-  if($('dashRecentAllTable'))$('dashRecentAllTable').querySelector('tbody').innerHTML=recentAll.length?recentAll.map(r=>`<tr><td><b>${escapeHtml(r._module)}</b></td><td>${escapeHtml(siteOf(r))}</td><td>${escapeHtml(r.assessor||'PIC')}</td><td>${escapeHtml(r.assessmentDate||r.timestamp||'-')}</td><td><b>${scoreOf(r)}%</b></td><td>${statusBadge(scoreOf(r))}</td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;padding:22px">Belum ada data.</td></tr>';
+  if($('dashRecentAllTable'))$('dashRecentAllTable').querySelector('tbody').innerHTML=recentAll.length?recentAll.map(r=>`<tr class="clickable-card" onclick="openExecutiveDetail('location','${escapeHtml(normalizeSite(siteOf(r)))}')"><td><b>${escapeHtml(r._module)}</b></td><td>${escapeHtml(siteOf(r))}</td><td>${escapeHtml(r.assessor||'PIC')}</td><td>${escapeHtml(r.assessmentDate||r.timestamp||'-')}</td><td><b>${scoreOf(r)}%</b></td><td>${statusBadge(scoreOf(r))}</td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;padding:22px">Belum ada data.</td></tr>';
   const risks=all.filter(r=>scoreOf(r)<70).sort((a,b)=>scoreOf(a)-scoreOf(b)).slice(0,3);
   if($('dashReminders'))$('dashReminders').innerHTML=risks.length?risks.map(r=>`<div class="reminder"><div class="reminder-icon">!</div><div><b>Perlu tindak lanjut — ${escapeHtml(siteOf(r))}</b><small>${scoreOf(r)}% · ${escapeHtml(r.assessor||'PIC')}</small></div></div>`).join(''):`<div class="reminder"><div class="reminder-icon">✓</div><div><b>Tidak ada risiko kritis</b><small>Semua assessment berada pada kondisi terpantau.</small></div></div>`;
   renderFollowupChart(all);
   renderAllModuleDashboard(dataMap);
 }
+let executiveRawMap={};
+let executiveFilteredMap={};
+function buildExecutiveFilterOptions(dataMap){
+  const moduleSel=$('execFilterModule'),siteSel=$('execFilterSite'),yearSel=$('execFilterYear');
+  if(!moduleSel||!siteSel||!yearSel)return;
+  const currentM=moduleSel.value,currentS=siteSel.value,currentY=yearSel.value;
+  const sites=new Map(),years=new Set();
+  Object.entries(dataMap).forEach(([key,rows])=>rows.forEach(r=>{const sk=normalizeSite(siteOf(r));if(sk&&!sites.has(sk))sites.set(sk,siteOf(r));const d=dateOf(r);if(d)years.add(d.getFullYear())}));
+  moduleSel.innerHTML='<option value="">Semua Bagian</option>'+Object.entries(moduleMeta).map(([k,m])=>`<option value="${k}">${escapeHtml(m.label)}</option>`).join('');
+  siteSel.innerHTML='<option value="">Semua Lokasi</option>'+[...sites.entries()].sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>`<option value="${escapeHtml(k)}">${escapeHtml(v)}</option>`).join('');
+  yearSel.innerHTML='<option value="">Semua Tahun</option>'+[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('');
+  if([...moduleSel.options].some(o=>o.value===currentM))moduleSel.value=currentM;
+  if([...siteSel.options].some(o=>o.value===currentS))siteSel.value=currentS;
+  if([...yearSel.options].some(o=>o.value===currentY))yearSel.value=currentY;
+}
+function applyExecutiveFilters(){
+  const mk=$('execFilterModule')?.value||'',sk=$('execFilterSite')?.value||'',yr=$('execFilterYear')?.value||'';
+  const out={};Object.entries(executiveRawMap).forEach(([key,rows])=>{if(mk&&key!==mk){out[key]=[];return}out[key]=(rows||[]).filter(r=>(!sk||normalizeSite(siteOf(r))===sk)&&(!yr||String(dateOf(r)?.getFullYear()||'')===String(yr)));});
+  executiveFilteredMap=out;renderExecutive(out);renderDashboardV2(out);
+}
+function resetExecutiveFilters(){if($('execFilterModule'))$('execFilterModule').value='';if($('execFilterSite'))$('execFilterSite').value='';if($('execFilterYear'))$('execFilterYear').value='';applyExecutiveFilters()}
+function openExecutiveDetail(type,value){
+  const map=executiveFilteredMap||executiveRawMap;let rows=[];let title='Detail Dashboard';
+  if(type==='module'){rows=map[value]||[];title=moduleMeta[value]?.label||'Detail Modul'}
+  else if(type==='location'){rows=Object.values(map).flat().filter(r=>normalizeSite(siteOf(r))===value);title=rows[0]?siteOf(rows[0]):'Detail Lokasi'}
+  else if(type==='kpi'){rows=Object.values(map).flat();title='Ringkasan Keseluruhan'}
+  const yes=rows.reduce((a,r)=>a+Number(r.yes||0),0),no=rows.reduce((a,r)=>a+Number(r.no||0),0),pct=avg(rows),sites=new Set(rows.map(r=>normalizeSite(siteOf(r))).filter(Boolean)).size;
+  $('execDetailTitle').textContent=title;$('execDetailSubtitle').textContent=`${rows.length} assessment · ${sites} lokasi · filter aktif mengikuti dashboard`;
+  $('execDetailKpis').innerHTML=[['Assessment',rows.length],['Lokasi',sites],['YA',yes],['Kepatuhan',pct+'%']].map(x=>`<div class="exec-mini-kpi"><span>${x[0]}</span><b>${x[1]}</b></div>`).join('');
+  $('execDetailRows').innerHTML=rows.length?rows.slice().sort((a,b)=>String(b.timestamp||b.assessmentDate).localeCompare(String(a.timestamp||a.assessmentDate))).map(r=>`<tr onclick='openExecutiveRecord(${JSON.stringify(r).replace(/'/g,"&#39;")})'><td>${escapeHtml(moduleMeta[r._module]?.label||r._module||'—')}</td><td>${escapeHtml(siteOf(r))}</td><td>${escapeHtml(r.assessor||'PIC')}</td><td>${escapeHtml(r.assessmentDate||r.timestamp||'-')}</td><td><b>${Number(r.yes||0)}</b></td><td><b>${Number(r.no||0)}</b></td><td><b>${scoreOf(r)}%</b></td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:30px;color:#7b8c96">Belum ada data untuk filter ini.</td></tr>';
+  $('execDetailModal').classList.add('show');
+}
+function openExecutiveRecord(r){
+  const rows=[r];const yes=Number(r.yes||0),no=Number(r.no||0);$('execDetailTitle').textContent=(moduleMeta[r._module]?.label||r._module||'Assessment')+' · '+siteOf(r);$('execDetailSubtitle').textContent='Detail assessment yang dipilih';$('execDetailKpis').innerHTML=[['Penilai',r.assessor||'PIC'],['Tanggal',r.assessmentDate||r.timestamp||'-'],['YA',yes],['Kepatuhan',scoreOf(r)+'%']].map(x=>`<div class="exec-mini-kpi"><span>${x[0]}</span><b>${escapeHtml(String(x[1]))}</b></div>`).join('');$('execDetailRows').innerHTML=`<tr><td>${escapeHtml(moduleMeta[r._module]?.label||r._module||'—')}</td><td>${escapeHtml(siteOf(r))}</td><td>${escapeHtml(r.assessor||'PIC')}</td><td>${escapeHtml(r.assessmentDate||r.timestamp||'-')}</td><td>${yes}</td><td>${no}</td><td><b>${scoreOf(r)}%</b></td></tr>`;$('execDetailModal').classList.add('show');
+}
+function closeExecutiveDetail(){$('execDetailModal')?.classList.remove('show')}
 async function loadExecutiveAnalyticsV2(force=false){
   ensureExecutiveDashboard();
   const keys=Object.keys(moduleMeta), results=await Promise.all(keys.map(k=>fetchModule(k,force))), map={};
   keys.forEach((k,i)=>{map[k]=results[i];executiveCache[k]=results[i];renderModuleAnalytics(k,results[i]);});
+  Object.entries(map).forEach(([key,rows])=>(rows||[]).forEach(r=>r._module=key));
+  executiveRawMap=map; buildExecutiveFilterOptions(map);
   renderExecutive(map); renderDashboardV2(map);
   if($('execSync'))$('execSync').textContent='Synced '+new Date().toLocaleTimeString('id-ID');
 }
@@ -2321,6 +2380,18 @@ const _oldLoadExecutiveAnalytics=loadExecutiveAnalytics;
 loadExecutiveAnalytics=function(force=false){return loadExecutiveAnalyticsV2(force)};
 setDashDate();
 setTimeout(()=>loadExecutiveAnalyticsV2(false),1200);
+
+(function initRealHero(){
+  const root=document.getElementById('heroPhotoSlides');if(!root)return;
+  const slides=[...root.querySelectorAll('.hero-photo-slide')];const dots=document.getElementById('heroDots');const idx=document.getElementById('heroSlideIndex');const title=document.getElementById('heroSlideTitle');const text=document.getElementById('heroSlideText');if(!slides.length)return;
+  let current=0,timer=null;
+  dots.innerHTML=slides.map((_,i)=>`<button type="button" aria-label="Slide ${i+1}" style="width:${i===0?22:7}px;height:7px;border:0;border-radius:9px;background:${i===0?'#6ce0b2':'rgba(255,255,255,.45)'};padding:0;margin:0 3px;transition:.3s"></button>`).join('');
+  const dotEls=[...dots.children];
+  function go(n){current=(n+slides.length)%slides.length;slides.forEach((s,i)=>s.classList.toggle('active',i===current));dotEls.forEach((d,i)=>{d.style.width=i===current?'22px':'7px';d.style.background=i===current?'#6ce0b2':'rgba(255,255,255,.45)'});idx.textContent=String(current+1).padStart(2,'0');const s=slides[current];title.innerHTML=s.dataset.title||'';text.textContent=s.dataset.text||'';}
+  dotEls.forEach((d,i)=>d.addEventListener('click',()=>{go(i);restart()}));
+  function restart(){clearInterval(timer);timer=setInterval(()=>go(current+1),6500)}
+  go(0);restart();root.parentElement.addEventListener('mouseenter',()=>clearInterval(timer));root.parentElement.addEventListener('mouseleave',restart);
+})();
 </script>
 </body>
 </html>
