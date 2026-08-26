@@ -900,6 +900,7 @@ background-size:auto,18px 18px}
 .proper-chat-msg.me .proper-chat-bubble{background:#d8f8e8;border-bottom-right-radius:4px}
 .proper-chat-msg.other .proper-chat-bubble{border-bottom-left-radius:4px}
 .proper-chat-meta{font-size:8px;color:#94a3b8;padding:0 5px}
+.proper-chat-actions{display:flex;gap:4px;margin-top:3px;padding:0 4px}.proper-chat-action{border:0;background:transparent;color:#94a3b8;font-size:9px;padding:2px 5px;border-radius:6px;cursor:pointer}.proper-chat-action:hover{background:#e2e8f0;color:#0f766e}.proper-chat-action.delete:hover{background:#fee2e2;color:#dc2626}
 .proper-chat-msg.me .proper-chat-meta{text-align:right}
 .proper-chat-reply{display:none;padding:9px 14px;background:#fff;border-top:1px solid var(--jk-line);border-left:4px solid #10b981;justify-content:space-between;align-items:center}
 .proper-chat-reply b{display:block;font-size:10px;color:#087f5b}.proper-chat-reply span{font-size:10px;color:#64748b}
@@ -1467,7 +1468,7 @@ background-size:auto,18px 18px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3HzY2cKB40CPqg7NkzHHpPQ4FLySx8TibeKPxoj5cbasJRItc10GP5_yW8U_Vrskm/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby5rCM67Glf0nvAlZ61YInZoeODnr2mUm3-1Ews0jNBblikO653GwTQa8G9hrVRWRRb/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -1713,6 +1714,106 @@ function resetPLB3(){
  $('plb3Assessor').value=(getCurrentUser()||{}).name||'';$('plb3Site').value='';$('plb3Date').value='';
  renderPLB3Form();
 }
+
+function jsonpGet(action, params={}){
+  return new Promise((resolve,reject)=>{
+    const cb='properJSONP_'+String(action).replace(/\W/g,'')+'_'+Date.now()+'_'+Math.floor(Math.random()*10000);
+    const script=document.createElement('script');
+    script.id=cb;
+    let settled=false;
+    const cleanup=()=>{
+      if(settled)return;
+      settled=true;
+      try{delete window[cb];}catch(_){}
+      if(script.parentNode)script.parentNode.removeChild(script);
+      clearTimeout(timer);
+    };
+    const timer=setTimeout(()=>{
+      cleanup();
+      reject(new Error('Timeout membaca '+action));
+    },20000);
+    window[cb]=(data)=>{
+      cleanup();
+      if(data && data.status==='success') resolve(data);
+      else reject(new Error((data&&data.message)||('Server gagal memproses '+action)));
+    };
+    const q=new URLSearchParams();
+    q.set('action',action);
+    q.set('callback',cb);
+    q.set('token',getAuthToken());
+    q.set('t',String(Date.now()));
+    Object.keys(params||{}).forEach(k=>{
+      const v=params[k];
+      if(v!==undefined && v!==null) q.set(k,String(v));
+    });
+    script.onerror=()=>{
+      cleanup();
+      reject(new Error('Google Apps Script tidak dapat diakses untuk '+action));
+    };
+    script.src=SCRIPT_URL+'?'+q.toString();
+    document.body.appendChild(script);
+  });
+}
+
+function submitFormRequest(payload){
+  return new Promise((resolve,reject)=>{
+    try{
+      const stamp=Date.now()+'_'+Math.floor(Math.random()*10000);
+      const frameName='properPostFrame_'+stamp;
+      const iframe=document.createElement('iframe');
+      iframe.name=frameName;
+      iframe.style.display='none';
+      document.body.appendChild(iframe);
+
+      const form=document.createElement('form');
+      form.method='POST';
+      form.action=SCRIPT_URL;
+      form.target=frameName;
+      form.style.display='none';
+
+      const add=(name,value)=>{
+        if(value===undefined || value===null) return;
+        const input=document.createElement('input');
+        input.type='hidden';
+        input.name=name;
+        input.value=String(value);
+        form.appendChild(input);
+      };
+
+      Object.keys(payload||{}).forEach(k=>{
+        const v=payload[k];
+        if(k==='profilePhoto' && v && typeof v==='object'){
+          add('profilePhotoData',v.data||'');
+          add('profilePhotoMimeType',v.mimeType||'image/jpeg');
+          add('profilePhotoFileName',v.fileName||('profile-'+Date.now()+'.jpg'));
+        }else if(typeof v!=='object'){
+          add(k,v);
+        }
+      });
+      add('userToken',getAuthToken());
+
+      document.body.appendChild(form);
+
+      let done=false;
+      const cleanup=()=>{
+        if(done)return;
+        done=true;
+        setTimeout(()=>{
+          try{form.remove();}catch(_){}
+          try{iframe.remove();}catch(_){}
+        },300);
+      };
+      iframe.onload=()=>{cleanup();resolve({status:'accepted'});};
+      form.submit();
+      setTimeout(()=>{
+        if(!done){cleanup();resolve({status:'accepted'});}
+      },5000);
+    }catch(e){
+      reject(e);
+    }
+  });
+}
+
 async function postJSON(payload){
  payload=Object.assign({},payload,{userToken:getAuthToken()});
  const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),20000);
@@ -2913,6 +3014,7 @@ setTimeout(()=>loadExecutiveAnalyticsV2(false),1200);
   ];
   let activeRoom = localStorage.getItem('properChatRoom') || 'umum';
   let activeReply = null;
+  let editingMessageId = null;
   let chatPollTimer = null;
   let chatBusy = false;
 
@@ -2963,6 +3065,7 @@ setTimeout(()=>loadExecutiveAnalyticsV2(false),1200);
       const isMe=String(m.senderId||'')===String((getCurrentUser()||{}).id||'');
       const body=safeText(m.text||'').replace(/\n/g,'<br>');
       const time=safeText(m.time||m.timestamp||'');
+      const actionHtml=isMe?`<div class="proper-chat-actions"><button class="proper-chat-action" title="Edit" onclick="editProperChatMessage('${safeText(m.id)}',decodeURIComponent('${encodeURIComponent(String(m.text||''))}'))">✎ Edit</button><button class="proper-chat-action delete" title="Hapus" onclick="deleteProperChatMessage('${safeText(m.id)}')">🗑 Hapus</button></div>`:'';
       return `<div class="proper-chat-msg ${isMe?'me':'other'}">
         <img class="proper-chat-avatar" src="${safeText(m.profilePhotoUrl||'')}" onerror="this.style.display='none'" alt="">
         <div class="proper-chat-stack">
@@ -2972,6 +3075,7 @@ setTimeout(()=>loadExecutiveAnalyticsV2(false),1200);
             ${body}
           </div>
           <div class="proper-chat-meta">${time}</div>
+          ${actionHtml}
         </div>
       </div>`;
     }).join('');
@@ -3003,20 +3107,48 @@ setTimeout(()=>loadExecutiveAnalyticsV2(false),1200);
     chatBusy=true;
     try{
       let data;
+      const action=editingMessageId?'editChatMessage':'sendChatMessage';
+      const payload=editingMessageId?{action,id:editingMessageId,text}:{action,room:activeRoom,text};
       try{
-        data=await postJSON({action:'sendChatMessage',room:activeRoom,text});
+        data=await postJSON(payload);
       }catch(firstErr){
-        // Fallback avoids fetch/CORS failure: fire-and-forget and verify on refresh.
-        await postJSONNoCors({action:'sendChatMessage',room:activeRoom,text});
-        data={status:'success',message:'Pesan dikirim.'};
+        await postJSONNoCors(payload);
+        await new Promise(r=>setTimeout(r,700));
+        data=await jsonpGet('getChatMessages',{room:activeRoom,limit:100});
       }
-      if(data.status!=='success') throw Error(data.message||'Pesan gagal dikirim');
-      input.value=''; cancelProperChatReply(); await fetchProperChatMessages();
+      if(data.status!=='success') throw Error(data.message||('Pesan gagal '+(editingMessageId?'diperbarui':'dikirim')));
+      input.value=''; cancelProperChatReply(); const wasEditing=!!editingMessageId; editingMessageId=null; input.placeholder='Ketik pesan...'; await fetchProperChatMessages();
+      toast(wasEditing?'Pesan diperbarui.':'Pesan terkirim.');
     }catch(err){toast('Chat: '+err.message)}
     finally{chatBusy=false;}
   };
 
-  window.cancelProperChatReply=function(){activeReply=null;const x=document.getElementById('properChatReply');if(x)x.style.display='none'};
+  window.cancelProperChatReply=function(){activeReply=null;editingMessageId=null;const i=document.getElementById('properChatInput');if(i)i.placeholder='Ketik pesan...';const x=document.getElementById('properChatReply');if(x)x.style.display='none'};
+  window.editProperChatMessage=function(id,text){
+    editingMessageId=String(id||'');
+    const input=document.getElementById('properChatInput');
+    if(!input) return;
+    input.value=String(text||'');
+    input.placeholder='Edit pesan lalu kirim...';
+    input.focus();
+    const reply=document.getElementById('properChatReply');
+    const rn=document.getElementById('properChatReplyName'); const rt=document.getElementById('properChatReplyText');
+    if(reply){reply.style.display='flex'; if(rn)rn.textContent='Mengedit pesan'; if(rt)rt.textContent=String(text||'');}
+  };
+  window.deleteProperChatMessage=async function(id){
+    if(!id||chatBusy) return;
+    if(!confirm('Hapus pesan ini?')) return;
+    chatBusy=true;
+    try{
+      let data;
+      try{ data=await postJSON({action:'deleteChatMessage',id}); }
+      catch(e){ await postJSONNoCors({action:'deleteChatMessage',id}); data={status:'success'}; await new Promise(r=>setTimeout(r,700)); }
+      if(data.status!=='success') throw Error(data.message||'Pesan gagal dihapus');
+      await fetchProperChatMessages();
+      toast('Pesan dihapus.');
+    }catch(err){toast('Chat: '+err.message)}
+    finally{chatBusy=false;}
+  };
 
   // More reliable profile save: normal POST first, no-cors fallback, then verify by JSONP.
   window.saveProfileChanges = async function(){
