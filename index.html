@@ -225,6 +225,10 @@ body{background:
 @media(max-width:1200px){.exec-kpis{grid-template-columns:repeat(3,1fr)}.exec-grid,.module-viz-grid{grid-template-columns:1fr}.exec-grid-3{grid-template-columns:1fr}.module-board{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:720px){.exec-kpis,.module-kpis{grid-template-columns:repeat(2,1fr)}.module-board{grid-template-columns:1fr}.exec-head{display:block}.exec-live{margin-top:10px}}
 
+
+.b3-input-fix,.darurat-input-fix{border:1px solid #dce8e3!important;border-radius:12px!important}
+.b3-status,.darurat-status{min-width:100px!important;min-height:42px!important;font-weight:800!important;cursor:pointer!important}
+.b3-status:focus,.darurat-status:focus{outline:3px solid rgba(11,122,96,.12)!important;border-color:#0b7a60!important}
 </style>
 </head>
 <body>
@@ -583,8 +587,8 @@ function showPage(id){
  $(id).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'});
  if(id==='monitoring'||id==='rekap'||id==='dashboard') { if(allPPAData.length===0) loadData(); }
  if(id==='plb3') loadPLB3();
- if(id==='plb3darurat') loadPLB3Darurat();
- if(id==='b3') loadB3();
+ if(id==='plb3darurat'){renderPLB3DaruratForm();if(!$('daruratDate').value)$('daruratDate').value=new Date().toISOString().slice(0,10);loadPLB3Darurat();}
+ if(id==='b3'){renderB3Forms();if(!$('b3Date').value)$('b3Date').value=new Date().toISOString().slice(0,10);loadB3();}
  if(id==='sampah') loadSampah();
  if(id==='emisi') loadEmisi();
  if(id==='dashboard') loadExecutiveAnalytics(false);
@@ -667,11 +671,11 @@ const plb3Items = [
 function renderEmisiForm(){
  $('emisiBody').innerHTML=emisiItems.map((item,i)=>`<tr>
    <td class="num">${i+1}</td><td class="ket">${escapeHtml(item)}</td>
-   <td><input class="small-input emisi-stack" type="number" min="0" value="${i===0?4:4}" oninput="calcEmisi()"></td>
-   <td><input class="small-input emisi-required" type="number" min="0" value="2" oninput="calcEmisi()"></td>
-   <td><input class="small-input emisi-sesuai" type="number" min="0" value="8" oninput="calcEmisi()"></td>
-   <td><input class="small-input emisi-terlapor" type="number" min="0" value="8" oninput="calcEmisi()"></td>
-   <td><b class="emisi-row-pct">100%</b></td>
+   <td><input class="small-input emisi-stack" type="number" min="0" value="0" oninput="calcEmisi()"></td>
+   <td><input class="small-input emisi-required" type="number" min="0" value="0" oninput="calcEmisi()"></td>
+   <td><input class="small-input emisi-sesuai" type="number" min="0" value="0" oninput="calcEmisi()"></td>
+   <td><input class="small-input emisi-terlapor" type="number" min="0" value="0" oninput="calcEmisi()"></td>
+   <td><b class="emisi-row-pct">0%</b></td>
  </tr>`).join('');
  calcEmisi();
 }
@@ -715,7 +719,7 @@ function calcPLB3(){
 }
 function resetEmisi(){
  $('emisiAssessor').value='';$('emisiSite').value='';$('emisiDate').value='';
- $('emisiStackCount').value=4;renderEmisiForm();
+ $('emisiStackCount').value=0;renderEmisiForm();
 }
 function resetPLB3(){
  $('plb3Assessor').value='';$('plb3Site').value='';$('plb3Date').value='';$('pplb3TpsCustom').value='';
@@ -787,8 +791,9 @@ const b3Sections = [["PENGANGKUTAN B3", [["1", "Apakah melakukan kegiatan pengan
 
 function renderPLB3DaruratForm(){
  const body=$('daruratBody');
+ if(!body){console.warn('daruratBody tidak ditemukan');return;}
  body.innerHTML=plb3DaruratItems.map((r,i)=>`<tr>
-   <td class="num">${escapeHtml(r[0])}</td>
+   <td class="num">${i+1}</td>
    <td class="ket"><b>${escapeHtml(r[1])}</b><br>${escapeHtml(r[2])}</td>
    <td><select class="darurat-status" data-i="${i}" onchange="calcPLB3Darurat()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td>
    <td><textarea class="darurat-doc" data-i="${i}" rows="3" placeholder="Dokumentasi / bukti dukung">${escapeHtml(r[3])}</textarea></td>
@@ -814,6 +819,7 @@ async function submitPLB3Darurat(){
 }
 function renderB3Forms(){
  const root=$('b3Forms');
+ if(!root){console.warn('b3Forms tidak ditemukan');return;}
  root.innerHTML=b3Sections.map((sec,si)=>`<div class="card">
    <div class="module-section-title"><h3>${escapeHtml(sec[0])}</h3><p>Checklist ketentuan B3</p></div>
    <div class="table-wrap"><table class="compact-table"><thead><tr><th style="width:55px">No</th><th>Aspek</th><th style="width:120px">YA/TIDAK</th><th>Dokumentasi / Keterangan</th></tr></thead>
@@ -917,7 +923,7 @@ async function submitSampah(){
   if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Sampah wajib diisi.');return;}
   if(statuses.some(s=>!s.value)){toast('Lengkapi semua status YA/TIDAK pada penilaian Sampah.');return;}
   const items=statuses.map((s,i)=>({
-    no:sampahItems[i][0],
+    no:i+1,
     section:sampahItems[i][1],
     ketentuan:sampahItems[i][2],
     status:s.value,
@@ -992,7 +998,17 @@ function scoreOf(r){
   const p=Number(r.percentage);
   if(Number.isFinite(p))return p;
   const t=Number(r.total||0),y=Number(r.yes||0);
-  return t?Math.round(y/t*100):0;
+  if(t)return Math.round(y/t*100);
+  const items=Array.isArray(r.items)?r.items:[];
+  if(items.length){
+    if(items.some(x=>x.prosentase!==undefined)){
+      const vals=items.map(x=>Number(x.prosentase)||0);
+      return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);
+    }
+    const sy=items.filter(x=>String(x.status||'').toUpperCase()==='YA').length;
+    return Math.round(sy/items.length*100);
+  }
+  return 0;
 }
 function siteOf(r){return displaySite(r.site||'Lokasi belum diisi')||'Lokasi belum diisi'}
 function dateOf(r){
@@ -1377,7 +1393,7 @@ function loadData(){
  };
  document.body.appendChild(script);
 }
-renderSampahForm();renderForm();renderEmisiForm();renderPLB3Form();populateDays();updateSiteTitle();
+renderSampahForm();renderForm();renderEmisiForm();renderPLB3Form();renderPLB3DaruratForm();renderB3Forms();populateDays();updateSiteTitle();
 $('emisiDate').value=new Date().toISOString().slice(0,10);
 $('plb3Date').value=new Date().toISOString().slice(0,10);
 $('assessmentDate').addEventListener('change',syncPartsFromDate);
