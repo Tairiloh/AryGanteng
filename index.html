@@ -229,9 +229,19 @@ body{background:
 .b3-input-fix,.darurat-input-fix{border:1px solid #dce8e3!important;border-radius:12px!important}
 .b3-status,.darurat-status{min-width:100px!important;min-height:42px!important;font-weight:800!important;cursor:pointer!important}
 .b3-status:focus,.darurat-status:focus{outline:3px solid rgba(11,122,96,.12)!important;border-color:#0b7a60!important}
+
+.location-master-note{font-size:10px;color:#71827d;margin-top:7px}
+input[list$="LocationSuggestions"]{cursor:text}
 </style>
 </head>
 <body>
+<datalist id="ppaLocationSuggestions"></datalist>
+<datalist id="emisiLocationSuggestions"></datalist>
+<datalist id="plb3LocationSuggestions"></datalist>
+<datalist id="daruratLocationSuggestions"></datalist>
+<datalist id="b3LocationSuggestions"></datalist>
+<datalist id="sampahLocationSuggestions"></datalist>
+
 <div class="mobile-header"><b>Inspeksi Ketentuan Teknis PROPER</b><button onclick="toggleMenu()">☰ Menu</button></div>
 <div class="app">
 <aside class="sidebar" id="sidebar">
@@ -334,7 +344,7 @@ body{background:
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="assessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Lokasi IPAL</label><input id="site" list="siteSuggestions" placeholder="Contoh: IPAL GGP 1" oninput="updateSiteTitle()"><datalist id="siteSuggestions"></datalist></div>
+      <div class="field"><label>Lokasi / Area</label><input id="site" list="ppaLocationSuggestions" placeholder="Contoh: IPAL GGP 1" oninput="updateSiteTitle()"></div>
     </div>
   </div>
   <div class="card">
@@ -372,11 +382,10 @@ body{background:
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="emisiAssessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Lokasi / Area</label><input id="emisiSite" list="globalSiteSuggestions" placeholder="Ketik atau pilih lokasi"></div>
+      <div class="field"><label>Lokasi / Area</label><input id="emisiSite" list="emisiLocationSuggestions" placeholder="Ketik atau pilih lokasi"><div class="location-master-note">Pilihan lokasi Emisi berasal dari data Emisi sendiri. Bisa diketik manual.</div></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="emisiDate" type="date"></div>
       <div class="field"><label>Jumlah Cerobong</label><input id="emisiStackCount" class="num-input" type="number" min="0" value="4"></div>
     </div>
-    <datalist id="globalSiteSuggestions"></datalist>
   </div>
   <div class="card">
     <div class="card-head"><div><h3>KETAATAN TERHADAP KETENTUAN TEKNIS</h3><div class="note">Isi data setiap ketentuan. Persentase dihitung otomatis.</div></div><span class="badge neutral" id="emisiPct">0%</span></div>
@@ -402,11 +411,11 @@ body{background:
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="plb3Assessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Lokasi / Area</label><input id="plb3Site" list="globalSiteSuggestions" placeholder="Ketik atau pilih lokasi"></div>
+      <div class="field"><label>Lokasi / Area</label><input id="plb3Site" list="plb3LocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="plb3Date" type="date"></div>
       <div class="field"><label>TPS yang dinilai</label><input id="pplb3TpsCustom" placeholder="Opsional: TPS tambahan / kode TPS"></div>
     </div>
-    <div class="note" style="margin-top:10px">Lokasi/Area dapat diketik manual atau dipilih dari lokasi yang sudah pernah digunakan. Kode TPS pada tabel dapat dinilai satu per satu.</div>
+    <div class="note" style="margin-top:10px">Lokasi/Area khusus PLB3 dapat dipilih dari master TPS PLB3 atau diketik manual. Kode TPS pada tabel dinilai satu per satu.</div>
   </div>
   <div class="card">
     <div class="card-head"><div><h3>Ketaatan Ketentuan Penyimpanan PLB3</h3><div class="note">Pilih YA/TIDAK dan isi dokumen & keterangan pada setiap TPS.</div></div><span class="badge neutral" id="lb3Pct">0%</span></div>
@@ -442,7 +451,7 @@ body{background:
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="daruratAssessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Lokasi / Area</label><input id="daruratSite" list="globalSiteSuggestions" placeholder="Ketik atau pilih lokasi"></div>
+      <div class="field"><label>Lokasi / Area</label><input id="daruratSite" list="daruratLocationSuggestions" placeholder="Ketik atau pilih lokasi"><div class="location-master-note">Pilihan lokasi Tanggap Darurat berasal dari data modul ini sendiri. Bisa diketik manual.</div></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="daruratDate" type="date"></div>
     </div>
   </div>
@@ -462,7 +471,7 @@ body{background:
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="b3Assessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Lokasi / Area</label><input id="b3Site" list="globalSiteSuggestions" placeholder="Ketik atau pilih lokasi"></div>
+      <div class="field"><label>Lokasi / Area</label><input id="b3Site" list="b3LocationSuggestions" placeholder="Ketik atau pilih lokasi"><div class="location-master-note">Pilihan lokasi B3 berasal dari data B3 sendiri. Bisa diketik manual.</div></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="b3Date" type="date"></div>
     </div>
   </div>
@@ -486,7 +495,7 @@ body{background:
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="sampahAssessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Lokasi / Area</label><input id="sampahSite" list="globalSiteSuggestions" placeholder="Ketik atau pilih lokasi"></div>
+      <div class="field"><label>Lokasi / Area</label><input id="sampahSite" list="sampahLocationSuggestions" placeholder="Ketik atau pilih lokasi"><div class="location-master-note">Pilihan lokasi Sampah berasal dari data Sampah sendiri. Bisa diketik manual.</div></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="sampahDate" type="date"></div>
     </div>
   </div>
@@ -600,6 +609,73 @@ function normalizeSite(name){
 }
 function displaySite(name){
  return String(name||'').trim().replace(/\s+/g,' ');
+}
+
+/*
+ * MASTER LOKASI PER TAB
+ * PPA: hanya lokasi yang memang ada pada matriks PPA yang diberikan user.
+ * PLB3: menggunakan kode TPS yang memang ada pada matriks Penyimpanan PLB3.
+ * Modul lain: tidak diberi lokasi dari modul lain; pilihan akan berasal
+ * dari data modul itu sendiri setelah pernah tersimpan, namun tetap bisa diketik manual.
+ */
+const MODULE_LOCATION_MASTERS = {
+  ppa: [
+    'IPAL GGP 1',
+    'IPAL GGP 2',
+    'IPAL PLTU'
+  ],
+  emisi: [],
+  plb3: [
+    'TPS LB3 01A','TPS LB3 01B','TPS LB3 02','TPS LB3 03',
+    'TPS LB3 04A','TPS LB3 04B','TPS LB3 04C','TPS LB3 05',
+    'TPS LB3 06','TPS LB3 07','TPS LB3 08','TPS LB3 09',
+    'TPS LB3 Klinik','TPS Klinik'
+  ],
+  darurat: [],
+  b3: [],
+  sampah: []
+};
+
+const MODULE_LOCATION_DATALISTS = {
+  ppa:'ppaLocationSuggestions',
+  emisi:'emisiLocationSuggestions',
+  plb3:'plb3LocationSuggestions',
+  darurat:'daruratLocationSuggestions',
+  b3:'b3LocationSuggestions',
+  sampah:'sampahLocationSuggestions'
+};
+
+function canonicalLocationFor(module,value){
+  const clean=displaySite(value);
+  if(!clean)return '';
+  const masters=MODULE_LOCATION_MASTERS[module]||[];
+  const key=normalizeSite(clean);
+  const hit=masters.find(x=>normalizeSite(x)===key);
+  return hit || clean;
+}
+
+/* Backward compatibility: fungsi lama tetap ada, tetapi tidak lagi
+   dipakai untuk memaksa lokasi semua tab menjadi satu master. */
+function canonicalLocation(value){
+  return displaySite(value);
+}
+
+function populateModuleLocationMaster(module,data){
+  const list=$(MODULE_LOCATION_DATALISTS[module]);
+  if(!list)return;
+  const fixed=[...(MODULE_LOCATION_MASTERS[module]||[])];
+  const ownData=Array.isArray(data)?data:[];
+  const dynamic=ownData.map(r=>displaySite(r.site||r.lokasi||r.location||'')).filter(Boolean);
+  const merged=[];
+  [...fixed,...dynamic].forEach(v=>{
+    const clean=displaySite(v);
+    if(clean && !merged.some(x=>normalizeSite(x)===normalizeSite(clean))) merged.push(clean);
+  });
+  list.innerHTML=merged.map(x=>`<option value="${escapeHtml(x)}"></option>`).join('');
+}
+
+function populateAllModuleLocationMasters(){
+  Object.keys(MODULE_LOCATION_MASTERS).forEach(m=>populateModuleLocationMaster(m,[]));
 }
 function updateSiteTitle(){
  const val=displaySite($('site').value);
@@ -730,7 +806,7 @@ async function postJSON(payload){
  return await r.json();
 }
 async function submitEmisi(){
- const assessor=$('emisiAssessor').value.trim(),site=displaySite($('emisiSite').value),date=$('emisiDate').value;
+ const assessor=$('emisiAssessor').value.trim(),site=canonicalLocationFor('emisi',$('emisiSite').value),date=$('emisiDate').value;
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Emisi wajib diisi.');return}
  const rows=[...document.querySelectorAll('#emisiBody tr')].map((tr,i)=>({
    no:i+1,ketentuan:emisiItems[i],
@@ -747,7 +823,7 @@ async function submitEmisi(){
  }catch(e){toast('Gagal menyimpan Emisi: '+e.message)}
 }
 async function submitPLB3(){
- const assessor=$('plb3Assessor').value.trim(),site=displaySite($('plb3Site').value),date=$('plb3Date').value;
+ const assessor=$('plb3Assessor').value.trim(),site=canonicalLocationFor('plb3',$('plb3Site').value),date=$('plb3Date').value;
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal PLB3 wajib diisi.');return}
  const items=[];
  plb3Items.forEach((ketentuan,i)=>{
@@ -775,13 +851,13 @@ function renderHistoryTable(id,data,type){
 function loadEmisi(){
  const old=document.getElementById('emisiJsonp');if(old)old.remove();
  const cb='emisiCallback_'+Date.now();
- window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('emisiHistory',d.data||[],'emisi');$('emisiCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('emisi',d.data||[]);}catch(e){toast('Data Emisi gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('emisiJsonp');if(s)s.remove();}};
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('emisiHistory',d.data||[],'emisi');populateModuleLocationMaster('emisi',d.data||[]);if($('emisiCount'))$('emisiCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('emisi',d.data||[]);}catch(e){toast('Data Emisi gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('emisiJsonp');if(s)s.remove();}};
  const s=document.createElement('script');s.id='emisiJsonp';s.src=SCRIPT_URL+'?action=getEmisi&callback='+cb+'&t='+Date.now();s.onerror=()=>{toast('Data Emisi gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 function loadPLB3(){
  const old=document.getElementById('plb3Jsonp');if(old)old.remove();
  const cb='plb3Callback_'+Date.now();
- window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('lb3History',d.data||[],'lb3');$('lb3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('plb3',d.data||[]);}catch(e){toast('Data PLB3 gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('plb3Jsonp');if(s)s.remove();}};
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('lb3History',d.data||[],'lb3');populateModuleLocationMaster('plb3',d.data||[]);if($('plb3Count'))$('plb3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('plb3',d.data||[]);}catch(e){toast('Data PLB3 gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('plb3Jsonp');if(s)s.remove();}};
  const s=document.createElement('script');s.id='plb3Jsonp';s.src=SCRIPT_URL+'?action=getPLB3&callback='+cb+'&t='+Date.now();s.onerror=()=>{toast('Data PLB3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 
@@ -808,7 +884,7 @@ function calcPLB3Darurat(){
 }
 function resetPLB3Darurat(){$('daruratAssessor').value='';$('daruratSite').value='';$('daruratDate').value='';renderPLB3DaruratForm();}
 async function submitPLB3Darurat(){
- const assessor=$('daruratAssessor').value.trim(),site=displaySite($('daruratSite').value),date=$('daruratDate').value;
+ const assessor=$('daruratAssessor').value.trim(),site=canonicalLocationFor('darurat',$('daruratSite').value),date=$('daruratDate').value;
  const statuses=[...document.querySelectorAll('.darurat-status')];
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal PLB3 Tanggap Darurat wajib diisi.');return}
  if(statuses.some(s=>!s.value)){toast('Lengkapi semua status YA/TIDAK PLB3 Tanggap Darurat.');return}
@@ -839,7 +915,7 @@ function calcB3(){
 }
 function resetB3(){$('b3Assessor').value='';$('b3Site').value='';$('b3Date').value='';renderB3Forms();}
 async function submitB3(){
- const assessor=$('b3Assessor').value.trim(),site=displaySite($('b3Site').value),date=$('b3Date').value;
+ const assessor=$('b3Assessor').value.trim(),site=canonicalLocationFor('b3',$('b3Site').value),date=$('b3Date').value;
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal B3 wajib diisi.');return}
  const items=[];
  b3Sections.forEach((sec,si)=>[...document.querySelectorAll(`.b3-status[data-s="${si}"]`)].forEach((s,i)=>{
@@ -857,12 +933,12 @@ function renderGenericHistory(id,data){
 }
 function loadPLB3Darurat(){
  const old=$('plb3DaruratJsonp');if(old)old.remove();const cb='plb3DaruratCB_'+Date.now();
- window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('daruratHistory',d.data||[]);$('daruratCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('darurat',d.data||[]);}catch(e){toast('Data PLB3 Tanggap Darurat gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('plb3DaruratJsonp');if(s)s.remove();}};
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('daruratHistory',d.data||[]);populateModuleLocationMaster('darurat',d.data||[]);if($('daruratCount'))$('daruratCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('darurat',d.data||[]);}catch(e){toast('Data PLB3 Tanggap Darurat gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('plb3DaruratJsonp');if(s)s.remove();}};
  const s=document.createElement('script');s.id='plb3DaruratJsonp';s.src=SCRIPT_URL+'?action=getPLB3Darurat&callback='+cb+'&t='+Date.now();s.onerror=()=>{toast('Data PLB3 Tanggap Darurat gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 function loadB3(){
  const old=$('b3Jsonp');if(old)old.remove();const cb='b3CB_'+Date.now();
- window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('b3History',d.data||[]);$('b3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('b3',d.data||[]);}catch(e){toast('Data B3 gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('b3Jsonp');if(s)s.remove();}};
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('b3History',d.data||[]);populateModuleLocationMaster('b3',d.data||[]);if($('b3Count'))$('b3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('b3',d.data||[]);}catch(e){toast('Data B3 gagal dibaca: '+e.message)}finally{delete window[cb];const s=$('b3Jsonp');if(s)s.remove();}};
  const s=document.createElement('script');s.id='b3Jsonp';s.src=SCRIPT_URL+'?action=getB3&callback='+cb+'&t='+Date.now();s.onerror=()=>{toast('Data B3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 
@@ -917,7 +993,7 @@ function resetSampah(){
 
 async function submitSampah(){
   const assessor=$('sampahAssessor').value.trim();
-  const site=displaySite($('sampahSite').value);
+  const site=canonicalLocationFor('sampah',$('sampahSite').value);
   const date=$('sampahDate').value;
   const statuses=[...document.querySelectorAll('.sampah-status')];
   if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Sampah wajib diisi.');return;}
@@ -945,7 +1021,7 @@ function loadSampah(){
   window[cb]=d=>{
     try{
       if(d.status!=='success')throw Error(d.message||'Error');
-      renderGenericHistory('sampahHistory',d.data||[]);refreshModuleAnalyticsFor('sampah',d.data||[]);
+      renderGenericHistory('sampahHistory',d.data||[]);populateModuleLocationMaster('sampah',d.data||[]);refreshModuleAnalyticsFor('sampah',d.data||[]);
       if($('sampahCount'))$('sampahCount').textContent=(d.data||[]).length+' assessment';
     }catch(e){toast('Data Sampah gagal dibaca: '+e.message);}
     finally{
@@ -1169,7 +1245,7 @@ function resetForm(){
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2800)}
 async function submitPPA(){
  if(SCRIPT_URL.startsWith('PASTE_')){toast('Masukkan URL Google Apps Script terlebih dahulu.');return}
- const assessor=$('assessor').value.trim(), site=displaySite($('site').value), date=$('assessmentDate').value;
+ const assessor=$('assessor').value.trim(), site=canonicalLocationFor('ppa',$('site').value), date=$('assessmentDate').value;
  const rows=[...document.querySelectorAll('.status-select')];
  if(!assessor){toast('Nama penilai wajib diisi.');$('assessor').focus();return}
  if(!site){toast('Lokasi IPAL wajib diisi.');$('site').focus();return}
@@ -1227,11 +1303,7 @@ function rebuildFilterOptions(data){
  fy.innerHTML='<option value="">Semua tahun</option>'+[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('');
  if([...fs.options].some(o=>o.value===currentS))fs.value=currentS;
  if([...fy.options].some(o=>o.value===currentY))fy.value=currentY;
- const list=$('siteSuggestions');
- const glist=$('globalSiteSuggestions');
- const opts=Object.values(sites).sort().map(s=>`<option value="${escapeHtml(s)}"></option>`).join('');
- if(list)list.innerHTML=opts;
- if(glist)glist.innerHTML=opts;
+ /* Shared location master is intentionally independent from PPA history. */
 }
 let allPPAData=[];
 function applyFilters(){
@@ -1368,6 +1440,7 @@ function loadData(){
    try{
      if(!d || d.status!=='success') throw new Error((d&&d.message)||'Server mengembalikan error');
      allPPAData=Array.isArray(d.data)?d.data:[];
+     populateModuleLocationMaster('ppa',allPPAData);
      executiveCache.ppa=allPPAData;
      renderModuleAnalytics('ppa',allPPAData);
      rebuildFilterOptions(allPPAData);
@@ -1393,7 +1466,7 @@ function loadData(){
  };
  document.body.appendChild(script);
 }
-renderSampahForm();renderForm();renderEmisiForm();renderPLB3Form();renderPLB3DaruratForm();renderB3Forms();populateDays();updateSiteTitle();
+renderSampahForm();renderForm();renderEmisiForm();renderPLB3Form();renderPLB3DaruratForm();renderB3Forms();populateDays();updateSiteTitle();populateAllModuleLocationMasters();
 $('emisiDate').value=new Date().toISOString().slice(0,10);
 $('plb3Date').value=new Date().toISOString().slice(0,10);
 $('assessmentDate').addEventListener('change',syncPartsFromDate);
