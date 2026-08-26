@@ -94,7 +94,7 @@ body{background:#f5f8f6}
 .nav-label{color:#8ebaae}
 .nav button{color:#c8ddd6}.nav button:hover{background:rgba(255,255,255,.09);color:#fff}
 .nav button.active{background:linear-gradient(135deg,#10a96f,#087f5b);box-shadow:0 10px 22px rgba(0,0,0,.15)}
-.sidebar .note{color:#9cc5b7}
+.sidebar .note{color:#9cc5b7}.sidebar-note{margin-top:18px;padding:10px 4px 2px}
 .main{max-width:1600px;padding:24px clamp(18px,2.5vw,38px)}
 .topbar-pro{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
 .topbar-pro h1{font-size:25px;letter-spacing:-1px;margin:0 0 4px}.topbar-pro p{margin:0;color:var(--muted);font-size:11px}
@@ -587,6 +587,24 @@ input[list$="LocationSuggestions"]{
 @media(max-width:1250px){.dash-grid-main{grid-template-columns:1fr 1fr}.dash-grid-main>.viz-card:nth-child(3){grid-column:1/-1}.dash-grid-4{grid-template-columns:1fr 1fr}.dash-bottom-grid{grid-template-columns:1fr}.dash-hero{grid-template-columns:1.3fr .7fr}}
 @media(max-width:900px){.dash-topbar{display:block}.dash-actions{margin-top:10px;flex-wrap:wrap}.dash-grid-main,.dash-grid-3,.dash-grid-4{grid-template-columns:1fr}.dash-hero{grid-template-columns:1fr}.hero-art{min-height:140px}.module-analytics .module-kpis{grid-template-columns:1fr 1fr}}
 @media(max-width:560px){.date-chip{flex:1}.admin-chip{min-width:130px}.dash-title h1{font-size:25px!important}.hero-left h2{font-size:21px}.dash-kpis{grid-template-columns:1fr 1fr!important}.quick-actions{grid-template-columns:1fr}.dash-actions{align-items:stretch}.dash-actions>*{height:40px}}
+
+/* ===== SIDEBAR SCROLL ===== */
+.sidebar{
+  position:sticky;
+  top:0;
+  height:100vh;
+  max-height:100vh;
+  overflow-y:auto;
+  overflow-x:hidden;
+  box-sizing:border-box;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(255,255,255,.28) transparent;
+}
+.sidebar::-webkit-scrollbar{width:6px}
+.sidebar::-webkit-scrollbar-track{background:transparent}
+.sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.24);border-radius:99px}
+.sidebar::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,.4)}
+@media(max-width:800px){.sidebar{height:100vh;max-height:100vh;overflow-y:auto}}
 </style>
 </head>
 <body>
@@ -605,7 +623,6 @@ input[list$="LocationSuggestions"]{
       <h2>Inspeksi Ketentuan Teknis PROPER</h2>
       <span>PENILAIAN &amp; MONITORING PPA</span>
     </div>
-    <div class="user"><small>MODE</small><b>Monitoring Kepatuhan PPA</b></div>
     <div class="user-mini"><span>●</span> Sistem Terhubung</div>
     
   <div class="nav-label">MENU UTAMA</div>
@@ -621,7 +638,7 @@ input[list$="LocationSuggestions"]{
     <button data-page="rekap" onclick="showPage('rekap')">▤ <span>Rekap Data</span></button>
     <button data-page="detail" id="detailNav" style="display:none" onclick="showPage('detail')">⌁ <span>Detail Lokasi</span></button>
   </nav>
-  <div style="margin-top:auto" class="note">Form PPA tersimpan ke Google Sheet melalui Google Apps Script.</div>
+  <div class="note sidebar-note">Form tersimpan ke Google Sheet melalui Google Apps Script.</div>
 </aside>
 
 <main class="main">
@@ -799,14 +816,13 @@ input[list$="LocationSuggestions"]{
   <div class="card">
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="plb3Assessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Lokasi / Area</label><input id="plb3Site" list="plb3LocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
+      <div class="field"><label>Lokasi / Area</label><input id="plb3Site" list="plb3LocationSuggestions" placeholder="Pilih atau ketik lokasi / area"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="plb3Date" type="date"></div>
-      <div class="field"><label>TPS yang dinilai</label><input id="pplb3TpsCustom" placeholder="Opsional: TPS tambahan / kode TPS"></div>
     </div>
-    <div class="note" style="margin-top:10px">Lokasi/Area khusus PLB3 dapat dipilih dari master TPS PLB3 atau diketik manual. Kode TPS pada tabel dinilai satu per satu.</div>
+    <div class="note" style="margin-top:10px">Pilih satu Lokasi / Area terlebih dahulu, kemudian isi status YA/TIDAK pada checklist di bawah. Tidak ada lagi pemisahan berdasarkan kode TPS.</div>
   </div>
   <div class="card">
-    <div class="card-head"><div><h3>Ketaatan Ketentuan Penyimpanan PLB3</h3><div class="note">Pilih YA/TIDAK dan isi dokumen & keterangan pada setiap TPS.</div></div><span class="badge neutral" id="lb3Pct">0%</span></div>
+    <div class="card-head"><div><h3>Ketaatan Ketentuan Penyimpanan PLB3</h3><div class="note">Penilaian dilakukan untuk Lokasi / Area yang dipilih. Isi satu status YA/TIDAK dan keterangan pendukung pada setiap ketentuan.</div></div><span class="badge neutral" id="lb3Pct">0%</span></div>
     <div class="table-wrap">
       <table class="lb3-table">
         <thead id="plb3Head"></thead><tbody id="plb3Body"></tbody><tfoot id="lb3Foot"></tfoot>
@@ -1002,7 +1018,7 @@ function displaySite(name){
 /*
  * MASTER LOKASI PER TAB
  * PPA: hanya lokasi yang memang ada pada matriks PPA yang diberikan user.
- * PLB3: menggunakan kode TPS yang memang ada pada matriks Penyimpanan PLB3.
+ * PLB3: lokasi/area dipilih pada form; tidak ada lagi master kode TPS.
  * Modul lain: tidak diberi lokasi dari modul lain; pilihan akan berasal
  * dari data modul itu sendiri setelah pernah tersimpan, namun tetap bisa diketik manual.
  */
@@ -1013,12 +1029,7 @@ const MODULE_LOCATION_MASTERS = {
     'IPAL PLTU'
   ],
   emisi: [],
-  plb3: [
-    'TPS LB3 01A','TPS LB3 01B','TPS LB3 02','TPS LB3 03',
-    'TPS LB3 04A','TPS LB3 04B','TPS LB3 04C','TPS LB3 05',
-    'TPS LB3 06','TPS LB3 07','TPS LB3 08','TPS LB3 09',
-    'TPS LB3 Klinik','TPS Klinik'
-  ],
+  plb3: [],
   darurat: [],
   b3: [],
   sampah: []
@@ -1103,10 +1114,7 @@ const emisiItems = [
  'Menampilkan kegiatan sampling dari petugas pengambil sampel dengan foto geotaging'
 ];
 
-const plb3Tps = [
- 'TPS LB3 01A','TPS LB3 01B','TPS LB3 02','TPS LB3 03','TPS LB3 04A','TPS LB3 04B','TPS LB3 04C',
- 'TPS LB3 05','TPS LB3 06','TPS LB3 07','TPS LB3 08','TPS LB3 09','TPS LB3 Klinik','TPS Klinik'
-];
+
 
 const plb3Items = [
  'Apakah lokasi Penyimpanan Limbah B3: A. Bebas banjir; B. tidak rawan bencana longsoran, bahaya gunung api, gempa bumi, sesar, sink hole, amblesan (land subsidence), tsunami, mud volcano; apakah telah dilakukan rekayasa teknologi?',
@@ -1158,13 +1166,12 @@ function calcEmisi(){
 }
 function renderPLB3Form(){
  const head=$('plb3Head');
- head.innerHTML='<tr><th class="sticky-left-head">No</th><th class="sticky-left-head">Ketentuan</th>'+
-   plb3Tps.map(t=>`<th colspan="2">${escapeHtml(t)}</th>`).join('')+'</tr>'+
-   '<tr><th class="sticky-left-head">YA/TIDAK</th><th class="sticky-left-head">Dokumen & Keterangan</th>'+
-   plb3Tps.map(()=>'<th>YA/TIDAK</th><th>Dokumen & Keterangan</th>').join('')+'</tr>';
+ head.innerHTML='<tr><th class="sticky-left-head">No</th><th class="sticky-left-head">Ketentuan</th><th>YA / TIDAK</th><th>Dokumen &amp; Keterangan</th></tr>';
  $('plb3Body').innerHTML=plb3Items.map((item,i)=>`<tr>
-   <td class="num sticky-left">${i+1}</td><td class="ket sticky-left">${escapeHtml(item)}</td>
-   ${plb3Tps.map((t,j)=>`<td><select class="plb3-status" data-row="${i}" data-tps="${j}" onchange="calcPLB3()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td><td><textarea class="plb3-note" data-row="${i}" data-tps="${j}" rows="2" placeholder="Dokumen / keterangan"></textarea></td>`).join('')}
+   <td class="num sticky-left">${i+1}</td>
+   <td class="ket sticky-left">${escapeHtml(item)}</td>
+   <td><select class="plb3-status" data-row="${i}" onchange="calcPLB3()"><option value="">Pilih</option><option value="YA">YA</option><option value="TIDAK">TIDAK</option></select></td>
+   <td><textarea class="plb3-note" data-row="${i}" rows="3" placeholder="Dokumen / keterangan / bukti pendukung"></textarea></td>
  </tr>`).join('');
  calcPLB3();
 }
@@ -1174,11 +1181,12 @@ function calcPLB3(){
  statuses.forEach(s=>{
    if(s.value)answered++;
    if(s.value==='YA')yes++;
-   s.classList.toggle('status-yes',s.value==='YA');s.classList.toggle('status-no',s.value==='TIDAK');
+   s.classList.toggle('status-yes',s.value==='YA');
+   s.classList.toggle('status-no',s.value==='TIDAK');
  });
  const pct=answered?Math.round(yes/answered*100):0;
  $('lb3Pct').textContent=pct+'%';
- const foot='<tr><th colspan="2" class="sticky-left-head">Jumlah Status / Jumlah Status "YA" / Prosentase Ketaatan</th><th colspan="'+(plb3Tps.length*2)+'" style="text-align:left">'+answered+' terisi • '+yes+' YA • '+pct+'%</th></tr>';
+ const foot='<tr><th colspan="2" class="sticky-left-head">Jumlah Status / Jumlah Status "YA" / Prosentase Ketaatan</th><th colspan="2" style="text-align:left">'+answered+' terisi • '+yes+' YA • '+pct+'%</th></tr>';
  $('lb3Foot').innerHTML=foot;
 }
 function resetEmisi(){
@@ -1186,7 +1194,7 @@ function resetEmisi(){
  $('emisiStackCount').value=0;renderEmisiForm();
 }
 function resetPLB3(){
- $('plb3Assessor').value='';$('plb3Site').value='';$('plb3Date').value='';$('pplb3TpsCustom').value='';
+ $('plb3Assessor').value='';$('plb3Site').value='';$('plb3Date').value='';
  renderPLB3Form();
 }
 async function postJSON(payload){
@@ -1212,16 +1220,14 @@ async function submitEmisi(){
 }
 async function submitPLB3(){
  const assessor=$('plb3Assessor').value.trim(),site=canonicalLocationFor('plb3',$('plb3Site').value),date=$('plb3Date').value;
- if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal PLB3 wajib diisi.');return}
- const items=[];
- plb3Items.forEach((ketentuan,i)=>{
-   plb3Tps.forEach((tps,j)=>{
-     const s=document.querySelector(`.plb3-status[data-row="${i}"][data-tps="${j}"]`);
-     const n=document.querySelector(`.plb3-note[data-row="${i}"][data-tps="${j}"]`);
-     if(s && s.value) items.push({no:i+1,tps,ketentuan,status:s.value,keterangan:n?n.value.trim():''});
-   });
+ if(!assessor||!site||!date){toast('Nama penilai, lokasi/area dan tanggal PLB3 wajib diisi.');return}
+ const statuses=[...document.querySelectorAll('.plb3-status')];
+ if(statuses.some(s=>!s.value)){toast('Lengkapi semua status YA/TIDAK pada penilaian PLB3.');return}
+ const items=plb3Items.map((ketentuan,i)=>{
+   const s=document.querySelector(`.plb3-status[data-row="${i}"]`);
+   const n=document.querySelector(`.plb3-note[data-row="${i}"]`);
+   return {no:i+1,ketentuan,status:s?s.value:'',keterangan:n?n.value.trim():''};
  });
- if(!items.length){toast('Isi minimal satu status YA/TIDAK pada LB3.');return}
  try{
    const d=await postJSON({action:'savePLB3',assessor,site,assessmentDate:date,items});
    if(d.status==='success'){toast('✓ Data Penyimpanan PLB3 berhasil disimpan.');resetPLB3();loadPLB3();}
