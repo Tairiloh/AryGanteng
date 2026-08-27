@@ -976,7 +976,7 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
 .row-actions{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
 .edit-outline.sm,.danger-outline.sm{display:inline-flex!important;visibility:visible!important;opacity:1!important;align-items:center;justify-content:center;min-width:66px}
 .danger-outline.sm{min-width:72px}
-table th:last-child,table td:last-child{min-width:145px}
+table th:last-child,table td:last-child{min-width:190px}
 </style>
 <style id="proper-evidence-status-final">
 .evidence-save-status{display:block!important;margin-top:5px;font-size:8px;font-weight:900}
@@ -1488,7 +1488,7 @@ table th:last-child,table td:last-child{min-width:145px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzXCMUi4UM3y1Uu7YMlPTGCjpMv-ZwFnhn1pYCcHPEU9KsfRT_zhi5QwkfIMQu_rBmm/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx538Ed5jtE200v3aO5hRJanyvEIjwOLWN9P3PBfGkXkThbv6DtaXRLKsYiPGBCMg3a/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -1868,116 +1868,29 @@ function submitFormRequest(payload){
 
 
 function submitEvidenceFormRequest(payload){
-  return new Promise((resolve,reject)=>{
-    const stamp=Date.now()+'_'+Math.floor(Math.random()*100000);
-    const frameName='properEvidenceFrame_'+stamp;
-    const iframe=document.createElement('iframe');
-    iframe.name=frameName;
-    iframe.id=frameName;
-    iframe.style.display='none';
-    document.body.appendChild(iframe);
+  /*
+   * Evidence upload memakai text/plain JSON.
+   * text/plain termasuk simple request sehingga tidak membutuhkan
+   * CORS preflight. Apps Script doPost membaca e.postData.contents
+   * dan mem-parse JSON.
+   */
+  const body=JSON.stringify(Object.assign({},payload,{
+    action:'uploadEvidence',
+    userToken:getAuthToken()
+  }));
 
-    const form=document.createElement('form');
-    form.method='POST';
-    form.action=SCRIPT_URL;
-    form.target=frameName;
-    form.enctype='application/x-www-form-urlencoded';
-    form.style.display='none';
-
-    const add=(name,value)=>{
-      const input=document.createElement('input');
-      input.type='hidden';
-      input.name=name;
-      input.value=String(value===undefined||value===null?'':value);
-      form.appendChild(input);
-    };
-
-    Object.keys(payload||{}).forEach(k=>{
-      if(k==='requestId')return;
-      const v=payload[k];
-
-      /*
-       * Evidence selalu primitive/string. Jangan bungkus base64
-       * ke payloadJson.
-       */
-      if(typeof v!=='object'){
-        add(k,v);
-      }
-    });
-
-    const requestId='evidence_'+stamp;
-    add('userToken',getAuthToken());
-    add('requestId',requestId);
-
-    document.body.appendChild(form);
-
-    let finished=false;
-    let timer=null;
-
-    const cleanup=()=>{
-      if(timer)clearTimeout(timer);
-      window.removeEventListener('message',onMessage);
-
-      setTimeout(()=>{
-        try{form.remove();}catch(_){}
-        try{iframe.remove();}catch(_){}
-      },300);
-    };
-
-    const finish=(ok,data)=>{
-      if(finished)return;
-      finished=true;
-      cleanup();
-
-      if(ok){
-        resolve(data||{status:'success'});
-      }else{
-        reject(
-          data instanceof Error
-            ?data
-            :new Error(
-                data&&data.message
-                  ?data.message
-                  :'Upload foto gagal.'
-              )
-        );
-      }
-    };
-
-    function onMessage(event){
-      if(event.source!==iframe.contentWindow)return;
-
-      const d=event.data;
-
-      if(!d||d.type!=='properResponse')return;
-      if(String(d.requestId||'')!==requestId)return;
-
-      finish(
-        d.ok===true,
-        d.data
-      );
+  return fetch(
+    SCRIPT_URL,
+    {
+      method:'POST',
+      mode:'no-cors',
+      headers:{
+        'Content-Type':'text/plain;charset=UTF-8'
+      },
+      body:body,
+      keepalive:false
     }
-
-    window.addEventListener(
-      'message',
-      onMessage
-    );
-
-    timer=setTimeout(()=>{
-      finish(
-        false,
-        new Error(
-          'Upload foto timeout. Server tidak memberikan konfirmasi.'
-        )
-      );
-    },35000);
-
-    try{
-      form.submit();
-    }catch(err){
-      finish(false,err);
-    }
-  });
+  ).then(()=>({status:'accepted'}));
 }
 
 async function submitResponseForm(payload){
@@ -3012,176 +2925,85 @@ async function uploadModuleEvidence(module,submissionId,files){
 
     try{
 
-      const original=
-        input.files&&input.files[0];
-
+      const original=input.files&&input.files[0];
       if(!original)continue;
 
-      const file=
-        await compressImage(original);
+      const file=await compressImage(original);
 
-      if(!file||!file.size){
-        throw new Error(
-          'Foto kosong setelah kompresi.'
-        );
-      }
+      const data=await new Promise((resolve,reject)=>{
+        const fr=new FileReader();
 
-      const data=
-        await new Promise(
-          (resolve,reject)=>{
-            const fr=new FileReader();
+        fr.onload=()=>{
+          const raw=String(fr.result||'');
+          const comma=raw.indexOf(',');
+          const base64=
+            comma>=0
+              ?raw.substring(comma+1)
+              :raw;
 
-            fr.onload=()=>{
-              const raw=
-                String(
-                  fr.result||''
-                );
-
-              const comma=
-                raw.indexOf(',');
-
-              const base64=
-                comma>=0
-                  ?raw.substring(
-                      comma+1
-                    )
-                  :raw;
-
-              if(!base64){
-                reject(
-                  new Error(
-                    'Data foto kosong.'
-                  )
-                );
-              }else{
-                resolve(base64);
-              }
-            };
-
-            fr.onerror=()=>{
-              reject(
-                new Error(
-                  'Browser gagal membaca foto.'
-                )
-              );
-            };
-
-            fr.readAsDataURL(file);
+          if(!base64){
+            reject(new Error('Data foto kosong.'));
+          }else{
+            resolve(base64);
           }
-        );
+        };
+
+        fr.onerror=()=>{
+          reject(new Error('Browser gagal membaca foto.'));
+        };
+
+        fr.readAsDataURL(file);
+      });
 
       /*
-       * Direct form fields.
-       * TIDAK menggunakan postJSON/payloadJson.
+       * Kirim raw JSON via text/plain. Tidak memakai form-urlencoded
+       * dan tidak memakai iframe postMessage.
        */
-      const server=
-        await submitEvidenceFormRequest({
-          action:'uploadEvidence',
-          submissionId:submissionId,
-          module:String(module||''),
-          no:String(input.dataset.no||''),
-          site:String(input.dataset.site||''),
-          fileName:String(
-            file.name||
-            'evidence.jpg'
-          ),
-          mimeType:'image/jpeg',
-          data:data
-        });
+      const accepted=await submitEvidenceFormRequest({
+        action:'uploadEvidence',
+        submissionId:String(submissionId),
+        module:String(module||''),
+        no:String(input.dataset.no||''),
+        site:String(input.dataset.site||''),
+        fileName:String(file.name||'evidence.jpg'),
+        mimeType:'image/jpeg',
+        data:data
+      });
 
-      if(
-        !server ||
-        server.status!=='success'
-      ){
-        throw new Error(
-          server&&server.message
-            ?server.message
-            :'Server menolak foto.'
-        );
+      if(!accepted||accepted.status!=='accepted'){
+        throw new Error('Request upload foto tidak diterima browser.');
       }
 
       /*
-       * Pastikan row benar-benar ada.
+       * Tunggu sampai Apps Script benar-benar menulis row evidence.
        */
-      const started=Date.now();
-      let confirmed=null;
-
-      while(
-        Date.now()-started<30000
-      ){
-
-        const check=
-          await jsonpGet(
-            'getEvidence',
-            {
-              submissionId:submissionId,
-              module:String(module||'')
-            }
-          );
-
-        if(
-          check &&
-          check.status==='success'
-        ){
-
-          const records=
-            Array.isArray(check.data)
-              ?check.data
-              :[];
-
-          confirmed=
-            records.find(r=>
-              String(r.no||'')===
-              String(input.dataset.no||'') &&
-              String(r.fileUrl||'').trim()!==''
-            );
-
-          if(confirmed)break;
-        }
-
-        await new Promise(
-          resolve=>setTimeout(
-            resolve,
-            800
-          )
-        );
-      }
-
-      if(!confirmed){
-        throw new Error(
-          'File tersimpan belum terdeteksi pada PROPER_Evidence.'
-        );
-      }
-
-      uploaded.push(confirmed);
-
-      input.dataset.savedUrl=
-        confirmed.fileUrl||'';
-
-      input.dataset.serverSaved='1';
-
-      input.classList.add(
-        'evidence-saved'
+      const verified=await waitForEvidenceServer(
+        submissionId,
+        module,
+        String(input.dataset.no||''),
+        String(file.name||'evidence.jpg')
       );
 
-      const wrap=
-        input.closest('.evidence-wrap');
+      if(!verified){
+        throw new Error(
+          'Foto belum terverifikasi di Google Sheet PROPER_Evidence.'
+        );
+      }
+
+      uploaded.push(verified);
+
+      input.dataset.savedUrl=verified.fileUrl||'';
+      input.dataset.serverSaved='1';
+      input.classList.add('evidence-saved');
+
+      const wrap=input.closest('.evidence-wrap');
 
       if(wrap){
-
-        let status=
-          wrap.querySelector(
-            '.evidence-save-status'
-          );
+        let status=wrap.querySelector('.evidence-save-status');
 
         if(!status){
-
-          status=
-            document.createElement('small');
-
-          status.className=
-            'evidence-save-status';
-
+          status=document.createElement('small');
+          status.className='evidence-save-status';
           wrap.appendChild(status);
         }
 
@@ -3194,42 +3016,31 @@ async function uploadModuleEvidence(module,submissionId,files){
     }catch(err){
 
       console.error(
-        '[PROPER] Upload evidence',
+        '[PROPER] Evidence upload',
         module,
         err
       );
 
       failed.push({
         no:String(input.dataset.no||''),
-        message:
-          err&&err.message
-            ?err.message
-            :String(err)
+        message:err&&err.message
+          ?err.message
+          :String(err)
       });
 
-      const wrap=
-        input.closest('.evidence-wrap');
+      const wrap=input.closest('.evidence-wrap');
 
       if(wrap){
 
-        let status=
-          wrap.querySelector(
-            '.evidence-save-status'
-          );
+        let status=wrap.querySelector('.evidence-save-status');
 
         if(!status){
-
-          status=
-            document.createElement('small');
-
-          status.className=
-            'evidence-save-status';
-
+          status=document.createElement('small');
+          status.className='evidence-save-status';
           wrap.appendChild(status);
         }
 
-        status.textContent=
-          '✕ Foto belum tersimpan';
+        status.textContent='✕ Foto belum tersimpan';
 
         status.style.color='#b42318';
       }
@@ -3717,7 +3528,7 @@ function renderAllModulesRecap(rows){
         <td>${Number(r.no||0)}</td>
         <td><b>${Number(r.percentage||0)}%</b></td>
         <td>${statusBadge(Number(r.percentage||0))}</td>
-        <td>${own?`<button class="danger-outline sm" type="button" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td>
+        <td>${own?`<span class="row-actions" onclick="event.stopPropagation()"><button class="edit-outline sm" type="button" onclick='editModuleAssessment(${rowJson})'>✎ Edit</button><button class="danger-outline sm" type="button" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button></span>`:'<span class="muted-action">—</span>'}</td>
       </tr>`;
     }).join(''):empty;
   }
@@ -3735,7 +3546,7 @@ function renderAllModulesRecap(rows){
         <td>${Number(r.no||0)}</td>
         <td><b>${Number(r.percentage||0)}%</b></td>
         <td>${statusBadge(Number(r.percentage||0))}</td>
-        <td>${own?`<button class="danger-outline sm" type="button" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td>
+        <td>${own?`<span class="row-actions" onclick="event.stopPropagation()"><button class="edit-outline sm" type="button" onclick='editModuleAssessment(${rowJson})'>✎ Edit</button><button class="danger-outline sm" type="button" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button></span>`:'<span class="muted-action">—</span>'}</td>
       </tr>`;
     }).join(''):empty;
   }
