@@ -972,6 +972,16 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
 .table-wrap th:last-child,.table-wrap td:last-child{white-space:nowrap;min-width:135px;text-align:center}
 .edit-outline.sm,.danger-outline.sm{display:inline-flex;align-items:center;justify-content:center;gap:4px;line-height:1;vertical-align:middle;margin:2px;font-weight:800}
 </style>
+<style id="proper-edit-delete-visibility">
+.row-actions{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.edit-outline.sm,.danger-outline.sm{display:inline-flex!important;visibility:visible!important;opacity:1!important;align-items:center;justify-content:center;min-width:66px}
+.danger-outline.sm{min-width:72px}
+table th:last-child,table td:last-child{min-width:145px}
+</style>
+<style id="proper-evidence-status-final">
+.evidence-save-status{display:block!important;margin-top:5px;font-size:8px;font-weight:900}
+.evidence-file.evidence-saved{border-color:#74c69d!important;background:#f0fff8!important}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1478,7 +1488,7 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyd7uMjfUkG-GhAjOZ_BMZRcf13Jq9eKCGnHNidKJwP40iwr6ZsHpB-toAuj0Wiyfm/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5lJYEiVNRXiaLAPnLtZ2iAhveAwj9t7VL-PKhqyYgue0EDaBjjdH0SYqTGdWLVqI/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -1998,7 +2008,7 @@ async function submitEmisi(){
   try{
     const d=await postJSON(isEditingModule('Emisi')?{action:'updateAssessment',module:'Emisi',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items:rows}:{action:'saveEmisi',assessor,site,assessmentDate:date,items:rows});
     if(d.status==='success'){
-      try{await uploadModuleEvidence('emisi',d.submissionId,collectEvidence('emisi'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
+      const evr=await uploadModuleEvidence('emisi',d.submissionId,collectEvidence('emisi')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
       toast('✓ Data Emisi berhasil disimpan.');
       resetEmisi();
       loadEmisi();
@@ -2018,7 +2028,7 @@ async function submitPLB3(){
  try{
    const d=await postJSON(isEditingModule('PLB3')?{action:'updateAssessment',module:'PLB3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'savePLB3',assessor,site,assessmentDate:date,items});
    if(d.status==='success'){
-     try{await uploadModuleEvidence('plb3',d.submissionId,collectEvidence('plb3'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
+     const evr=await uploadModuleEvidence('plb3',d.submissionId,collectEvidence('plb3')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
      toast(isEditingModule('PLB3')?'✓ Data Penyimpanan PLB3 berhasil diperbarui.':'✓ Data Penyimpanan PLB3 berhasil disimpan.');clearEditMode();resetPLB3();loadPLB3();
    }
    else throw new Error(d.message||'Gagal menyimpan');
@@ -2027,29 +2037,72 @@ async function submitPLB3(){
 function renderHistoryTable(id,data,type){
  const body=$(id);
  if(!body)return;
- body.innerHTML=data.length?data.slice().reverse().map(r=>{
-   if(type==='emisi') {
-   const rowJson=JSON.stringify(Object.assign({},r,{moduleKey:'Emisi',module:'Emisi'})).replace(/'/g,"&#39;");
-   const own=canManageAssessment(r);
-   return `<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(r.site||'-')}</td><td><b>${r.percentage||0}%</b></td><td>${own?`<button type="button" class="edit-outline sm" onclick='editModuleAssessment(${rowJson});event.stopPropagation()'>✎ Edit</button><button type="button" class="danger-outline sm" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`;
+
+ const rows=Array.isArray(data)?data.slice().reverse():[];
+
+ if(!rows.length){
+   body.innerHTML='<tr><td colspan="'+(type==='emisi'?5:8)+'" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+   return;
+ }
+
+ body.innerHTML=rows.map(r=>{
+   const moduleKey=type==='emisi'?'Emisi':(type==='lb3'?'PLB3':type);
+   const rowJson=JSON.stringify(Object.assign({},r,{
+     moduleKey:moduleKey,
+     module:moduleKey
+   })).replace(/'/g,"&#39;");
+
+   const actionButtons=
+     `<span class="row-actions" onclick="event.stopPropagation()">
+        <button type="button" class="edit-outline sm"
+          onclick='editModuleAssessment(${rowJson})'>✎ Edit</button>
+        <button type="button" class="danger-outline sm"
+          onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>
+      </span>`;
+
+   if(type==='emisi'){
+     return `<tr>
+       <td>${escapeHtml(r.timestamp||'-')}</td>
+       <td>${escapeHtml(r.assessor||'-')}</td>
+       <td>${escapeHtml(r.site||'-')}</td>
+       <td><b>${Number(r.percentage||0)}%</b></td>
+       <td>${actionButtons}</td>
+     </tr>`;
+   }
+
+   return `<tr>
+     <td>${escapeHtml(r.timestamp||'-')}</td>
+     <td>${escapeHtml(r.assessor||'-')}</td>
+     <td>${escapeHtml(r.site||'-')}</td>
+     <td>${Number(r.total||0)}</td>
+     <td>${Number(r.yes||0)}</td>
+     <td>${Number(r.no||0)}</td>
+     <td><b>${Number(r.percentage||0)}%</b></td>
+     <td>${actionButtons}</td>
+   </tr>`;
+ }).join('');
 }
-   const moduleKey=type==='lb3'?'PLB3':type;
-   const rowJson=JSON.stringify(Object.assign({},r,{moduleKey,module:moduleKey})).replace(/'/g,"&#39;");
-   const own=canManageAssessment(r);
-   return `<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(r.site||'-')}</td><td>${r.total||0}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td><td>${own?`<button type="button" class="edit-outline sm" onclick='editModuleAssessment(${rowJson});event.stopPropagation()'>✎ Edit</button><button type="button" class="danger-outline sm" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`;
- }).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
-}
+
 function loadEmisi(){
  const old=document.getElementById('emisiJsonp');if(old)old.remove();
  const cb='emisiCallback_'+Date.now();
  window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('emisiHistory',d.data||[],'emisi');populateModuleLocationMaster('emisi',d.data||[]);if($('emisiCount'))$('emisiCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('emisi',d.data||[]);}catch(e){console.warn('[PROPER] Data Emisi gagal dibaca:',e)}finally{delete window[cb];const s=$('emisiJsonp');if(s)s.remove();}};
  const s=document.createElement('script');s.id='emisiJsonp';s.src=SCRIPT_URL+'?action=getEmisi&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{console.warn('[PROPER] Data Emisi gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
-function loadPLB3(){
- const old=document.getElementById('plb3Jsonp');if(old)old.remove();
- const cb='plb3Callback_'+Date.now();
- window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('lb3History',d.data||[],'lb3');populateModuleLocationMaster('plb3',d.data||[]);if($('plb3Count'))$('plb3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('plb3',d.data||[]);}catch(e){console.warn('[PROPER] Data PLB3 gagal dibaca:',e)}finally{delete window[cb];const s=$('plb3Jsonp');if(s)s.remove();}};
- const s=document.createElement('script');s.id='plb3Jsonp';s.src=SCRIPT_URL+'?action=getPLB3&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{console.warn('[PROPER] Data PLB3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+async function loadPLB3(){
+  try{
+    const d=await jsonpGet('getPLB3',{});
+    if(!d||d.status!=='success')throw new Error((d&&d.message)||'Data PLB3 gagal dibaca.');
+    const data=Array.isArray(d.data)?d.data:[];
+    renderHistoryTable('plb3History',data,'lb3');
+    populateModuleLocationMaster('plb3',data);
+    if($('plb3Count'))$('plb3Count').textContent=data.length+' assessment';
+    refreshModuleAnalyticsFor('plb3',data);
+  }catch(e){
+    console.warn('[PROPER] PLB3 read:',e);
+    const body=$('plb3History');
+    if(body)body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data yang dapat ditampilkan.</td></tr>';
+  }
 }
 
 
@@ -2082,7 +2135,7 @@ async function submitPLB3Darurat(){
  const items=statuses.map((s,i)=>({no:plb3DaruratItems[i][0],ketentuan:plb3DaruratItems[i][2],section:plb3DaruratItems[i][1],status:s.value,documentation:'',keterangan:$(`.darurat-note[data-i="${i}"]`).value.trim()}));
  try{const d=await postJSON(isEditingModule('PLB3 Tanggap Darurat')?{action:'updateAssessment',module:'PLB3 Tanggap Darurat',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'savePLB3Darurat',assessor,site,assessmentDate:date,items});
    if(d.status==='success'){
-   try{await uploadModuleEvidence('darurat',d.submissionId,collectEvidence('darurat'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
+   const evr=await uploadModuleEvidence('darurat',d.submissionId,collectEvidence('darurat')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
    toast(isEditingModule('PLB3 Tanggap Darurat')?'✓ PLB3 Tanggap Darurat berhasil diperbarui.':'✓ PLB3 Tanggap Darurat tersimpan.');clearEditMode();resetPLB3Darurat();loadPLB3Darurat();
  } else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan PLB3 Tanggap Darurat: '+e.message)}
@@ -2119,19 +2172,55 @@ async function submitB3(){
  }));
  if(items.length===0){toast('Isi minimal satu status YA/TIDAK pada B3.');return}
  try{const d=await postJSON(isEditingModule('B3')?{action:'updateAssessment',module:'B3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'saveB3',assessor,site,assessmentDate:date,items});
-   if(d.status==='success'){try{await uploadModuleEvidence('b3',d.submissionId,collectEvidence('b3'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}toast(isEditingModule('B3')?'✓ Data B3 berhasil diperbarui.':'✓ Data B3 berhasil disimpan.');clearEditMode();resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
+   if(d.status==='success'){const evr=await uploadModuleEvidence('b3',d.submissionId,collectEvidence('b3')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');toast(isEditingModule('B3')?'✓ Data B3 berhasil diperbarui.':'✓ Data B3 berhasil disimpan.');clearEditMode();resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan B3: '+e.message)}
 }
 function renderGenericHistory(id,data,typeHint){
- const body=$(id);if(!body)return;
- body.innerHTML=data.length?data.slice().reverse().map(r=>{
-   const mapType={darurat:'PLB3 Tanggap Darurat',b3:'B3',sampah:'Sampah'};
-   const moduleKey=mapType[typeHint]||mapType[id.replace('History','')]||'';
-   const rowJson=JSON.stringify(Object.assign({},r,{moduleKey,module:moduleKey})).replace(/'/g,"&#39;");
-   const own=canManageAssessment(r);
-   return `<tr><td>${r.timestamp||'-'}</td><td><b>${escapeHtml(r.assessor||'-')}</b></td><td>${escapeHtml(r.site||'-')}</td><td>${r.total||0}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td><td>${own?`<button type="button" class="edit-outline sm" onclick='editModuleAssessment(${rowJson});event.stopPropagation()'>✎ Edit</button><button type="button" class="danger-outline sm" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`;
- }).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+ const body=$(id);
+ if(!body)return;
+
+ const rows=Array.isArray(data)?data.slice().reverse():[];
+
+ if(!rows.length){
+   body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+   return;
+ }
+
+ const moduleKeyMap={
+   darurat:'PLB3 Tanggap Darurat',
+   b3:'B3',
+   sampah:'Sampah'
+ };
+
+ const moduleKey=moduleKeyMap[typeHint]||typeHint;
+
+ body.innerHTML=rows.map(r=>{
+   const rowJson=JSON.stringify(Object.assign({},r,{
+     moduleKey:moduleKey,
+     module:moduleKey
+   })).replace(/'/g,"&#39;");
+
+   const actionButtons=
+     `<span class="row-actions" onclick="event.stopPropagation()">
+       <button type="button" class="edit-outline sm"
+         onclick='editModuleAssessment(${rowJson})'>✎ Edit</button>
+       <button type="button" class="danger-outline sm"
+         onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>
+      </span>`;
+
+   return `<tr>
+     <td>${escapeHtml(r.timestamp||'-')}</td>
+     <td><b>${escapeHtml(r.assessor||'-')}</b></td>
+     <td>${escapeHtml(r.site||'-')}</td>
+     <td>${Number(r.total||0)}</td>
+     <td>${Number(r.yes||0)}</td>
+     <td>${Number(r.no||0)}</td>
+     <td><b>${Number(r.percentage||0)}%</b></td>
+     <td>${actionButtons}</td>
+   </tr>`;
+ }).join('');
 }
+
 function loadPLB3Darurat(){
  const old=$('plb3DaruratJsonp');if(old)old.remove();const cb='plb3DaruratCB_'+Date.now();
  window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('daruratHistory',d.data||[],'darurat');populateModuleLocationMaster('darurat',d.data||[]);if($('daruratCount'))$('daruratCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('darurat',d.data||[]);}catch(e){console.warn('[PROPER] Data PLB3 Tanggap Darurat gagal dibaca:',e)}finally{delete window[cb];const s=$('plb3DaruratJsonp');if(s)s.remove();}};
@@ -2502,7 +2591,21 @@ function enhanceEvidenceInputs(rootSelector,module){
   });
 }
 function collectEvidence(module){
-  return [...document.querySelectorAll(`.evidence-file[data-module="${module}"]`)].filter(x=>x.files&&x.files[0]);
+  return [...document.querySelectorAll(
+    `.evidence-file[data-module="${module}"]`
+  )].filter(x=>x.files&&x.files[0]).map(x=>{
+    const ids={
+      ppa:'site',
+      emisi:'emisiSite',
+      plb3:'plb3Site',
+      darurat:'daruratSite',
+      b3:'b3Site',
+      sampah:'sampahSite'
+    };
+    const siteEl=$(ids[module]||'site');
+    if(siteEl)x.dataset.site=siteEl.value||'';
+    return x;
+  });
 }
 async function compressImage(file){
   if(!file)return null;
@@ -2522,73 +2625,11 @@ async function compressImage(file){
     img.src=url;
   });
 }
-function submitEvidenceForm(payload){
-  return new Promise((resolve,reject)=>{
-    try{
-      const stamp=Date.now()+'_'+Math.floor(Math.random()*100000);
-      const frameName='properEvidenceUpload_'+stamp;
-
-      const iframe=document.createElement('iframe');
-      iframe.name=frameName;
-      iframe.style.display='none';
-      document.body.appendChild(iframe);
-
-      const form=document.createElement('form');
-      form.method='POST';
-      form.action=SCRIPT_URL;
-      form.target=frameName;
-      form.enctype='application/x-www-form-urlencoded';
-      form.style.display='none';
-
-      const add=(name,value)=>{
-        const el=document.createElement('input');
-        el.type='hidden';
-        el.name=name;
-        el.value=String(value??'');
-        form.appendChild(el);
-      };
-
-      add('action','uploadEvidence');
-      add('userToken',getAuthToken());
-      add('submissionId',payload.submissionId||'');
-      add('module',payload.module||'');
-      add('no',payload.no||'');
-      add('site',payload.site||'');
-      add('fileName',payload.fileName||'evidence.jpg');
-      add('mimeType',payload.mimeType||'image/jpeg');
-      add('data',payload.data||'');
-
-      document.body.appendChild(form);
-
-      let done=false;
-      const finish=(v)=>{
-        if(done)return;
-        done=true;
-        setTimeout(()=>{
-          try{form.remove();}catch(_){}
-          try{iframe.remove();}catch(_){}
-        },1000);
-        resolve(v);
-      };
-
-      iframe.onload=()=>finish({status:'accepted'});
-
-      form.submit();
-
-      setTimeout(()=>{
-        finish({status:'accepted'});
-      },9000);
-
-    }catch(err){
-      reject(err);
-    }
-  });
-}
-
-async function verifyEvidenceServer(submissionId,module,no){
+async function waitForEvidenceServer(submissionId,module,no){
   const started=Date.now();
+  const timeout=30000;
 
-  while(Date.now()-started<30000){
+  while(Date.now()-started<timeout){
     try{
       const r=await jsonpGet('getEvidence',{
         submissionId:submissionId,
@@ -2596,20 +2637,16 @@ async function verifyEvidenceServer(submissionId,module,no){
       });
 
       if(r&&r.status==='success'){
-        const list=Array.isArray(r.data)?r.data:[];
-
-        const match=list.find(x=>
-          String(x.no||'')===String(no||'')
+        const data=Array.isArray(r.data)?r.data:[];
+        const found=data.find(x=>
+          String(x.no||'')===String(no||'') &&
+          String(x.fileUrl||'').trim()
         );
-
-        if(match && match.fileUrl){
-          return match;
-        }
+        if(found)return found;
       }
-
     }catch(_){}
 
-    await new Promise(r=>setTimeout(r,1000));
+    await new Promise(resolve=>setTimeout(resolve,1000));
   }
 
   return null;
@@ -2617,23 +2654,11 @@ async function verifyEvidenceServer(submissionId,module,no){
 
 async function uploadModuleEvidence(module,submissionId,files){
   const inputs=Array.isArray(files)?files:[];
-
-  if(!submissionId||!inputs.length){
-    return {
-      uploaded:0,
-      failed:0,
-      urls:[],
-      failures:[]
-    };
-  }
-
   const uploaded=[];
-  const failures=[];
+  const failed=[];
 
   for(const input of inputs){
-
     try{
-
       const original=input.files&&input.files[0];
       if(!original)continue;
 
@@ -2641,7 +2666,6 @@ async function uploadModuleEvidence(module,submissionId,files){
 
       const data=await new Promise((resolve,reject)=>{
         const fr=new FileReader();
-
         fr.onload=()=>{
           const raw=String(fr.result||'');
           resolve(
@@ -2650,23 +2674,14 @@ async function uploadModuleEvidence(module,submissionId,files){
               :raw
           );
         };
-
-        fr.onerror=()=>{
-          reject(
-            new Error('Foto gagal dibaca.')
-          );
-        };
-
+        fr.onerror=()=>reject(new Error('Foto tidak dapat dibaca.'));
         fr.readAsDataURL(file);
       });
 
-      /*
-       * POST langsung ke Apps Script.
-       * Tidak menggunakan JSON payload untuk base64.
-       */
-      await submitEvidenceForm({
-        submissionId,
-        module,
+      const r=await postJSON({
+        action:'uploadEvidence',
+        module:module,
+        submissionId:submissionId,
         no:input.dataset.no||'',
         site:input.dataset.site||'',
         fileName:file.name||('evidence-'+Date.now()+'.jpg'),
@@ -2674,19 +2689,22 @@ async function uploadModuleEvidence(module,submissionId,files){
         data:data
       });
 
-      /*
-       * Konfirmasi berdasarkan record yang benar-benar masuk server.
-       */
-      const confirmed=
-        await verifyEvidenceServer(
-          submissionId,
-          module,
-          input.dataset.no||''
+      if(!r||r.status!=='success'){
+        throw new Error(
+          (r&&r.message)||
+          'Server menolak upload foto.'
         );
+      }
+
+      const confirmed=await waitForEvidenceServer(
+        submissionId,
+        module,
+        input.dataset.no||''
+      );
 
       if(!confirmed){
         throw new Error(
-          'Foto belum ditemukan pada PROPER_Evidence setelah upload.'
+          'Foto belum terkonfirmasi di PROPER_Evidence.'
         );
       }
 
@@ -2697,50 +2715,31 @@ async function uploadModuleEvidence(module,submissionId,files){
       input.classList.add('evidence-saved');
 
       const wrap=input.closest('.evidence-wrap');
-
       if(wrap){
-        let status=wrap.querySelector(
-          '.evidence-save-status'
-        );
-
+        let status=wrap.querySelector('.evidence-save-status');
         if(!status){
           status=document.createElement('small');
           status.className='evidence-save-status';
           wrap.appendChild(status);
         }
-
         status.textContent='✓ Tersimpan di server';
+        status.style.color='#087f5b';
       }
 
     }catch(err){
-
-      console.error(
-        '[PROPER] Upload evidence gagal',
-        module,
-        input.dataset.no||'',
-        err
-      );
-
-      failures.push({
+      failed.push({
         no:input.dataset.no||'',
-        message:err&&err.message
-          ?err.message
-          :String(err)
+        message:err&&err.message?err.message:String(err)
       });
 
       const wrap=input.closest('.evidence-wrap');
-
       if(wrap){
-        let status=wrap.querySelector(
-          '.evidence-save-status'
-        );
-
+        let status=wrap.querySelector('.evidence-save-status');
         if(!status){
           status=document.createElement('small');
           status.className='evidence-save-status';
           wrap.appendChild(status);
         }
-
         status.textContent='✕ Belum tersimpan di server';
         status.style.color='#b42318';
       }
@@ -2749,9 +2748,9 @@ async function uploadModuleEvidence(module,submissionId,files){
 
   return {
     uploaded:uploaded.length,
-    failed:failures.length,
+    failed:failed.length,
     urls:uploaded,
-    failures:failures
+    failures:failed
   };
 }
 
@@ -2764,23 +2763,40 @@ function renderForm(){
 }
 function updateScore(){
  let yes=0,filled=0;
- document.querySelectorAll('.status-select').forEach(s=>{if(s.value)filled++;if(s.value==='YA')yes++;
-   s.classList.toggle('status-yes',s.value==='YA');s.classList.toggle('status-no',s.value==='TIDAK');
+ const selects=[...document.querySelectorAll('#ppaBody .status-select')];
+ selects.forEach(s=>{
+   if(s.value)filled++;
+   if(s.value==='YA')yes++;
+   s.classList.toggle('status-yes',s.value==='YA');
+   s.classList.toggle('status-no',s.value==='TIDAK');
  });
- let pct=Math.round(yes/items.length*100); $('scoreValue').textContent=pct+'%'; $('scoreBar').style.width=pct+'%'; $('answerCount').textContent=filled+'/'+items.length+' terisi';
+ const pct=items.length?Math.round(yes/items.length*100):0;
+ $('scoreValue').textContent=pct+'%';
+ $('scoreBar').style.width=pct+'%';
+ $('answerCount').textContent=filled+'/'+items.length+' terisi';
 }
 function resetForm(){
- document.querySelectorAll('.status-select').forEach(s=>s.value='');
- document.querySelectorAll('textarea').forEach(t=>t.value='');
- $('assessor').value=(getCurrentUser()||{}).name||'';$('site').value='';$('assessmentDate').value='';
- $('assessmentMonth').value='';$('assessmentYear').value='';$('assessmentDay').value='';
- updateSiteTitle();updateScore();
+ document.querySelectorAll('#ppaBody .status-select').forEach(s=>s.value='');
+ document.querySelectorAll('#ppaBody textarea').forEach(t=>t.value='');
+ document.querySelectorAll('#ppaBody input[type=file]').forEach(f=>{
+   try{f.value='';}catch(_){}
+   delete f.dataset.savedUrl;
+   delete f.dataset.serverSaved;
+ });
+ $('assessor').value=(getCurrentUser()||{}).name||'';
+ $('site').value='';
+ $('assessmentDate').value='';
+ $('assessmentMonth').value='';
+ $('assessmentYear').value='';
+ $('assessmentDay').value='';
+ updateSiteTitle();
+ updateScore();
 }
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2800)}
 async function submitPPA(){
  if(SCRIPT_URL.startsWith('PASTE_')){toast('Masukkan URL Google Apps Script terlebih dahulu.');return}
  const assessor=$('assessor').value.trim(), site=canonicalLocationFor('ppa',$('site').value), date=$('assessmentDate').value;
- const rows=[...document.querySelectorAll('.status-select')];
+ const rows=[...document.querySelectorAll('#ppaBody .status-select')];
  if(!assessor){toast('Nama penilai wajib diisi.');$('assessor').focus();return}
  if(!site){toast('Lokasi IPAL wajib diisi.');$('site').focus();return}
  if(!date){toast('Tanggal penilaian wajib diisi.');$('assessmentDate').focus();return}
@@ -2790,7 +2806,7 @@ async function submitPPA(){
  try{
    const d=await postJSON(isEditingModule('PPA')?Object.assign({},payload,{action:'updateAssessment',module:'PPA',submissionId:window.editingAssessment.submissionId}):payload);
    if(d.status==='success'){
-     try{await uploadModuleEvidence('ppa',d.submissionId,collectEvidence('ppa'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
+     const evr=await uploadModuleEvidence('ppa',d.submissionId,collectEvidence('ppa')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
      toast(isEditingModule('PPA')?'✓ Penilaian PPA berhasil diperbarui.':'✓ Penilaian berhasil tersimpan ke Google Sheet.');clearEditMode();localStorage.setItem('ppaLastSubmit',JSON.stringify(payload));resetForm();loadData();showPage('monitoring')
    } else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal terhubung ke server: '+e.message)}
@@ -3271,7 +3287,10 @@ function renderData(data,rebuild=true){
    <td><button class="action-eye" onclick="openDetail('${escapeHtml(r.siteKey||normalizeSite(r.site))}')">◉</button></td>
  </tr>`).join(''):'<tr><td colspan="9" style="text-align:center;padding:25px;color:#64756f">Belum ada data penilaian.</td></tr>';
 
- if($('monitorBody'))$('monitorBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td><b>${escapeHtml(displaySite(r.site)||'-')}</b></td><td>${r.total||11}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.timestamp||'-'}</td><td>${canManageAssessment(r)?`<button class="edit-outline sm" type="button" onclick='editModuleAssessment(${JSON.stringify(Object.assign({},r,{module:"PPA",moduleKey:"PPA"})).replace(/\'/g,"&#39;")});event.stopPropagation()'>✎ Edit</button><button class="danger-outline sm" type="button" onclick='deleteAssessment(${JSON.stringify(Object.assign({},r,{module:"PPA",moduleKey:"PPA"})).replace(/\'/g,"&#39;")},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+ if($('monitorBody'))$('monitorBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>{
+ const ppaRow=JSON.stringify(Object.assign({},r,{module:'PPA',moduleKey:'PPA'})).replace(/'/g,"&#39;");
+ return `<tr><td><b>${escapeHtml(displaySite(r.site)||'-')}</b></td><td>${r.total||11}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.timestamp||'-'}</td><td><span class="row-actions" onclick="event.stopPropagation()"><button class="edit-outline sm" type="button" onclick='editModuleAssessment(${ppaRow})'>✎ Edit</button><button class="danger-outline sm" type="button" onclick='deleteAssessment(${ppaRow},event)'>🗑 Hapus</button></span></td></tr>`;
+}).join(''):'<tr><td colspan="9" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
  if($('rekapBody'))$('rekapBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
  if($('lastSync'))$('lastSync').textContent='Sinkron terakhir: '+new Date().toLocaleString('id-ID');
  if($('topLastSync'))$('topLastSync').textContent='Terakhir diperbarui: '+new Date().toLocaleTimeString('id-ID');
