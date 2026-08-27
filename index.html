@@ -962,6 +962,12 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
 @media(max-width:1050px){.portal-module-grid{grid-template-columns:1fr 1fr}.portal-analytics-grid,.portal-lower-grid{grid-template-columns:1fr}.plb3-kpis{grid-template-columns:1fr 1fr}.portal-dashboard .portal-header{display:block}.portal-header-right{margin-top:10px}.portal-filter-mini{justify-content:flex-start}}
 @media(max-width:650px){.portal-module-grid{grid-template-columns:1fr}.portal-strip{display:block}.portal-strip-note{margin-top:4px}.portal-date{display:none}.portal-header-left h1{font-size:26px}.plb3-kpis{grid-template-columns:1fr}.plb3-topbar{display:block}.plb3-actions{margin-top:10px}.plb3-hero-strip{display:block}.plb3-hero-score{text-align:left;margin-top:12px;width:max-content}.portal-analytics-head{display:block}.portal-filter-mini{margin-top:10px}.portal-filter-mini select{flex:1;min-width:120px}}
 </style>
+<style id="assessment-delete-ui">
+.danger-outline.sm{border:1px solid #e2b3b3;background:#fff7f7;color:#b42318;border-radius:9px;padding:7px 10px;font-size:9px;font-weight:900;cursor:pointer;white-space:nowrap}
+.danger-outline.sm:hover{background:#b42318;color:#fff}
+.muted-action{color:#a0aaa6;font-size:11px}
+#monitorBody .recap-click-row td:last-child,#rekapBody .recap-click-row td:last-child{white-space:nowrap}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1440,12 +1446,12 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
     <div class="kpi"><span>Rata-rata Kepatuhan</span><strong id="allRecapAvg">0%</strong><em>Semua assessment</em></div>
     <div class="kpi"><span>Modul Aktif</span><strong id="allRecapModules">0/6</strong><em>Sudah terisi</em></div>
   </div>
-  <div class="card"><div class="card-head"><div><h3>Detail Monitoring Seluruh Aspek</h3><div class="note" id="lastSync">Belum sinkron</div></div></div><div class="table-wrap"><table><thead><tr><th>Modul</th><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>%</th><th>Status</th></tr></thead><tbody id="monitorBody"></tbody></table></div></div>
+  <div class="card"><div class="card-head"><div><h3>Detail Monitoring Seluruh Aspek</h3><div class="note" id="lastSync">Belum sinkron</div></div></div><div class="table-wrap"><table><thead><tr><th>Modul</th><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>%</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="monitorBody"></tbody></table></div></div>
 </section>
 
 <section id="rekap" class="page">
   <div class="topline"><div><h1>Rekap Data</h1><p>Riwayat inspeksi seluruh aspek: PPA, PPU/Emisi, PLB3, Tanggap Darurat PLB3, B3, dan Sampah.</p></div><button class="btn secondary" onclick="loadAllModulesRecap(true)">↻ Refresh</button></div>
-  <div class="card"><div class="card-head"><div><h3>Rekap Semua Penilaian</h3><div class="note">Semua checklist/inspeksi dari seluruh PIC dan seluruh aspek ditampilkan di sini. Klik baris untuk melihat hasil YA/TIDAK per ketentuan.</div></div><span class="badge neutral" id="rekapModuleBadge">0 assessment</span></div><div class="table-wrap"><table><thead><tr><th>Modul</th><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>Persentase</th><th>Status</th></tr></thead><tbody id="rekapBody"></tbody></table></div></div>
+  <div class="card"><div class="card-head"><div><h3>Rekap Semua Penilaian</h3><div class="note">Semua checklist/inspeksi dari seluruh PIC dan seluruh aspek ditampilkan di sini. Klik baris untuk melihat hasil YA/TIDAK per ketentuan.</div></div><span class="badge neutral" id="rekapModuleBadge">0 assessment</span></div><div class="table-wrap"><table><thead><tr><th>Modul</th><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>Persentase</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="rekapBody"></tbody></table></div></div>
 </section>
 </main>
 </div>
@@ -1454,7 +1460,7 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
 
 <div class="exec-detail-modal" id="assessmentChecklistModal" onclick="if(event.target===this)closeAssessmentChecklist()">
   <div class="exec-detail-panel assessment-checklist-panel">
-    <div class="exec-detail-head"><div><h3 id="assessmentChecklistTitle">Hasil Checklist</h3><p id="assessmentChecklistSubtitle">Detail inspeksi</p></div><button class="exec-detail-close" onclick="closeAssessmentChecklist()">×</button></div>
+    <div class="exec-detail-head"><div><h3 id="assessmentChecklistTitle">Hasil Checklist</h3><p id="assessmentChecklistSubtitle">Detail inspeksi</p></div><div style="display:flex;gap:8px;align-items:center"><button id="assessmentDeleteBtn" class="danger-outline sm" type="button" style="display:none">🗑 Hapus Assessment</button><button class="exec-detail-close" onclick="closeAssessmentChecklist()">×</button></div></div>
     <div class="exec-detail-kpis" id="assessmentChecklistKpis"></div>
     <div class="exec-detail-body"><table class="exec-detail-table checklist-result-table"><thead><tr><th>No</th><th>Ketentuan / Pertanyaan</th><th>Status</th><th>Keterangan</th><th>Dokumentasi</th></tr></thead><tbody id="assessmentChecklistRows"></tbody></table></div>
   </div>
@@ -1468,7 +1474,7 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxhB6P9qNqT7z9yL38H-IW0Xcy-p-5ksiYEFgR-_oCtakjqvS_lf6zDUEzg9TZAIA/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_fv7dkyjYl6dLf2d5qfktmDZvNj25hoqhIwKsYslYOV7WGbGGmcW0QOlSEkL3M_PS/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2712,19 +2718,61 @@ async function loadAllModulesRecap(force=false){
 }
 
 function renderAllModulesRecap(rows){
- rows=Array.isArray(rows)?rows:[];
- const sites=new Set(rows.map(r=>normalizeSite(r.site)).filter(Boolean));
- const modules=new Set(rows.map(r=>r.moduleKey||r.module).filter(Boolean));
- const avg=rows.length?Math.round(rows.reduce((s,r)=>s+Number(r.percentage||0),0)/rows.length):0;
- if($('allRecapCount'))$('allRecapCount').textContent=rows.length;
- if($('allRecapSites'))$('allRecapSites').textContent=sites.size;
- if($('allRecapAvg'))$('allRecapAvg').textContent=avg+'%';
- if($('allRecapModules'))$('allRecapModules').textContent=modules.size+'/6';
- if($('rekapModuleBadge'))$('rekapModuleBadge').textContent=rows.length+' assessment';
- const sorted=rows.slice().sort((a,b)=>String(b.timestamp||b.assessmentDate||'').localeCompare(String(a.timestamp||a.assessmentDate||'')));
- if($('monitorBody'))$('monitorBody').innerHTML=sorted.length?sorted.map(r=>`<tr class="recap-click-row" onclick='openAssessmentChecklist(${JSON.stringify(r).replace(/'/g,"&#39;")})'><td><b>${escapeHtml(r.module||'-')}</b></td><td>${escapeHtml(r.timestamp||r.assessmentDate||'-')}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${Number(r.yes||0)}</td><td>${Number(r.no||0)}</td><td><b>${Number(r.percentage||0)}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data dari aspek manapun.</td></tr>';
- if($('rekapBody'))$('rekapBody').innerHTML=sorted.length?sorted.map(r=>`<tr class="recap-click-row" onclick='openAssessmentChecklist(${JSON.stringify(r).replace(/'/g,"&#39;")})'><td><b>${escapeHtml(r.module||'-')}</b></td><td>${escapeHtml(r.timestamp||r.assessmentDate||'-')}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${Number(r.yes||0)}</td><td>${Number(r.no||0)}</td><td><b>${Number(r.percentage||0)}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data dari aspek manapun.</td></tr>';
- if($('lastSync'))$('lastSync').textContent='Semua modul tersinkron: '+new Date().toLocaleString('id-ID');
+  rows=Array.isArray(rows)?rows:[];
+  const sites=new Set(rows.map(r=>normalizeSite(r.site)).filter(Boolean));
+  const modules=new Set(rows.map(r=>r.moduleKey||r.module).filter(Boolean));
+  const avg=rows.length?Math.round(rows.reduce((sum,r)=>sum+Number(r.percentage||0),0)/rows.length):0;
+
+  if($('allRecapCount'))$('allRecapCount').textContent=rows.length;
+  if($('allRecapSites'))$('allRecapSites').textContent=sites.size;
+  if($('allRecapAvg'))$('allRecapAvg').textContent=avg+'%';
+  if($('allRecapModules'))$('allRecapModules').textContent=modules.size+'/6';
+  if($('rekapModuleBadge'))$('rekapModuleBadge').textContent=rows.length+' assessment';
+  if($('lastSync'))$('lastSync').textContent='Semua aspek tersinkron: '+new Date().toLocaleString('id-ID');
+
+  const sorted=rows.slice().sort((a,b)=>
+    String(b.timestamp||b.assessmentDate||'').localeCompare(
+      String(a.timestamp||a.assessmentDate||'')
+    )
+  );
+
+  const empty='<tr><td colspan="9" style="text-align:center;padding:28px;color:#64756f">Belum ada data dari aspek manapun.</td></tr>';
+
+  if($('monitorBody')){
+    $('monitorBody').innerHTML=sorted.length?sorted.map(r=>{
+      const own=canManageAssessment(r);
+      const rowJson=JSON.stringify(r).replace(/'/g,'&#39;');
+      return `<tr class="recap-click-row" onclick='openAssessmentChecklist(${rowJson})'>
+        <td><b>${escapeHtml(r.module||'-')}</b></td>
+        <td>${escapeHtml(r.timestamp||r.assessmentDate||'-')}</td>
+        <td>${escapeHtml(r.assessor||'-')}</td>
+        <td>${escapeHtml(displaySite(r.site)||'-')}</td>
+        <td>${Number(r.yes||0)}</td>
+        <td>${Number(r.no||0)}</td>
+        <td><b>${Number(r.percentage||0)}%</b></td>
+        <td>${statusBadge(Number(r.percentage||0))}</td>
+        <td>${own?`<button class="danger-outline sm" type="button" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td>
+      </tr>`;
+    }).join(''):empty;
+  }
+
+  if($('rekapBody')){
+    $('rekapBody').innerHTML=sorted.length?sorted.map(r=>{
+      const own=canManageAssessment(r);
+      const rowJson=JSON.stringify(r).replace(/'/g,'&#39;');
+      return `<tr class="recap-click-row" onclick='openAssessmentChecklist(${rowJson})'>
+        <td><b>${escapeHtml(r.module||'-')}</b></td>
+        <td>${escapeHtml(r.timestamp||r.assessmentDate||'-')}</td>
+        <td>${escapeHtml(r.assessor||'-')}</td>
+        <td>${escapeHtml(displaySite(r.site)||'-')}</td>
+        <td>${Number(r.yes||0)}</td>
+        <td>${Number(r.no||0)}</td>
+        <td><b>${Number(r.percentage||0)}%</b></td>
+        <td>${statusBadge(Number(r.percentage||0))}</td>
+        <td>${own?`<button class="danger-outline sm" type="button" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td>
+      </tr>`;
+    }).join(''):empty;
+  }
 }
 
 function renderData(data,rebuild=true){
@@ -2763,7 +2811,7 @@ function renderData(data,rebuild=true){
    <td><button class="action-eye" onclick="openDetail('${escapeHtml(r.siteKey||normalizeSite(r.site))}')">◉</button></td>
  </tr>`).join(''):'<tr><td colspan="9" style="text-align:center;padding:25px;color:#64756f">Belum ada data penilaian.</td></tr>';
 
- if($('monitorBody'))$('monitorBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td><b>${escapeHtml(displaySite(r.site)||'-')}</b></td><td>${r.total||11}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.timestamp||'-'}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+ if($('monitorBody'))$('monitorBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td><b>${escapeHtml(displaySite(r.site)||'-')}</b></td><td>${r.total||11}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.timestamp||'-'}</td><td>${canManageAssessment(r)?`<button class="danger-outline sm" type="button" onclick='deleteAssessment(${JSON.stringify(Object.assign({},r,{module:"PPA",moduleKey:"PPA"})).replace(/\'/g,"&#39;")},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
  if($('rekapBody'))$('rekapBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
  if($('lastSync'))$('lastSync').textContent='Sinkron terakhir: '+new Date().toLocaleString('id-ID');
  if($('topLastSync'))$('topLastSync').textContent='Terakhir diperbarui: '+new Date().toLocaleTimeString('id-ID');
@@ -3310,7 +3358,47 @@ function openExecutiveRecord(r){
 }
 function closeExecutiveDetail(){$('execDetailModal')?.classList.remove('show')}
 function closeAssessmentChecklist(){ $('assessmentChecklistModal')?.classList.remove('show'); }
-async function openAssessmentChecklist(row){
+async 
+function canManageAssessment(row){
+  const u=window.currentUser||null;
+  if(!u||!row)return false;
+  const me=[u.name,u.username].filter(Boolean).map(normalizeUser);
+  const owner=normalizeUser(row.assessor||'');
+  return !!owner && me.includes(owner);
+}
+function normalizeUser(v){
+  return String(v||'').trim().toLowerCase().replace(/\s+/g,' ');
+}
+async function deleteAssessment(row, ev){
+  if(ev){ev.preventDefault();ev.stopPropagation();}
+  if(!row||!row.submissionId){toast('Submission ID tidak ditemukan.');return;}
+  if(!canManageAssessment(row)){
+    toast('Assessment ini hanya dapat dihapus oleh penilai yang membuatnya.');
+    return;
+  }
+  const label=`${row.module||row.moduleKey||'Assessment'} · ${displaySite(row.site)||'-'} · ${row.assessmentDate||row.timestamp||'-'}`;
+  if(!confirm(`Hapus assessment ini?\n\n${label}\n\nSemua checklist, keterangan, dan dokumentasi terkait akan dihapus permanen dari Google Sheet.`)) return;
+  try{
+    const result=await postJSON({action:'deleteAssessment',module:row.moduleKey||row.module,submissionId:row.submissionId});
+    if(result.status!=='success') throw new Error(result.message||'Assessment gagal dihapus.');
+    toast('✓ Assessment berhasil dihapus permanen.');
+    window.__allRecapData=null;
+    closeAssessmentChecklist();
+    if(typeof loadExecutiveAnalyticsV2==='function'){
+      try{await loadExecutiveAnalyticsV2(true);}catch(_){}
+    }
+    if(typeof loadAllModulesRecap==='function'){
+      try{await loadAllModulesRecap(true);}catch(_){}
+    }
+    if(typeof loadData==='function'){
+      try{loadData();}catch(_){}
+    }
+  }catch(e){
+    toast('Gagal menghapus assessment: '+(e.message||String(e)));
+  }
+}
+
+function openAssessmentChecklist(row){
   const module=row?.module||row?.moduleKey||''; const submissionId=row?.submissionId||'';
   if(!module||!submissionId){toast('Detail inspeksi tidak tersedia.');return;}
   const modLabel=module==='Emisi'?'Aspek PPU':(moduleMeta[module]?.label||module);
@@ -3318,6 +3406,11 @@ async function openAssessmentChecklist(row){
   $('assessmentChecklistSubtitle').textContent=`${displaySite(row.site)||'-'} · ${row.assessor||'PIC'} · ${row.assessmentDate||row.timestamp||'-'}`;
   $('assessmentChecklistKpis').innerHTML=[['YA',Number(row.yes||0)],['TIDAK',Number(row.no||0)],['Kepatuhan',Number(row.percentage||0)+'%'],['Aspek',modLabel]].map(x=>`<div class="exec-mini-kpi"><span>${escapeHtml(String(x[0]))}</span><b>${escapeHtml(String(x[1]))}</b></div>`).join('');
   $('assessmentChecklistRows').innerHTML='<tr><td colspan="5" style="text-align:center;padding:35px;color:#7b8c96">Memuat hasil checklist...</td></tr>';
+  const delBtn=$('assessmentDeleteBtn');
+  if(delBtn){
+    delBtn.style.display=canManageAssessment(row)?'inline-flex':'none';
+    delBtn.onclick=(ev)=>deleteAssessment(row,ev);
+  }
   $('assessmentChecklistModal').classList.add('show');
   try{
     const d=await jsonpGet('getAssessmentDetails',{module:module,submissionId:submissionId});
