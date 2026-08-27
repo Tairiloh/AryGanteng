@@ -1488,7 +1488,7 @@ table th:last-child,table td:last-child{min-width:145px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw17QrzeqeEu4RnNkPPiYdp6wRet3CdAkBxzvGIuXQkUtkcBgCfOFyHVMks7rD9NnDJ/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzXCMUi4UM3y1Uu7YMlPTGCjpMv-ZwFnhn1pYCcHPEU9KsfRT_zhi5QwkfIMQu_rBmm/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -1862,6 +1862,120 @@ function submitFormRequest(payload){
       },5000);
     }catch(e){
       reject(e);
+    }
+  });
+}
+
+
+function submitEvidenceFormRequest(payload){
+  return new Promise((resolve,reject)=>{
+    const stamp=Date.now()+'_'+Math.floor(Math.random()*100000);
+    const frameName='properEvidenceFrame_'+stamp;
+    const iframe=document.createElement('iframe');
+    iframe.name=frameName;
+    iframe.id=frameName;
+    iframe.style.display='none';
+    document.body.appendChild(iframe);
+
+    const form=document.createElement('form');
+    form.method='POST';
+    form.action=SCRIPT_URL;
+    form.target=frameName;
+    form.enctype='application/x-www-form-urlencoded';
+    form.style.display='none';
+
+    const add=(name,value)=>{
+      const input=document.createElement('input');
+      input.type='hidden';
+      input.name=name;
+      input.value=String(value===undefined||value===null?'':value);
+      form.appendChild(input);
+    };
+
+    Object.keys(payload||{}).forEach(k=>{
+      if(k==='requestId')return;
+      const v=payload[k];
+
+      /*
+       * Evidence selalu primitive/string. Jangan bungkus base64
+       * ke payloadJson.
+       */
+      if(typeof v!=='object'){
+        add(k,v);
+      }
+    });
+
+    const requestId='evidence_'+stamp;
+    add('userToken',getAuthToken());
+    add('requestId',requestId);
+
+    document.body.appendChild(form);
+
+    let finished=false;
+    let timer=null;
+
+    const cleanup=()=>{
+      if(timer)clearTimeout(timer);
+      window.removeEventListener('message',onMessage);
+
+      setTimeout(()=>{
+        try{form.remove();}catch(_){}
+        try{iframe.remove();}catch(_){}
+      },300);
+    };
+
+    const finish=(ok,data)=>{
+      if(finished)return;
+      finished=true;
+      cleanup();
+
+      if(ok){
+        resolve(data||{status:'success'});
+      }else{
+        reject(
+          data instanceof Error
+            ?data
+            :new Error(
+                data&&data.message
+                  ?data.message
+                  :'Upload foto gagal.'
+              )
+        );
+      }
+    };
+
+    function onMessage(event){
+      if(event.source!==iframe.contentWindow)return;
+
+      const d=event.data;
+
+      if(!d||d.type!=='properResponse')return;
+      if(String(d.requestId||'')!==requestId)return;
+
+      finish(
+        d.ok===true,
+        d.data
+      );
+    }
+
+    window.addEventListener(
+      'message',
+      onMessage
+    );
+
+    timer=setTimeout(()=>{
+      finish(
+        false,
+        new Error(
+          'Upload foto timeout. Server tidak memberikan konfirmasi.'
+        )
+      );
+    },35000);
+
+    try{
+      form.submit();
+    }catch(err){
+      finish(false,err);
     }
   });
 }
@@ -2344,7 +2458,12 @@ async function submitSampah(){
   try{
     const d=await postJSON(isEditingModule('Sampah')?{action:'updateAssessment',module:'Sampah',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'saveSampah',assessor,site,assessmentDate:date,items});
     if(d.status==='success'){
-      toast(isEditingModule('Sampah')?'✓ Penilaian Sampah berhasil diperbarui.':'✓ Penilaian Sampah berhasil disimpan.');
+      const evr=await uploadModuleEvidence('sampah',d.submissionId,collectEvidence('sampah'));
+      if(evr.failed){
+        toast('Data Sampah tersimpan. '+evr.failed+' foto gagal tersimpan ke server.');
+      }else{
+        toast(isEditingModule('Sampah')?'✓ Penilaian Sampah berhasil diperbarui.':'✓ Penilaian Sampah berhasil disimpan.');
+      }
       clearEditMode();
       resetSampah();
       loadSampah();
@@ -2658,19 +2777,24 @@ function collectEvidence(module){
   });
 }
 async function compressImage(file){
-  if(!file)return null;
-  if(!file.type.startsWith('image/')){
+  if(!file){
+    throw new Error('Foto kosong.');
+  }
+
+  if(!String(file.type||'').startsWith('image/')){
     throw new Error('File harus berupa gambar.');
   }
 
-  /*
-   * Selalu kompres bukti ke ukuran kecil agar POST ke Apps Script stabil.
-   * Target < 900 KB, dimensi maksimum 1400 px.
-   */
-  const TARGET=900*1024;
-  const MAX_SIDE=1400;
+  const TARGET=700*1024;
 
-  if(file.size<=TARGET && /^image\/jpe?g$/i.test(file.type)){
+  /*
+   * JPG kecil boleh langsung dipakai.
+   * Selain itu selalu recompress.
+   */
+  if(
+    file.size<=TARGET &&
+    /^image\/jpe?g$/i.test(file.type)
+  ){
     return file;
   }
 
@@ -2680,66 +2804,125 @@ async function compressImage(file){
 
     img.onload=async()=>{
       try{
+
         URL.revokeObjectURL(url);
 
-        let scale=Math.min(
-          1,
-          MAX_SIDE/img.width,
-          MAX_SIDE/img.height
-        );
-
-        let w=Math.max(1,Math.round(img.width*scale));
-        let h=Math.max(1,Math.round(img.height*scale));
-
-        const canvas=document.createElement('canvas');
-        const ctx=canvas.getContext('2d',{alpha:false});
-
-        if(!ctx)throw new Error('Canvas browser tidak tersedia.');
-
-        let quality=.78;
+        let maxSide=1200;
+        let quality=0.72;
         let blob=null;
 
-        for(let i=0;i<7;i++){
-          canvas.width=w;
-          canvas.height=h;
-          ctx.clearRect(0,0,w,h);
-          ctx.drawImage(img,0,0,w,h);
+        for(let attempt=0;attempt<9;attempt++){
 
-          blob=await new Promise(r=>
-            canvas.toBlob(r,'image/jpeg',quality)
+          const scale=Math.min(
+            1,
+            maxSide/Math.max(
+              img.width,
+              img.height
+            )
           );
 
-          if(blob && blob.size<=TARGET)break;
+          const w=Math.max(
+            1,
+            Math.round(img.width*scale)
+          );
 
-          quality=Math.max(.50,quality-.05);
+          const h=Math.max(
+            1,
+            Math.round(img.height*scale)
+          );
 
-          if(blob && blob.size>TARGET && i>=3){
-            w=Math.max(720,Math.round(w*.88));
-            h=Math.max(720,Math.round(h*.88));
+          const canvas=
+            document.createElement('canvas');
+
+          canvas.width=w;
+          canvas.height=h;
+
+          const ctx=canvas.getContext(
+            '2d',
+            {alpha:false}
+          );
+
+          if(!ctx){
+            throw new Error(
+              'Browser tidak mendukung pemrosesan foto.'
+            );
           }
+
+          ctx.fillStyle='#ffffff';
+          ctx.fillRect(0,0,w,h);
+
+          ctx.drawImage(
+            img,
+            0,
+            0,
+            w,
+            h
+          );
+
+          blob=await new Promise(
+            resolveBlob=>
+              canvas.toBlob(
+                resolveBlob,
+                'image/jpeg',
+                quality
+              )
+          );
+
+          if(
+            blob &&
+            blob.size<=TARGET
+          ){
+            break;
+          }
+
+          quality=Math.max(
+            0.42,
+            quality-0.06
+          );
+
+          maxSide=Math.max(
+            640,
+            Math.round(
+              maxSide*0.86
+            )
+          );
         }
 
         if(!blob){
-          throw new Error('Gagal mengompresi foto.');
+          throw new Error(
+            'Gagal mengompresi foto.'
+          );
+        }
+
+        if(blob.size>1700000){
+          throw new Error(
+            'Foto masih terlalu besar setelah kompresi.'
+          );
         }
 
         resolve(
           new File(
             [blob],
-            'evidence-'+Date.now()+'.jpg',
-            {type:'image/jpeg'}
+            'evidence.jpg',
+            {
+              type:'image/jpeg',
+              lastModified:Date.now()
+            }
           )
         );
 
       }catch(err){
-        try{URL.revokeObjectURL(url);}catch(_){ }
         reject(err);
       }
     };
 
     img.onerror=()=>{
-      try{URL.revokeObjectURL(url);}catch(_){ }
-      reject(new Error('Foto tidak dapat dibaca browser.'));
+      URL.revokeObjectURL(url);
+      reject(
+        new Error(
+          'Foto tidak dapat dibaca.'
+        )
+      );
     };
 
     img.src=url;
@@ -2819,99 +3002,241 @@ async function uploadModuleEvidence(module,submissionId,files){
       uploaded:0,
       failed:inputs.length,
       urls:[],
-      failures:[{message:'Submission ID tidak tersedia.'}]
+      failures:[{
+        message:'Submission ID tidak tersedia.'
+      }]
     };
   }
 
   for(const input of inputs){
+
     try{
-      const original=input.files&&input.files[0];
+
+      const original=
+        input.files&&input.files[0];
+
       if(!original)continue;
 
-      const file=await compressImage(original);
-      if(!file)throw new Error('Foto tidak dapat diproses.');
+      const file=
+        await compressImage(original);
 
-      const data=await new Promise((resolve,reject)=>{
-        const fr=new FileReader();
-        fr.onload=()=>{
-          const raw=String(fr.result||'');
-          const base64=raw.includes(',')
-            ?raw.substring(raw.indexOf(',')+1)
-            :raw;
-          if(!base64)reject(new Error('Data foto kosong.'));
-          else resolve(base64);
-        };
-        fr.onerror=()=>reject(new Error('Foto tidak dapat dibaca.'));
-        fr.readAsDataURL(file);
-      });
+      if(!file||!file.size){
+        throw new Error(
+          'Foto kosong setelah kompresi.'
+        );
+      }
+
+      const data=
+        await new Promise(
+          (resolve,reject)=>{
+            const fr=new FileReader();
+
+            fr.onload=()=>{
+              const raw=
+                String(
+                  fr.result||''
+                );
+
+              const comma=
+                raw.indexOf(',');
+
+              const base64=
+                comma>=0
+                  ?raw.substring(
+                      comma+1
+                    )
+                  :raw;
+
+              if(!base64){
+                reject(
+                  new Error(
+                    'Data foto kosong.'
+                  )
+                );
+              }else{
+                resolve(base64);
+              }
+            };
+
+            fr.onerror=()=>{
+              reject(
+                new Error(
+                  'Browser gagal membaca foto.'
+                )
+              );
+            };
+
+            fr.readAsDataURL(file);
+          }
+        );
 
       /*
-       * Kirim data mentah sebagai form-urlencoded.
-       * JANGAN memakai payloadJson untuk foto.
+       * Direct form fields.
+       * TIDAK menggunakan postJSON/payloadJson.
        */
-      await postEvidenceNoCors({
-        action:'uploadEvidence',
-        userToken:getAuthToken(),
-        submissionId:submissionId,
-        module:module,
-        no:String(input.dataset.no||''),
-        site:String(input.dataset.site||''),
-        fileName:file.name,
-        mimeType:'image/jpeg',
-        data:data
-      });
+      const server=
+        await submitEvidenceFormRequest({
+          action:'uploadEvidence',
+          submissionId:submissionId,
+          module:String(module||''),
+          no:String(input.dataset.no||''),
+          site:String(input.dataset.site||''),
+          fileName:String(
+            file.name||
+            'evidence.jpg'
+          ),
+          mimeType:'image/jpeg',
+          data:data
+        });
 
-      const confirmed=await waitForEvidenceServer(
-        submissionId,
-        module,
-        input.dataset.no||'',
-        file.name
-      );
+      if(
+        !server ||
+        server.status!=='success'
+      ){
+        throw new Error(
+          server&&server.message
+            ?server.message
+            :'Server menolak foto.'
+        );
+      }
+
+      /*
+       * Pastikan row benar-benar ada.
+       */
+      const started=Date.now();
+      let confirmed=null;
+
+      while(
+        Date.now()-started<30000
+      ){
+
+        const check=
+          await jsonpGet(
+            'getEvidence',
+            {
+              submissionId:submissionId,
+              module:String(module||'')
+            }
+          );
+
+        if(
+          check &&
+          check.status==='success'
+        ){
+
+          const records=
+            Array.isArray(check.data)
+              ?check.data
+              :[];
+
+          confirmed=
+            records.find(r=>
+              String(r.no||'')===
+              String(input.dataset.no||'') &&
+              String(r.fileUrl||'').trim()!==''
+            );
+
+          if(confirmed)break;
+        }
+
+        await new Promise(
+          resolve=>setTimeout(
+            resolve,
+            800
+          )
+        );
+      }
 
       if(!confirmed){
         throw new Error(
-          'Foto belum terkonfirmasi di PROPER_Evidence. Pastikan Deployment Apps Script sudah versi terbaru.'
+          'File tersimpan belum terdeteksi pada PROPER_Evidence.'
         );
       }
 
       uploaded.push(confirmed);
-      input.dataset.savedUrl=confirmed.fileUrl||'';
-      input.dataset.serverSaved='1';
-      input.classList.add('evidence-saved');
 
-      const wrap=input.closest('.evidence-wrap');
+      input.dataset.savedUrl=
+        confirmed.fileUrl||'';
+
+      input.dataset.serverSaved='1';
+
+      input.classList.add(
+        'evidence-saved'
+      );
+
+      const wrap=
+        input.closest('.evidence-wrap');
+
       if(wrap){
-        let status=wrap.querySelector('.evidence-save-status');
+
+        let status=
+          wrap.querySelector(
+            '.evidence-save-status'
+          );
+
         if(!status){
-          status=document.createElement('small');
-          status.className='evidence-save-status';
+
+          status=
+            document.createElement('small');
+
+          status.className=
+            'evidence-save-status';
+
           wrap.appendChild(status);
         }
-        status.textContent='✓ Foto tersimpan di server';
+
+        status.textContent=
+          '✓ Tersimpan di Google Drive & Spreadsheet';
+
         status.style.color='#087f5b';
       }
 
     }catch(err){
+
+      console.error(
+        '[PROPER] Upload evidence',
+        module,
+        err
+      );
+
       failed.push({
-        no:input.dataset.no||'',
-        message:err&&err.message?err.message:String(err)
+        no:String(input.dataset.no||''),
+        message:
+          err&&err.message
+            ?err.message
+            :String(err)
       });
 
-      const wrap=input.closest('.evidence-wrap');
+      const wrap=
+        input.closest('.evidence-wrap');
+
       if(wrap){
-        let status=wrap.querySelector('.evidence-save-status');
+
+        let status=
+          wrap.querySelector(
+            '.evidence-save-status'
+          );
+
         if(!status){
-          status=document.createElement('small');
-          status.className='evidence-save-status';
+
+          status=
+            document.createElement('small');
+
+          status.className=
+            'evidence-save-status';
+
           wrap.appendChild(status);
         }
-        status.textContent='✕ Foto gagal tersimpan';
+
+        status.textContent=
+          '✕ Foto belum tersimpan';
+
         status.style.color='#b42318';
       }
     }
   }
 
-  return {
+  return{
     uploaded:uploaded.length,
     failed:failed.length,
     urls:uploaded,
