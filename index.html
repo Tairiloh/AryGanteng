@@ -828,6 +828,146 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
 }
 </style>
 
+
+<style>
+.profile-modal{position:fixed;inset:0;background:rgba(4,25,38,.55);backdrop-filter:blur(8px);z-index:10001;display:none;align-items:center;justify-content:center;padding:20px}.profile-modal.show{display:flex}.profile-panel{width:min(620px,94vw);background:#fff;border:1px solid #e1ebe9;border-radius:24px;box-shadow:0 28px 80px rgba(0,0,0,.24);overflow:hidden}.profile-head{display:flex;justify-content:space-between;gap:20px;padding:22px 24px 18px;border-bottom:1px solid #edf2ef}.profile-head span{font-size:8px;font-weight:900;letter-spacing:.12em;color:#0b8b6b}.profile-head h2{margin:5px 0 4px;font-size:22px;color:#082d42}.profile-head p{margin:0;font-size:10px;color:#7c8b93}.profile-close{border:0;width:34px;height:34px;border-radius:10px;background:#f1f6f4;color:#31535f;font-size:22px;cursor:pointer}.profile-body{display:grid;grid-template-columns:170px 1fr;gap:22px;padding:24px}.profile-avatar-editor{text-align:center}.profile-avatar-wrap{width:112px;height:112px;margin:0 auto 12px;border-radius:50%;overflow:hidden;background:#eaf5f1;border:5px solid #f1f7f5;box-shadow:0 8px 24px rgba(5,50,40,.08);position:relative;display:grid;place-items:center}.profile-avatar-wrap img{width:100%;height:100%;object-fit:cover}.profile-avatar-wrap span{position:absolute;right:3px;bottom:3px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#0b7a60;color:#fff;border:3px solid #fff;font-size:12px}.profile-upload-btn{display:inline-block;position:relative;cursor:pointer}.profile-upload-btn input{display:none}.profile-avatar-editor small{display:block;margin-top:7px;font-size:8px;color:#8a979d}.profile-fields{display:flex;flex-direction:column;gap:14px}.profile-fields label{display:flex;flex-direction:column;gap:6px}.profile-fields label span{font-size:9px;text-transform:uppercase;letter-spacing:.06em;font-weight:900;color:#6d7f87}.profile-fields input{height:42px;border:1px solid #d9e6e8;border-radius:11px;padding:0 12px;font-size:11px;outline:none}.profile-fields input:focus{border-color:#59b79c;box-shadow:0 0 0 3px rgba(89,183,156,.12)}.profile-fields input[readonly]{background:#f5f8f8;color:#819099}.profile-info{padding:10px 12px;border-radius:10px;background:#f0f8f5;color:#648078;font-size:9px;line-height:1.5}.profile-foot{display:flex;justify-content:flex-end;gap:8px;padding:16px 24px;border-top:1px solid #edf2ef;background:#fbfdfc}.loading-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#0b9b70;box-shadow:12px 0 #69c7aa,24px 0 #b5ded1;margin-right:28px;animation:loadDots 1s infinite alternate}@keyframes loadDots{from{opacity:.35}to{opacity:1}}@media(max-width:600px){.profile-body{grid-template-columns:1fr}.profile-avatar-editor{display:grid;justify-items:center}}
+</style>
+<style id="profile-crop-fix">
+.crop-modal{position:fixed;inset:0;background:rgba(3,20,32,.62);backdrop-filter:blur(10px);z-index:10003;display:none;align-items:center;justify-content:center;padding:20px}.crop-modal.show{display:flex}.crop-panel{width:min(520px,94vw);background:#fff;border-radius:22px;border:1px solid #dfe9e7;box-shadow:0 28px 90px rgba(0,0,0,.28);overflow:hidden}.crop-head{display:flex;justify-content:space-between;gap:14px;padding:20px 22px 16px;border-bottom:1px solid #edf2ef}.crop-head span{font-size:8px;font-weight:900;letter-spacing:.12em;color:#0b8b6b}.crop-head h3{margin:4px 0;font-size:20px;color:#082d42}.crop-head p{margin:0;font-size:9px;color:#7c8b93}.crop-stage{width:min(360px,82vw);height:min(360px,82vw);margin:22px auto;border-radius:18px;overflow:hidden;position:relative;background:#0f2835;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);touch-action:none}.crop-stage canvas{display:block;width:100%;height:100%}.crop-grid{pointer-events:none;position:absolute;inset:0;border-radius:18px;background:linear-gradient(to right,transparent 33.333%,rgba(255,255,255,.28) 33.333%,rgba(255,255,255,.28) 33.8%,transparent 33.8%,transparent 66.666%,rgba(255,255,255,.28) 66.666%,rgba(255,255,255,.28) 67.2%,transparent 67.2%),linear-gradient(to bottom,transparent 33.333%,rgba(255,255,255,.28) 33.333%,rgba(255,255,255,.28) 33.8%,transparent 33.8%,transparent 66.666%,rgba(255,255,255,.28) 66.666%,rgba(255,255,255,.28) 67.2%,transparent 67.2%)}.crop-controls{display:flex;align-items:center;gap:12px;padding:0 22px 18px}.crop-controls label{flex:1;font-size:9px;font-weight:900;color:#667780;display:flex;align-items:center;gap:8px}.crop-controls input{width:100%}.crop-foot{display:flex;justify-content:flex-end;gap:8px;padding:14px 22px;border-top:1px solid #edf2ef;background:#fbfdfc}
+.profile-avatar-wrap{cursor:pointer}
+</style>
+<style id="all-module-recap-fixes">
+.monitoring-kpi-grid{grid-template-columns:repeat(4,1fr)!important}
+#monitorBody td,#rekapBody td{vertical-align:middle!important}
+.profile-avatar-editor .profile-avatar-wrap{cursor:pointer;overflow:hidden}
+#profileEditAvatar{width:100%;height:100%;object-fit:cover}
+@media(max-width:900px){.monitoring-kpi-grid{grid-template-columns:repeat(2,1fr)!important}}
+@media(max-width:560px){.monitoring-kpi-grid{grid-template-columns:1fr!important}}
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+
+
+<style id="proper-jejak-chat-ui">
+:root{
+  --jk-green:#059669;--jk-green2:#10b981;--jk-dark:#022c22;--jk-mint:#d1fae5;
+  --jk-bg:#f1f5f9;--jk-card:#fff;--jk-line:#e2e8f0;--jk-muted:#64748b;
+}
+.nav button{position:relative}
+.chat-unread{display:none;margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:#ef4444;color:#fff;font-size:10px;line-height:20px;text-align:center;font-weight:900}
+.proper-chat-layout{
+  display:flex;min-height:640px;height:calc(100vh - 185px);max-height:760px;
+  background:#fff;border:1px solid var(--jk-line);border-radius:22px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(2,44,34,.08);
+}
+.proper-chat-sidebar{width:320px;display:flex;flex-direction:column;background:#f8fafc;border-right:1px solid var(--jk-line)}
+.proper-chat-search{padding:14px;background:#fff;border-bottom:1px solid var(--jk-line)}
+.proper-chat-search input{width:100%;padding:11px 13px;border-radius:12px;background:#f1f5f9;border:1px solid transparent;color:#0f172a;font-size:12px}
+.proper-chat-search input:focus{background:#fff;border-color:#86efac;box-shadow:0 0 0 3px rgba(16,185,129,.1)}
+.proper-chat-room-head{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;background:#fff;border-bottom:1px solid var(--jk-line);font-size:10px;font-weight:900;letter-spacing:1px;color:#64748b}
+.proper-chat-rooms{flex:1;overflow:auto;padding:10px}
+.proper-chat-room{
+  display:flex;align-items:center;gap:11px;padding:12px;border-radius:14px;background:#fff;border:1px solid #e9eef1;
+  margin-bottom:7px;cursor:pointer;transition:.2s
+}
+.proper-chat-room:hover{border-color:#86efac;box-shadow:0 5px 16px rgba(0,0,0,.04)}
+.proper-chat-room.active{background:#059669;border-color:#059669;color:#fff;box-shadow:0 8px 22px rgba(5,150,105,.2)}
+.proper-chat-room-icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:#ecfdf5;color:#059669;font-size:18px;flex:0 0 auto}
+.proper-chat-room.active .proper-chat-room-icon{background:rgba(255,255,255,.14);color:#fff}
+.proper-chat-room-info{min-width:0;flex:1}.proper-chat-room-title{font-size:12.5px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.proper-chat-room-sub{font-size:9.5px;color:#64748b;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.proper-chat-room.active .proper-chat-room-sub{color:rgba(255,255,255,.8)}
+.proper-chat-main{min-width:0;flex:1;display:flex;flex-direction:column;background:#eef4f1}
+.proper-chat-header{height:68px;display:flex;align-items:center;gap:11px;padding:0 18px;background:#fff;border-bottom:1px solid var(--jk-line)}
+.proper-chat-room-avatar{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:#dff8ee;color:#087f5b;font-size:19px}
+.proper-chat-header b{font-size:13px;color:#0f172a}.proper-chat-header small{display:block;font-size:9.5px;color:#64748b;margin-top:2px}
+.proper-chat-refresh,.proper-chat-back{border:0;background:#f8fafc;color:#64748b;width:34px;height:34px;border-radius:10px;cursor:pointer}
+.proper-chat-back{display:none}
+.proper-chat-messages{flex:1;padding:20px;overflow:auto;display:flex;flex-direction:column;gap:11px;background:
+linear-gradient(rgba(236,246,241,.74),rgba(236,246,241,.74)),
+radial-gradient(circle at 20% 20%,rgba(16,185,129,.06) 1px,transparent 1px);
+background-size:auto,18px 18px}
+.proper-chat-empty{margin:auto;text-align:center;color:#64748b;display:flex;flex-direction:column;gap:5px}
+.proper-chat-empty div{font-size:40px}.proper-chat-empty b{font-size:14px;color:#0f172a}.proper-chat-empty span{font-size:10px}
+.proper-chat-msg{display:flex;gap:8px;align-items:flex-end;max-width:82%}
+.proper-chat-msg.me{align-self:flex-end;flex-direction:row-reverse}.proper-chat-msg.other{align-self:flex-start}
+.proper-chat-avatar{width:30px;height:30px;border-radius:50%;object-fit:cover;background:#dbeafe;flex:0 0 auto;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.proper-chat-stack{display:flex;flex-direction:column;gap:3px;min-width:0}
+.proper-chat-sender{font-size:9px;font-weight:900;color:#64748b;padding:0 4px}
+.proper-chat-msg.me .proper-chat-sender{text-align:right}
+.proper-chat-bubble{padding:9px 12px;border-radius:16px;box-shadow:0 2px 7px rgba(0,0,0,.05);background:#fff;color:#0f172a;font-size:12.5px;line-height:1.45}
+.proper-chat-msg.me .proper-chat-bubble{background:#d8f8e8;border-bottom-right-radius:4px}
+.proper-chat-msg.other .proper-chat-bubble{border-bottom-left-radius:4px}
+.proper-chat-meta{font-size:8px;color:#94a3b8;padding:0 5px}
+.proper-chat-actions{display:flex;gap:4px;margin-top:3px;padding:0 4px}.proper-chat-action{border:0;background:transparent;color:#94a3b8;font-size:9px;padding:2px 5px;border-radius:6px;cursor:pointer}.proper-chat-action:hover{background:#e2e8f0;color:#0f766e}.proper-chat-action.delete:hover{background:#fee2e2;color:#dc2626}
+.proper-chat-msg.me .proper-chat-meta{text-align:right}
+.proper-chat-reply{display:none;padding:9px 14px;background:#fff;border-top:1px solid var(--jk-line);border-left:4px solid #10b981;justify-content:space-between;align-items:center}
+.proper-chat-reply b{display:block;font-size:10px;color:#087f5b}.proper-chat-reply span{font-size:10px;color:#64748b}
+.proper-chat-reply button{border:0;background:transparent;color:#94a3b8;font-size:18px}
+.proper-chat-inputbar{display:flex;gap:8px;padding:10px 12px;background:#fff;border-top:1px solid var(--jk-line);align-items:flex-end}
+.proper-chat-emoji{border:0;background:#f1f5f9;color:#64748b;width:40px;height:40px;border-radius:50%}
+.proper-chat-compose{flex:1;position:relative}.proper-chat-compose input{width:100%;height:40px;padding:0 14px;border-radius:20px;background:#f1f5f9;border:1px solid transparent;font-size:12px}
+.proper-chat-compose input:focus{background:#fff;border-color:#86efac;box-shadow:0 0 0 3px rgba(16,185,129,.08)}
+.proper-chat-send{width:40px;height:40px;border:0;border-radius:50%;background:linear-gradient(135deg,#059669,#10b981);color:#fff;font-size:16px;box-shadow:0 8px 18px rgba(5,150,105,.2)}
+.proper-emoji-panel{display:none;position:absolute;bottom:50px;left:0;padding:9px;background:#fff;border:1px solid var(--jk-line);border-radius:14px;box-shadow:0 15px 35px rgba(0,0,0,.13);grid-template-columns:repeat(6,1fr);gap:8px;z-index:30}
+.proper-emoji-panel.show{display:grid}.proper-emoji-panel span{font-size:20px;cursor:pointer}
+.proper-chat-photo{max-width:220px;max-height:220px;border-radius:12px;display:block;margin-bottom:6px}
+@media(max-width:900px){
+  .proper-chat-layout{height:calc(100vh - 155px);min-height:560px}
+  .proper-chat-sidebar{width:100%}
+  .proper-chat-main{display:none}
+  #chat.chat-mobile-open .proper-chat-sidebar{display:none}
+  #chat.chat-mobile-open .proper-chat-main{display:flex}
+  .proper-chat-back{display:block}
+}
+</style>
+
+
+<style id="proper-jejak-profile-ui">
+.profile-panel{max-width:720px!important;border-radius:26px!important;box-shadow:0 28px 70px rgba(2,44,34,.22)!important}
+.profile-head{background:linear-gradient(135deg,#f8fffb,#fff)!important}
+.profile-body{gap:28px!important}
+.profile-avatar-wrap{box-shadow:0 14px 28px rgba(5,150,105,.14)!important;border:5px solid #fff!important;background:#dff8ee!important}
+.profile-upload-btn{border-color:#a7f3d0!important;color:#047857!important;background:#f0fdf4!important}
+.crop-panel{max-width:620px!important;border-radius:26px!important;box-shadow:0 28px 70px rgba(2,44,34,.22)!important}
+.crop-stage{background:linear-gradient(135deg,#022c22,#0f766e)!important}
+</style>
+
+<style id="recap-checklist-ui">
+.recap-click-row{cursor:pointer;transition:background .2s,transform .2s}.recap-click-row:hover{background:#f0faf6!important}.assessment-checklist-panel{max-width:1180px!important;width:min(1180px,96vw)!important}.assessment-checklist-panel .exec-detail-body{max-height:65vh;overflow:auto}.checklist-result-table{min-width:880px}.checklist-result-table td,.checklist-result-table th{vertical-align:top}.check-status{display:inline-flex;align-items:center;justify-content:center;padding:6px 10px;border-radius:999px;font-size:10px;font-weight:900}.check-status.yes{background:#dcfce7;color:#166534}.check-status.no{background:#fee2e2;color:#991b1b}.check-status.pending{background:#f1f5f9;color:#64748b}.evidence-link{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:8px;background:#ecfdf5;color:#087f5b;text-decoration:none;font-size:10px;font-weight:800}.evidence-link:hover{background:#d1fae5}.recap-help{font-size:10px;color:#7c8c87;margin-top:4px}.
+</style>
+
+<style id="proper-trend-fix">
+.trend-empty-state{height:100%;min-height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#7e9189;text-align:center;border:1px dashed #dbe8e2;border-radius:16px;background:linear-gradient(180deg,#fbfefd,#f4faf7)}
+.trend-empty-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:#e7f7ef;color:#0b7a60;font-size:26px;font-weight:900}
+.trend-empty-state b{font-size:11px;color:#315048}
+.trend-empty-state span{font-size:9px;color:#93a29d}
+.premium-trend-svg{min-height:220px}
+</style>
+
+<style id="proper-portal-reference-style">
+:root{--portal-green:#0aa76f;--portal-deep:#034c3b;--portal-teal:#11a99b;--portal-blue:#37a9d2;--portal-yellow:#f5bf18;--portal-orange:#f39a20;--portal-red:#d94c4c;--portal-navy:#13243b;--portal-purple:#7254c7;--portal-bg:#eef4f1}
+body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!important}
+.portal-dashboard .portal-header{display:flex;justify-content:space-between;gap:20px;align-items:center;margin:-8px -8px 16px;padding:12px 0 4px}
+.portal-header-left .portal-kicker{font-size:9px;font-weight:900;letter-spacing:.16em;color:#008b67}.portal-header-left h1{margin:4px 0;font-size:32px;color:#062c3c;letter-spacing:-1.4px}.portal-header-left p{margin:0;color:#6b7c7b;font-size:11px}.portal-header-right{display:flex;align-items:center;gap:8px}.portal-date{height:42px;padding:0 14px;border:1px solid #d6e4df;background:#fff;border-radius:11px;display:flex;align-items:center;gap:7px;font-size:10px;font-weight:800}.portal-round{width:42px;height:42px;border:1px solid #d6e4df;background:#fff;border-radius:11px;font-size:18px}.portal-user{display:flex;align-items:center;gap:8px;height:42px;border:1px solid #d6e4df;background:#fff;border-radius:11px;padding:0 10px;cursor:pointer}.portal-user img{width:28px;height:28px;border-radius:50%;object-fit:cover;background:#e8efec}.portal-user b,.portal-user small{display:block;text-align:left}.portal-user b{font-size:10px}.portal-user small{font-size:8px;color:#83928f}.portal-user em{font-style:normal;font-size:8px;color:#078b68;font-weight:900;margin-left:7px}
+.portal-strip{display:flex;align-items:center;justify-content:space-between;gap:20px;background:linear-gradient(90deg,#08a36d,#149bb4);padding:15px 20px;color:#fff;border-radius:4px 4px 0 0;box-shadow:0 10px 28px rgba(1,72,56,.10)}.portal-strip-title span{font-size:10px;font-weight:900;letter-spacing:.12em;display:block;opacity:.86}.portal-strip-title b{font-size:20px;letter-spacing:.14em}.portal-strip-note{font-size:10px;opacity:.88}
+.portal-section-title{display:flex;justify-content:space-between;align-items:end;padding:20px 2px 12px}.portal-section-title span,.portal-analytics-head span,.portal-panel-head>div>span,.plb3-kicker{font-size:8px;letter-spacing:.12em;font-weight:900;color:#148b6d}.portal-section-title h2,.portal-analytics-head h2{margin:3px 0 0;font-size:20px;color:#133443;letter-spacing:-.6px}.portal-live{font-size:9px;font-weight:800;color:#0b7f60;background:#e4f8ef;border:1px solid #cbeede;border-radius:999px;padding:7px 10px}.portal-live i{display:inline-block;width:6px;height:6px;border-radius:50%;background:#15b981;margin-right:5px}
+.portal-module-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.portal-module{position:relative;min-height:108px;border:0;border-radius:10px;padding:22px 42px 20px 20px;text-align:center;color:#fff;box-shadow:0 12px 28px rgba(12,60,51,.14);transition:.22s transform,.22s box-shadow;overflow:hidden}.portal-module:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(12,60,51,.20)}.portal-module strong{display:block;font-size:19px;letter-spacing:-.4px;font-weight:900}.portal-module span{display:block;margin-top:7px;font-size:8px;font-weight:700;opacity:.93;line-height:1.5}.portal-module i{position:absolute;right:16px;bottom:13px;font-size:17px;font-style:normal;opacity:.75}.portal-green{background:linear-gradient(135deg,#2faf1c,#56db4c)}.portal-blue{background:linear-gradient(135deg,#298ea6,#45b7d6)}.portal-cyan{background:linear-gradient(135deg,#12a796,#0c8e8e)}.portal-orange{background:linear-gradient(135deg,#dc584b,#f08f50)}.portal-yellow{background:linear-gradient(135deg,#e3a60d,#ffc21d)}.portal-amber{background:linear-gradient(135deg,#e9951c,#ffad3a)}.portal-navy{background:linear-gradient(135deg,#20304b,#142036)}.portal-purple{background:linear-gradient(135deg,#7050c1,#8b68de)}.portal-slate{background:linear-gradient(135deg,#5c6771,#3c464e)}
+.portal-analytics-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-top:22px;padding:0 2px 10px}.portal-analytics-head p{margin:4px 0 0;color:#7c8e89;font-size:9px}.portal-filter-mini{display:flex;gap:7px;flex-wrap:wrap}.portal-filter-mini select,.portal-filter-mini button{height:34px;border-radius:9px;padding:0 10px;border:1px solid #d4e2de;background:#fff;font-size:9px}.portal-filter-mini button{font-weight:800;color:#087f5b}
+.portal-analytics-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:14px}.portal-lower-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-top:14px}.portal-panel{background:#fff;border:1px solid #dce9e4;border-radius:15px;padding:16px;box-shadow:0 10px 25px rgba(13,61,48,.06)}.portal-panel-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:10px}.portal-panel-head h3{margin:3px 0;font-size:14px;color:#163747}.portal-panel-head p{margin:0;color:#82918e;font-size:9px}.portal-panel-head>b{font-size:18px;color:#0a8867}.portal-quick{display:grid;grid-template-columns:1fr 1fr;gap:8px}.portal-quick button{border:1px solid #e1ece8;background:#f8fbfa;border-radius:10px;padding:9px;text-align:left;font-size:10px;font-weight:800;color:#153b4c}.portal-quick button span{margin-left:5px}.portal-recap{margin-top:14px}.portal-text-btn{border:1px solid #d7e5e0;background:#f7fbf9;border-radius:9px;padding:8px 10px;font-size:9px;font-weight:800;color:#087f5b}
+.plb3-topbar{margin:-8px -8px 0;padding:14px 18px;background:linear-gradient(90deg,#0b8f68,#17a89b);color:#fff;display:flex;justify-content:space-between;align-items:center;gap:16px}.plb3-brand span{font-size:8px;letter-spacing:.15em;font-weight:900;opacity:.85}.plb3-brand h1{margin:4px 0;font-size:26px;letter-spacing:-.8px}.plb3-brand p{margin:0;font-size:10px;opacity:.82}.plb3-actions{display:flex;gap:8px}.plb3-actions button{border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.1);color:#fff;padding:10px 12px;border-radius:9px;font-size:9px;font-weight:800}.plb3-nav{display:flex;background:#fff;border:1px solid #dce9e5;border-top:0;padding:0 6px}.plb3-nav button{border:0;background:transparent;padding:12px 14px;font-size:9px;font-weight:900;color:#647771;border-bottom:3px solid transparent}.plb3-nav button.active{color:#087f5b;border-bottom-color:#11a979}
+.plb3-hero-strip{margin-top:14px;border-radius:14px;padding:20px 22px;background:linear-gradient(100deg,#063949,#0b7181 58%,#0a9c89);color:#fff;display:flex;justify-content:space-between;align-items:center;box-shadow:0 16px 32px rgba(2,64,75,.16)}.plb3-hero-strip span{font-size:8px;letter-spacing:.15em;font-weight:900;color:#89eed0}.plb3-hero-strip h2{margin:5px 0;font-size:23px}.plb3-hero-strip p{margin:0;font-size:10px;color:rgba(255,255,255,.78)}.plb3-hero-score{text-align:right;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.10);border-radius:12px;padding:11px 15px;min-width:110px}.plb3-hero-score small,.plb3-hero-score span{display:block;font-size:7px;color:rgba(255,255,255,.72);font-weight:800}.plb3-hero-score b{display:block;font-size:25px;margin:2px 0}
+.plb3-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0}.plb3-kpis>div{background:#fff;border:1px solid #dae9e4;border-radius:13px;padding:14px;box-shadow:0 8px 20px rgba(9,69,51,.05)}.plb3-kpis span{font-size:8px;letter-spacing:.09em;font-weight:900;color:#6e817b}.plb3-kpis b{display:block;margin:6px 0 3px;font-size:22px;color:#0b3346}.plb3-kpis small{font-size:8px;color:#8a9995}.plb3-form-card{border-radius:14px}.plb3-form-title{display:flex;justify-content:space-between;align-items:end;margin-bottom:14px}.plb3-form-title span{font-size:8px;color:#128b6d;font-weight:900;letter-spacing:.12em}.plb3-form-title h3{margin:4px 0;font-size:16px}.plb3-form-title p{margin:0;color:#83928f;font-size:9px}.plb3-check-card{border-radius:14px}.plb3-history-card{border-radius:14px}
+@media(max-width:1050px){.portal-module-grid{grid-template-columns:1fr 1fr}.portal-analytics-grid,.portal-lower-grid{grid-template-columns:1fr}.plb3-kpis{grid-template-columns:1fr 1fr}.portal-dashboard .portal-header{display:block}.portal-header-right{margin-top:10px}.portal-filter-mini{justify-content:flex-start}}
+@media(max-width:650px){.portal-module-grid{grid-template-columns:1fr}.portal-strip{display:block}.portal-strip-note{margin-top:4px}.portal-date{display:none}.portal-header-left h1{font-size:26px}.plb3-kpis{grid-template-columns:1fr}.plb3-topbar{display:block}.plb3-actions{margin-top:10px}.plb3-hero-strip{display:block}.plb3-hero-score{text-align:left;margin-top:12px;width:max-content}.portal-analytics-head{display:block}.portal-filter-mini{margin-top:10px}.portal-filter-mini select{flex:1;min-width:120px}}
+</style>
+<style id="assessment-delete-ui">
+.danger-outline.sm{border:1px solid #e2b3b3;background:#fff7f7;color:#b42318;border-radius:9px;padding:7px 10px;font-size:9px;font-weight:900;cursor:pointer;white-space:nowrap}
+.danger-outline.sm:hover{background:#b42318;color:#fff}
+.muted-action{color:#a0aaa6;font-size:11px}
+#monitorBody .recap-click-row td:last-child,#rekapBody .recap-click-row td:last-child{white-space:nowrap}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -858,6 +998,7 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
     <div class="field"><label>Username</label><input id="loginUsername" autocomplete="username" placeholder="username"></div>
     <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
     <div id="loginMsg" class="auth-msg"></div>
+    <button type="button" class="auth-link" onclick="testProperApi()">Tes koneksi server</button>
     <button class="btn primary auth-submit" onclick="doLogin()">Masuk ke Dashboard</button>
    </div>
    <div id="auth-register" class="auth-form">
@@ -881,6 +1022,32 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
  </div>
 </div>
 
+
+<div class="profile-modal" id="profileModal" onclick="if(event.target===this)closeProfileModal()">
+ <div class="profile-panel">
+  <div class="profile-head"><div><span>AKUN SAYA</span><h2>Edit Profil</h2><p>Perbarui nama dan foto profil akun Anda.</p></div><button class="profile-close" onclick="closeProfileModal()">×</button></div>
+  <div class="profile-body">
+   <div class="profile-avatar-editor"><div class="profile-avatar-wrap" onclick="document.getElementById('profileEditPhoto').click()"><img id="profileEditAvatar" alt="Profil"><span>📷</span></div><label class="btn secondary profile-upload-btn">Ganti Foto<input id="profileEditPhoto" type="file" accept="image/*" onchange="openProfileCrop(this)"></label><small>JPG/PNG · maksimal 2.5 MB</small></div>
+   <div class="profile-fields">
+    <label><span>Nama Lengkap</span><input id="profileEditName" placeholder="Nama lengkap"></label>
+    <label><span>Username</span><input id="profileEditUsername" readonly></label>
+    <div class="profile-info">Nama lengkap dan foto profil dapat diperbarui. Username tetap dikunci agar riwayat assessment tetap konsisten.</div>
+    <div id="profileMsg" class="auth-msg"></div>
+   </div>
+  </div>
+  <div class="profile-foot"><button class="btn secondary" onclick="closeProfileModal()">Batal</button><button class="btn primary" onclick="saveProfileChanges()">Simpan Perubahan</button></div>
+ </div>
+</div>
+
+
+<div class="crop-modal" id="profileCropModal" onclick="if(event.target===this)closeProfileCrop()">
+  <div class="crop-panel">
+    <div class="crop-head"><div><span>FOTO PROFIL</span><h3>Atur foto profil</h3><p>Geser foto, ubah zoom, lalu pilih area yang paling pas.</p></div><button class="profile-close" onclick="closeProfileCrop()">×</button></div>
+    <div class="crop-stage" id="profileCropStage"><canvas id="profileCropCanvas" width="360" height="360"></canvas><div class="crop-grid"></div></div>
+    <div class="crop-controls"><label>Zoom <input id="profileCropZoom" type="range" min="1" max="3" step="0.01" value="1"></label><button class="btn secondary" onclick="centerProfileCrop()">↺ Reset Posisi</button></div>
+    <div class="crop-foot"><button class="btn secondary" onclick="closeProfileCrop()">Batal</button><button class="btn primary" onclick="applyProfileCrop()">Gunakan Foto</button></div>
+  </div>
+</div>
 <div class="app">
 <aside class="sidebar" id="sidebar">
   <div class="brand">
@@ -888,158 +1055,116 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
       <h2>Inspeksi Ketentuan Teknis PROPER</h2>
       
     </div>
-    <div class="user-profile-mini"><img id="sidebarAvatar" src="logo.png" alt=""><div><b id="sidebarUserName">Guest</b><small id="sidebarUserRole">Belum masuk</small></div></div>
+    <div class="user-profile-mini" onclick="openProfileModal()" title="Edit profil" style="cursor:pointer"><img id="sidebarAvatar" src="logo.png" alt=""><div><b id="sidebarUserName">Guest</b><small id="sidebarUserRole">Belum masuk</small></div></div>
     
   <div class="nav-label">MENU UTAMA</div>
   <nav class="nav">
     <button class="active" data-page="dashboard" onclick="showPage('dashboard')">⌂ <span>Dashboard</span></button>
-    <button data-page="ppa" onclick="showPage('ppa')">✓ <span>Input Penilaian (PPA)</span></button>
-    <button data-page="emisi" onclick="showPage('emisi')">◉ <span>Emisi</span></button>
-    <button data-page="plb3" onclick="showPage('plb3')">▦ <span>Penyimpanan PLB3</span></button>
-    <button data-page="plb3darurat" onclick="showPage('plb3darurat')">⚠ <span>PLB3 Tanggap Darurat</span></button>
-    <button data-page="b3" onclick="showPage('b3')">▤ <span>B3</span></button>
-    <button data-page="sampah" onclick="showPage('sampah')">♻ <span>Sampah</span></button>
+    <button data-page="ppa" onclick="showPage('ppa')">✓ <span>Aspek PPA</span></button>
+    <button data-page="emisi" onclick="showPage('emisi')">◉ <span>Aspek PPU</span></button>
+    <button data-page="plb3" onclick="showPage('plb3')">▦ <span>Aspek Penyimpanan PLB3</span></button>
+    <button data-page="plb3darurat" onclick="showPage('plb3darurat')">⚠ <span>Aspek Sistem Tanggap Darurat PLB3</span></button>
+    <button data-page="b3" onclick="showPage('b3')">▤ <span>Aspek B3</span></button>
+    <button data-page="sampah" onclick="showPage('sampah')">♻ <span>Aspek Sampah</span></button>
     <button data-page="monitoring" onclick="showPage('monitoring')">◫ <span>Monitoring &amp; Rekap</span></button>
     <button data-page="rekap" onclick="showPage('rekap')">▤ <span>Rekap Data</span></button>
+    <button data-page="chat" onclick="showPage('chat')">💬 <span>Chat Tim</span><span class="chat-unread" id="chatUnreadBadge">0</span></button>
+    <button data-page="profil" onclick="openProfileModal()">◉ <span>Profil Saya</span></button>
     <button data-page="detail" id="detailNav" style="display:none" onclick="showPage('detail')">⌁ <span>Detail Lokasi</span></button>
   </nav>
   <div class="note sidebar-note">Form tersimpan ke Google Sheet melalui Google Apps Script.<button class="btn secondary" style="width:100%;margin-top:10px;font-size:10px" onclick="logoutUser()">Keluar Akun</button></div>
 </aside>
 
 <main class="main">
-<section id="dashboard" class="page active">
-  <div class="dash-topbar">
-    <div class="dash-title">
-      <div class="dash-kicker">PROPER • ENVIRONMENTAL COMPLIANCE</div>
+<section id="dashboard" class="page active portal-dashboard">
+  <div class="portal-header">
+    <div class="portal-header-left">
+      <div class="portal-kicker">PROPER • SISTEM PEMANTAUAN KEPATUHAN LINGKUNGAN</div>
       <h1>Dashboard Utama</h1>
-      <p>Ringkasan kepatuhan seluruh aspek pengelolaan lingkungan dalam satu tampilan eksekutif.</p>
+      <p>Ringkasan dan akses cepat seluruh aspek penilaian PROPER dalam satu portal.</p>
     </div>
-    <div class="dash-actions">
-      <div class="date-chip">▣ <span id="dashToday">26 Agustus 2026</span></div>
-      <button class="icon-btn" onclick="loadExecutiveAnalytics(true)" title="Refresh data">↻</button>
-      <div class="admin-chip"><img id="topUserAvatar" class="admin-avatar-img" src="logo.png"><div><b id="topUserName">User</b><small id="topUserRole">PIC</small></div><button class="admin-drop" onclick="logoutUser()">Keluar</button></div>
+    <div class="portal-header-right">
+      <div class="portal-date">▣ <span id="dashToday">26 Agustus 2026</span></div>
+      <button class="portal-round" onclick="loadExecutiveAnalytics(true)" title="Refresh">↻</button>
+      <button class="portal-user" onclick="openProfileModal()"><img id="topUserAvatar" src="logo.png" alt="Profil"><span><b id="topUserName">User</b><small id="topUserRole">PIC</small></span><em>Profil</em></button>
     </div>
   </div>
 
-  <div class="dashboard-filter-bar" id="dashboardFilterBar">
-    <div class="filter-intro"><span class="filter-icon">⌁</span><div><b>Filter Dashboard</b><small>Gunakan filter untuk melihat keseluruhan atau lokasi tertentu.</small></div></div>
-    <label><span>Bagian</span><select id="execFilterModule" onchange="applyExecutiveFilters()"><option value="">Semua Bagian</option></select></label>
-    <label><span>Lokasi / Area</span><select id="execFilterSite" onchange="applyExecutiveFilters()"><option value="">Semua Lokasi</option></select></label>
-    <label><span>Tahun</span><select id="execFilterYear" onchange="applyExecutiveFilters()"><option value="">Semua Tahun</option></select></label>
-    <label><span>Bulan</span><select id="execFilterMonth" onchange="applyExecutiveFilters()"><option value="">Semua Bulan</option></select></label>
-    <button class="filter-reset" onclick="resetExecutiveFilters()">Reset</button>
+  <div class="portal-strip">
+    <div class="portal-strip-title"><span>PELAPORAN</span><b>PROPER</b></div>
+    <div class="portal-strip-note">Semua aspek penilaian, pemantauan, dokumentasi dan tindak lanjut.</div>
   </div>
 
-  <div class="dash-hero pro-hero hero-full-bleed" id="proHero">
-    <div class="hero-photo-visual">
-      <div class="hero-photo-slides" id="heroPhotoSlides">
-        <div class="hero-photo-slide active"
-             data-title="Kepatuhan lingkungan yang <span>terukur.</span>"
-             data-text="Pantau performa pengelolaan lingkungan dari seluruh lokasi dalam satu dashboard yang ringkas, jelas, dan mudah ditindaklanjuti."
-             data-img="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=2200&q=90"></div>
-        <div class="hero-photo-slide"
-             data-title="Jaga <span>air &amp; emisi.</span>"
-             data-text="Pastikan pengendalian pencemaran, pemantauan emisi, dan kualitas lingkungan berjalan konsisten di setiap lokasi."
-             data-img="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=2200&q=90"></div>
-        <div class="hero-photo-slide"
-             data-title="Kelola <span>limbah B3.</span>"
-             data-text="Perkuat kepatuhan penyimpanan, tanggap darurat, dokumentasi, dan pengendalian risiko Limbah B3."
-             data-img="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=2200&q=90"></div>
-        <div class="hero-photo-slide"
-             data-title="Menuju lingkungan <span>lebih hijau.</span>"
-             data-text="Bangun budaya kepatuhan yang konsisten melalui data, evaluasi, tindak lanjut, dan perbaikan berkelanjutan."
-             data-img="https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=2200&q=90"></div>
-      </div>
-      <div class="hero-photo-shade"></div>
+  <div class="portal-section-title">
+    <div><span>MENU UTAMA</span><h2>Akses Aspek Penilaian</h2></div>
+    <div class="portal-live"><i></i> Data terhubung</div>
+  </div>
 
-      <div class="hero-overlay-content">
-        <div class="hero-kicker">PROPER • ENVIRONMENTAL COMPLIANCE</div>
-        <h2 id="heroSlideTitle">Kepatuhan lingkungan yang <span>terukur.</span></h2>
-        <p id="heroSlideText">Pantau performa pengelolaan lingkungan dari seluruh lokasi dalam satu dashboard yang ringkas, jelas, dan mudah ditindaklanjuti.</p>
-        <div class="hero-tags"><span>6 Modul</span><span>Multi-Lokasi</span><span>Live Data</span><span>Action Ready</span></div>
-      </div>
+  <div class="portal-module-grid">
+    <button class="portal-module portal-green" onclick="showPage('ppa')">
+      <strong>ASPEK PPA</strong><span>PENGENDALIAN PENCEMARAN AIR</span><i>→</i>
+    </button>
+    <button class="portal-module portal-blue" onclick="showPage('emisi')">
+      <strong>ASPEK PPU</strong><span>PENGENDALIAN PENCEMARAN UDARA &amp; EMISI</span><i>→</i>
+    </button>
+    <button class="portal-module portal-cyan" onclick="showPage('plb3')">
+      <strong>ASPEK PENYIMPANAN PLB3</strong><span>PENGELOLAAN PENYIMPANAN LIMBAH B3</span><i>→</i>
+    </button>
+    <button class="portal-module portal-orange" onclick="showPage('plb3darurat')">
+      <strong>ASPEK SISTEM TANGGAP DARURAT PLB3</strong><span>PROGRAM &amp; KESIAPSIAGAAN DARURAT</span><i>→</i>
+    </button>
+    <button class="portal-module portal-yellow" onclick="showPage('b3')">
+      <strong>ASPEK B3</strong><span>PENGELOLAAN B3 &amp; PCBs</span><i>→</i>
+    </button>
+    <button class="portal-module portal-amber" onclick="showPage('sampah')">
+      <strong>ASPEK SAMPAH</strong><span>PENGELOLAAN, PEMILAHAN &amp; PELAPORAN SAMPAH</span><i>→</i>
+    </button>
+    <button class="portal-module portal-navy" onclick="showPage('monitoring')">
+      <strong>MONITORING &amp; REKAP</strong><span>HASIL INSPEKSI SELURUH ASPEK</span><i>→</i>
+    </button>
+    <button class="portal-module portal-purple" onclick="showPage('chat')">
+      <strong>CHAT TIM PROPER</strong><span>KOORDINASI &amp; TINDAK LANJUT LAPANGAN</span><i>→</i>
+    </button>
+    <button class="portal-module portal-slate" onclick="openProfileModal()">
+      <strong>PROFIL SAYA</strong><span>AKUN, FOTO PROFIL &amp; PENGATURAN</span><i>→</i>
+    </button>
+  </div>
 
-      <div class="hero-score"><small>OVERALL</small><b id="heroOverall">0%</b><span>Kepatuhan</span></div>
-      <div class="hero-slide-meta"><span id="heroSlideIndex">01</span><div class="hero-dots" id="heroDots"></div></div>
+  <div class="portal-analytics-head">
+    <div><span>EXECUTIVE VIEW</span><h2>Ringkasan Kinerja PROPER</h2><p>Summary otomatis dari data yang diinput seluruh PIC.</p></div>
+    <div class="portal-filter-mini">
+      <select id="execFilterModule" onchange="applyExecutiveFilters()"><option value="">Semua Aspek</option></select>
+      <select id="execFilterSite" onchange="applyExecutiveFilters()"><option value="">Semua Lokasi</option></select>
+      <select id="execFilterYear" onchange="applyExecutiveFilters()"><option value="">Semua Tahun</option></select>
+      <select id="execFilterMonth" onchange="applyExecutiveFilters()"><option value="">Semua Bulan</option></select>
+      <button onclick="resetExecutiveFilters()">Reset</button>
     </div>
   </div>
 
   <div class="exec-kpis dash-kpis" id="execKpis"></div>
 
-  <div class="dash-grid-main">
-    <div class="viz-card dash-trend-card">
-      <div class="viz-title"><div><h3>Trend Kepatuhan Bulanan</h3><p>Performa rata-rata lintas seluruh modul</p></div><span class="viz-badge" id="execAvg">0%</span></div>
-      <div id="execTrend"></div>
-    </div>
-    <div class="viz-card">
-      <div class="viz-title"><div><h3>Performa Modul</h3><p>Perbandingan tingkat kepatuhan</p></div><span class="viz-badge">6 Modul</span></div>
-      <div id="execModules" class="module-board"></div>
-    </div>
-    <div class="viz-card">
-      <div class="viz-title"><div><h3>Ranking Lokasi</h3><p>Top lokasi berdasarkan kepatuhan</p></div><button class="mini-link" onclick="showPage('monitoring')">Lihat Semua →</button></div>
-      <div id="execLocations" class="ranking-pro"></div>
-    </div>
+  <div class="portal-analytics-grid">
+    <div class="portal-panel portal-wide"><div class="portal-panel-head"><div><span>PERFORMA</span><h3>Trend Kepatuhan Bulanan</h3><p>Rata-rata kepatuhan seluruh aspek.</p></div><b id="execAvg">0%</b></div><div id="execTrend"></div></div>
+    <div class="portal-panel"><div class="portal-panel-head"><div><span>ASPEK</span><h3>Performa Aspek</h3><p>Perbandingan kepatuhan.</p></div></div><div id="execModules" class="module-board"></div></div>
+    <div class="portal-panel"><div class="portal-panel-head"><div><span>LOKASI</span><h3>Ranking Lokasi</h3><p>Top lokasi berdasarkan kepatuhan.</p></div></div><div id="execLocations" class="ranking-pro"></div></div>
   </div>
 
-  <div class="dash-grid-3">
-    <div class="viz-card">
-      <div class="viz-title"><div><h3>Risk Snapshot</h3><p>Assessment yang perlu perhatian</p></div><span class="risk-badge">● Risiko</span></div>
-      <div id="execRisk"></div>
-    </div>
-    <div class="viz-card">
-      <div class="viz-title"><div><h3>Coverage Modul</h3><p>Jumlah assessment per modul</p></div></div>
-      <div id="execCoverage"></div>
-    </div>
-    <div class="viz-card quick-card">
-      <div class="viz-title"><div><h3>Aksi Cepat</h3><p>Masuk langsung ke input penilaian</p></div></div>
-      <div class="quick-actions">
-        <button onclick="showPage('ppa')"><i class="qa-blue">✓</i><span>Input PPA</span></button>
-        <button onclick="showPage('emisi')"><i class="qa-green">◉</i><span>Input Emisi</span></button>
-        <button onclick="showPage('plb3')"><i class="qa-purple">▦</i><span>Input PLB3</span></button>
-        <button onclick="showPage('plb3darurat')"><i class="qa-orange">⚠</i><span>PLB3 T.Darurat</span></button>
-        <button onclick="showPage('b3')"><i class="qa-cyan">⚗</i><span>Input B3</span></button>
-        <button onclick="showPage('sampah')"><i class="qa-lime">♻</i><span>Input Sampah</span></button>
-      </div>
-    </div>
+  <div class="portal-lower-grid">
+    <div class="portal-panel"><div class="portal-panel-head"><div><span>RISIKO</span><h3>Risk Snapshot</h3><p>Assessment dengan nilai terendah.</p></div></div><div id="execRisk"></div></div>
+    <div class="portal-panel"><div class="portal-panel-head"><div><span>COVERAGE</span><h3>Coverage Aspek</h3><p>Jumlah assessment per aspek.</p></div></div><div id="execCoverage"></div></div>
+    <div class="portal-panel"><div class="portal-panel-head"><div><span>AKSI CEPAT</span><h3>Input Penilaian</h3><p>Akses langsung ke form.</p></div></div><div class="quick-actions portal-quick">
+      <button onclick="showPage('ppa')">✓ <span>Input PPA</span></button><button onclick="showPage('emisi')">◉ <span>Input PPU</span></button><button onclick="showPage('plb3')">▦ <span>Input PLB3</span></button><button onclick="showPage('plb3darurat')">⚠ <span>Tanggap Darurat</span></button><button onclick="showPage('b3')">⚗ <span>Input B3</span></button><button onclick="showPage('sampah')">♻ <span>Input Sampah</span></button>
+    </div></div>
   </div>
 
-  <div class="dash-grid-4">
-    <div class="viz-card"><div class="viz-title"><div><h3>Distribusi Kepatuhan</h3><p>Komposisi status assessment</p></div></div><div class="big-donut" id="dashStatusDonut"><div><b id="dashDonutPct">0%</b><small>Rata-rata</small></div></div><div id="dashStatusLegend" class="donut-legend-pro"></div></div>
-    <div class="viz-card"><div class="viz-title"><div><h3>Kepatuhan Berdasarkan Lokasi</h3><p>Perbandingan top lokasi</p></div></div><div id="dashLocationBars" class="location-bars"></div></div>
-    <div class="viz-card"><div class="viz-title"><div><h3>Status Kriteria</h3><p>Total YA vs TIDAK</p></div></div><div class="status-ring" id="dashStatusRing"><div><b id="dashYesPct">0%</b><small>YA</small></div></div><div class="status-split"><span><i class="dot-green"></i><b id="dashYesTotal">0</b> YA</span><span><i class="dot-red"></i><b id="dashNoTotal">0</b> TIDAK</span></div></div>
-    <div class="viz-card"><div class="viz-title"><div><h3>Trend Tindak Lanjut</h3><p>YA & TIDAK per periode</p></div></div><div id="dashFollowupChart" class="followup-chart"></div></div>
-  </div>
+  <div class="portal-panel portal-recap"><div class="portal-panel-head"><div><span>LIVE RECAP</span><h3>Assessment Terbaru Semua Aspek</h3><p>PPA, PPU/Emisi, Penyimpanan PLB3, Tanggap Darurat PLB3, B3 dan Sampah.</p></div><button class="portal-text-btn" onclick="showPage('rekap')">Lihat rekap lengkap →</button></div><div id="dashRecentAllTable" class="table-wrap"><table><thead><tr><th>Aspek</th><th>Lokasi</th><th>Penilai</th><th>Tanggal</th><th>%</th><th>Status</th></tr></thead><tbody></tbody></table></div></div>
 
-  <div class="dash-bottom-grid">
-    <div class="viz-card">
-      <div class="viz-title"><div><h3>Summary Modul</h3><p>Ringkasan seluruh modul dan status performanya</p></div><span class="viz-badge">Live</span></div>
-      <div class="exec-table-wrap"><table class="exec-table summary-table"><thead><tr><th>Modul</th><th>Lokasi</th><th>Assessment</th><th>Rata-rata</th><th>YA</th><th>TIDAK</th><th>Status</th></tr></thead><tbody id="dashModuleTable"></tbody></table></div>
-    </div>
-    <div class="viz-card">
-      <div class="viz-title"><div><h3>Aktivitas Terbaru</h3><p>Assessment terbaru dari seluruh modul</p></div></div>
-      <div id="dashActivity" class="activity-list"></div>
-      <button class="btn secondary full-btn" onclick="showPage('rekap')">Lihat Semua Aktivitas →</button>
-    </div>
+  <!-- Containers retained for existing analytics code -->
+  <div style="display:none">
+    <div id="execSync"></div><div id="dashModuleTable"></div><div id="dashActivity"></div><div id="dashReminders"></div><div id="allModuleCards"></div><div id="dashStatusDonut"></div><div id="dashStatusLegend"></div><div id="dashDonutPct"></div><div id="dashLocationBars"></div><div id="dashStatusRing"></div><div id="dashYesPct"></div><div id="dashYesTotal"></div><div id="dashNoTotal"></div><div id="dashFollowupChart"></div>
   </div>
-
-  <div class="dash-bottom-grid">
-    <div class="viz-card">
-      <div class="viz-title"><div><h3>Assessment Terbaru Semua Bagian</h3><p>Riwayat terbaru dari PPA, Emisi, PLB3, Tanggap Darurat, B3 dan Sampah.</p></div><span class="viz-badge">Live</span></div>
-      <div id="dashRecentAllTable" class="table-wrap"><table><thead><tr><th>Bagian</th><th>Lokasi</th><th>Penilai</th><th>Tanggal</th><th>%</th><th>Status</th></tr></thead><tbody></tbody></table></div>
-      <button class="btn secondary full-btn" onclick="showPage('rekap')">Buka Rekap Lengkap →</button>
-    </div>
-    <div class="viz-card reminders-card">
-      <div class="viz-title"><div><h3>Pengingat & Notifikasi</h3><p>Area yang perlu ditindaklanjuti</p></div></div>
-      <div id="dashReminders"></div>
-    </div>
-  </div>
-
-  <div class="card all-module-dashboard" id="allModuleDashboard">
-    <div class="card-head"><div><h3>Ringkasan Semua Bagian</h3><div class="note">Summary otomatis dari seluruh data yang diinput pada PPA, Emisi, Penyimpanan PLB3, PLB3 Tanggap Darurat, B3 dan Sampah.</div></div><span class="viz-badge">6 Bagian</span></div>
-    <div id="allModuleCards" class="all-module-cards"></div>
-  </div>
-
 </section>
+
 
 <section id="ppa" class="page">
   <div class="topline"><div><h1>Form Penilaian PPA</h1><p>Isi YA/TIDAK dan keterangan untuk setiap ketentuan teknis.</p></div></div>
@@ -1096,30 +1221,99 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
   </div>
 </section>
 
-<section id="plb3" class="page">
-  <div class="topline">
-    <div><h1>Penyimpanan PLB3</h1><p>Checklist ketentuan teknis fasilitas penyimpanan Limbah B3.</p></div>
-    <button class="btn secondary" onclick="loadPLB3()">↻ Refresh Data</button>
+<section id="plb3" class="page plb3-portal-page">
+  <div class="plb3-topbar">
+    <div class="plb3-brand"><span>PROPER • ENVIRONMENTAL COMPLIANCE</span><h1>Aspek Penyimpanan PLB3</h1><p>Sistem penilaian dan pemantauan ketentuan teknis penyimpanan Limbah B3.</p></div>
+    <div class="plb3-actions"><button onclick="loadPLB3()">↻ Refresh</button><button onclick="showPage('plb3darurat')">⚠ Tanggap Darurat</button></div>
   </div>
-  <div class="card">
+  <div class="plb3-nav"><button class="active">▦ PENYIMPANAN PLB3</button><button onclick="showPage('plb3darurat')">⚠ TANGGAP DARURAT</button><button onclick="showPage('monitoring')">▤ REKAP INSPEKSI</button></div>
+
+  <div class="plb3-hero-strip"><div><span>ASPEK PENILAIAN</span><h2>Penyimpanan Limbah B3</h2><p>Checklist ketentuan teknis untuk lokasi/area yang dipilih.</p></div><div class="plb3-hero-score"><small>KETAATAN</small><b id="lb3Pct">0%</b><span>Assessment</span></div></div>
+
+  <div class="plb3-kpis">
+    <div><span>TOTAL ASSESSMENT</span><b id="plb3CountValue">0</b><small>Riwayat penilaian</small></div>
+    <div><span>RATA-RATA KETAATAN</span><b id="plb3AvgValue">0%</b><small>Seluruh lokasi</small></div>
+    <div><span>STATUS</span><b id="plb3StatusValue">Belum ada</b><small>Perlu pengisian</small></div>
+    <div><span>RUANG LINGKUP</span><b>PLB3</b><small>Penyimpanan</small></div>
+  </div>
+
+  <div class="plb3-form-card card">
+    <div class="plb3-form-title"><div><span>FORM PENILAIAN</span><h3>Data Inspeksi</h3><p>Pilih satu lokasi/area, lalu isi YA/TIDAK dan bukti pendukung.</p></div><button class="btn secondary" onclick="resetPLB3()">Reset</button></div>
     <div class="assessor-grid">
       <div class="field"><label>Nama Penilai</label><input id="plb3Assessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Lokasi / Area</label><input id="plb3Site" list="plb3LocationSuggestions" placeholder="Pilih atau ketik lokasi / area"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="plb3Date" type="date"></div>
     </div>
-    <div class="note" style="margin-top:10px">Pilih satu Lokasi / Area terlebih dahulu, kemudian isi status YA/TIDAK pada checklist di bawah. Tidak ada lagi pemisahan berdasarkan kode TPS.</div>
   </div>
-  <div class="card">
-    <div class="card-head"><div><h3>Ketaatan Ketentuan Penyimpanan PLB3</h3><div class="note">Penilaian dilakukan untuk Lokasi / Area yang dipilih. Isi satu status YA/TIDAK dan keterangan pendukung pada setiap ketentuan.</div></div><span class="badge neutral" id="lb3Pct">0%</span></div>
-    <div class="table-wrap">
-      <table class="lb3-table">
-        <thead id="plb3Head"></thead><tbody id="plb3Body"></tbody><tfoot id="lb3Foot"></tfoot>
-      </table>
+
+  <div class="plb3-check-card card">
+    <div class="card-head"><div><span class="plb3-kicker">CHECKLIST KETAATAN</span><h3>Ketentuan Teknis Penyimpanan PLB3</h3><div class="note">Penilaian untuk satu Lokasi / Area. Tidak ada lagi pemisahan berdasarkan kode TPS.</div></div><span class="badge neutral" id="lb3PctMirror">0%</span></div>
+    <div class="table-wrap"><table class="lb3-table"><thead id="plb3Head"></thead><tbody id="plb3Body"></tbody><tfoot id="lb3Foot"></tfoot></table></div>
+    <div class="score-box" style="margin-top:16px"><div class="progress"><span id="lb3Bar"></span></div><div class="score-value" id="lb3Score">0%</div></div>
+    <div class="actions"><button class="btn secondary" onclick="resetPLB3()">Reset</button><button class="btn primary" onclick="submitPLB3()">☁ Simpan Penilaian PLB3</button></div>
+  </div>
+
+  <div class="card plb3-history-card"><div class="card-head"><div><span class="plb3-kicker">HISTORI</span><h3>Riwayat Inspeksi PLB3</h3></div><span class="badge neutral" id="plb3Count">0 assessment</span></div><div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>Total Status</th><th>YA</th><th>TIDAK</th><th>%</th></tr></thead><tbody id="plb3History"></tbody></table></div></div>
+</section>
+
+
+<section id="chat" class="page">
+  <div class="topline">
+    <div>
+      <h1>Chat Tim PROPER</h1>
+      <p>Ruang komunikasi untuk koordinasi PPA, Emisi, PLB3, B3, Sampah, dan tindak lanjut lapangan.</p>
     </div>
-    <div class="actions"><button class="btn secondary" onclick="resetPLB3()">Reset</button><button class="btn primary" onclick="submitPLB3()">☁ Simpan LB3</button></div>
+    <button class="btn secondary" onclick="refreshProperChat()">↻ Refresh Chat</button>
   </div>
-  <div class="card"><div class="card-head"><h3>Riwayat Data Penyimpanan PLB3</h3><span class="badge neutral" id="plb3Count">0 assessment</span></div>
-    <div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>Total Status</th><th>YA</th><th>TIDAK</th><th>%</th></tr></thead><tbody id="plb3History"></tbody></table></div>
+
+  <div class="proper-chat-layout">
+    <aside class="proper-chat-sidebar">
+      <div class="proper-chat-search">
+        <input id="properChatSearch" placeholder="Cari ruang..." oninput="renderProperChatRooms()">
+      </div>
+      <div class="proper-chat-room-head">
+        <span>RUANG OBROLAN</span><span id="properChatRoomCount">0</span>
+      </div>
+      <div class="proper-chat-rooms" id="properChatRooms"></div>
+    </aside>
+
+    <section class="proper-chat-main">
+      <header class="proper-chat-header">
+        <button class="proper-chat-back" onclick="chatBackToRooms()">‹</button>
+        <div class="proper-chat-room-avatar" id="properChatRoomAvatar">💬</div>
+        <div style="min-width:0;flex:1">
+          <b id="properChatRoomTitle">Pilih ruang</b>
+          <small id="properChatRoomSubtitle">Belum ada ruang dipilih</small>
+        </div>
+        <button class="proper-chat-refresh" onclick="refreshProperChat()">↻</button>
+      </header>
+
+      <div class="proper-chat-messages" id="properChatMessages">
+        <div class="proper-chat-empty">
+          <div>💬</div>
+          <b>Mulai percakapan</b>
+          <span>Pilih ruang di sebelah kiri untuk melihat pesan.</span>
+        </div>
+      </div>
+
+      <div class="proper-chat-reply" id="properChatReply">
+        <div><b id="properChatReplyName">Membalas</b><span id="properChatReplyText"></span></div>
+        <button onclick="cancelProperChatReply()">×</button>
+      </div>
+
+      <div class="proper-chat-inputbar">
+        <button class="proper-chat-emoji" onclick="toggleProperEmoji()">😊</button>
+        <div class="proper-chat-compose">
+          <div id="properEmojiPanel" class="proper-emoji-panel">
+            <span onclick="insertProperEmoji('👍')">👍</span><span onclick="insertProperEmoji('✅')">✅</span><span onclick="insertProperEmoji('📸')">📸</span>
+            <span onclick="insertProperEmoji('⚠️')">⚠️</span><span onclick="insertProperEmoji('🌱')">🌱</span><span onclick="insertProperEmoji('💧')">💧</span>
+            <span onclick="insertProperEmoji('♻️')">♻️</span><span onclick="insertProperEmoji('👏')">👏</span><span onclick="insertProperEmoji('🙏')">🙏</span>
+          </div>
+          <input id="properChatInput" type="text" placeholder="Ketik pesan..." onkeydown="handleProperChatKey(event)">
+        </div>
+        <button class="proper-chat-send" onclick="sendProperChatMessage()">➤</button>
+      </div>
+    </section>
   </div>
 </section>
 
@@ -1245,35 +1439,42 @@ body{color:var(--ink)!important;background:#f2f7f8!important}
   </div>
 </section>
 <section id="monitoring" class="page">
-  <div class="topline"><div><h1>Monitoring</h1><p>Pantau hasil penilaian per lokasi IPAL.</p></div><button class="btn secondary" onclick="loadData()">↻ Refresh Data</button></div>
-  <div class="grid">
-    <div class="kpi"><span>GGP 1</span><strong id="mon1">0%</strong><em id="mon1s">0 YA</em></div>
-    <div class="kpi"><span>GGP 2</span><strong id="mon2">0%</strong><em id="mon2s">0 YA</em></div>
-    <div class="kpi"><span>PLTU</span><strong id="mon3">0%</strong><em id="mon3s">0 YA</em></div>
-    <div class="kpi"><span>Total Record</span><strong id="recordCount">0</strong><em>Data tersimpan</em></div>
+  <div class="topline"><div><h1>Monitoring</h1><p>Pantau hasil inspeksi seluruh aspek dan seluruh PIC secara cepat.</p></div><button class="btn secondary" onclick="loadAllModulesRecap(true)">↻ Refresh Data</button></div>
+  <div class="grid monitoring-kpi-grid">
+    <div class="kpi"><span>Total Assessment</span><strong id="allRecapCount">0</strong><em>Semua modul</em></div>
+    <div class="kpi"><span>Total Lokasi</span><strong id="allRecapSites">0</strong><em>Lintas modul</em></div>
+    <div class="kpi"><span>Rata-rata Kepatuhan</span><strong id="allRecapAvg">0%</strong><em>Semua assessment</em></div>
+    <div class="kpi"><span>Modul Aktif</span><strong id="allRecapModules">0/6</strong><em>Sudah terisi</em></div>
   </div>
-  <div class="card"><div class="card-head"><div><h3>Detail Monitoring</h3><div class="note" id="lastSync">Belum sinkron</div></div></div><div class="table-wrap"><table><thead><tr><th>Lokasi</th><th>Aspek</th><th>YA</th><th>TIDAK</th><th>%</th><th>Status</th><th>Penilai</th><th>Waktu</th></tr></thead><tbody id="monitorBody"></tbody></table></div></div>
+  <div class="card"><div class="card-head"><div><h3>Detail Monitoring Seluruh Aspek</h3><div class="note" id="lastSync">Belum sinkron</div></div></div><div class="table-wrap"><table><thead><tr><th>Modul</th><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>%</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="monitorBody"></tbody></table></div></div>
 </section>
 
 <section id="rekap" class="page">
-  <div class="topline"><div><h1>Rekap Data</h1><p>Riwayat pengisian PPA yang telah dikirim ke server.</p></div><button class="btn secondary" onclick="loadData()">↻ Refresh</button></div>
-  <div class="card"><div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>Persentase</th><th>Status</th></tr></thead><tbody id="rekapBody"></tbody></table></div></div>
+  <div class="topline"><div><h1>Rekap Data</h1><p>Riwayat inspeksi seluruh aspek: PPA, PPU/Emisi, PLB3, Tanggap Darurat PLB3, B3, dan Sampah.</p></div><button class="btn secondary" onclick="loadAllModulesRecap(true)">↻ Refresh</button></div>
+  <div class="card"><div class="card-head"><div><h3>Rekap Semua Penilaian</h3><div class="note">Semua checklist/inspeksi dari seluruh PIC dan seluruh aspek ditampilkan di sini. Klik baris untuk melihat hasil YA/TIDAK per ketentuan.</div></div><span class="badge neutral" id="rekapModuleBadge">0 assessment</span></div><div class="table-wrap"><table><thead><tr><th>Modul</th><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>YA</th><th>TIDAK</th><th>Persentase</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="rekapBody"></tbody></table></div></div>
 </section>
 </main>
 </div>
 <div class="toast" id="toast"></div>
 
 
+<div class="exec-detail-modal" id="assessmentChecklistModal" onclick="if(event.target===this)closeAssessmentChecklist()">
+  <div class="exec-detail-panel assessment-checklist-panel">
+    <div class="exec-detail-head"><div><h3 id="assessmentChecklistTitle">Hasil Checklist</h3><p id="assessmentChecklistSubtitle">Detail inspeksi</p></div><div style="display:flex;gap:8px;align-items:center"><button id="assessmentDeleteBtn" class="danger-outline sm" type="button" style="display:none">🗑 Hapus Assessment</button><button class="exec-detail-close" onclick="closeAssessmentChecklist()">×</button></div></div>
+    <div class="exec-detail-kpis" id="assessmentChecklistKpis"></div>
+    <div class="exec-detail-body"><table class="exec-detail-table checklist-result-table"><thead><tr><th>No</th><th>Ketentuan / Pertanyaan</th><th>Status</th><th>Keterangan</th><th>Dokumentasi</th></tr></thead><tbody id="assessmentChecklistRows"></tbody></table></div>
+  </div>
+</div>
 <div class="exec-detail-modal" id="execDetailModal" onclick="if(event.target===this)closeExecutiveDetail()">
   <div class="exec-detail-panel">
     <div class="exec-detail-head"><div><h3 id="execDetailTitle">Detail</h3><p id="execDetailSubtitle">Ringkasan detail</p></div><button class="exec-detail-close" onclick="closeExecutiveDetail()">×</button></div>
     <div class="exec-detail-kpis" id="execDetailKpis"></div>
-    <div class="exec-detail-body"><table class="exec-detail-table"><thead><tr><th>Bagian</th><th>Lokasi</th><th>Penilai</th><th>Tanggal</th><th>YA</th><th>TIDAK</th><th>Kepatuhan</th></tr></thead><tbody id="execDetailRows"></tbody></table></div>
+    <div class="exec-detail-body"><table class="exec-detail-table"><thead><tr><th>Aspek</th><th>Lokasi</th><th>Penilai</th><th>Tanggal</th><th>YA</th><th>TIDAK</th><th>Kepatuhan</th></tr></thead><tbody id="execDetailRows"></tbody></table></div>
   </div>
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxhEnkVZ5vkV3fY007hPiATsocOQPtgnxIYAXIUANc1SJQPV9utBXC1vnbJnZAwLVXf/execc';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyk0I2RkTUTJkAV5axkYBfAF1uJdEOxkGeIC1U08xUhFcEc_KS5rq5HfCuAaD2j_7LS/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -1297,21 +1498,13 @@ const __nullEl={
   querySelectorAll(){return []},addEventListener(){},setAttribute(){},getAttribute(){return null}
 };
 function $(id){return document.getElementById(id)||__nullEl}
-function showDataReadWarning(label,error){
-  console.warn('[PROPER] '+label+' tidak tersedia:',error);
-  const el=$('globalDataStatus');
-  if(el){
-    el.textContent='Data server belum tersedia. Gunakan Refresh Data.';
-    el.classList.add('warn');
-  }
-}
-
 function showPage(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
  $(id).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'});
  if(id==='ppa') renderForm();
- if(id==='monitoring'||id==='rekap'||id==='dashboard') { if(allPPAData.length===0) loadData(); }
+ if(id==='monitoring'||id==='rekap') { loadAllModulesRecap(false); }
+ if(id==='dashboard' && allPPAData.length===0) loadData();
  if(id==='plb3'){renderPLB3Form();loadPLB3();}
  if(id==='plb3darurat'){renderPLB3DaruratForm();if(!$('daruratDate').value)$('daruratDate').value=new Date().toISOString().slice(0,10);loadPLB3Darurat();}
  if(id==='b3'){renderB3Forms();if(!$('b3Date').value)$('b3Date').value=new Date().toISOString().slice(0,10);loadB3();}
@@ -1527,10 +1720,249 @@ function resetPLB3(){
  $('plb3Assessor').value=(getCurrentUser()||{}).name||'';$('plb3Site').value='';$('plb3Date').value='';
  renderPLB3Form();
 }
+
+function jsonpGet(action, params={}){
+  return new Promise((resolve,reject)=>{
+    const cb='properJSONP_'+String(action).replace(/\W/g,'')+'_'+Date.now()+'_'+Math.floor(Math.random()*10000);
+    const script=document.createElement('script');
+    script.id=cb;
+
+    let finished=false;
+    let timer=null;
+
+    const cleanup=()=>{
+      if(timer)clearTimeout(timer);
+      try{delete window[cb];}catch(_){}
+      if(script.parentNode)script.parentNode.removeChild(script);
+    };
+
+    const ok=(data)=>{
+      if(finished)return;
+      finished=true;
+      cleanup();
+      resolve(data);
+    };
+
+    const fail=(err)=>{
+      if(finished)return;
+      finished=true;
+      cleanup();
+      reject(err instanceof Error?err:new Error(String(err||'Server gagal.')));
+    };
+
+    window[cb]=(data)=>{
+      if(data && data.status==='success'){
+        ok(data);
+      }else{
+        fail(new Error(
+          (data&&data.message)||
+          ('Server gagal memproses '+action)
+        ));
+      }
+    };
+
+    script.onerror=()=>{
+      fail(new Error(
+        'Google Apps Script tidak dapat diakses untuk '+action+
+        '. Pastikan Web App sudah di-deploy sebagai versi terbaru.'
+      ));
+    };
+
+    timer=setTimeout(()=>{
+      fail(new Error(
+        'Timeout membaca '+action+
+        '. Pastikan URL /exec mengarah ke deployment terbaru.'
+      ));
+    },15000);
+
+    const q=new URLSearchParams();
+    q.set('action',action);
+    q.set('callback',cb);
+    q.set('t',String(Date.now()));
+
+    const token=getAuthToken();
+    if(token)q.set('token',token);
+
+    Object.keys(params||{}).forEach(k=>{
+      const v=params[k];
+      if(v!==undefined&&v!==null)q.set(k,String(v));
+    });
+
+    script.src=SCRIPT_URL+'?'+q.toString();
+    document.head.appendChild(script);
+  });
+}
+
+function submitFormRequest(payload){
+  return new Promise((resolve,reject)=>{
+    try{
+      const stamp=Date.now()+'_'+Math.floor(Math.random()*10000);
+      const frameName='properPostFrame_'+stamp;
+      const iframe=document.createElement('iframe');
+      iframe.name=frameName;
+      iframe.style.display='none';
+      document.body.appendChild(iframe);
+
+      const form=document.createElement('form');
+      form.method='POST';
+      form.action=SCRIPT_URL;
+      form.target=frameName;
+      form.style.display='none';
+
+      const add=(name,value)=>{
+        if(value===undefined || value===null) return;
+        const input=document.createElement('input');
+        input.type='hidden';
+        input.name=name;
+        input.value=String(value);
+        form.appendChild(input);
+      };
+
+      Object.keys(payload||{}).forEach(k=>{
+        const v=payload[k];
+        if(k==='profilePhoto' && v && typeof v==='object'){
+          add('profilePhotoData',v.data||'');
+          add('profilePhotoMimeType',v.mimeType||'image/jpeg');
+          add('profilePhotoFileName',v.fileName||('profile-'+Date.now()+'.jpg'));
+        }else if(typeof v!=='object'){
+          add(k,v);
+        }
+      });
+      add('userToken',getAuthToken());
+
+      document.body.appendChild(form);
+
+      let done=false;
+      const cleanup=()=>{
+        if(done)return;
+        done=true;
+        setTimeout(()=>{
+          try{form.remove();}catch(_){}
+          try{iframe.remove();}catch(_){}
+        },300);
+      };
+      iframe.onload=()=>{cleanup();resolve({status:'accepted'});};
+      form.submit();
+      setTimeout(()=>{
+        if(!done){cleanup();resolve({status:'accepted'});}
+      },5000);
+    }catch(e){
+      reject(e);
+    }
+  });
+}
+
+async function submitResponseForm(payload){
+  return new Promise((resolve,reject)=>{
+    const stamp=Date.now()+'_'+Math.floor(Math.random()*100000);
+    const frameName='properResponseFrame_'+stamp;
+    const iframe=document.createElement('iframe');
+    iframe.name=frameName;
+    iframe.id=frameName;
+    iframe.style.display='none';
+    document.body.appendChild(iframe);
+
+    const form=document.createElement('form');
+    form.method='POST';
+    form.action=SCRIPT_URL;
+    form.target=frameName;
+    form.style.display='none';
+
+    const add=(name,value)=>{
+      const input=document.createElement('input');
+      input.type='hidden';
+      input.name=name;
+      input.value=String(value ?? '');
+      form.appendChild(input);
+    };
+
+    const requestId='req_'+stamp;
+    const body=Object.assign({},payload,{userToken:getAuthToken()});
+
+    /*
+     * Apps Script membaca payloadJson agar object/array tetap utuh.
+     * requestId memberi tahu Apps Script untuk mengembalikan
+     * response ke parent dengan window.postMessage().
+     */
+    add('payloadJson',JSON.stringify(body));
+    add('requestId',requestId);
+
+    document.body.appendChild(form);
+
+    let settled=false;
+    let timer=null;
+
+    const cleanup=()=>{
+      if(timer) clearTimeout(timer);
+      window.removeEventListener('message',onMessage);
+      setTimeout(()=>{
+        try{form.remove();}catch(_){}
+        try{iframe.remove();}catch(_){}
+      },250);
+    };
+
+    const finish=(ok,val)=>{
+      if(settled)return;
+      settled=true;
+      cleanup();
+      ok?resolve(val):reject(val);
+    };
+
+    function onMessage(event){
+      /*
+       * Jangan menerima message dari iframe lain.
+       */
+      if(event.source!==iframe.contentWindow)return;
+
+      const d=event.data;
+
+      if(!d || d.type!=='properResponse')return;
+      if(String(d.requestId||'')!==requestId)return;
+
+      if(d.data && typeof d.data==='object'){
+        finish(
+          d.ok===true,
+          d.data
+        );
+      }else{
+        finish(
+          false,
+          new Error('Respons server tidak valid.')
+        );
+      }
+    }
+
+    window.addEventListener('message',onMessage);
+
+    timer=setTimeout(()=>{
+      finish(
+        false,
+        new Error(
+          'Server tidak merespons. Pastikan deployment Apps Script terbaru sudah digunakan.'
+        )
+      );
+    },30000);
+
+    try{
+      form.submit();
+    }catch(e){
+      finish(false,e);
+    }
+  });
+}
+
 async function postJSON(payload){
- payload=Object.assign({},payload,{userToken:getAuthToken()});
- const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
- return await r.json();
+  payload=Object.assign({},payload,{userToken:getAuthToken()});
+
+  /*
+   * GitHub Pages -> Google Apps Script:
+   * jangan mengandalkan fetch POST karena respons CORS
+   * tidak dapat dibaca browser.
+   *
+   * Gunakan hidden-form POST + postMessage.
+   * Password tetap berada di POST body, bukan di URL.
+   */
+  return await submitResponseForm(payload);
 }
 async function submitEmisi(){
   const assessor=$('emisiAssessor').value.trim(),site=canonicalLocationFor('emisi',$('emisiSite').value),date=$('emisiDate').value;
@@ -1596,26 +2028,17 @@ function renderHistoryTable(id,data,type){
    return `<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(r.site||'-')}</td><td>${r.total||0}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td></tr>`;
  }).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
 }
-async function stableReadModule(action){
-  try{
-    return await jsonpGet(action,{});
-  }catch(error){
-    showDataReadWarning(action,error);
-    return {status:'error',data:[],message:error.message||String(error)};
-  }
-}
-
 function loadEmisi(){
  const old=document.getElementById('emisiJsonp');if(old)old.remove();
  const cb='emisiCallback_'+Date.now();
- window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('emisiHistory',d.data||[],'emisi');populateModuleLocationMaster('emisi',d.data||[]);if($('emisiCount'))$('emisiCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('emisi',d.data||[]);}catch(e){console.warn('Data Emisi gagal dibaca:',e);}finally{delete window[cb];const s=$('emisiJsonp');if(s)s.remove();}};
- const s=document.createElement('script');s.id='emisiJsonp';s.src=SCRIPT_URL+'?action=getEmisi&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{console.warn('Data Emisi gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('emisiHistory',d.data||[],'emisi');populateModuleLocationMaster('emisi',d.data||[]);if($('emisiCount'))$('emisiCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('emisi',d.data||[]);}catch(e){console.warn('[PROPER] Data Emisi gagal dibaca:',e)}finally{delete window[cb];const s=$('emisiJsonp');if(s)s.remove();}};
+ const s=document.createElement('script');s.id='emisiJsonp';s.src=SCRIPT_URL+'?action=getEmisi&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{console.warn('[PROPER] Data Emisi gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 function loadPLB3(){
  const old=document.getElementById('plb3Jsonp');if(old)old.remove();
  const cb='plb3Callback_'+Date.now();
- window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('lb3History',d.data||[],'lb3');populateModuleLocationMaster('plb3',d.data||[]);if($('plb3Count'))$('plb3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('plb3',d.data||[]);}catch(e){console.warn('Data PLB3 gagal dibaca:',e);}finally{delete window[cb];const s=$('plb3Jsonp');if(s)s.remove();}};
- const s=document.createElement('script');s.id='plb3Jsonp';s.src=SCRIPT_URL+'?action=getPLB3&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{console.warn('Data PLB3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('lb3History',d.data||[],'lb3');populateModuleLocationMaster('plb3',d.data||[]);if($('plb3Count'))$('plb3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('plb3',d.data||[]);}catch(e){console.warn('[PROPER] Data PLB3 gagal dibaca:',e)}finally{delete window[cb];const s=$('plb3Jsonp');if(s)s.remove();}};
+ const s=document.createElement('script');s.id='plb3Jsonp';s.src=SCRIPT_URL+'?action=getPLB3&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{console.warn('[PROPER] Data PLB3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 
 
@@ -1694,13 +2117,13 @@ function renderGenericHistory(id,data){
 }
 function loadPLB3Darurat(){
  const old=$('plb3DaruratJsonp');if(old)old.remove();const cb='plb3DaruratCB_'+Date.now();
- window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('daruratHistory',d.data||[]);populateModuleLocationMaster('darurat',d.data||[]);if($('daruratCount'))$('daruratCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('darurat',d.data||[]);}catch(e){console.warn('Data PLB3 Tanggap Darurat gagal dibaca:',e);}finally{delete window[cb];const s=$('plb3DaruratJsonp');if(s)s.remove();}};
- const s=document.createElement('script');s.id='plb3DaruratJsonp';s.src=SCRIPT_URL+'?action=getPLB3Darurat&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{console.warn('Data PLB3 Tanggap Darurat gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('daruratHistory',d.data||[]);populateModuleLocationMaster('darurat',d.data||[]);if($('daruratCount'))$('daruratCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('darurat',d.data||[]);}catch(e){console.warn('[PROPER] Data PLB3 Tanggap Darurat gagal dibaca:',e)}finally{delete window[cb];const s=$('plb3DaruratJsonp');if(s)s.remove();}};
+ const s=document.createElement('script');s.id='plb3DaruratJsonp';s.src=SCRIPT_URL+'?action=getPLB3Darurat&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{console.warn('[PROPER] Data PLB3 Tanggap Darurat gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 function loadB3(){
  const old=$('b3Jsonp');if(old)old.remove();const cb='b3CB_'+Date.now();
- window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('b3History',d.data||[]);populateModuleLocationMaster('b3',d.data||[]);if($('b3Count'))$('b3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('b3',d.data||[]);}catch(e){console.warn('Data B3 gagal dibaca:',e);}finally{delete window[cb];const s=$('b3Jsonp');if(s)s.remove();}};
- const s=document.createElement('script');s.id='b3Jsonp';s.src=SCRIPT_URL+'?action=getB3&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{console.warn('Data B3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('b3History',d.data||[]);populateModuleLocationMaster('b3',d.data||[]);if($('b3Count'))$('b3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('b3',d.data||[]);}catch(e){console.warn('[PROPER] Data B3 gagal dibaca:',e)}finally{delete window[cb];const s=$('b3Jsonp');if(s)s.remove();}};
+ const s=document.createElement('script');s.id='b3Jsonp';s.src=SCRIPT_URL+'?action=getB3&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{console.warn('[PROPER] Data B3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 
 
@@ -1785,7 +2208,7 @@ function loadSampah(){
       if(d.status!=='success')throw Error(d.message||'Error');
       renderGenericHistory('sampahHistory',d.data||[]);populateModuleLocationMaster('sampah',d.data||[]);refreshModuleAnalyticsFor('sampah',d.data||[]);
       if($('sampahCount'))$('sampahCount').textContent=(d.data||[]).length+' assessment';
-    }catch(e){toast('Data Sampah gagal dibaca: '+e.message);}
+    }catch(e){console.warn('[PROPER] Data Sampah gagal dibaca:',e);}
     finally{
       delete window[cb];
       const s=$('sampahJsonp');if(s)s.remove();
@@ -1794,7 +2217,7 @@ function loadSampah(){
   const s=document.createElement('script');
   s.id='sampahJsonp';
   s.src=SCRIPT_URL+'?action=getSampah&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();
-  s.onerror=()=>{console.warn('Data Sampah gagal dibaca dari Google Sheet');s.remove();};
+  s.onerror=()=>{console.warn('[PROPER] Data Sampah gagal dibaca dari Google Sheet');s.remove();};
   document.body.appendChild(s);
 }
 
@@ -1804,7 +2227,7 @@ function loadSampah(){
    ========================================================= */
 const executiveCache={};
 const moduleMeta={
-  ppa:{label:'PPA',action:'getPPA',page:'ppa',desc:'Pengendalian pencemaran air'},
+  ppa:{label:'PPA',action:'getPPASummary',page:'ppa',desc:'Pengendalian pencemaran air'},
   emisi:{label:'Emisi',action:'getEmisi',page:'emisi',desc:'Ketaatan ketentuan teknis cerobong'},
   plb3:{label:'PLB3',action:'getPLB3',page:'plb3',desc:'Penyimpanan Limbah B3'},
   darurat:{label:'PLB3 Tanggap Darurat',action:'getPLB3Darurat',page:'plb3darurat',desc:'Kesiapsiagaan dan penanggulangan kedaruratan'},
@@ -1861,16 +2284,67 @@ function avg(arr){return arr.length?Math.round(arr.reduce((s,x)=>s+scoreOf(x),0)
 function uniqueSites(arr){return new Set(arr.map(r=>normalizeSite(siteOf(r))).filter(Boolean)).size}
 
 function svgLine(data,w=720,h=220){
-  if(!data.length)return '<div class="module-empty">Belum ada data tren.</div>';
-  const pad={l:38,r:14,t:20,b:34}, iw=w-pad.l-pad.r, ih=h-pad.t-pad.b;
-  const vals=data.map(x=>Number(x.value)||0), max=100,min=0;
-  const pts=data.map((x,i)=>({x:pad.l+(data.length===1?iw/2:i*iw/(data.length-1)),y:pad.t+ih-(x.value-min)/(max-min)*ih,v:x.value,l:x.label}));
+  if(!data.length){
+    return `<div class="trend-empty-state">
+      <div class="trend-empty-icon">⌁</div>
+      <b>Belum ada data tren</b>
+      <span>Grafik akan muncul otomatis setelah ada hasil inspeksi.</span>
+    </div>`;
+  }
+  const pad={l:42,r:20,t:22,b:40}, iw=w-pad.l-pad.r, ih=h-pad.t-pad.b;
+  const max=100,min=0;
+  const grid=[0,25,50,75,100].map(v=>{
+    const y=pad.t+ih-v/100*ih;
+    return `<line x1="${pad.l}" y1="${y}" x2="${w-pad.r}" y2="${y}" stroke="${v===0?'#dce9e3':'#edf3ef'}" stroke-width="${v===0?1.4:1}"/>
+      <text x="${pad.l-10}" y="${y+3}" text-anchor="end" font-size="8" fill="#8a9994">${v}%</text>`;
+  }).join('');
+
+  // Single point: make it visually intentional, not a lonely dot.
+  if(data.length===1){
+    const v=Math.max(0,Math.min(100,Number(data[0].value)||0));
+    const x=pad.l+iw/2;
+    const y=pad.t+ih-v/100*ih;
+    const barY=pad.t+ih;
+    const gradId='singleTrendGrad_'+Math.random().toString(36).slice(2);
+    return `<svg class="svg-chart premium-trend-svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="${gradId}" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="#19b37a" stop-opacity=".36"/>
+          <stop offset="100%" stop-color="#19b37a" stop-opacity=".03"/>
+        </linearGradient>
+        <filter id="${gradId}_shadow" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#0b7a60" flood-opacity=".24"/>
+        </filter>
+      </defs>
+      ${grid}
+      <path d="M ${x-115} ${barY} C ${x-80} ${barY-12}, ${x-45} ${y+30}, ${x} ${y} C ${x+45} ${y+30}, ${x+80} ${barY-12}, ${x+115} ${barY} Z" fill="url(#${gradId})"/>
+      <line x1="${x}" y1="${y}" x2="${x}" y2="${barY}" stroke="#9adac3" stroke-dasharray="4 5"/>
+      <circle cx="${x}" cy="${y}" r="8" fill="#fff" stroke="#0b7a60" stroke-width="4" filter="url(#${gradId}_shadow)"/>
+      <circle cx="${x}" cy="${y}" r="3.5" fill="#19b37a"/>
+      <g transform="translate(${x-34},${Math.max(7,y-38)})">
+        <rect width="68" height="26" rx="13" fill="#083f31"/>
+        <text x="34" y="17" text-anchor="middle" font-size="12" font-weight="900" fill="#fff">${v}%</text>
+      </g>
+      <text x="${x}" y="${barY+23}" text-anchor="middle" font-size="9" font-weight="800" fill="#60736b">${escapeHtml(data[0].label)}</text>
+      <text x="${x}" y="${barY+35}" text-anchor="middle" font-size="8" fill="#93a19b">1 assessment</text>
+    </svg>`;
+  }
+
+  const pts=data.map((x,i)=>({
+    x:pad.l+i*iw/(data.length-1),
+    y:pad.t+ih-(Math.max(0,Math.min(100,Number(x.value)||0))-min)/(max-min)*ih,
+    v:Math.max(0,Math.min(100,Number(x.value)||0)),
+    l:x.label
+  }));
   const path=pts.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)).join(' ');
-  const area=path+' L '+pts[pts.length-1].x+' '+(pad.t+ih)+' L '+pts[0].x+' '+(pad.t+ih)+' Z';
-  const grid=[0,25,50,75,100].map(v=>{const y=pad.t+ih-v/100*ih;return `<line x1="${pad.l}" y1="${y}" x2="${w-pad.r}" y2="${y}" stroke="#edf2ef"/><text x="${pad.l-7}" y="${y+3}" text-anchor="end" font-size="8" fill="#8a9994">${v}</text>`}).join('');
-  const labels=pts.map(p=>`<text x="${p.x}" y="${h-10}" text-anchor="middle" font-size="8" fill="#80908b">${escapeHtml(p.l)}</text>`).join('');
-  const dots=pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="4" fill="#fff" stroke="#0b7a60" stroke-width="3"><title>${escapeHtml(p.l)}: ${p.v}%</title></circle>`).join('');
-  return `<svg class="svg-chart" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><defs><linearGradient id="gradLine" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#0b7a60" stop-opacity=".25"/><stop offset="100%" stop-color="#0b7a60" stop-opacity="0"/></linearGradient></defs>${grid}<path d="${area}" fill="url(#gradLine)"/><path d="${path}" fill="none" stroke="#0b7a60" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
+  const area=`${path} L ${pts[pts.length-1].x} ${pad.t+ih} L ${pts[0].x} ${pad.t+ih} Z`;
+  const labels=pts.map(p=>`<text x="${p.x}" y="${h-11}" text-anchor="middle" font-size="8" fill="#80908b">${escapeHtml(p.l)}</text>`).join('');
+  const dots=pts.map(p=>`<g><circle cx="${p.x}" cy="${p.y}" r="6" fill="#fff" stroke="#0b7a60" stroke-width="3"/><circle cx="${p.x}" cy="${p.y}" r="2.3" fill="#19b37a"/><title>${escapeHtml(p.l)}: ${p.v}%</title></g>`).join('');
+  const gid='trendGrad_'+Math.random().toString(36).slice(2);
+  return `<svg class="svg-chart premium-trend-svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <defs><linearGradient id="${gid}" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#19b37a" stop-opacity=".28"/><stop offset="100%" stop-color="#19b37a" stop-opacity=".02"/></linearGradient></defs>
+    ${grid}<path d="${area}" fill="url(#${gid})"/><path d="${path}" fill="none" stroke="#0b7a60" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}
+  </svg>`;
 }
 function svgBars(data,w=720,h=220){
   if(!data.length)return '<div class="module-empty">Belum ada data.</div>';
@@ -2157,17 +2631,27 @@ function rebuildFilterOptions(data){
  const rows=normalizedRows(data);
  const sites={}; const years=new Set();
  rows.forEach(r=>{if(r.siteKey)sites[r.siteKey]=displaySite(r.site);if(r.year)years.add(r.year)});
- const fs=$('filterSite'), fy=$('filterYear');
- const currentS=fs.value,currentY=fy.value;
- fs.innerHTML='<option value="">Semua lokasi</option>'+Object.keys(sites).sort().map(k=>`<option value="${escapeHtml(k)}">${escapeHtml(sites[k])}</option>`).join('');
- fy.innerHTML='<option value="">Semua tahun</option>'+[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('');
- if([...fs.options].some(o=>o.value===currentS))fs.value=currentS;
- if([...fy.options].some(o=>o.value===currentY))fy.value=currentY;
+ const fs=document.getElementById('filterSite'), fy=document.getElementById('filterYear');
+ if(fs){
+   const currentS=fs.value||'';
+   fs.innerHTML='<option value="">Semua lokasi</option>'+Object.keys(sites).sort().map(k=>`<option value="${escapeHtml(k)}">${escapeHtml(sites[k])}</option>`).join('');
+   const valid=[...fs.options].some(o=>o.value===currentS);
+   if(valid)fs.value=currentS;
+ }
+ if(fy){
+   const currentY=fy.value||'';
+   fy.innerHTML='<option value="">Semua tahun</option>'+[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('');
+   const valid=[...fy.options].some(o=>o.value===currentY);
+   if(valid)fy.value=currentY;
+ }
  /* Shared location master is intentionally independent from PPA history. */
 }
 let allPPAData=[];
 function applyFilters(){
- const sk=$('filterSite').value, y=$('filterYear').value, m=$('filterMonth').value, d=$('filterDay').value;
+ const sk=(document.getElementById('filterSite')||{}).value||'';
+ const y=(document.getElementById('filterYear')||{}).value||'';
+ const m=(document.getElementById('filterMonth')||{}).value||'';
+ const d=(document.getElementById('filterDay')||{}).value||'';
  const filtered=normalizedRows(allPPAData).filter(r=>
    (!sk||r.siteKey===sk)&&(!y||String(r.year)===String(y))&&(!m||String(r.month)===String(m))&&(!d||String(r.day)===String(d))
  );
@@ -2175,7 +2659,7 @@ function applyFilters(){
  document.querySelectorAll('#filterSite,#filterYear,#filterMonth,#filterDay').forEach(x=>x.classList.toggle('filter-active',!!x.value));
 }
 function clearFilters(){
- $('filterSite').value='';$('filterYear').value='';$('filterMonth').value='';$('filterDay').value='';
+ ['filterSite','filterYear','filterMonth','filterDay'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
  applyFilters();
 }
 function renderTrend(data){
@@ -2216,7 +2700,10 @@ function renderHeatmap(data){
  const arr=Object.values(map).sort((a,b)=>(b.yes/(b.yes+b.no))-(a.yes/(a.yes+a.no)));
  $('heatmapTable').querySelector('tbody').innerHTML=arr.length?arr.map(x=>{const total=x.yes+x.no,p=Math.round(x.yes/total*100);return `<tr onclick="openDetail('${escapeHtml(normalizeSite(x.site))}')" style="cursor:pointer"><td><b>${escapeHtml(x.site)}</b></td><td><span class="badge good">${x.yes}</span></td><td><span class="badge bad">${x.no}</span></td><td><b>${p}%</b></td><td style="min-width:180px"><div class="progress"><span style="width:${p}%"></span></div></td></tr>`}).join(''):'<tr><td colspan="5" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
 }
-function openDetail(siteKey){
+async function openDetail(siteKey){
+ if(!allPPAData.some(r=>Array.isArray(r.details))) {
+   try { await loadPPAFullData(); } catch(e){ toast('Detail lokasi gagal dimuat: '+e.message); return; }
+ }
  const rows=normalizedRows(allPPAData).filter(r=>r.siteKey===siteKey);
  if(!rows.length)return;
  $('detailNav').style.display='flex';
@@ -2229,6 +2716,97 @@ function openDetail(siteKey){
  $('detailBody').innerHTML=rows.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td>${r.assessmentDate||r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join('');
  showPage('detail');
 }
+async function loadAllModulesRecap(force=false){
+ if(window.__allRecapLoading)return window.__allRecapLoading;
+ if(!force && window.__allRecapData && window.__allRecapData.loadedAt && Date.now()-window.__allRecapData.loadedAt<15000){
+   renderAllModulesRecap(window.__allRecapData.rows||[]);
+   return window.__allRecapData.rows||[];
+ }
+ const bodies=document.querySelectorAll('#monitorBody,#rekapBody');
+ bodies.forEach(b=>b.innerHTML='<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f"><span class="loading-dot"></span> Mengambil data seluruh modul...</td></tr>');
+ window.__allRecapLoading=new Promise((resolve,reject)=>{
+   const cb='allRecapCB_'+Date.now();
+   const s=document.createElement('script'); s.id='allRecapJsonp';
+   const timer=setTimeout(()=>{cleanup();reject(new Error('Timeout mengambil rekap seluruh modul'));},25000);
+   function cleanup(){clearTimeout(timer);delete window[cb];if(s.parentNode)s.removeChild(s);window.__allRecapLoading=null;}
+   window[cb]=d=>{
+     try{
+       if(!d||d.status!=='success')throw Error((d&&d.message)||'Server mengembalikan error');
+       const rows=Array.isArray(d.data)?d.data:[];
+       window.__allRecapData={rows,loadedAt:Date.now()};
+       renderAllModulesRecap(rows);
+       resolve(rows);
+     }catch(err){
+       renderAllModulesRecap([]);
+       console.warn('[PROPER] Rekap seluruh modul gagal dibaca:',err);
+       reject(err);
+     }finally{cleanup();}
+   };
+   s.onerror=()=>{const err=new Error('Google Apps Script tidak dapat diakses untuk rekap seluruh modul');renderAllModulesRecap([]);console.warn('[PROPER] Rekap seluruh modul gagal dibaca:',err);cleanup();reject(err);};
+   s.src=SCRIPT_URL+'?action=getAllAssessmentSummary&callback='+encodeURIComponent(cb)+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();
+   document.body.appendChild(s);
+ });
+ return window.__allRecapLoading;
+}
+
+function renderAllModulesRecap(rows){
+  rows=Array.isArray(rows)?rows:[];
+  const sites=new Set(rows.map(r=>normalizeSite(r.site)).filter(Boolean));
+  const modules=new Set(rows.map(r=>r.moduleKey||r.module).filter(Boolean));
+  const avg=rows.length?Math.round(rows.reduce((sum,r)=>sum+Number(r.percentage||0),0)/rows.length):0;
+
+  if($('allRecapCount'))$('allRecapCount').textContent=rows.length;
+  if($('allRecapSites'))$('allRecapSites').textContent=sites.size;
+  if($('allRecapAvg'))$('allRecapAvg').textContent=avg+'%';
+  if($('allRecapModules'))$('allRecapModules').textContent=modules.size+'/6';
+  if($('rekapModuleBadge'))$('rekapModuleBadge').textContent=rows.length+' assessment';
+  if($('lastSync'))$('lastSync').textContent='Semua aspek tersinkron: '+new Date().toLocaleString('id-ID');
+
+  const sorted=rows.slice().sort((a,b)=>
+    String(b.timestamp||b.assessmentDate||'').localeCompare(
+      String(a.timestamp||a.assessmentDate||'')
+    )
+  );
+
+  const empty='<tr><td colspan="9" style="text-align:center;padding:28px;color:#64756f">Belum ada data dari aspek manapun.</td></tr>';
+
+  if($('monitorBody')){
+    $('monitorBody').innerHTML=sorted.length?sorted.map(r=>{
+      const own=canManageAssessment(r);
+      const rowJson=JSON.stringify(r).replace(/'/g,'&#39;');
+      return `<tr class="recap-click-row" onclick='openAssessmentChecklist(${rowJson})'>
+        <td><b>${escapeHtml(r.module||'-')}</b></td>
+        <td>${escapeHtml(r.timestamp||r.assessmentDate||'-')}</td>
+        <td>${escapeHtml(r.assessor||'-')}</td>
+        <td>${escapeHtml(displaySite(r.site)||'-')}</td>
+        <td>${Number(r.yes||0)}</td>
+        <td>${Number(r.no||0)}</td>
+        <td><b>${Number(r.percentage||0)}%</b></td>
+        <td>${statusBadge(Number(r.percentage||0))}</td>
+        <td>${own?`<button class="danger-outline sm" type="button" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td>
+      </tr>`;
+    }).join(''):empty;
+  }
+
+  if($('rekapBody')){
+    $('rekapBody').innerHTML=sorted.length?sorted.map(r=>{
+      const own=canManageAssessment(r);
+      const rowJson=JSON.stringify(r).replace(/'/g,'&#39;');
+      return `<tr class="recap-click-row" onclick='openAssessmentChecklist(${rowJson})'>
+        <td><b>${escapeHtml(r.module||'-')}</b></td>
+        <td>${escapeHtml(r.timestamp||r.assessmentDate||'-')}</td>
+        <td>${escapeHtml(r.assessor||'-')}</td>
+        <td>${escapeHtml(displaySite(r.site)||'-')}</td>
+        <td>${Number(r.yes||0)}</td>
+        <td>${Number(r.no||0)}</td>
+        <td><b>${Number(r.percentage||0)}%</b></td>
+        <td>${statusBadge(Number(r.percentage||0))}</td>
+        <td>${own?`<button class="danger-outline sm" type="button" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td>
+      </tr>`;
+    }).join(''):empty;
+  }
+}
+
 function renderData(data,rebuild=true){
  data=Array.isArray(data)?data:[];
  if(rebuild)rebuildFilterOptions(allPPAData);
@@ -2265,7 +2843,7 @@ function renderData(data,rebuild=true){
    <td><button class="action-eye" onclick="openDetail('${escapeHtml(r.siteKey||normalizeSite(r.site))}')">◉</button></td>
  </tr>`).join(''):'<tr><td colspan="9" style="text-align:center;padding:25px;color:#64756f">Belum ada data penilaian.</td></tr>';
 
- if($('monitorBody'))$('monitorBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td><b>${escapeHtml(displaySite(r.site)||'-')}</b></td><td>${r.total||11}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.timestamp||'-'}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+ if($('monitorBody'))$('monitorBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td><b>${escapeHtml(displaySite(r.site)||'-')}</b></td><td>${r.total||11}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.timestamp||'-'}</td><td>${canManageAssessment(r)?`<button class="danger-outline sm" type="button" onclick='deleteAssessment(${JSON.stringify(Object.assign({},r,{module:"PPA",moduleKey:"PPA"})).replace(/\'/g,"&#39;")},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
  if($('rekapBody'))$('rekapBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
  if($('lastSync'))$('lastSync').textContent='Sinkron terakhir: '+new Date().toLocaleString('id-ID');
  if($('topLastSync'))$('topLastSync').textContent='Terakhir diperbarui: '+new Date().toLocaleTimeString('id-ID');
@@ -2285,46 +2863,47 @@ function renderDonut(data){
    <span><i style="background:#dc3a3a"></i>Buruk &lt;70% <b>${total?Math.round(b):0}% (${counts.bad})</b></span>`;
 }
 function loadData(){
- if(!SCRIPT_URL || SCRIPT_URL.indexOf('/exec')===-1){
-   toast('URL Google Apps Script belum benar.');
-   return;
- }
+ if(!SCRIPT_URL || SCRIPT_URL.indexOf('/exec')===-1){toast('URL Google Apps Script belum benar.');return;}
+ if(window.__ppaSummaryLoading)return;
+ window.__ppaSummaryLoading=true;
  const bodies=document.querySelectorAll('#dashboardTable tbody,#monitorBody,#rekapBody');
- bodies.forEach(b=>b.innerHTML='<tr><td colspan="9" style="text-align:center;padding:25px;color:#64756f">⏳ Mengambil semua data dari Google Sheet...</td></tr>');
-
- const old=document.getElementById('ppaJsonpScript');
- if(old) old.remove();
-
- const callbackName='ppaDataCallback_'+Date.now();
+ bodies.forEach(b=>b.innerHTML='<tr><td colspan="9" style="text-align:center;padding:22px;color:#64756f"><span class="loading-dot"></span> Menyiapkan rekap...</td></tr>');
+ const old=document.getElementById('ppaSummaryJsonp'); if(old)old.remove();
+ const callbackName='ppaSummaryCallback_'+Date.now();
+ const cleanup=()=>{window.__ppaSummaryLoading=false;delete window[callbackName];const s=document.getElementById('ppaSummaryJsonp');if(s)s.remove();};
  window[callbackName]=function(d){
    try{
-     if(!d || d.status!=='success') throw new Error((d&&d.message)||'Server mengembalikan error');
+     if(!d||d.status!=='success')throw new Error((d&&d.message)||'Server mengembalikan error');
      allPPAData=Array.isArray(d.data)?d.data:[];
      populateModuleLocationMaster('ppa',allPPAData);
      executiveCache.ppa=allPPAData;
      renderModuleAnalytics('ppa',allPPAData);
      rebuildFilterOptions(allPPAData);
+     renderData(allPPAData,false);
      applyFilters();
-     if($('topLastSync'))$('topLastSync').textContent='Semua data tersinkron: '+new Date().toLocaleTimeString('id-ID');
-   }catch(err){
-     console.error(err);
-     toast('Data Google Sheet gagal dibaca: '+err.message);
-   }finally{
-     delete window[callbackName];
-     const s=document.getElementById('ppaJsonpScript');
-     if(s)s.remove();
-   }
+     if($('topLastSync'))$('topLastSync').textContent='Rekap tersinkron: '+new Date().toLocaleTimeString('id-ID');
+   }catch(err){console.warn('[PROPER] Rekap PPA gagal dibaca:',err);}
+   finally{cleanup();}
  };
-
- const script=document.createElement('script');
- script.id='ppaJsonpScript';
- script.src=SCRIPT_URL+'?action=getPPA&callback='+encodeURIComponent(callbackName)+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();
- script.onerror=function(){
-   toast('Tidak dapat mengakses Google Apps Script. Periksa deployment Web App.');
-   delete window[callbackName];
-   script.remove();
- };
+ const script=document.createElement('script');script.id='ppaSummaryJsonp';
+ script.src=SCRIPT_URL+'?action=getPPASummary&callback='+encodeURIComponent(callbackName)+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();
+ script.onerror=function(){cleanup();console.warn('[PROPER] Rekap PPA belum dapat diakses.');};
  document.body.appendChild(script);
+}
+
+async function loadPPAFullData(){
+ if(window.__ppaFullLoading)return window.__ppaFullLoading;
+ window.__ppaFullLoading=new Promise((resolve,reject)=>{
+   const cb='ppaFullCallback_'+Date.now();
+   const s=document.createElement('script');s.id='ppaFullJsonp';
+   const timer=setTimeout(()=>{cleanup();reject(new Error('Timeout mengambil detail PPA'));},20000);
+   function cleanup(){clearTimeout(timer);delete window[cb];if(s.parentNode)s.parentNode.removeChild(s);window.__ppaFullLoading=null;}
+   window[cb]=d=>{cleanup();if(d&&d.status==='success'){allPPAData=Array.isArray(d.data)?d.data:[];executiveCache.ppa=allPPAData;resolve(allPPAData);}else reject(new Error((d&&d.message)||'Gagal mengambil detail PPA'));};
+   s.onerror=()=>{cleanup();reject(new Error('Google Sheet tidak dapat diakses'));};
+   s.src=SCRIPT_URL+'?action=getPPA&callback='+encodeURIComponent(cb)+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();
+   document.body.appendChild(s);
+ });
+ return window.__ppaFullLoading;
 }
 
 /* =========================
@@ -2348,50 +2927,348 @@ function previewAuthPhoto(input){
 function fileToDataURL(file){
  return new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(String(fr.result).split(',')[1]||'');fr.onerror=reject;fr.readAsDataURL(file);});
 }
+async function testProperApi(){
+  const el=$('loginMsg');
+  if(el)el.textContent='Menghubungkan ke Google Apps Script...';
+  try{
+    const d=await jsonpGet('apiCheck',{});
+    if(el)el.textContent='Server aktif ✓';
+    toast('Google Apps Script terhubung.');
+  }catch(e){
+    if(el)el.textContent='Server tidak dapat diakses: '+e.message;
+    toast('Koneksi server gagal.');
+  }
+}
+
 async function doRegister(){
- const name=$('regName').value.trim(),username=$('regUsername').value.trim().toLowerCase(),p=$('regPassword').value,p2=$('regPassword2').value,recovery=$('regRecovery').value.trim();
- setAuthMsg('regMsg','');
- if(name.length<2||username.length<3||p.length<8||p!==p2||recovery.length<6){setAuthMsg('regMsg','Lengkapi data. Password minimal 8 karakter dan password harus sama.');return}
- let profilePhoto=null;
- const f=$('regPhoto').files&&$('regPhoto').files[0];
- if(f){if(f.size>2500000){setAuthMsg('regMsg','Foto profil maksimal 2.5 MB.');return} profilePhoto={fileName:f.name,mimeType:f.type,data:await fileToDataURL(f)}}
- try{
-  const r=await postJSON({action:'registerUser',name,username,password:p,recoveryCode:recovery,profilePhoto});
-  if(r.status!=='success')throw Error(r.message||'Pendaftaran gagal');
-  setAuthMsg('regMsg','Akun berhasil dibuat. Silakan masuk.');switchAuth('login');$('loginUsername').value=username;
- }catch(e){setAuthMsg('regMsg',e.message)}
+  const name=$('regName').value.trim();
+  const username=$('regUsername').value.trim().toLowerCase();
+  const password=$('regPassword').value;
+  const password2=$('regPassword2').value;
+  const recovery=$('regRecovery').value.trim();
+
+  setAuthMsg('regMsg','');
+
+  if(name.length<2){
+    setAuthMsg('regMsg','Nama lengkap wajib diisi.');
+    return;
+  }
+
+  if(!/^[a-z0-9._-]{3,24}$/.test(username)){
+    setAuthMsg('regMsg','Username 3-24 karakter: huruf kecil, angka, titik, underscore atau strip.');
+    return;
+  }
+
+  if(password.length<8){
+    setAuthMsg('regMsg','Password minimal 8 karakter.');
+    return;
+  }
+
+  if(password!==password2){
+    setAuthMsg('regMsg','Konfirmasi password tidak sama.');
+    return;
+  }
+
+  if(recovery.length<6){
+    setAuthMsg('regMsg','Kode pemulihan minimal 6 karakter.');
+    return;
+  }
+
+  /*
+   * Registrasi melalui JSONP GET.
+   * Tidak mengirim foto pada tahap ini supaya request kecil dan stabil.
+   * Foto profil dapat dipasang setelah login.
+   */
+  try{
+    const r=await jsonpGet('registerUser',{
+      username:username,
+      name:name,
+      password:password,
+      recoveryCode:recovery
+    });
+
+    if(r.status!=='success'){
+      throw new Error(r.message||'Pendaftaran gagal');
+    }
+
+    setAuthMsg(
+      'regMsg',
+      'Akun berhasil dibuat. Silakan masuk dengan akun baru.'
+    );
+
+    switchAuth('login');
+    $('loginUsername').value=username;
+    $('loginPassword').value='';
+  }catch(e){
+    setAuthMsg(
+      'regMsg',
+      e.message||'Pendaftaran gagal. Pastikan Apps Script sudah di-deploy versi terbaru.'
+    );
+  }
 }
+
 async function doLogin(){
- const username=$('loginUsername').value.trim().toLowerCase(),password=$('loginPassword').value;
- setAuthMsg('loginMsg','');
- if(!username||!password){setAuthMsg('loginMsg','Username dan password wajib diisi.');return}
- try{
-  const r=await postJSON({action:'loginUser',username,password});
-  if(r.status!=='success')throw Error(r.message||'Login gagal');
-  setCurrentUser(r.user,r.token);
-  $('authGate').classList.add('hidden');
-  updateLoggedUserUI();
-  applyAccountToForms();
-  loadAllAfterLogin();
- }catch(e){setAuthMsg('loginMsg',e.message)}
+  const username=$('loginUsername').value.trim().toLowerCase();
+  const password=$('loginPassword').value;
+
+  setAuthMsg('loginMsg','');
+
+  if(!username||!password){
+    setAuthMsg('loginMsg','Username dan password wajib diisi.');
+    return;
+  }
+
+  const btn=document.querySelector('#auth-login .auth-submit');
+  if(btn){btn.disabled=true;btn.textContent='Menghubungkan…';}
+
+  try{
+    const r=await jsonpGet('loginUser',{
+      username:username,
+      password:password
+    });
+
+    if(!r||r.status!=='success'){
+      throw new Error((r&&r.message)||'Username atau password salah.');
+    }
+
+    if(!r.token||!r.user){
+      throw new Error('Respons login dari server tidak lengkap.');
+    }
+
+    setCurrentUser(r.user,r.token);
+
+    $('authGate').classList.add('hidden');
+    updateLoggedUserUI();
+    applyAccountToForms();
+
+    /*
+     * Penting: setelah autentikasi sukses, jangan masukkan error
+     * inisialisasi dashboard ke catch login.
+     */
+    setTimeout(()=>{
+      try{
+        safeInitializeDashboard();
+      }catch(err){
+        console.error('Dashboard init error:',err);
+        toast('Login berhasil. Sebagian data dashboard belum termuat.');
+      }
+    },30);
+
+  }catch(e){
+    console.error('Login error:',e);
+    setAuthMsg(
+      'loginMsg',
+      e&&e.message
+        ? e.message
+        : 'Login gagal.'
+    );
+  }finally{
+    if(btn){
+      btn.disabled=false;
+      btn.textContent='Masuk ke Dashboard';
+    }
+  }
 }
+
 async function doResetPassword(){
- const username=$('resetUsername').value.trim().toLowerCase(),recovery=$('resetRecovery').value.trim(),password=$('resetPassword').value;
- setAuthMsg('resetMsg','');
- if(!username||recovery.length<6||password.length<8){setAuthMsg('resetMsg','Username, kode pemulihan dan password baru wajib valid.');return}
- try{
-  const r=await postJSON({action:'resetPassword',username,recoveryCode:recovery,newPassword:password});
-  if(r.status!=='success')throw Error(r.message||'Reset gagal');
-  setAuthMsg('resetMsg','Password berhasil direset. Silakan masuk.');switchAuth('login');$('loginUsername').value=username;
- }catch(e){setAuthMsg('resetMsg',e.message)}
+  const username=$('resetUsername').value.trim().toLowerCase();
+  const recovery=$('resetRecovery').value.trim();
+  const password=$('resetPassword').value;
+
+  setAuthMsg('resetMsg','');
+
+  if(!username){
+    setAuthMsg('resetMsg','Username wajib diisi.');
+    return;
+  }
+
+  if(recovery.length<6){
+    setAuthMsg('resetMsg','Kode pemulihan minimal 6 karakter.');
+    return;
+  }
+
+  if(password.length<8){
+    setAuthMsg('resetMsg','Password baru minimal 8 karakter.');
+    return;
+  }
+
+  try{
+    const r=await jsonpGet('resetPassword',{
+      username:username,
+      recoveryCode:recovery,
+      newPassword:password
+    });
+
+    if(r.status!=='success'){
+      throw new Error(r.message||'Reset password gagal');
+    }
+
+    setAuthMsg(
+      'resetMsg',
+      'Password berhasil direset. Silakan masuk.'
+    );
+
+    switchAuth('login');
+    $('loginUsername').value=username;
+    $('loginPassword').value='';
+
+  }catch(e){
+    setAuthMsg(
+      'resetMsg',
+      e.message||'Reset password gagal.'
+    );
+  }
 }
+
 function logoutUser(){clearCurrentUser();location.reload()}
+function avatarFallback(name){const s=String(name||'U').trim().split(/\s+/).filter(Boolean);return (s[0]?.[0]||'U')+(s[1]?.[0]||'');}
+function setAvatarElement(el,u){
+ if(!el)return;
+ const dataUrl=String(u.profilePhotoDataUrl||'').trim();
+ const url=String(u.profilePhotoUrl||'').trim();
+ const fallback=avatarFallback(u.name||u.username||'User');
+ el.alt=fallback;
+ if(dataUrl){
+   el.src=dataUrl;
+   el.onerror=()=>{
+     if(url){
+       el.src=url;
+       el.onerror=()=>{
+         el.removeAttribute('src');
+         el.alt=fallback;
+       };
+     }else{
+       el.removeAttribute('src');
+       el.alt=fallback;
+     }
+   };
+   return;
+ }
+ if(url){
+   el.src=url;
+   el.onerror=()=>{
+     el.removeAttribute('src');
+     el.alt=fallback;
+   };
+   return;
+ }
+ el.removeAttribute('src');
+ el.alt=fallback;
+}
+async function hydrateCurrentProfilePhoto(){
+ const u=getCurrentUser()||{};
+ if(!u.id||u.__photoHydrated)return;
+ u.__photoHydrated=true;
+ try{
+   const d=await jsonpGet('getProfilePhoto',{});
+   if(d&&d.status==='success'&&d.dataUrl){
+     u.profilePhotoDataUrl=d.dataUrl;
+     setCurrentUser(u,getAuthToken());
+     updateLoggedUserUI();
+     const pa=$('profileEditAvatar');
+     if(pa)setAvatarElement(pa,u);
+   }
+ }catch(_){}
+}
 function updateLoggedUserUI(){
  const u=getCurrentUser()||{};
  if($('sidebarUserName'))$('sidebarUserName').textContent=u.name||u.username||'User';
  if($('sidebarUserRole'))$('sidebarUserRole').textContent='@'+(u.username||'user');
- if($('sidebarAvatar'))$('sidebarAvatar').src=u.profilePhotoUrl||'logo.png'; if($('topUserAvatar'))$('topUserAvatar').src=u.profilePhotoUrl||'logo.png'; if($('topUserName'))$('topUserName').textContent=u.name||u.username||'User'; if($('topUserRole'))$('topUserRole').textContent='@'+(u.username||'user');
+ if($('sidebarAvatar'))setAvatarElement($('sidebarAvatar'),u);
+ if($('topUserAvatar'))setAvatarElement($('topUserAvatar'),u);
+ if($('topUserName'))$('topUserName').textContent=u.name||u.username||'User';
+ if($('topUserRole'))$('topUserRole').textContent='@'+(u.username||'user');
+ setTimeout(hydrateCurrentProfilePhoto,50);
 }
+
+function openProfileModal(){
+ if(!getAuthToken())return;
+ const u=getCurrentUser()||{};
+ $('profileEditName').value=u.name||'';
+ $('profileEditUsername').value=u.username||'';
+ $('profileMsg').textContent='';
+ setAvatarElement($('profileEditAvatar'),u);
+ $('profileEditPhoto').value='';
+ $('profileModal').classList.add('show');
+ hydrateCurrentProfilePhoto();
+}
+function closeProfileModal(){$('profileModal').classList.remove('show');}
+let profileCropState={img:null,scale:1,x:0,y:0,drag:false,lastX:0,lastY:0};
+function openProfileCrop(input){
+ const f=input.files&&input.files[0];
+ if(!f)return;
+ if(f.size>2500000){$('profileMsg').textContent='Foto profil maksimal 2.5 MB.';input.value='';return;}
+ const img=new Image();
+ img.onload=()=>{profileCropState={img,scale:1,x:0,y:0,drag:false,lastX:0,lastY:0};centerProfileCrop();$('profileCropZoom').value='1';$('profileCropModal').classList.add('show');};
+ img.src=URL.createObjectURL(f);
+}
+function drawProfileCrop(){
+ const c=$('profileCropCanvas'); if(!c||!profileCropState.img)return;
+ const ctx=c.getContext('2d'), W=c.width,H=c.height,img=profileCropState.img;
+ ctx.clearRect(0,0,W,H);ctx.fillStyle='#0f2835';ctx.fillRect(0,0,W,H);
+ const base=Math.max(W/img.width,H/img.height);
+ const scale=base*profileCropState.scale;
+ const dw=img.width*scale,dh=img.height*scale;
+ const dx=(W-dw)/2+profileCropState.x,dy=(H-dh)/2+profileCropState.y;
+ ctx.drawImage(img,dx,dy,dw,dh);
+}
+function centerProfileCrop(){
+ profileCropState.x=0;profileCropState.y=0; if($('profileCropZoom'))$('profileCropZoom').value=String(profileCropState.scale||1); drawProfileCrop();
+}
+function closeProfileCrop(){$('profileCropModal').classList.remove('show');}
+function applyProfileCrop(){
+ const c=$('profileCropCanvas'); if(!c||!profileCropState.img)return;
+ $('profileEditAvatar').src=c.toDataURL('image/jpeg',0.88);
+ const input=$('profileEditPhoto');
+ input.__croppedData=c.toDataURL('image/jpeg',0.88).split(',')[1];
+ input.__croppedType='image/jpeg';
+ input.__croppedName='profile-'+Date.now()+'.jpg';
+ closeProfileCrop();
+}
+(function initProfileCropInteractions(){
+ const stage=document.getElementById('profileCropStage'); if(!stage)return;
+ const c=document.getElementById('profileCropCanvas');
+ const zoom=document.getElementById('profileCropZoom');
+ const point=e=>{const r=stage.getBoundingClientRect();return {x:(e.clientX??e.touches?.[0]?.clientX)-r.left,y:(e.clientY??e.touches?.[0]?.clientY)-r.top};};
+ const down=e=>{const p=point(e);profileCropState.drag=true;profileCropState.lastX=p.x;profileCropState.lastY=p.y;stage.setPointerCapture?.(e.pointerId);};
+ const move=e=>{if(!profileCropState.drag)return;const p=point(e);profileCropState.x+=p.x-profileCropState.lastX;profileCropState.y+=p.y-profileCropState.lastY;profileCropState.lastX=p.x;profileCropState.lastY=p.y;drawProfileCrop();};
+ const up=()=>{profileCropState.drag=false;};
+ stage.addEventListener('pointerdown',down);stage.addEventListener('pointermove',move);stage.addEventListener('pointerup',up);stage.addEventListener('pointercancel',up);
+ zoom.addEventListener('input',()=>{profileCropState.scale=Number(zoom.value)||1;drawProfileCrop();});
+ c.addEventListener('dblclick',centerProfileCrop);
+})();
+async function saveProfileChanges(){
+ const current=getCurrentUser()||{};
+ const name=String($('profileEditName').value||'').trim();
+ const f=$('profileEditPhoto').files&&$('profileEditPhoto').files[0];
+ if(!current.id){$('profileMsg').textContent='Identitas akun tidak ditemukan.';return;}
+ if(name.length<2){$('profileMsg').textContent='Nama lengkap minimal 2 karakter.';return;}
+ $('profileMsg').textContent='Menyimpan perubahan...';
+ try{
+  let profilePhoto=null;
+  if(f){
+    if(f.__croppedData){
+      profilePhoto={fileName:f.__croppedName||'profile.jpg',mimeType:f.__croppedType||'image/jpeg',data:f.__croppedData};
+    }else{
+      const raw=await fileToDataURL(f);
+      profilePhoto={fileName:f.name,mimeType:f.type||'image/jpeg',data:raw};
+    }
+  }
+  const payload={action:'updateProfile',name,profilePhoto};
+  const r=await postJSON(payload);
+  if(!r || r.status!=='success') throw Error((r&&r.message)||'Profil gagal diperbarui');
+  setCurrentUser(r.user,r.token||getAuthToken());
+  updateLoggedUserUI();
+  applyAccountToForms();
+  $('profileEditPhoto').value='';
+  closeProfileModal();
+  toast('✓ Profil berhasil diperbarui.');
+ }catch(e){
+  console.error('saveProfileChanges',e);
+  $('profileMsg').textContent=e.message||'Profil gagal diperbarui.';
+ }
+}
+
 function requireLogin(){if(!getAuthToken()){ $('authGate').classList.remove('hidden'); return false;}return true}
 
 function applyAccountToForms(){
@@ -2400,17 +3277,61 @@ function applyAccountToForms(){
  ids.forEach(id=>{const el=$(id);if(el&&el!==__nullEl){el.value=u.name||'';el.readOnly=true;el.title='Nama penilai mengikuti akun yang sedang login';}});
 }
 
-function loadAllAfterLogin(){
- if(!requireLogin())return;
- applyAccountToForms();
- populateDays();updateSiteTitle();populateAllModuleLocationMasters();
- renderSampahForm();renderForm();renderEmisiForm();renderPLB3Form();renderPLB3DaruratForm();renderB3Forms();
- if($('emisiDate'))$('emisiDate').value=new Date().toISOString().slice(0,10);
- if($('plb3Date'))$('plb3Date').value=new Date().toISOString().slice(0,10);
- if($('assessmentDate'))$('assessmentDate').addEventListener('change',syncPartsFromDate);
- if($('assessmentYear'))$('assessmentYear').value=new Date().getFullYear();
- ensureExecutiveDashboard();loadData();setTimeout(()=>loadExecutiveAnalytics(false),500);loadUserContributions();
+function safeCall(label,fn){
+  try{
+    const result=fn();
+    if(result && typeof result.catch==='function'){
+      result.catch(err=>console.warn('[PROPER]',label,err));
+    }
+    return result;
+  }catch(err){
+    console.warn('[PROPER]',label,err);
+    return null;
+  }
 }
+
+function safeInitializeDashboard(){
+  if(!requireLogin())return;
+
+  safeCall('applyAccountToForms',applyAccountToForms);
+  safeCall('populateDays',populateDays);
+  safeCall('updateSiteTitle',updateSiteTitle);
+  safeCall('populateAllModuleLocationMasters',populateAllModuleLocationMasters);
+
+  safeCall('renderSampahForm',renderSampahForm);
+  safeCall('renderForm',renderForm);
+  safeCall('renderEmisiForm',renderEmisiForm);
+  safeCall('renderPLB3Form',renderPLB3Form);
+  safeCall('renderPLB3DaruratForm',renderPLB3DaruratForm);
+  safeCall('renderB3Forms',renderB3Forms);
+
+  const today=new Date().toISOString().slice(0,10);
+
+  const ed=$('emisiDate');
+  if(ed && !ed.value)ed.value=today;
+
+  const pd=$('plb3Date');
+  if(pd && !pd.value)pd.value=today;
+
+  const ad=$('assessmentDate');
+  if(ad){
+    ad.removeEventListener('change',syncPartsFromDate);
+    ad.addEventListener('change',syncPartsFromDate);
+  }
+
+  const ay=$('assessmentYear');
+  if(ay&&!ay.value)ay.value=new Date().getFullYear();
+
+  safeCall('ensureExecutiveDashboard',ensureExecutiveDashboard);
+  safeCall('loadData',loadData);
+  safeCall('loadExecutiveAnalytics',()=>loadExecutiveAnalytics(false));
+  safeCall('loadUserContributions',loadUserContributions);
+}
+
+function loadAllAfterLogin(){
+  safeInitializeDashboard();
+}
+
 async function loadUserContributions(){
  try{
   const r=await postJSON({action:'getUserStats'});
@@ -2419,7 +3340,7 @@ async function loadUserContributions(){
   if($('userCountBadge'))$('userCountBadge').textContent=users.length+' PIC';
   $('userContribList').innerHTML=users.length?users.sort((a,b)=>b.percentage-a.percentage).map(u=>`
    <div class="contrib-card">
-    <img src="${escapeHtml(u.profilePhotoUrl||'logo.png')}" alt="">
+    <img src="${escapeHtml(u.profilePhotoUrl||'')}" alt="${escapeHtml(avatarFallback(u.name||u.username))}" onerror="this.removeAttribute('src')">
     <div style="flex:1"><b>${escapeHtml(u.name)}</b><span>@${escapeHtml(u.username)}</span><strong>${Number(u.percentage||0)}%</strong><span>${u.assessments||0} assessment · ${u.modules||0} modul</span></div>
    </div>`).join(''):'<div class="module-empty">Belum ada pengguna.</div>';
  }catch(e){if($('userContribList'))$('userContribList').innerHTML='<div class="module-empty">Statistik PIC belum tersedia.</div>'}
@@ -2427,12 +3348,12 @@ async function loadUserContributions(){
 
 if(getAuthToken()){
   $('authGate').classList.add('hidden');
-  updateLoggedUserUI();
-  loadAllAfterLogin();
+  safeCall('updateLoggedUserUI',updateLoggedUserUI);
+  setTimeout(()=>safeInitializeDashboard(),30);
 }else{
   $('authGate').classList.remove('hidden');
 }
-setInterval(()=>{ if(!document.hidden && getAuthToken()){ loadData(); loadExecutiveAnalytics(true); loadUserContributions(); } },60000);
+setInterval(()=>{ if(!document.hidden && getAuthToken()){ loadData(); loadExecutiveAnalytics(false); loadUserContributions(); } },60000);
 
 /* ===== DASHBOARD V2 RENDERER ===== */
 function setDashDate(){
@@ -2495,7 +3416,7 @@ function buildExecutiveFilterOptions(dataMap){
     const sk=normalizeSite(siteOf(r)); if(sk&&!sites.has(sk))sites.set(sk,siteOf(r));
     const d=dateOf(r); if(d){years.add(d.getFullYear());months.add(d.getMonth()+1)}
   }));
-  moduleSel.innerHTML='<option value="">Semua Bagian</option>'+Object.entries(moduleMeta).map(([k,m])=>`<option value="${k}">${escapeHtml(m.label)}</option>`).join('');
+  moduleSel.innerHTML='<option value="">Semua Aspek</option>'+Object.entries(moduleMeta).map(([k,m])=>`<option value="${k}">${escapeHtml(m.label)}</option>`).join('');
   siteSel.innerHTML='<option value="">Semua Lokasi</option>'+[...sites.entries()].sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>`<option value="${escapeHtml(k)}">${escapeHtml(v)}</option>`).join('');
   yearSel.innerHTML='<option value="">Semua Tahun</option>'+[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('');
   monthSel.innerHTML='<option value="">Semua Bulan</option>'+[...months].sort((a,b)=>a-b).map(m=>`<option value="${m}">${monthName(m)}</option>`).join('');
@@ -2534,6 +3455,73 @@ function openExecutiveRecord(r){
   const rows=[r];const yes=Number(r.yes||0),no=Number(r.no||0);$('execDetailTitle').textContent=(moduleMeta[r._module]?.label||r._module||'Assessment')+' · '+siteOf(r);$('execDetailSubtitle').textContent='Detail assessment yang dipilih';$('execDetailKpis').innerHTML=[['Penilai',r.assessor||'PIC'],['Tanggal',r.assessmentDate||r.timestamp||'-'],['YA',yes],['Kepatuhan',scoreOf(r)+'%']].map(x=>`<div class="exec-mini-kpi"><span>${x[0]}</span><b>${escapeHtml(String(x[1]))}</b></div>`).join('');$('execDetailRows').innerHTML=`<tr><td>${escapeHtml(moduleMeta[r._module]?.label||r._module||'—')}</td><td>${escapeHtml(siteOf(r))}</td><td>${escapeHtml(r.assessor||'PIC')}</td><td>${escapeHtml(r.assessmentDate||r.timestamp||'-')}</td><td>${yes}</td><td>${no}</td><td><b>${scoreOf(r)}%</b></td></tr>`;$('execDetailModal').classList.add('show');
 }
 function closeExecutiveDetail(){$('execDetailModal')?.classList.remove('show')}
+function closeAssessmentChecklist(){ $('assessmentChecklistModal')?.classList.remove('show'); }
+async 
+function canManageAssessment(row){
+  const u=window.currentUser||null;
+  if(!u||!row)return false;
+  const me=[u.name,u.username].filter(Boolean).map(normalizeUser);
+  const owner=normalizeUser(row.assessor||'');
+  return !!owner && me.includes(owner);
+}
+function normalizeUser(v){
+  return String(v||'').trim().toLowerCase().replace(/\s+/g,' ');
+}
+async function deleteAssessment(row, ev){
+  if(ev){ev.preventDefault();ev.stopPropagation();}
+  if(!row||!row.submissionId){toast('Submission ID tidak ditemukan.');return;}
+  if(!canManageAssessment(row)){
+    toast('Assessment ini hanya dapat dihapus oleh penilai yang membuatnya.');
+    return;
+  }
+  const label=`${row.module||row.moduleKey||'Assessment'} · ${displaySite(row.site)||'-'} · ${row.assessmentDate||row.timestamp||'-'}`;
+  if(!confirm(`Hapus assessment ini?\n\n${label}\n\nSemua checklist, keterangan, dan dokumentasi terkait akan dihapus permanen dari Google Sheet.`)) return;
+  try{
+    const result=await postJSON({action:'deleteAssessment',module:row.moduleKey||row.module,submissionId:row.submissionId});
+    if(result.status!=='success') throw new Error(result.message||'Assessment gagal dihapus.');
+    toast('✓ Assessment berhasil dihapus permanen.');
+    window.__allRecapData=null;
+    closeAssessmentChecklist();
+    if(typeof loadExecutiveAnalyticsV2==='function'){
+      try{await loadExecutiveAnalyticsV2(true);}catch(_){}
+    }
+    if(typeof loadAllModulesRecap==='function'){
+      try{await loadAllModulesRecap(true);}catch(_){}
+    }
+    if(typeof loadData==='function'){
+      try{loadData();}catch(_){}
+    }
+  }catch(e){
+    toast('Gagal menghapus assessment: '+(e.message||String(e)));
+  }
+}
+
+async function openAssessmentChecklist(row){
+  const module=row?.module||row?.moduleKey||''; const submissionId=row?.submissionId||'';
+  if(!module||!submissionId){toast('Detail inspeksi tidak tersedia.');return;}
+  const modLabel=module==='Emisi'?'Aspek PPU':(moduleMeta[module]?.label||module);
+  $('assessmentChecklistTitle').textContent='Hasil Checklist · '+modLabel;
+  $('assessmentChecklistSubtitle').textContent=`${displaySite(row.site)||'-'} · ${row.assessor||'PIC'} · ${row.assessmentDate||row.timestamp||'-'}`;
+  $('assessmentChecklistKpis').innerHTML=[['YA',Number(row.yes||0)],['TIDAK',Number(row.no||0)],['Kepatuhan',Number(row.percentage||0)+'%'],['Aspek',modLabel]].map(x=>`<div class="exec-mini-kpi"><span>${escapeHtml(String(x[0]))}</span><b>${escapeHtml(String(x[1]))}</b></div>`).join('');
+  $('assessmentChecklistRows').innerHTML='<tr><td colspan="5" style="text-align:center;padding:35px;color:#7b8c96">Memuat hasil checklist...</td></tr>';
+  const delBtn=$('assessmentDeleteBtn');
+  if(delBtn){
+    delBtn.style.display=canManageAssessment(row)?'inline-flex':'none';
+    delBtn.onclick=(ev)=>deleteAssessment(row,ev);
+  }
+  $('assessmentChecklistModal').classList.add('show');
+  try{
+    const d=await jsonpGet('getAssessmentDetails',{module:module,submissionId:submissionId});
+    const rows=Array.isArray(d.data?.details)?d.data.details:[];
+    $('assessmentChecklistRows').innerHTML=rows.length?rows.map((x,i)=>{
+      const st=String(x.status||'').toUpperCase(); const cls=st==='YA'?'yes':st==='TIDAK'?'no':'pending';
+      const doc=x.dokumentasi||x.documentation||'';
+      const docHtml=doc?`<a class="evidence-link" href="${escapeHtml(doc)}" target="_blank" rel="noopener">📷 Lihat</a>`:'<span style="color:#9aa9a3;font-size:10px">—</span>';
+      return `<tr><td><b>${escapeHtml(String(x.no||i+1))}</b></td><td><div style="font-weight:700;line-height:1.45">${escapeHtml(x.item||x.ketentuan||'')}</div>${x.section?`<div style="font-size:9px;color:#087f5b;margin-top:4px;font-weight:800">${escapeHtml(x.section)}</div>`:''}</td><td><span class="check-status ${cls}">${escapeHtml(st||'—')}</span></td><td>${escapeHtml(x.keterangan||'—')}</td><td>${docHtml}</td></tr>`;
+    }).join(''):'<tr><td colspan="5" style="text-align:center;padding:35px;color:#7b8c96">Detail checklist belum tersedia untuk assessment ini.</td></tr>';
+  }catch(e){$('assessmentChecklistRows').innerHTML=`<tr><td colspan="5" style="text-align:center;padding:35px;color:#b42318">Gagal membaca detail checklist: ${escapeHtml(e.message||String(e))}</td></tr>`;}
+}
+
 async function loadExecutiveAnalyticsV2(force=false){
   ensureExecutiveDashboard();
   const keys=Object.keys(moduleMeta), results=await Promise.all(keys.map(k=>fetchModule(k,force))), map={};
@@ -2565,6 +3553,339 @@ setTimeout(()=>loadExecutiveAnalyticsV2(false),1200);
   dotEls.forEach((d,i)=>d.addEventListener('click',()=>{go(i);restart()}));
   function restart(){clearInterval(timer);timer=setInterval(()=>go(current+1),6500)}
   go(0);restart();const hero=root.closest('.hero-full-bleed')||root.parentElement;hero.addEventListener('mouseenter',()=>clearInterval(timer));hero.addEventListener('mouseleave',restart);
+})();
+</script>
+
+<script>
+/* ===== PROPER • JEJAK-STYLE UX + ROBUST DATA LAYER ===== */
+(() => {
+  const rooms = [
+    {id:'umum',title:'Umum PROPER',sub:'Koordinasi umum tim',icon:'💬'},
+    {id:'ppa',title:'PPA',sub:'Pengendalian pencemaran air',icon:'💧'},
+    {id:'emisi',title:'Emisi',sub:'Cerobong & pemantauan emisi',icon:'🏭'},
+    {id:'plb3',title:'PLB3',sub:'Penyimpanan & tanggap darurat',icon:'🧰'},
+    {id:'b3',title:'B3 & PCBs',sub:'Pengelolaan bahan berbahaya',icon:'⚗️'},
+    {id:'sampah',title:'Sampah',sub:'Pengurangan & pengelolaan sampah',icon:'♻️'}
+  ];
+  let activeRoom = localStorage.getItem('properChatRoom') || 'umum';
+  let activeReply = null;
+  let editingMessageId = null;
+  let chatPollTimer = null;
+  let chatBusy = false;
+
+  window.__properChatRooms = rooms;
+
+  function safeText(v){ return escapeHtml(String(v ?? '')); }
+
+  window.renderProperChatRooms = function(){
+    const root = document.getElementById('properChatRooms');
+    if(!root) return;
+    const q = String(document.getElementById('properChatSearch')?.value || '').trim().toLowerCase();
+    const list = rooms.filter(r=>!q || (r.title+' '+r.sub).toLowerCase().includes(q));
+    const count = document.getElementById('properChatRoomCount');
+    if(count) count.textContent = list.length;
+    root.innerHTML = list.map(r=>`
+      <div class="proper-chat-room ${r.id===activeRoom?'active':''}" onclick="openProperChatRoom('${r.id}')">
+        <div class="proper-chat-room-icon">${r.icon}</div>
+        <div class="proper-chat-room-info">
+          <div class="proper-chat-room-title">${safeText(r.title)}</div>
+          <div class="proper-chat-room-sub">${safeText(r.sub)}</div>
+        </div>
+      </div>`).join('') || '<div class="proper-chat-empty" style="padding:30px 10px"><div>🔎</div><span>Ruang tidak ditemukan.</span></div>';
+  };
+
+  window.openProperChatRoom = async function(roomId){
+    if(!rooms.some(r=>r.id===roomId)) return;
+    activeRoom = roomId; localStorage.setItem('properChatRoom', roomId);
+    const room = rooms.find(r=>r.id===activeRoom);
+    const title=document.getElementById('properChatRoomTitle'), sub=document.getElementById('properChatRoomSubtitle'), av=document.getElementById('properChatRoomAvatar');
+    if(title) title.textContent=room.title; if(sub) sub.textContent=room.sub; if(av) av.textContent=room.icon;
+    const section=document.getElementById('chat'); if(section) section.classList.add('chat-mobile-open');
+    renderProperChatRooms();
+    await fetchProperChatMessages();
+  };
+
+  window.chatBackToRooms = function(){
+    const section=document.getElementById('chat'); if(section) section.classList.remove('chat-mobile-open');
+  };
+
+  function renderProperMessages(rows){
+    const box=document.getElementById('properChatMessages'); if(!box) return;
+    const list=Array.isArray(rows)?rows:[];
+    if(!list.length){
+      box.innerHTML='<div class="proper-chat-empty"><div>🌱</div><b>Belum ada pesan</b><span>Jadilah yang pertama mengawali percakapan di ruang ini.</span></div>';
+      return;
+    }
+    box.innerHTML=list.map(m=>{
+      const isMe=String(m.senderId||'')===String((getCurrentUser()||{}).id||'');
+      const body=safeText(m.text||'').replace(/\n/g,'<br>');
+      const time=safeText(m.time||m.timestamp||'');
+      const actionHtml=isMe?`<div class="proper-chat-actions"><button class="proper-chat-action" title="Edit" onclick="editProperChatMessage('${safeText(m.id)}',decodeURIComponent('${encodeURIComponent(String(m.text||''))}'))">✎ Edit</button><button class="proper-chat-action delete" title="Hapus" onclick="deleteProperChatMessage('${safeText(m.id)}')">🗑 Hapus</button></div>`:'';
+      return `<div class="proper-chat-msg ${isMe?'me':'other'}">
+        <img class="proper-chat-avatar" src="${safeText(m.profilePhotoUrl||'')}" onerror="this.style.display='none'" alt="">
+        <div class="proper-chat-stack">
+          <div class="proper-chat-sender">${safeText(m.name||m.username||'User')}</div>
+          <div class="proper-chat-bubble">
+            ${m.imageUrl?`<img class="proper-chat-photo" src="${safeText(m.imageUrl)}" onclick="window.open(this.src,'_blank')" alt="Lampiran">`:''}
+            ${body}
+          </div>
+          <div class="proper-chat-meta">${time}</div>
+          ${actionHtml}
+        </div>
+      </div>`;
+    }).join('');
+    box.scrollTop=box.scrollHeight;
+  }
+
+  async function fetchProperChatMessages(){
+    if(!getAuthToken()) return;
+    try{
+      const data=await jsonpGet('getChatMessages',{room:activeRoom,limit:100});
+      if(data.status!=='success') throw Error(data.message||'Gagal mengambil pesan');
+      renderProperMessages(data.data||[]);
+      const badge=document.getElementById('chatUnreadBadge'); if(badge) badge.style.display='none';
+    }catch(err){
+      const box=document.getElementById('properChatMessages');
+      if(box) box.innerHTML=`<div class="proper-chat-empty"><div>⚠️</div><b>Chat belum dapat dimuat</b><span>${safeText(err.message)}</span></div>`;
+    }
+  }
+  window.refreshProperChat=function(){ fetchProperChatMessages(); renderProperChatRooms(); };
+
+  window.toggleProperEmoji=function(){document.getElementById('properEmojiPanel')?.classList.toggle('show')};
+  window.insertProperEmoji=function(e){const i=document.getElementById('properChatInput');if(i){i.value+=(i.value?' ':'')+e;i.focus();}document.getElementById('properEmojiPanel')?.classList.remove('show')};
+  window.handleProperChatKey=function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendProperChatMessage();}};
+
+  window.sendProperChatMessage = async function(){
+    if(chatBusy||!getAuthToken()) return;
+    const input=document.getElementById('properChatInput'); const text=String(input?.value||'').trim();
+    if(!text) return;
+    chatBusy=true;
+    try{
+      let data;
+      const action=editingMessageId?'editChatMessage':'sendChatMessage';
+      const payload=editingMessageId?{action,id:editingMessageId,text}:{action,room:activeRoom,text};
+      try{
+        data=await postJSON(payload);
+      }catch(firstErr){
+        await postJSONNoCors(payload);
+        await new Promise(r=>setTimeout(r,700));
+        data=await jsonpGet('getChatMessages',{room:activeRoom,limit:100});
+      }
+      if(data.status!=='success') throw Error(data.message||('Pesan gagal '+(editingMessageId?'diperbarui':'dikirim')));
+      input.value=''; cancelProperChatReply(); const wasEditing=!!editingMessageId; editingMessageId=null; input.placeholder='Ketik pesan...'; await fetchProperChatMessages();
+      toast(wasEditing?'Pesan diperbarui.':'Pesan terkirim.');
+    }catch(err){toast('Chat: '+err.message)}
+    finally{chatBusy=false;}
+  };
+
+  window.cancelProperChatReply=function(){activeReply=null;editingMessageId=null;const i=document.getElementById('properChatInput');if(i)i.placeholder='Ketik pesan...';const x=document.getElementById('properChatReply');if(x)x.style.display='none'};
+  window.editProperChatMessage=function(id,text){
+    editingMessageId=String(id||'');
+    const input=document.getElementById('properChatInput');
+    if(!input) return;
+    input.value=String(text||'');
+    input.placeholder='Edit pesan lalu kirim...';
+    input.focus();
+    const reply=document.getElementById('properChatReply');
+    const rn=document.getElementById('properChatReplyName'); const rt=document.getElementById('properChatReplyText');
+    if(reply){reply.style.display='flex'; if(rn)rn.textContent='Mengedit pesan'; if(rt)rt.textContent=String(text||'');}
+  };
+  window.deleteProperChatMessage=async function(id){
+    if(!id||chatBusy) return;
+    if(!confirm('Hapus pesan ini?')) return;
+    chatBusy=true;
+    try{
+      let data;
+      try{ data=await postJSON({action:'deleteChatMessage',id}); }
+      catch(e){ await postJSONNoCors({action:'deleteChatMessage',id}); data={status:'success'}; await new Promise(r=>setTimeout(r,700)); }
+      if(data.status!=='success') throw Error(data.message||'Pesan gagal dihapus');
+      await fetchProperChatMessages();
+      toast('Pesan dihapus.');
+    }catch(err){toast('Chat: '+err.message)}
+    finally{chatBusy=false;}
+  };
+
+  // More reliable profile save: normal POST first, no-cors fallback, then verify by JSONP.
+  window.saveProfileChanges = async function(){
+    const current=getCurrentUser()||{};
+    const name=String(document.getElementById('profileEditName')?.value||'').trim();
+    const input=document.getElementById('profileEditPhoto');
+    const f=input?.files?.[0];
+
+    if(!current.id){
+      document.getElementById('profileMsg').textContent='Identitas akun tidak ditemukan.';
+      return;
+    }
+    if(name.length<2){
+      document.getElementById('profileMsg').textContent='Nama lengkap minimal 2 karakter.';
+      return;
+    }
+
+    const btn=document.querySelector('#profileModal .profile-foot .btn.primary');
+    if(btn){btn.disabled=true;btn.textContent='Menyimpan...'}
+    document.getElementById('profileMsg').textContent='Menyimpan perubahan...';
+
+    try{
+      let profilePhoto=null;
+      if(f){
+        if(f.__croppedData){
+          profilePhoto={
+            fileName:f.__croppedName||('profile-'+Date.now()+'.jpg'),
+            mimeType:'image/jpeg',
+            data:f.__croppedData
+          };
+        }else{
+          const raw=await fileToDataURL(f);
+          profilePhoto={
+            fileName:'profile-'+Date.now()+'.jpg',
+            mimeType:f.type||'image/jpeg',
+            data:raw.split(',').pop()
+          };
+        }
+      }
+
+      // Update UI optimistically with the cropped photo while saving.
+      const optimistic=Object.assign({},current,{name:name});
+      if(profilePhoto) optimistic.profilePhotoDataUrl='data:image/jpeg;base64,'+profilePhoto.data;
+      setCurrentUser(optimistic,getAuthToken());
+      updateLoggedUserUI();
+
+      // Use form POST to avoid CORS/redirect issues with Apps Script Web Apps.
+      await submitProfileFormNoCors({
+        action:'updateProfile',
+        userToken:getAuthToken(),
+        name:name,
+        profilePhotoData:profilePhoto?profilePhoto.data:'',
+        profilePhotoMimeType:profilePhoto?profilePhoto.mimeType:'',
+        profilePhotoFileName:profilePhoto?profilePhoto.fileName:''
+      });
+
+      // Give Apps Script/Drive a moment to commit, then verify through JSONP.
+      await new Promise(r=>setTimeout(r,1400));
+      const result=await jsonpGet('getProfile',{});
+
+      if(!result||result.status!=='success') {
+        throw new Error((result&&result.message)||'Server belum mengonfirmasi perubahan profil.');
+      }
+
+      const updated=Object.assign({},current,result.user||{},{name});
+      if(profilePhoto){
+        updated.profilePhotoDataUrl='data:image/jpeg;base64,'+profilePhoto.data;
+      } else if(current.profilePhotoDataUrl){
+        updated.profilePhotoDataUrl=current.profilePhotoDataUrl;
+      }
+
+      setCurrentUser(updated,result.token||getAuthToken());
+      updateLoggedUserUI();
+      if(input)input.value='';
+      closeProfileModal();
+      toast('✓ Profil berhasil diperbarui.');
+    }catch(err){
+      console.error('saveProfileChanges',err);
+      const msg=String(err?.message||err);
+      document.getElementById('profileMsg').textContent=
+        msg.includes('Timeout')
+          ? 'Server terlalu lama merespons. Coba tekan Simpan lagi.'
+          : msg;
+      // Restore known local profile state if save could not be confirmed.
+      setCurrentUser(current,getAuthToken());
+      updateLoggedUserUI();
+    }finally{
+      if(btn){btn.disabled=false;btn.textContent='Simpan Perubahan'}
+    }
+  };
+
+  function loadChatOnPage(){
+    renderProperChatRooms();
+    if(!chatPollTimer){
+      chatPollTimer=setInterval(()=>{if(document.getElementById('chat')?.classList.contains('active'))fetchProperChatMessages();},12000);
+    }
+  }
+  const oldShowPage=window.showPage;
+  if(typeof oldShowPage==='function'){
+    window.showPage=function(id){
+      oldShowPage(id);
+      if(id==='chat') loadChatOnPage();
+      if(id==='monitoring'||id==='rekap') setTimeout(()=>loadAllModulesRecap(false),80);
+    };
+  }
+
+  // Robust recap: no hard dependency on optional DOM nodes.
+  window.renderAllModulesRecap=function(rows){
+    rows=Array.isArray(rows)?rows:[];
+    const set=(id,val)=>{const el=document.getElementById(id); if(el) el.textContent=val;};
+    const setHtml=(id,val)=>{const el=document.getElementById(id); if(el) el.innerHTML=val;};
+    const sites=new Set(rows.map(r=>normalizeSite(r.site)).filter(Boolean));
+    const modules=new Set(rows.map(r=>r.moduleKey||r.module).filter(Boolean));
+    const avg=rows.length?Math.round(rows.reduce((s,r)=>s+Number(r.percentage||0),0)/rows.length):0;
+    set('allRecapCount',rows.length); set('allRecapSites',sites.size); set('allRecapAvg',avg+'%'); set('allRecapModules',modules.size+'/6');
+    set('rekapModuleBadge',rows.length+' assessment');
+    const sorted=rows.slice().sort((a,b)=>String(b.timestamp||b.assessmentDate||'').localeCompare(String(a.timestamp||a.assessmentDate||'')));
+    const body=sorted.length?sorted.map(r=>`<tr class="recap-click-row" onclick='openAssessmentChecklist(${JSON.stringify(r).replace(/'/g,"&#39;")})'>
+      <td><span class="mod-pill">${safeText(r.module||'-')}</span></td>
+      <td>${safeText(r.timestamp||r.assessmentDate||'-')}</td>
+      <td><b>${safeText(r.assessor||'-')}</b></td>
+      <td>${safeText(displaySite(r.site)||'-')}</td>
+      <td>${Number(r.yes||0)}</td><td>${Number(r.no||0)}</td>
+      <td><b>${Number(r.percentage||0)}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td>
+    </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:35px;color:#64756f">Belum ada data dari aspek manapun.</td></tr>';
+    setHtml('monitorBody',body); setHtml('rekapBody',body);
+    set('lastSync','Semua modul tersinkron: '+new Date().toLocaleString('id-ID'));
+  };
+
+  // Safer GET for JSONP. Existing jsonpGet can be used by the rest of the app.
+  const oldLoadAll=window.loadAllModulesRecap;
+  window.loadAllModulesRecap=async function(force=false){
+    if(window.__allRecapLoading && !force) return window.__allRecapLoading;
+    try{
+      return await oldLoadAll(force);
+    }catch(e){
+      // Final fallback: load each module independently and merge summaries.
+      const actions=['getPPA','getEmisi','getPLB3','getPLB3Darurat','getB3','getSampah'];
+      const labels={getPPA:'PPA',getEmisi:'Emisi',getPLB3:'PLB3',getPLB3Darurat:'PLB3 Tanggap Darurat',getB3:'B3',getSampah:'Sampah'};
+      const results=[];
+      for(const action of actions){
+        try{
+          const d=await jsonpGet(action,{});
+          (d.data||[]).forEach(r=>results.push({...r,module:labels[action],moduleKey:labels[action]}));
+        }catch(_){}
+      }
+      renderAllModulesRecap(results);
+      return results;
+    }
+  };
+
+  document.addEventListener('click',e=>{
+    if(!e.target.closest('.proper-chat-emoji')&&!e.target.closest('.proper-emoji-panel')) document.getElementById('properEmojiPanel')?.classList.remove('show');
+  });
+})();
+</script>
+
+
+
+\n<script id="plb3-portal-sync">
+(function(){
+  function sync(){
+    const pctEl=document.getElementById('lb3Pct');
+    const badge=document.getElementById('lb3PctMirror');
+    const score=document.getElementById('lb3Score');
+    const bar=document.getElementById('lb3Bar');
+    if(pctEl){
+      const t=pctEl.textContent||'0%';
+      if(badge)badge.textContent=t;
+      if(score)score.textContent=t;
+      if(bar)bar.style.width=t;
+    }
+    const c=document.getElementById('plb3Count');
+    const cv=document.getElementById('plb3CountValue');
+    if(c&&cv){const m=(c.textContent||'').match(/\d+/);cv.textContent=m?m[0]:'0';}
+    const avg=document.getElementById('plb3AvgValue');
+    if(avg&&pctEl)avg.textContent=pctEl.textContent||'0%';
+    const st=document.getElementById('plb3StatusValue');
+    if(st&&pctEl){const n=parseInt(pctEl.textContent||'0',10);st.textContent=n>=90?'Baik':n>=70?'Perlu Pantauan':'Perlu Tindak Lanjut';}
+  }
+  setInterval(sync,600);
+  document.addEventListener('input',sync,true);
 })();
 </script>
 </body>
