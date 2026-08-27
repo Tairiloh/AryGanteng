@@ -978,6 +978,10 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
 .danger-outline.sm{min-width:72px}
 table th:last-child,table td:last-child{min-width:145px}
 </style>
+<style id="evidence-server-status">
+.evidence-file.evidence-saved{border-color:#7ac9a7;background:#f0fdf6}
+.evidence-save-status{display:block!important;margin-top:4px;color:#087f5b!important;font-size:8px!important;font-weight:900}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1484,7 +1488,7 @@ table th:last-child,table td:last-child{min-width:145px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTHFBKS_JGT9Ozv8XkwDSYbKCezwb9qTSB-sG8DxewqJRNNClWyI6qqQ1CQ0PBY2b_/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyP_RmGQsBxBPugTgBS9-Bd1M-fcbns8VxybQoQoHF_ysPKG3WjDjXgLIbAbGQYKDN2/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2004,7 +2008,7 @@ async function submitEmisi(){
   try{
     const d=await postJSON(isEditingModule('Emisi')?{action:'updateAssessment',module:'Emisi',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items:rows}:{action:'saveEmisi',assessor,site,assessmentDate:date,items:rows});
     if(d.status==='success'){
-      try{await uploadModuleEvidence('emisi',d.submissionId,collectEvidence('emisi'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
+      const evr=await uploadModuleEvidence('emisi',d.submissionId,collectEvidence('emisi')); if(evr.failed){toast('Assessment tersimpan, tetapi '+evr.failed+' foto gagal tersimpan. Cek status foto pada form.');}
       toast('✓ Data Emisi berhasil disimpan.');
       resetEmisi();
       loadEmisi();
@@ -2024,7 +2028,7 @@ async function submitPLB3(){
  try{
    const d=await postJSON(isEditingModule('PLB3')?{action:'updateAssessment',module:'PLB3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'savePLB3',assessor,site,assessmentDate:date,items});
    if(d.status==='success'){
-     try{await uploadModuleEvidence('plb3',d.submissionId,collectEvidence('plb3'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
+     const evr=await uploadModuleEvidence('plb3',d.submissionId,collectEvidence('plb3')); if(evr.failed){toast('Assessment tersimpan, tetapi '+evr.failed+' foto gagal tersimpan. Cek status foto pada form.');}
      toast(isEditingModule('PLB3')?'✓ Data Penyimpanan PLB3 berhasil diperbarui.':'✓ Data Penyimpanan PLB3 berhasil disimpan.');clearEditMode();resetPLB3();loadPLB3();
    }
    else throw new Error(d.message||'Gagal menyimpan');
@@ -2048,8 +2052,9 @@ function renderHistoryTable(id,data,type){
      module:moduleKey
    })).replace(/'/g,"&#39;");
 
+   const evidenceMark=(r.dokumentasi||r.documentation||r.fileUrl)?' 📷':'';
    const actionButtons=
-     `<span class="row-actions" onclick="event.stopPropagation()">
+     `<span class="row-actions"> onclick="event.stopPropagation()">
         <button type="button" class="edit-outline sm"
           onclick='editModuleAssessment(${rowJson})'>✎ Edit</button>
         <button type="button" class="danger-outline sm"
@@ -2122,7 +2127,7 @@ async function submitPLB3Darurat(){
  const items=statuses.map((s,i)=>({no:plb3DaruratItems[i][0],ketentuan:plb3DaruratItems[i][2],section:plb3DaruratItems[i][1],status:s.value,documentation:'',keterangan:$(`.darurat-note[data-i="${i}"]`).value.trim()}));
  try{const d=await postJSON(isEditingModule('PLB3 Tanggap Darurat')?{action:'updateAssessment',module:'PLB3 Tanggap Darurat',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'savePLB3Darurat',assessor,site,assessmentDate:date,items});
    if(d.status==='success'){
-   try{await uploadModuleEvidence('darurat',d.submissionId,collectEvidence('darurat'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
+   const evr=await uploadModuleEvidence('darurat',d.submissionId,collectEvidence('darurat')); if(evr.failed){toast('Assessment tersimpan, tetapi '+evr.failed+' foto gagal tersimpan. Cek status foto pada form.');}
    toast(isEditingModule('PLB3 Tanggap Darurat')?'✓ PLB3 Tanggap Darurat berhasil diperbarui.':'✓ PLB3 Tanggap Darurat tersimpan.');clearEditMode();resetPLB3Darurat();loadPLB3Darurat();
  } else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan PLB3 Tanggap Darurat: '+e.message)}
@@ -2159,7 +2164,7 @@ async function submitB3(){
  }));
  if(items.length===0){toast('Isi minimal satu status YA/TIDAK pada B3.');return}
  try{const d=await postJSON(isEditingModule('B3')?{action:'updateAssessment',module:'B3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'saveB3',assessor,site,assessmentDate:date,items});
-   if(d.status==='success'){try{await uploadModuleEvidence('b3',d.submissionId,collectEvidence('b3'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}toast(isEditingModule('B3')?'✓ Data B3 berhasil diperbarui.':'✓ Data B3 berhasil disimpan.');clearEditMode();resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
+   if(d.status==='success'){const evr=await uploadModuleEvidence('b3',d.submissionId,collectEvidence('b3')); if(evr.failed){toast('Assessment tersimpan, tetapi '+evr.failed+' foto gagal tersimpan. Cek status foto pada form.');}toast(isEditingModule('B3')?'✓ Data B3 berhasil diperbarui.':'✓ Data B3 berhasil disimpan.');clearEditMode();resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan B3: '+e.message)}
 }
 function renderGenericHistory(id,data,typeHint){
@@ -2567,6 +2572,11 @@ function enhanceEvidenceInputs(rootSelector,module){
     const input=document.createElement('input');
     input.type='file'; input.accept='image/*'; input.className='evidence-file';
     input.dataset.module=module;
+    input.dataset.site=(
+      root.querySelector('input[name="site"]')?.value ||
+      root.querySelector('#'+module+'Site')?.value ||
+      ''
+    );
     // derive item number from the closest row
     const row=ta.closest('tr');
     input.dataset.no=row ? String((row.querySelector('.num')||{}).textContent||'').trim() : '';
@@ -2599,20 +2609,93 @@ async function compressImage(file){
   });
 }
 async function uploadModuleEvidence(module,submissionId,files){
-  const out=[];
-  for(const input of files){
-    const file=await compressImage(input.files[0]);
-    const data=await new Promise((resolve,reject)=>{
-      const fr=new FileReader();fr.onload=()=>resolve(String(fr.result).split(',')[1]||'');fr.onerror=reject;fr.readAsDataURL(file);
-    });
-    const r=await postJSON({
-      action:'uploadEvidence',module,submissionId,no:input.dataset.no||'',
-      fileName:file.name,mimeType:file.type,data
-    });
-    if(r.status!=='success')throw new Error(r.message||'Upload dokumentasi gagal');
-    out.push(r.url);
+  const inputs=Array.isArray(files)?files:[];
+  if(!submissionId||!inputs.length){
+    return {uploaded:0,failed:0,urls:[]};
   }
-  return out;
+
+  const urls=[];
+  const failures=[];
+
+  for(const input of inputs){
+    try{
+      const original=input.files&&input.files[0];
+      if(!original)continue;
+
+      const file=await compressImage(original);
+
+      const data=await new Promise((resolve,reject)=>{
+        const fr=new FileReader();
+        fr.onload=()=>{
+          const result=String(fr.result||'');
+          resolve(result.split(',').pop()||'');
+        };
+        fr.onerror=()=>reject(new Error('Foto tidak dapat dibaca.'));
+        fr.readAsDataURL(file);
+      });
+
+      const r=await postJSON({
+        action:'uploadEvidence',
+        module,
+        submissionId,
+        no:input.dataset.no||'',
+        site:input.dataset.site||'',
+        fileName:file.name,
+        mimeType:file.type||'image/jpeg',
+        data
+      });
+
+      if(!r||r.status!=='success'){
+        throw new Error(
+          r&&r.message
+            ? r.message
+            : 'Server tidak mengonfirmasi penyimpanan foto.'
+        );
+      }
+
+      urls.push({
+        no:input.dataset.no||'',
+        url:r.url||''
+      });
+
+      /*
+       * Tandai input sebagai sudah tersimpan agar user dapat
+       * membedakan foto yang benar-benar sudah masuk server.
+       */
+      input.dataset.savedUrl=r.url||'';
+      input.classList.add('evidence-saved');
+
+      const wrap=input.closest('.evidence-wrap');
+      if(wrap){
+        let status=wrap.querySelector('.evidence-save-status');
+
+        if(!status){
+          status=document.createElement('small');
+          status.className='evidence-save-status';
+          wrap.appendChild(status);
+        }
+
+        status.textContent='✓ Tersimpan di server';
+      }
+
+    }catch(err){
+
+      failures.push({
+        no:input.dataset.no||'',
+        message:err&&err.message
+          ? err.message
+          : String(err)
+      });
+
+    }
+  }
+
+  return {
+    uploaded:urls.length,
+    failed:failures.length,
+    urls,
+    failures
+  };
 }
 
 function renderForm(){
@@ -2650,7 +2733,7 @@ async function submitPPA(){
  try{
    const d=await postJSON(isEditingModule('PPA')?Object.assign({},payload,{action:'updateAssessment',module:'PPA',submissionId:window.editingAssessment.submissionId}):payload);
    if(d.status==='success'){
-     try{await uploadModuleEvidence('ppa',d.submissionId,collectEvidence('ppa'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
+     const evr=await uploadModuleEvidence('ppa',d.submissionId,collectEvidence('ppa')); if(evr.failed){toast('Assessment tersimpan, tetapi '+evr.failed+' foto gagal tersimpan. Cek status foto pada form.');}
      toast(isEditingModule('PPA')?'✓ Penilaian PPA berhasil diperbarui.':'✓ Penilaian berhasil tersimpan ke Google Sheet.');clearEditMode();localStorage.setItem('ppaLastSubmit',JSON.stringify(payload));resetForm();loadData();showPage('monitoring')
    } else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal terhubung ke server: '+e.message)}
