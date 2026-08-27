@@ -1204,6 +1204,33 @@ table th:last-child,table td:last-child{min-width:190px}
       <div class="note" style="margin-top:7px">Persentase = jumlah jawaban YA ÷ 11 ketentuan × 100.</div></div>
     <div class="actions"><button class="btn secondary" onclick="resetForm()">Reset</button><button class="btn primary" onclick="submitPPA()">☁ Simpan ke Google Sheet</button></div>
   </div>
+
+  <div class="card ppa-history-card">
+    <div class="card-head">
+      <div>
+        <h3>Riwayat Data PPA</h3>
+        <div class="note">Riwayat assessment PPA dari seluruh penilai dan seluruh lokasi.</div>
+      </div>
+      <span class="badge neutral" id="ppaHistoryCount">0 assessment</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Waktu</th>
+            <th>Penilai</th>
+            <th>Lokasi</th>
+            <th>YA</th>
+            <th>TIDAK</th>
+            <th>Persentase</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="ppaHistory"></tbody>
+      </table>
+    </div>
+  </div>
 </section>
 
 
@@ -1488,7 +1515,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx538Ed5jtE200v3aO5hRJanyvEIjwOLWN9P3PBfGkXkThbv6DtaXRLKsYiPGBCMg3a/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrssAyVWzGUxFmk6Uwjzvbdbdv6DnTc3divnidYcWQr9H9vFzkQeAu4TEZiRIgA9MW/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -1512,11 +1539,102 @@ const __nullEl={
   querySelectorAll(){return []},addEventListener(){},setAttribute(){},getAttribute(){return null}
 };
 function $(id){return document.getElementById(id)||__nullEl}
+
+async function loadPPAHistory(){
+  try{
+    const d=await jsonpGet('getPPA',{});
+    if(!d||d.status!=='success'){
+      throw new Error((d&&d.message)||'Riwayat PPA gagal dibaca.');
+    }
+
+    const data=Array.isArray(d.data)?d.data:[];
+
+    if($('ppaHistoryCount')){
+      $('ppaHistoryCount').textContent=
+        data.length+' assessment';
+    }
+
+    const body=$('ppaHistory');
+
+    if(!body)return;
+
+    if(!data.length){
+      body.innerHTML=
+        '<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data PPA.</td></tr>';
+      return;
+    }
+
+    body.innerHTML=
+      data
+        .slice()
+        .sort((a,b)=>
+          String(
+            b.timestamp||
+            b.assessmentDate||
+            ''
+          ).localeCompare(
+            String(
+              a.timestamp||
+              a.assessmentDate||
+              ''
+            )
+          )
+        )
+        .map(r=>{
+          const rowJson=
+            JSON.stringify(
+              Object.assign({},r,{
+                module:'PPA',
+                moduleKey:'PPA'
+              })
+            ).replace(/'/g,'&#39;');
+
+          const actions=
+            `<span class="row-actions" onclick="event.stopPropagation()">
+               <button
+                 class="edit-outline sm"
+                 type="button"
+                 onclick='editModuleAssessment(${rowJson})'>
+                 ✎ Edit
+               </button>
+               <button
+                 class="danger-outline sm"
+                 type="button"
+                 onclick='deleteAssessment(${rowJson},event)'>
+                 🗑 Hapus
+               </button>
+             </span>`;
+
+          return `<tr>
+            <td>${escapeHtml(r.timestamp||r.assessmentDate||'-')}</td>
+            <td>${escapeHtml(r.assessor||'-')}</td>
+            <td>${escapeHtml(displaySite(r.site)||'-')}</td>
+            <td>${Number(r.yes||0)}</td>
+            <td>${Number(r.no||0)}</td>
+            <td><b>${Number(r.percentage||0)}%</b></td>
+            <td>${statusBadge(Number(r.percentage||0))}</td>
+            <td>${actions}</td>
+          </tr>`;
+        })
+        .join('');
+
+  }catch(err){
+    console.warn('[PROPER] PPA history:',err);
+
+    const body=$('ppaHistory');
+
+    if(body){
+      body.innerHTML=
+        '<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Riwayat PPA belum tersedia.</td></tr>';
+    }
+  }
+}
+
 function showPage(id){
  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
  $(id).classList.add('active'); window.scrollTo({top:0,behavior:'smooth'});
- if(id==='ppa') renderForm();
+ if(id==='ppa'){renderForm();loadPPAHistory();}
  if(id==='monitoring'||id==='rekap') { loadAllModulesRecap(false); }
  if(id==='dashboard' && allPPAData.length===0) loadData();
  if(id==='plb3'){renderPLB3Form();loadPLB3();}
@@ -3175,11 +3293,6 @@ async function editModuleAssessment(row){
     return;
   }
 
-  if(!canManageAssessment(row)){
-    toast('Assessment ini hanya dapat diedit oleh penilai yang membuatnya.');
-    return;
-  }
-
   try{
     const r=await jsonpGet('getAssessmentDetails',{
       module:module,
@@ -4571,26 +4684,155 @@ setTimeout(()=>loadExecutiveAnalyticsV2(false),1200);
 
   // Robust recap: no hard dependency on optional DOM nodes.
   window.renderAllModulesRecap=function(rows){
-    rows=Array.isArray(rows)?rows:[];
-    const set=(id,val)=>{const el=document.getElementById(id); if(el) el.textContent=val;};
-    const setHtml=(id,val)=>{const el=document.getElementById(id); if(el) el.innerHTML=val;};
-    const sites=new Set(rows.map(r=>normalizeSite(r.site)).filter(Boolean));
-    const modules=new Set(rows.map(r=>r.moduleKey||r.module).filter(Boolean));
-    const avg=rows.length?Math.round(rows.reduce((s,r)=>s+Number(r.percentage||0),0)/rows.length):0;
-    set('allRecapCount',rows.length); set('allRecapSites',sites.size); set('allRecapAvg',avg+'%'); set('allRecapModules',modules.size+'/6');
-    set('rekapModuleBadge',rows.length+' assessment');
-    const sorted=rows.slice().sort((a,b)=>String(b.timestamp||b.assessmentDate||'').localeCompare(String(a.timestamp||a.assessmentDate||'')));
-    const body=sorted.length?sorted.map(r=>`<tr class="recap-click-row" onclick='openAssessmentChecklist(${JSON.stringify(r).replace(/'/g,"&#39;")})'>
-      <td><span class="mod-pill">${safeText(r.module||'-')}</span></td>
-      <td>${safeText(r.timestamp||r.assessmentDate||'-')}</td>
-      <td><b>${safeText(r.assessor||'-')}</b></td>
-      <td>${safeText(displaySite(r.site)||'-')}</td>
-      <td>${Number(r.yes||0)}</td><td>${Number(r.no||0)}</td>
-      <td><b>${Number(r.percentage||0)}%</b></td><td>${statusBadge(Number(r.percentage||0))}</td>
-    </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:35px;color:#64756f">Belum ada data dari aspek manapun.</td></tr>';
-    setHtml('monitorBody',body); setHtml('rekapBody',body);
-    set('lastSync','Semua modul tersinkron: '+new Date().toLocaleString('id-ID'));
+  rows=Array.isArray(rows)?rows:[];
+
+  const set=(id,val)=>{
+    const el=document.getElementById(id);
+    if(el)el.textContent=val;
   };
+
+  const setHtml=(id,val)=>{
+    const el=document.getElementById(id);
+    if(el)el.innerHTML=val;
+  };
+
+  const sites=new Set(
+    rows
+      .map(r=>normalizeSite(r.site))
+      .filter(Boolean)
+  );
+
+  const modules=new Set(
+    rows
+      .map(r=>r.moduleKey||r.module)
+      .filter(Boolean)
+  );
+
+  /*
+   * Recompute YES/TIDAK from checklist details when available.
+   * This protects the executive table from an incorrectly cached
+   * yes/no aggregate.
+   */
+  rows=rows.map(r=>{
+    const details=Array.isArray(r.details)?r.details:[];
+
+    if(details.length){
+      const yes=details.filter(x=>
+        String(x.status||'').trim().toUpperCase()==='YA'
+      ).length;
+
+      const no=details.filter(x=>
+        String(x.status||'').trim().toUpperCase()==='TIDAK'
+      ).length;
+
+      const total=yes+no;
+
+      return Object.assign({},r,{
+        total:total||Number(r.total||0),
+        yes:yes,
+        no:no,
+        percentage:total
+          ?Math.round(yes/total*100)
+          :Number(r.percentage||0)
+      });
+    }
+
+    return r;
+  });
+
+  const avg=rows.length
+    ?Math.round(
+        rows.reduce(
+          (sum,r)=>sum+Number(r.percentage||0),
+          0
+        )/rows.length
+      )
+    :0;
+
+  set('allRecapCount',rows.length);
+  set('allRecapSites',sites.size);
+  set('allRecapAvg',avg+'%');
+  set('allRecapModules',modules.size+'/6');
+  set('rekapModuleBadge',rows.length+' assessment');
+  set(
+    'lastSync',
+    'Semua aspek tersinkron: '+
+    new Date().toLocaleString('id-ID')
+  );
+
+  const sorted=rows.slice().sort((a,b)=>
+    String(
+      b.timestamp||
+      b.assessmentDate||
+      ''
+    ).localeCompare(
+      String(
+        a.timestamp||
+        a.assessmentDate||
+        ''
+      )
+    )
+  );
+
+  const empty=
+    '<tr><td colspan="9" style="text-align:center;padding:28px;color:#64756f">Belum ada data dari aspek manapun.</td></tr>';
+
+  const makeRow=(r)=>{
+    const moduleKey=
+      String(
+        r.moduleKey||
+        r.module||
+        ''
+      ).trim();
+
+    const rowJson=
+      JSON.stringify(
+        Object.assign({},r,{
+          module:moduleKey,
+          moduleKey:moduleKey
+        })
+      ).replace(/'/g,'&#39;');
+
+    /*
+     * Always display the actions. Backend validates the owner.
+     */
+    const actions=
+      `<span class="row-actions" onclick="event.stopPropagation()">
+         <button
+           class="edit-outline sm"
+           type="button"
+           onclick='editModuleAssessment(${rowJson})'>
+           ✎ Edit
+         </button>
+         <button
+           class="danger-outline sm"
+           type="button"
+           onclick='deleteAssessment(${rowJson},event)'>
+           🗑 Hapus
+         </button>
+       </span>`;
+
+    return `<tr class="recap-click-row" onclick='openAssessmentChecklist(${rowJson})'>
+      <td><b>${escapeHtml(moduleKey||'-')}</b></td>
+      <td>${escapeHtml(r.timestamp||r.assessmentDate||'-')}</td>
+      <td>${escapeHtml(r.assessor||'-')}</td>
+      <td>${escapeHtml(displaySite(r.site)||'-')}</td>
+      <td>${Number(r.yes||0)}</td>
+      <td>${Number(r.no||0)}</td>
+      <td><b>${Number(r.percentage||0)}%</b></td>
+      <td>${statusBadge(Number(r.percentage||0))}</td>
+      <td>${actions}</td>
+    </tr>`;
+  };
+
+  const body=
+    sorted.length
+      ?sorted.map(makeRow).join('')
+      :empty;
+
+  setHtml('monitorBody',body);
+  setHtml('rekapBody',body);
+};
 
   // Safer GET for JSONP. Existing jsonpGet can be used by the rest of the app.
   const oldLoadAll=window.loadAllModulesRecap;
