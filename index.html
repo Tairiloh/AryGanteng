@@ -1488,7 +1488,7 @@ table th:last-child,table td:last-child{min-width:145px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPAVDb_7b2VCiYG_vucPYjVayNIrkP8fEQK8Ovw68twZ1lnWBD9nCgEtkQn1DaQr3j/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw17QrzeqeEu4RnNkPPiYdp6wRet3CdAkBxzvGIuXQkUtkcBgCfOFyHVMks7rD9NnDJ/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2659,25 +2659,124 @@ function collectEvidence(module){
 }
 async function compressImage(file){
   if(!file)return null;
-  if(!file.type.startsWith('image/'))throw new Error('File harus berupa gambar.');
-  const maxBytes=1800000;
-  if(file.size<=maxBytes)return file;
+  if(!file.type.startsWith('image/')){
+    throw new Error('File harus berupa gambar.');
+  }
+
+  /*
+   * Selalu kompres bukti ke ukuran kecil agar POST ke Apps Script stabil.
+   * Target < 900 KB, dimensi maksimum 1400 px.
+   */
+  const TARGET=900*1024;
+  const MAX_SIDE=1400;
+
+  if(file.size<=TARGET && /^image\/jpe?g$/i.test(file.type)){
+    return file;
+  }
+
   return await new Promise((resolve,reject)=>{
-    const img=new Image(),url=URL.createObjectURL(file);
-    img.onload=()=>{
-      URL.revokeObjectURL(url);
-      const max=1600,scale=Math.min(1,max/img.width,max/img.height);
-      const c=document.createElement('canvas');c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);
-      c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-      c.toBlob(b=>b?resolve(new File([b],'evidence.jpg',{type:'image/jpeg'})):reject(new Error('Gagal memproses foto')),'image/jpeg',.76);
+    const img=new Image();
+    const url=URL.createObjectURL(file);
+
+    img.onload=async()=>{
+      try{
+        URL.revokeObjectURL(url);
+
+        let scale=Math.min(
+          1,
+          MAX_SIDE/img.width,
+          MAX_SIDE/img.height
+        );
+
+        let w=Math.max(1,Math.round(img.width*scale));
+        let h=Math.max(1,Math.round(img.height*scale));
+
+        const canvas=document.createElement('canvas');
+        const ctx=canvas.getContext('2d',{alpha:false});
+
+        if(!ctx)throw new Error('Canvas browser tidak tersedia.');
+
+        let quality=.78;
+        let blob=null;
+
+        for(let i=0;i<7;i++){
+          canvas.width=w;
+          canvas.height=h;
+          ctx.clearRect(0,0,w,h);
+          ctx.drawImage(img,0,0,w,h);
+
+          blob=await new Promise(r=>
+            canvas.toBlob(r,'image/jpeg',quality)
+          );
+
+          if(blob && blob.size<=TARGET)break;
+
+          quality=Math.max(.50,quality-.05);
+
+          if(blob && blob.size>TARGET && i>=3){
+            w=Math.max(720,Math.round(w*.88));
+            h=Math.max(720,Math.round(h*.88));
+          }
+        }
+
+        if(!blob){
+          throw new Error('Gagal mengompresi foto.');
+        }
+
+        resolve(
+          new File(
+            [blob],
+            'evidence-'+Date.now()+'.jpg',
+            {type:'image/jpeg'}
+          )
+        );
+
+      }catch(err){
+        try{URL.revokeObjectURL(url);}catch(_){ }
+        reject(err);
+      }
     };
-    img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Foto tidak dapat dibaca'))};
+
+    img.onerror=()=>{
+      try{URL.revokeObjectURL(url);}catch(_){ }
+      reject(new Error('Foto tidak dapat dibaca browser.'));
+    };
+
     img.src=url;
   });
 }
-async function waitForEvidenceServer(submissionId,module,no){
+
+function postEvidenceNoCors(payload){
+  /*
+   * CORS-safe upload.
+   * application/x-www-form-urlencoded tidak memicu preflight.
+   * Response memang opaque, sehingga keberhasilan diverifikasi
+   * setelahnya melalui getEvidence().
+   */
+  const body=new URLSearchParams();
+
+  Object.keys(payload||{}).forEach(k=>{
+    const v=payload[k];
+    if(v!==undefined && v!==null){
+      body.set(k,String(v));
+    }
+  });
+
+  return fetch(
+    SCRIPT_URL,
+    {
+      method:'POST',
+      mode:'no-cors',
+      headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
+      body:body.toString(),
+      keepalive:false
+    }
+  ).then(()=>({status:'accepted'}));
+}
+
+async function waitForEvidenceServer(submissionId,module,no,fileName){
   const started=Date.now();
-  const timeout=30000;
+  const timeout=45000;
 
   while(Date.now()-started<timeout){
     try{
@@ -2687,16 +2786,24 @@ async function waitForEvidenceServer(submissionId,module,no){
       });
 
       if(r&&r.status==='success'){
-        const data=Array.isArray(r.data)?r.data:[];
-        const found=data.find(x=>
+        const rows=Array.isArray(r.data)?r.data:[];
+
+        /* Prefer exact item number. File name is secondary. */
+        const found=rows.find(x=>
           String(x.no||'')===String(no||'') &&
-          String(x.fileUrl||'').trim()
+          String(x.fileUrl||'').trim()!==''
+        ) || rows.find(x=>
+          String(x.fileName||'')===String(fileName||'') &&
+          String(x.fileUrl||'').trim()!==''
         );
+
         if(found)return found;
       }
-    }catch(_){}
+    }catch(_){ }
 
-    await new Promise(resolve=>setTimeout(resolve,1000));
+    await new Promise(
+      resolve=>setTimeout(resolve,1200)
+    );
   }
 
   return null;
@@ -2717,167 +2824,94 @@ async function uploadModuleEvidence(module,submissionId,files){
   }
 
   for(const input of inputs){
-
     try{
-
       const original=input.files&&input.files[0];
       if(!original)continue;
 
       const file=await compressImage(original);
-
-      if(!file){
-        throw new Error('Foto tidak dapat diproses.');
-      }
+      if(!file)throw new Error('Foto tidak dapat diproses.');
 
       const data=await new Promise((resolve,reject)=>{
         const fr=new FileReader();
-
         fr.onload=()=>{
           const raw=String(fr.result||'');
-          const base64=
-            raw.indexOf(',')>=0
-              ?raw.substring(raw.indexOf(',')+1)
-              :raw;
-
-          if(!base64){
-            reject(new Error('Data foto kosong.'));
-          }else{
-            resolve(base64);
-          }
+          const base64=raw.includes(',')
+            ?raw.substring(raw.indexOf(',')+1)
+            :raw;
+          if(!base64)reject(new Error('Data foto kosong.'));
+          else resolve(base64);
         };
-
-        fr.onerror=()=>{
-          reject(new Error('Foto tidak dapat dibaca browser.'));
-        };
-
+        fr.onerror=()=>reject(new Error('Foto tidak dapat dibaca.'));
         fr.readAsDataURL(file);
       });
 
       /*
-       * FOTO:
-       * jangan gunakan postJSON/payloadJson.
-       * Kirim sebagai form field langsung agar Apps Script menerima
-       * e.parameter.data secara konsisten.
+       * Kirim data mentah sebagai form-urlencoded.
+       * JANGAN memakai payloadJson untuk foto.
        */
-      const accepted=await submitFormRequest({
+      await postEvidenceNoCors({
         action:'uploadEvidence',
         userToken:getAuthToken(),
         submissionId:submissionId,
         module:module,
         no:String(input.dataset.no||''),
         site:String(input.dataset.site||''),
-        fileName:file.name||('evidence-'+Date.now()+'.jpg'),
-        mimeType:file.type||'image/jpeg',
+        fileName:file.name,
+        mimeType:'image/jpeg',
         data:data
       });
 
-      if(!accepted||accepted.status!=='accepted'){
-        throw new Error('Server tidak menerima request upload foto.');
-      }
-
-      /*
-       * VERIFIKASI:
-       * Jangan percaya HTTP selesai.
-       * Pastikan baris benar-benar sudah muncul di PROPER_Evidence.
-       */
-      const started=Date.now();
-      let confirmed=null;
-
-      while(Date.now()-started<30000){
-
-        try{
-
-          const check=await jsonpGet(
-            'getEvidence',
-            {
-              submissionId:submissionId,
-              module:module
-            }
-          );
-
-          if(check&&check.status==='success'){
-
-            const rows=
-              Array.isArray(check.data)
-                ?check.data
-                :[];
-
-            confirmed=rows.find(r=>
-              String(r.no||'')===
-              String(input.dataset.no||'') &&
-              String(r.fileUrl||'').trim()!==''
-            );
-
-            if(confirmed)break;
-          }
-
-        }catch(_){}
-
-        await new Promise(
-          resolve=>setTimeout(resolve,1000)
-        );
-      }
+      const confirmed=await waitForEvidenceServer(
+        submissionId,
+        module,
+        input.dataset.no||'',
+        file.name
+      );
 
       if(!confirmed){
         throw new Error(
-          'Server belum mengonfirmasi foto masuk ke PROPER_Evidence.'
+          'Foto belum terkonfirmasi di PROPER_Evidence. Pastikan Deployment Apps Script sudah versi terbaru.'
         );
       }
 
       uploaded.push(confirmed);
-
       input.dataset.savedUrl=confirmed.fileUrl||'';
       input.dataset.serverSaved='1';
       input.classList.add('evidence-saved');
 
       const wrap=input.closest('.evidence-wrap');
-
       if(wrap){
-
-        let status=
-          wrap.querySelector('.evidence-save-status');
-
+        let status=wrap.querySelector('.evidence-save-status');
         if(!status){
           status=document.createElement('small');
           status.className='evidence-save-status';
           wrap.appendChild(status);
         }
-
-        status.textContent='✓ Tersimpan di server';
+        status.textContent='✓ Foto tersimpan di server';
         status.style.color='#087f5b';
       }
 
     }catch(err){
-
       failed.push({
         no:input.dataset.no||'',
-        message:
-          err&&err.message
-            ?err.message
-            :String(err)
+        message:err&&err.message?err.message:String(err)
       });
 
-      const wrap=
-        input.closest('.evidence-wrap');
-
+      const wrap=input.closest('.evidence-wrap');
       if(wrap){
-
-        let status=
-          wrap.querySelector('.evidence-save-status');
-
+        let status=wrap.querySelector('.evidence-save-status');
         if(!status){
           status=document.createElement('small');
           status.className='evidence-save-status';
           wrap.appendChild(status);
         }
-
-        status.textContent='✕ Belum tersimpan di server';
+        status.textContent='✕ Foto gagal tersimpan';
         status.style.color='#b42318';
       }
     }
   }
 
-  return{
+  return {
     uploaded:uploaded.length,
     failed:failed.length,
     urls:uploaded,
