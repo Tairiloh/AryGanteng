@@ -1474,7 +1474,7 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_fv7dkyjYl6dLf2d5qfktmDZvNj25hoqhIwKsYslYOV7WGbGGmcW0QOlSEkL3M_PS/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzr3Sesv-GWyNXYCWQQ29SDlkT4L20fQfZ2_GHH8NE9mfdW9JIf0AUAE_6GAaGwcB4I/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -1726,38 +1726,70 @@ function jsonpGet(action, params={}){
     const cb='properJSONP_'+String(action).replace(/\W/g,'')+'_'+Date.now()+'_'+Math.floor(Math.random()*10000);
     const script=document.createElement('script');
     script.id=cb;
-    let settled=false;
+
+    let finished=false;
+    let timer=null;
+
     const cleanup=()=>{
-      if(settled)return;
-      settled=true;
+      if(timer)clearTimeout(timer);
       try{delete window[cb];}catch(_){}
       if(script.parentNode)script.parentNode.removeChild(script);
-      clearTimeout(timer);
     };
-    const timer=setTimeout(()=>{
+
+    const ok=(data)=>{
+      if(finished)return;
+      finished=true;
       cleanup();
-      reject(new Error('Timeout membaca '+action));
-    },20000);
+      resolve(data);
+    };
+
+    const fail=(err)=>{
+      if(finished)return;
+      finished=true;
+      cleanup();
+      reject(err instanceof Error?err:new Error(String(err||'Server gagal.')));
+    };
+
     window[cb]=(data)=>{
-      cleanup();
-      if(data && data.status==='success') resolve(data);
-      else reject(new Error((data&&data.message)||('Server gagal memproses '+action)));
+      if(data && data.status==='success'){
+        ok(data);
+      }else{
+        fail(new Error(
+          (data&&data.message)||
+          ('Server gagal memproses '+action)
+        ));
+      }
     };
+
+    script.onerror=()=>{
+      fail(new Error(
+        'Google Apps Script tidak dapat diakses untuk '+action+
+        '. Pastikan Web App sudah di-deploy sebagai versi terbaru.'
+      ));
+    };
+
+    timer=setTimeout(()=>{
+      fail(new Error(
+        'Timeout membaca '+action+
+        '. Pastikan URL /exec mengarah ke deployment terbaru.'
+      ));
+    },15000);
+
     const q=new URLSearchParams();
     q.set('action',action);
     q.set('callback',cb);
-    q.set('token',getAuthToken());
     q.set('t',String(Date.now()));
+
+    const token=getAuthToken();
+    if(token)q.set('token',token);
+
     Object.keys(params||{}).forEach(k=>{
       const v=params[k];
-      if(v!==undefined && v!==null) q.set(k,String(v));
+      if(v!==undefined&&v!==null)q.set(k,String(v));
     });
-    script.onerror=()=>{
-      cleanup();
-      reject(new Error('Google Apps Script tidak dapat diakses untuk '+action));
-    };
+
     script.src=SCRIPT_URL+'?'+q.toString();
-    document.body.appendChild(script);
+    document.head.appendChild(script);
   });
 }
 
@@ -2986,33 +3018,55 @@ async function doLogin(){
     return;
   }
 
+  const btn=document.querySelector('#auth-login .auth-submit');
+  if(btn){btn.disabled=true;btn.textContent='Menghubungkan…';}
+
   try{
-    /*
-     * LOGIN LANGSUNG JSONP.
-     * Ini menghindari masalah CORS POST GitHub Pages -> Apps Script.
-     */
     const r=await jsonpGet('loginUser',{
       username:username,
       password:password
     });
 
-    if(r.status!=='success'){
-      throw new Error(r.message||'Username atau password salah.');
+    if(!r||r.status!=='success'){
+      throw new Error((r&&r.message)||'Username atau password salah.');
+    }
+
+    if(!r.token||!r.user){
+      throw new Error('Respons login dari server tidak lengkap.');
     }
 
     setCurrentUser(r.user,r.token);
 
     $('authGate').classList.add('hidden');
-
     updateLoggedUserUI();
     applyAccountToForms();
-    loadAllAfterLogin();
+
+    /*
+     * Penting: setelah autentikasi sukses, jangan masukkan error
+     * inisialisasi dashboard ke catch login.
+     */
+    setTimeout(()=>{
+      try{
+        safeInitializeDashboard();
+      }catch(err){
+        console.error('Dashboard init error:',err);
+        toast('Login berhasil. Sebagian data dashboard belum termuat.');
+      }
+    },30);
 
   }catch(e){
+    console.error('Login error:',e);
     setAuthMsg(
       'loginMsg',
-      e.message||'Login gagal. Pastikan URL Apps Script dan deployment sudah benar.'
+      e&&e.message
+        ? e.message
+        : 'Login gagal.'
     );
+  }finally{
+    if(btn){
+      btn.disabled=false;
+      btn.textContent='Masuk ke Dashboard';
+    }
   }
 }
 
@@ -3223,17 +3277,61 @@ function applyAccountToForms(){
  ids.forEach(id=>{const el=$(id);if(el&&el!==__nullEl){el.value=u.name||'';el.readOnly=true;el.title='Nama penilai mengikuti akun yang sedang login';}});
 }
 
-function loadAllAfterLogin(){
- if(!requireLogin())return;
- applyAccountToForms();
- populateDays();updateSiteTitle();populateAllModuleLocationMasters();
- renderSampahForm();renderForm();renderEmisiForm();renderPLB3Form();renderPLB3DaruratForm();renderB3Forms();
- if($('emisiDate'))$('emisiDate').value=new Date().toISOString().slice(0,10);
- if($('plb3Date'))$('plb3Date').value=new Date().toISOString().slice(0,10);
- if($('assessmentDate'))$('assessmentDate').addEventListener('change',syncPartsFromDate);
- if($('assessmentYear'))$('assessmentYear').value=new Date().getFullYear();
- ensureExecutiveDashboard();loadData();loadExecutiveAnalytics(false);loadUserContributions();
+function safeCall(label,fn){
+  try{
+    const result=fn();
+    if(result && typeof result.catch==='function'){
+      result.catch(err=>console.warn('[PROPER]',label,err));
+    }
+    return result;
+  }catch(err){
+    console.warn('[PROPER]',label,err);
+    return null;
+  }
 }
+
+function safeInitializeDashboard(){
+  if(!requireLogin())return;
+
+  safeCall('applyAccountToForms',applyAccountToForms);
+  safeCall('populateDays',populateDays);
+  safeCall('updateSiteTitle',updateSiteTitle);
+  safeCall('populateAllModuleLocationMasters',populateAllModuleLocationMasters);
+
+  safeCall('renderSampahForm',renderSampahForm);
+  safeCall('renderForm',renderForm);
+  safeCall('renderEmisiForm',renderEmisiForm);
+  safeCall('renderPLB3Form',renderPLB3Form);
+  safeCall('renderPLB3DaruratForm',renderPLB3DaruratForm);
+  safeCall('renderB3Forms',renderB3Forms);
+
+  const today=new Date().toISOString().slice(0,10);
+
+  const ed=$('emisiDate');
+  if(ed && !ed.value)ed.value=today;
+
+  const pd=$('plb3Date');
+  if(pd && !pd.value)pd.value=today;
+
+  const ad=$('assessmentDate');
+  if(ad){
+    ad.removeEventListener('change',syncPartsFromDate);
+    ad.addEventListener('change',syncPartsFromDate);
+  }
+
+  const ay=$('assessmentYear');
+  if(ay&&!ay.value)ay.value=new Date().getFullYear();
+
+  safeCall('ensureExecutiveDashboard',ensureExecutiveDashboard);
+  safeCall('loadData',loadData);
+  safeCall('loadExecutiveAnalytics',()=>loadExecutiveAnalytics(false));
+  safeCall('loadUserContributions',loadUserContributions);
+}
+
+function loadAllAfterLogin(){
+  safeInitializeDashboard();
+}
+
 async function loadUserContributions(){
  try{
   const r=await postJSON({action:'getUserStats'});
@@ -3250,8 +3348,8 @@ async function loadUserContributions(){
 
 if(getAuthToken()){
   $('authGate').classList.add('hidden');
-  updateLoggedUserUI();
-  loadAllAfterLogin();
+  safeCall('updateLoggedUserUI',updateLoggedUserUI);
+  setTimeout(()=>safeInitializeDashboard(),30);
 }else{
   $('authGate').classList.remove('hidden');
 }
@@ -3398,7 +3496,7 @@ async function deleteAssessment(row, ev){
   }
 }
 
-function openAssessmentChecklist(row){
+async function openAssessmentChecklist(row){
   const module=row?.module||row?.moduleKey||''; const submissionId=row?.submissionId||'';
   if(!module||!submissionId){toast('Detail inspeksi tidak tersedia.');return;}
   const modLabel=module==='Emisi'?'Aspek PPU':(moduleMeta[module]?.label||module);
