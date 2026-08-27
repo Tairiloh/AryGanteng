@@ -968,6 +968,16 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
 .muted-action{color:#a0aaa6;font-size:11px}
 #monitorBody .recap-click-row td:last-child,#rekapBody .recap-click-row td:last-child{white-space:nowrap}
 </style>
+<style id="assessment-actions-fix">
+.table-wrap th:last-child,.table-wrap td:last-child{white-space:nowrap;min-width:135px;text-align:center}
+.edit-outline.sm,.danger-outline.sm{display:inline-flex;align-items:center;justify-content:center;gap:4px;line-height:1;vertical-align:middle;margin:2px;font-weight:800}
+</style>
+<style id="proper-edit-delete-visibility">
+.row-actions{display:inline-flex;align-items:center;justify-content:center;gap:6px;white-space:nowrap}
+.edit-outline.sm,.danger-outline.sm{display:inline-flex!important;visibility:visible!important;opacity:1!important;align-items:center;justify-content:center;min-width:66px}
+.danger-outline.sm{min-width:72px}
+table th:last-child,table td:last-child{min-width:145px}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1474,7 +1484,7 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyH_WgvzVQZko-OUPRLuDpJybT8lLL6mkLyP64uk_V4Td7UqIuQLDNpdPnotOgaamWX/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyTHFBKS_JGT9Ozv8XkwDSYbKCezwb9qTSB-sG8DxewqJRNNClWyI6qqQ1CQ0PBY2b_/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2023,18 +2033,52 @@ async function submitPLB3(){
 function renderHistoryTable(id,data,type){
  const body=$(id);
  if(!body)return;
- body.innerHTML=data.length?data.slice().reverse().map(r=>{
-   if(type==='emisi') {
-   const rowJson=JSON.stringify(Object.assign({},r,{moduleKey:'Emisi',module:'Emisi'})).replace(/'/g,"&#39;");
-   const own=canManageAssessment(r);
-   return `<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(r.site||'-')}</td><td><b>${r.percentage||0}%</b></td><td>${own?`<button type="button" class="edit-outline sm" onclick='editModuleAssessment(${rowJson});event.stopPropagation()'>✎ Edit</button><button type="button" class="danger-outline sm" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`;
+
+ const rows=Array.isArray(data)?data.slice().reverse():[];
+
+ if(!rows.length){
+   body.innerHTML='<tr><td colspan="'+(type==='emisi'?5:8)+'" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+   return;
+ }
+
+ body.innerHTML=rows.map(r=>{
+   const moduleKey=type==='emisi'?'Emisi':(type==='lb3'?'PLB3':type);
+   const rowJson=JSON.stringify(Object.assign({},r,{
+     moduleKey:moduleKey,
+     module:moduleKey
+   })).replace(/'/g,"&#39;");
+
+   const actionButtons=
+     `<span class="row-actions" onclick="event.stopPropagation()">
+        <button type="button" class="edit-outline sm"
+          onclick='editModuleAssessment(${rowJson})'>✎ Edit</button>
+        <button type="button" class="danger-outline sm"
+          onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>
+      </span>`;
+
+   if(type==='emisi'){
+     return `<tr>
+       <td>${escapeHtml(r.timestamp||'-')}</td>
+       <td>${escapeHtml(r.assessor||'-')}</td>
+       <td>${escapeHtml(r.site||'-')}</td>
+       <td><b>${Number(r.percentage||0)}%</b></td>
+       <td>${actionButtons}</td>
+     </tr>`;
+   }
+
+   return `<tr>
+     <td>${escapeHtml(r.timestamp||'-')}</td>
+     <td>${escapeHtml(r.assessor||'-')}</td>
+     <td>${escapeHtml(r.site||'-')}</td>
+     <td>${Number(r.total||0)}</td>
+     <td>${Number(r.yes||0)}</td>
+     <td>${Number(r.no||0)}</td>
+     <td><b>${Number(r.percentage||0)}%</b></td>
+     <td>${actionButtons}</td>
+   </tr>`;
+ }).join('');
 }
-   const moduleKey=type==='lb3'?'PLB3':type;
-   const rowJson=JSON.stringify(Object.assign({},r,{moduleKey,module:moduleKey})).replace(/'/g,"&#39;");
-   const own=canManageAssessment(r);
-   return `<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(r.site||'-')}</td><td>${r.total||0}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td><td>${own?`<button type="button" class="edit-outline sm" onclick='editModuleAssessment(${rowJson});event.stopPropagation()'>✎ Edit</button><button type="button" class="danger-outline sm" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`;
- }).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
-}
+
 function loadEmisi(){
  const old=document.getElementById('emisiJsonp');if(old)old.remove();
  const cb='emisiCallback_'+Date.now();
@@ -2044,7 +2088,7 @@ function loadEmisi(){
 function loadPLB3(){
  const old=document.getElementById('plb3Jsonp');if(old)old.remove();
  const cb='plb3Callback_'+Date.now();
- window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('lb3History',d.data||[],'lb3');populateModuleLocationMaster('plb3',d.data||[]);if($('plb3Count'))$('plb3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('plb3',d.data||[]);}catch(e){console.warn('[PROPER] Data PLB3 gagal dibaca:',e)}finally{delete window[cb];const s=$('plb3Jsonp');if(s)s.remove();}};
+ window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('plb3History',d.data||[],'lb3');populateModuleLocationMaster('plb3',d.data||[]);if($('plb3Count'))$('plb3Count').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('plb3',d.data||[]);}catch(e){console.warn('[PROPER] Data PLB3 gagal dibaca:',e)}finally{delete window[cb];const s=$('plb3Jsonp');if(s)s.remove();}};
  const s=document.createElement('script');s.id='plb3Jsonp';s.src=SCRIPT_URL+'?action=getPLB3&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{console.warn('[PROPER] Data PLB3 gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
 }
 
@@ -2119,15 +2163,51 @@ async function submitB3(){
  }catch(e){toast('Gagal menyimpan B3: '+e.message)}
 }
 function renderGenericHistory(id,data,typeHint){
- const body=$(id);if(!body)return;
- body.innerHTML=data.length?data.slice().reverse().map(r=>{
-   const mapType={darurat:'PLB3 Tanggap Darurat',b3:'B3',sampah:'Sampah'};
-   const moduleKey=mapType[typeHint]||mapType[id.replace('History','')]||'';
-   const rowJson=JSON.stringify(Object.assign({},r,{moduleKey,module:moduleKey})).replace(/'/g,"&#39;");
-   const own=canManageAssessment(r);
-   return `<tr><td>${r.timestamp||'-'}</td><td><b>${escapeHtml(r.assessor||'-')}</b></td><td>${escapeHtml(r.site||'-')}</td><td>${r.total||0}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td><td>${own?`<button type="button" class="edit-outline sm" onclick='editModuleAssessment(${rowJson});event.stopPropagation()'>✎ Edit</button><button type="button" class="danger-outline sm" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`;
- }).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+ const body=$(id);
+ if(!body)return;
+
+ const rows=Array.isArray(data)?data.slice().reverse():[];
+
+ if(!rows.length){
+   body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+   return;
+ }
+
+ const moduleKeyMap={
+   darurat:'PLB3 Tanggap Darurat',
+   b3:'B3',
+   sampah:'Sampah'
+ };
+
+ const moduleKey=moduleKeyMap[typeHint]||typeHint;
+
+ body.innerHTML=rows.map(r=>{
+   const rowJson=JSON.stringify(Object.assign({},r,{
+     moduleKey:moduleKey,
+     module:moduleKey
+   })).replace(/'/g,"&#39;");
+
+   const actionButtons=
+     `<span class="row-actions" onclick="event.stopPropagation()">
+       <button type="button" class="edit-outline sm"
+         onclick='editModuleAssessment(${rowJson})'>✎ Edit</button>
+       <button type="button" class="danger-outline sm"
+         onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>
+      </span>`;
+
+   return `<tr>
+     <td>${escapeHtml(r.timestamp||'-')}</td>
+     <td><b>${escapeHtml(r.assessor||'-')}</b></td>
+     <td>${escapeHtml(r.site||'-')}</td>
+     <td>${Number(r.total||0)}</td>
+     <td>${Number(r.yes||0)}</td>
+     <td>${Number(r.no||0)}</td>
+     <td><b>${Number(r.percentage||0)}%</b></td>
+     <td>${actionButtons}</td>
+   </tr>`;
+ }).join('');
 }
+
 function loadPLB3Darurat(){
  const old=$('plb3DaruratJsonp');if(old)old.remove();const cb='plb3DaruratCB_'+Date.now();
  window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('daruratHistory',d.data||[],'darurat');populateModuleLocationMaster('darurat',d.data||[]);if($('daruratCount'))$('daruratCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('darurat',d.data||[]);}catch(e){console.warn('[PROPER] Data PLB3 Tanggap Darurat gagal dibaca:',e)}finally{delete window[cb];const s=$('plb3DaruratJsonp');if(s)s.remove();}};
@@ -3051,7 +3131,10 @@ function renderData(data,rebuild=true){
    <td><button class="action-eye" onclick="openDetail('${escapeHtml(r.siteKey||normalizeSite(r.site))}')">◉</button></td>
  </tr>`).join(''):'<tr><td colspan="9" style="text-align:center;padding:25px;color:#64756f">Belum ada data penilaian.</td></tr>';
 
- if($('monitorBody'))$('monitorBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td><b>${escapeHtml(displaySite(r.site)||'-')}</b></td><td>${r.total||11}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.timestamp||'-'}</td><td>${canManageAssessment(r)?`<button class="edit-outline sm" type="button" onclick='editModuleAssessment(${JSON.stringify(Object.assign({},r,{module:"PPA",moduleKey:"PPA"})).replace(/\'/g,"&#39;")});event.stopPropagation()'>✎ Edit</button><button class="danger-outline sm" type="button" onclick='deleteAssessment(${JSON.stringify(Object.assign({},r,{module:"PPA",moduleKey:"PPA"})).replace(/\'/g,"&#39;")},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+ if($('monitorBody'))$('monitorBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>{
+ const ppaRow=JSON.stringify(Object.assign({},r,{module:'PPA',moduleKey:'PPA'})).replace(/'/g,"&#39;");
+ return `<tr><td><b>${escapeHtml(displaySite(r.site)||'-')}</b></td><td>${r.total||11}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.timestamp||'-'}</td><td><span class="row-actions" onclick="event.stopPropagation()"><button class="edit-outline sm" type="button" onclick='editModuleAssessment(${ppaRow})'>✎ Edit</button><button class="danger-outline sm" type="button" onclick='deleteAssessment(${ppaRow},event)'>🗑 Hapus</button></span></td></tr>`;
+}).join(''):'<tr><td colspan="9" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
  if($('rekapBody'))$('rekapBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
  if($('lastSync'))$('lastSync').textContent='Sinkron terakhir: '+new Date().toLocaleString('id-ID');
  if($('topLastSync'))$('topLastSync').textContent='Terakhir diperbarui: '+new Date().toLocaleTimeString('id-ID');
@@ -3120,8 +3203,8 @@ async function loadPPAFullData(){
 let currentUser=null;
 function getAuthToken(){return localStorage.getItem('properAuthToken')||''}
 function getCurrentUser(){try{return JSON.parse(localStorage.getItem('properCurrentUser')||'null')}catch(_){return null}}
-function setCurrentUser(u,t){currentUser=u;localStorage.setItem('properCurrentUser',JSON.stringify(u));localStorage.setItem('properAuthToken',t||'')}
-function clearCurrentUser(){currentUser=null;localStorage.removeItem('properCurrentUser');localStorage.removeItem('properAuthToken')}
+function setCurrentUser(u,t){currentUser=u;window.currentUser=u||null;localStorage.setItem('properCurrentUser',JSON.stringify(u));localStorage.setItem('properAuthToken',t||'')}
+function clearCurrentUser(){currentUser=null;window.currentUser=null;localStorage.removeItem('properCurrentUser');localStorage.removeItem('properAuthToken')}
 function switchAuth(which){
  document.querySelectorAll('.auth-tabs button').forEach((b,i)=>b.classList.toggle('active',['login','register','reset'][i]===which));
  document.querySelectorAll('.auth-form').forEach(x=>x.classList.remove('active'));
@@ -3664,13 +3747,24 @@ function openExecutiveRecord(r){
 }
 function closeExecutiveDetail(){$('execDetailModal')?.classList.remove('show')}
 function closeAssessmentChecklist(){ $('assessmentChecklistModal')?.classList.remove('show'); }
-async 
 function canManageAssessment(row){
-  const u=window.currentUser||null;
+  const u=(typeof getCurrentUser==='function'?getCurrentUser():null) || window.currentUser || null;
   if(!u||!row)return false;
-  const me=[u.name,u.username].filter(Boolean).map(normalizeUser);
-  const owner=normalizeUser(row.assessor||'');
-  return !!owner && me.includes(owner);
+
+  const normalize=(v)=>String(v||'').trim().toLowerCase().replace(/\s+/g,' ');
+  const me=[u.name,u.username,u.fullName,u.displayName]
+    .filter(Boolean)
+    .map(normalize);
+
+  const owners=[
+    row.assessor,
+    row.penilai,
+    row.username,
+    row.createdBy,
+    row.createdByUsername
+  ].filter(Boolean).map(normalize);
+
+  return owners.some(owner=>me.includes(owner));
 }
 function normalizeUser(v){
   return String(v||'').trim().toLowerCase().replace(/\s+/g,' ');
