@@ -968,21 +968,6 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
 .muted-action{color:#a0aaa6;font-size:11px}
 #monitorBody .recap-click-row td:last-child,#rekapBody .recap-click-row td:last-child{white-space:nowrap}
 </style>
-
-<style id="assessment-edit-delete-ui">
-.history-actions{display:flex;gap:6px;align-items:center;justify-content:center;white-space:nowrap}
-.edit-btn.sm,.delete-btn.sm{
-  border:1px solid #d9e5e9;background:#fff;border-radius:8px;
-  padding:6px 9px;font-size:9px;font-weight:900;cursor:pointer;
-}
-.edit-btn.sm{color:#1769a8;border-color:#c8dded;background:#f5faff}
-.edit-btn.sm:hover{background:#1769a8;color:#fff}
-.delete-btn.sm{color:#b42318;border-color:#f0c7c4;background:#fff7f7}
-.delete-btn.sm:hover{background:#b42318;color:#fff}
-.danger-outline.sm{border:1px solid #e2b3b3;background:#fff7f7;color:#b42318;border-radius:9px;padding:7px 10px;font-size:9px;font-weight:900;cursor:pointer;white-space:nowrap}
-.muted-action{color:#a0aaa6;font-size:10px}
-</style>
-
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1067,8 +1052,7 @@ body{background:linear-gradient(135deg,#edf4f1 0%,#f7faf9 45%,#edf5f2 100%)!impo
 <aside class="sidebar" id="sidebar">
   <div class="brand">
       <div class="proper-logo"><img src="logo.png" alt="PROPER" onerror="this.style.opacity=.15"></div>
-      <h2>INSPEKSI KETENTUAN TEKNIS PROPER
-SHE DEPARTEMENT</h2>
+      <h2>Inspeksi Ketentuan Teknis PROPER</h2>
       
     </div>
     <div class="user-profile-mini" onclick="openProfileModal()" title="Edit profil" style="cursor:pointer"><img id="sidebarAvatar" src="logo.png" alt=""><div><b id="sidebarUserName">Guest</b><small id="sidebarUserRole">Belum masuk</small></div></div>
@@ -1381,7 +1365,7 @@ SHE DEPARTEMENT</h2>
   <div class="card"><div class="actions"><button class="btn secondary" onclick="resetB3()">Reset</button><button class="btn primary" onclick="submitB3()">☁ Simpan B3 ke Google Sheet</button></div></div>
   <div class="card">
     <div class="card-head"><h3>Riwayat Penilaian B3</h3><span class="badge neutral" id="b3Count">0 assessment</span></div>
-    <div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>Aspek</th><th>YA</th><th>TIDAK</th><th>%</th></tr></thead><tbody id="b3History"></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>Waktu</th><th>Penilai</th><th>Lokasi</th><th>Aspek</th><th>YA</th><th>TIDAK</th><th>%</th><th>Aksi</th></tr></thead><tbody id="b3History"></tbody></table></div>
   </div>
 </section>
 
@@ -1490,7 +1474,7 @@ SHE DEPARTEMENT</h2>
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKBmnRvU0HDbZ88BWuRY-8aGiDaIkFGK_E_q32K3dcW8FI_b3-w5dL7E5DNTeXsuWf/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwGmK_CHdpST52jR2Lleb5rVO0h09QhZ2GQPfvprs1JTNzG5vVWaILPTT6KHq65I2E/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -1971,22 +1955,15 @@ async function postJSON(payload){
   payload=Object.assign({},payload,{userToken:getAuthToken()});
 
   /*
-   * Saat user sedang mengedit assessment, otomatis kirim
-   * Submission ID assessment lama supaya server melakukan
-   * UPDATE terhadap data lama, bukan membuat assessment baru.
+   * GitHub Pages -> Google Apps Script:
+   * jangan mengandalkan fetch POST karena respons CORS
+   * tidak dapat dibaca browser.
+   *
+   * Gunakan hidden-form POST + postMessage.
+   * Password tetap berada di POST body, bukan di URL.
    */
-  const editState=window.properEditState||null;
-  if(
-    editState &&
-    editState.submissionId &&
-    /^save/i.test(String(payload.action||''))
-  ){
-    payload.replaceSubmissionId=editState.submissionId;
-  }
-
   return await submitResponseForm(payload);
 }
-
 async function submitEmisi(){
   const assessor=$('emisiAssessor').value.trim(),site=canonicalLocationFor('emisi',$('emisiSite').value),date=$('emisiDate').value;
   if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Emisi wajib diisi.');return}
@@ -2015,7 +1992,7 @@ async function submitEmisi(){
   });
 
   try{
-    const d=await postJSON({action:'saveEmisi',assessor,site,assessmentDate:date,items:rows});
+    const d=await postJSON(isEditingModule('Emisi')?{action:'updateAssessment',module:'Emisi',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items:rows}:{action:'saveEmisi',assessor,site,assessmentDate:date,items:rows});
     if(d.status==='success'){
       try{await uploadModuleEvidence('emisi',d.submissionId,collectEvidence('emisi'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
       toast('✓ Data Emisi berhasil disimpan.');
@@ -2035,10 +2012,10 @@ async function submitPLB3(){
    return {no:i+1,ketentuan,status:s?s.value:'',keterangan:n?n.value.trim():''};
  });
  try{
-   const d=await postJSON({action:'savePLB3',assessor,site,assessmentDate:date,items});
+   const d=await postJSON(isEditingModule('PLB3')?{action:'updateAssessment',module:'PLB3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'savePLB3',assessor,site,assessmentDate:date,items});
    if(d.status==='success'){
      try{await uploadModuleEvidence('plb3',d.submissionId,collectEvidence('plb3'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
-     toast('✓ Data Penyimpanan PLB3 berhasil disimpan.');resetPLB3();loadPLB3();
+     toast(isEditingModule('PLB3')?'✓ Data Penyimpanan PLB3 berhasil diperbarui.':'✓ Data Penyimpanan PLB3 berhasil disimpan.');clearEditMode();resetPLB3();loadPLB3();
    }
    else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan LB3: '+e.message)}
@@ -2046,42 +2023,18 @@ async function submitPLB3(){
 function renderHistoryTable(id,data,type){
  const body=$(id);
  if(!body)return;
-
- const rows=Array.isArray(data)?data:[];
- const emptyCols=type==='emisi'?5:8;
-
- body.innerHTML=rows.length?rows.slice().reverse().map(r=>{
-   const module=type==='emisi'?'Emisi':'PLB3';
-   const rowJson=JSON.stringify(Object.assign({},r,{module,moduleKey:module})).replace(/'/g,"&#39;");
-   const actions=`
-     <div class="history-actions">
-       ${canManageAssessment(r)?`<button type="button" class="edit-btn sm" onclick='editAssessment(${rowJson},event)'>✎ Edit</button>`:''}
-       ${canManageAssessment(r)?`<button type="button" class="delete-btn sm" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:''}
-     </div>`;
-
-   if(type==='emisi'){
-     return `<tr>
-       <td>${r.timestamp||'-'}</td>
-       <td>${escapeHtml(r.assessor||'-')}</td>
-       <td>${escapeHtml(r.site||'-')}</td>
-       <td><b>${r.percentage||0}%</b></td>
-       <td>${actions}</td>
-     </tr>`;
-   }
-
-   return `<tr>
-     <td>${r.timestamp||'-'}</td>
-     <td>${escapeHtml(r.assessor||'-')}</td>
-     <td>${escapeHtml(r.site||'-')}</td>
-     <td>${r.total||0}</td>
-     <td>${r.yes||0}</td>
-     <td>${r.no||0}</td>
-     <td><b>${r.percentage||0}%</b></td>
-     <td>${actions}</td>
-   </tr>`;
- }).join(''):`<tr><td colspan="${emptyCols}" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>`;
+ body.innerHTML=data.length?data.slice().reverse().map(r=>{
+   if(type==='emisi') {
+   const rowJson=JSON.stringify(Object.assign({},r,{moduleKey:'Emisi',module:'Emisi'})).replace(/'/g,"&#39;");
+   const own=canManageAssessment(r);
+   return `<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(r.site||'-')}</td><td><b>${r.percentage||0}%</b></td><td>${own?`<button type="button" class="edit-outline sm" onclick='editModuleAssessment(${rowJson});event.stopPropagation()'>✎ Edit</button><button type="button" class="danger-outline sm" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`;
 }
-
+   const moduleKey=type==='lb3'?'PLB3':type;
+   const rowJson=JSON.stringify(Object.assign({},r,{moduleKey,module:moduleKey})).replace(/'/g,"&#39;");
+   const own=canManageAssessment(r);
+   return `<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(r.site||'-')}</td><td>${r.total||0}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td><td>${own?`<button type="button" class="edit-outline sm" onclick='editModuleAssessment(${rowJson});event.stopPropagation()'>✎ Edit</button><button type="button" class="danger-outline sm" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`;
+ }).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+}
 function loadEmisi(){
  const old=document.getElementById('emisiJsonp');if(old)old.remove();
  const cb='emisiCallback_'+Date.now();
@@ -2123,10 +2076,10 @@ async function submitPLB3Darurat(){
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal PLB3 Tanggap Darurat wajib diisi.');return}
  if(statuses.some(s=>!s.value)){toast('Lengkapi semua status YA/TIDAK PLB3 Tanggap Darurat.');return}
  const items=statuses.map((s,i)=>({no:plb3DaruratItems[i][0],ketentuan:plb3DaruratItems[i][2],section:plb3DaruratItems[i][1],status:s.value,documentation:'',keterangan:$(`.darurat-note[data-i="${i}"]`).value.trim()}));
- try{const d=await postJSON({action:'savePLB3Darurat',assessor,site,assessmentDate:date,items});
+ try{const d=await postJSON(isEditingModule('PLB3 Tanggap Darurat')?{action:'updateAssessment',module:'PLB3 Tanggap Darurat',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'savePLB3Darurat',assessor,site,assessmentDate:date,items});
    if(d.status==='success'){
    try{await uploadModuleEvidence('darurat',d.submissionId,collectEvidence('darurat'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
-   toast('✓ PLB3 Tanggap Darurat tersimpan.');resetPLB3Darurat();loadPLB3Darurat();
+   toast(isEditingModule('PLB3 Tanggap Darurat')?'✓ PLB3 Tanggap Darurat berhasil diperbarui.':'✓ PLB3 Tanggap Darurat tersimpan.');clearEditMode();resetPLB3Darurat();loadPLB3Darurat();
  } else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan PLB3 Tanggap Darurat: '+e.message)}
 }
@@ -2161,41 +2114,20 @@ async function submitB3(){
    items.push({section:sec[0],no:sec[1][i][0],ketentuan:sec[1][i][1],status:s.value,keterangan:$(`.b3-note[data-s="${si}"][data-i="${i}"]`).value.trim()});
  }));
  if(items.length===0){toast('Isi minimal satu status YA/TIDAK pada B3.');return}
- try{const d=await postJSON({action:'saveB3',assessor,site,assessmentDate:date,items});
-   if(d.status==='success'){try{await uploadModuleEvidence('b3',d.submissionId,collectEvidence('b3'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}toast('✓ Data B3 berhasil disimpan.');resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
+ try{const d=await postJSON(isEditingModule('B3')?{action:'updateAssessment',module:'B3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'saveB3',assessor,site,assessmentDate:date,items});
+   if(d.status==='success'){try{await uploadModuleEvidence('b3',d.submissionId,collectEvidence('b3'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}toast(isEditingModule('B3')?'✓ Data B3 berhasil diperbarui.':'✓ Data B3 berhasil disimpan.');clearEditMode();resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan B3: '+e.message)}
 }
-function renderGenericHistory(id,data,type){
- const body=$(id);
- if(!body)return;
-
- const rows=Array.isArray(data)?data:[];
- const module=
-   type==='darurat'?'PLB3 Tanggap Darurat':
-   type==='b3'?'B3':
-   type==='sampah'?'Sampah':'PLB3';
-
- body.innerHTML=rows.length?rows.slice().reverse().map(r=>{
-   const rowJson=JSON.stringify(Object.assign({},r,{module,moduleKey:module})).replace(/'/g,"&#39;");
-   const actions=`
-     <div class="history-actions">
-       ${canManageAssessment(r)?`<button type="button" class="edit-btn sm" onclick='editAssessment(${rowJson},event)'>✎ Edit</button>`:''}
-       ${canManageAssessment(r)?`<button type="button" class="delete-btn sm" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:''}
-     </div>`;
-
-   return `<tr>
-     <td>${r.timestamp||'-'}</td>
-     <td><b>${escapeHtml(r.assessor||'-')}</b></td>
-     <td>${escapeHtml(r.site||'-')}</td>
-     <td>${r.total||0}</td>
-     <td>${r.yes||0}</td>
-     <td>${r.no||0}</td>
-     <td><b>${r.percentage||0}%</b></td>
-     <td>${actions}</td>
-   </tr>`;
- }).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+function renderGenericHistory(id,data,typeHint){
+ const body=$(id);if(!body)return;
+ body.innerHTML=data.length?data.slice().reverse().map(r=>{
+   const mapType={darurat:'PLB3 Tanggap Darurat',b3:'B3',sampah:'Sampah'};
+   const moduleKey=mapType[typeHint]||mapType[id.replace('History','')]||'';
+   const rowJson=JSON.stringify(Object.assign({},r,{moduleKey,module:moduleKey})).replace(/'/g,"&#39;");
+   const own=canManageAssessment(r);
+   return `<tr><td>${r.timestamp||'-'}</td><td><b>${escapeHtml(r.assessor||'-')}</b></td><td>${escapeHtml(r.site||'-')}</td><td>${r.total||0}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td><td>${own?`<button type="button" class="edit-outline sm" onclick='editModuleAssessment(${rowJson});event.stopPropagation()'>✎ Edit</button><button type="button" class="danger-outline sm" onclick='deleteAssessment(${rowJson},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`;
+ }).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
 }
-
 function loadPLB3Darurat(){
  const old=$('plb3DaruratJsonp');if(old)old.remove();const cb='plb3DaruratCB_'+Date.now();
  window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderGenericHistory('daruratHistory',d.data||[],'darurat');populateModuleLocationMaster('darurat',d.data||[]);if($('daruratCount'))$('daruratCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('darurat',d.data||[]);}catch(e){console.warn('[PROPER] Data PLB3 Tanggap Darurat gagal dibaca:',e)}finally{delete window[cb];const s=$('plb3DaruratJsonp');if(s)s.remove();}};
@@ -2272,9 +2204,10 @@ async function submitSampah(){
     keterangan:$(`.sampah-note[data-i="${i}"]`).value.trim()
   }));
   try{
-    const d=await postJSON({action:'saveSampah',assessor,site,assessmentDate:date,items});
+    const d=await postJSON(isEditingModule('Sampah')?{action:'updateAssessment',module:'Sampah',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'saveSampah',assessor,site,assessmentDate:date,items});
     if(d.status==='success'){
-      toast('✓ Penilaian Sampah berhasil disimpan.');
+      toast(isEditingModule('Sampah')?'✓ Penilaian Sampah berhasil diperbarui.':'✓ Penilaian Sampah berhasil disimpan.');
+      clearEditMode();
       resetSampah();
       loadSampah();
     }else throw new Error(d.message||'Gagal menyimpan');
@@ -2635,10 +2568,10 @@ async function submitPPA(){
  const payload={action:'savePPA',assessor,site,assessmentDate:date,items:rows.map((s,i)=>({no:i+1,ketentuan:items[i],status:s.value,keterangan:document.querySelector(`[data-k="${i}"]`).value.trim()}))};
  const btn=document.querySelector('.actions .primary');btn.disabled=true;btn.textContent='⏳ Menyimpan...';
  try{
-   const d=await postJSON(payload);
+   const d=await postJSON(isEditingModule('PPA')?Object.assign({},payload,{action:'updateAssessment',module:'PPA',submissionId:window.editingAssessment.submissionId}):payload);
    if(d.status==='success'){
      try{await uploadModuleEvidence('ppa',d.submissionId,collectEvidence('ppa'));}catch(ev){toast('Data tersimpan, tetapi sebagian foto gagal diupload: '+ev.message);}
-     toast('✓ Penilaian berhasil tersimpan ke Google Sheet.');localStorage.setItem('ppaLastSubmit',JSON.stringify(payload));resetForm();loadData();showPage('monitoring')
+     toast(isEditingModule('PPA')?'✓ Penilaian PPA berhasil diperbarui.':'✓ Penilaian berhasil tersimpan ke Google Sheet.');clearEditMode();localStorage.setItem('ppaLastSubmit',JSON.stringify(payload));resetForm();loadData();showPage('monitoring')
    } else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal terhubung ke server: '+e.message)}
  finally{btn.disabled=false;btn.textContent='☁ Simpan ke Google Sheet'}
@@ -2675,6 +2608,200 @@ async function submitPPA(){
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',start);else start();
 })();
+
+
+window.editingAssessment=null;
+
+function setEditMode(module, row){
+  window.editingAssessment={
+    moduleKey:String(module||'').trim(),
+    submissionId:String(row&&row.submissionId||'').trim()
+  };
+}
+
+function clearEditMode(){
+  window.editingAssessment=null;
+}
+
+function isEditingModule(module){
+  return !!window.editingAssessment &&
+    String(window.editingAssessment.moduleKey||'').toLowerCase()===
+    String(module||'').toLowerCase();
+}
+
+async function editModuleAssessment(row){
+  const module=String(row.moduleKey||row.module||'').trim();
+  const submissionId=String(row.submissionId||'').trim();
+
+  if(!module||!submissionId){
+    toast('Assessment tidak memiliki Submission ID.');
+    return;
+  }
+
+  if(!canManageAssessment(row)){
+    toast('Assessment ini hanya dapat diedit oleh penilai yang membuatnya.');
+    return;
+  }
+
+  try{
+    const r=await jsonpGet('getAssessmentDetails',{
+      module:module,
+      submissionId:submissionId
+    });
+
+    if(!r||r.status!=='success'){
+      throw new Error((r&&r.message)||'Detail assessment gagal dibaca.');
+    }
+
+    const d=r.data||{};
+    setEditMode(module,row);
+
+    const map={
+      'PPA':{page:'ppa',assessor:'assessor',site:'site',date:'assessmentDate',key:'ppa'},
+      'Emisi':{page:'emisi',assessor:'emisiAssessor',site:'emisiSite',date:'emisiDate',key:'emisi'},
+      'PLB3':{page:'plb3',assessor:'plb3Assessor',site:'plb3Site',date:'plb3Date',key:'plb3'},
+      'PLB3 Tanggap Darurat':{page:'plb3darurat',assessor:'daruratAssessor',site:'daruratSite',date:'daruratDate',key:'darurat'},
+      'B3':{page:'b3',assessor:'b3Assessor',site:'b3Site',date:'b3Date',key:'b3'},
+      'Sampah':{page:'sampah',assessor:'sampahAssessor',site:'sampahSite',date:'sampahDate',key:'sampah'}
+    };
+
+    const cfg=map[module];
+    if(!cfg){
+      clearEditMode();
+      toast('Modul tidak dikenal: '+module);
+      return;
+    }
+
+    showPage(cfg.page);
+
+    const setVal=(id,val)=>{
+      const el=$(id);
+      if(el)el.value=val||'';
+    };
+
+    setVal(cfg.assessor,row.assessor||'');
+    setVal(cfg.site,row.site||'');
+    setVal(cfg.date,row.assessmentDate||'');
+
+    // Form is rendered by showPage()/tab loader; wait one frame before filling.
+    requestAnimationFrame(()=>{
+      try{
+        const details=Array.isArray(d.details)?d.details:[];
+        if(cfg.key==='ppa'){
+          document.querySelectorAll('#ppaBody .status-select').forEach((s,i)=>{
+            const item=details[i]||{};
+            s.value=item.status||'';
+            s.classList.toggle('status-yes',s.value==='YA');
+            s.classList.toggle('status-no',s.value==='TIDAK');
+          });
+          document.querySelectorAll('#ppaBody textarea[data-k]').forEach((t,i)=>{
+            t.value=(details[i]||{}).keterangan||'';
+          });
+          updateScore();
+        }
+        else if(cfg.key==='emisi'){
+          document.querySelectorAll('#emisiBody .emisi-status').forEach((s,i)=>{
+            const item=details[i]||{};
+            s.value=item.status||'';
+            s.classList.toggle('status-yes',s.value==='YA');
+            s.classList.toggle('status-no',s.value==='TIDAK');
+          });
+          document.querySelectorAll('#emisiBody .emisi-note').forEach((t,i)=>{
+            t.value=(details[i]||{}).keterangan||'';
+          });
+          calcEmisi();
+        }
+        else if(cfg.key==='plb3'){
+          document.querySelectorAll('#plb3Body .plb3-status').forEach((s,i)=>{
+            const item=details[i]||{};
+            s.value=item.status||'';
+            s.classList.toggle('status-yes',s.value==='YA');
+            s.classList.toggle('status-no',s.value==='TIDAK');
+          });
+          document.querySelectorAll('#plb3Body .plb3-note').forEach((t,i)=>{
+            t.value=(details[i]||{}).keterangan||'';
+          });
+          calcPLB3();
+        }
+        else if(cfg.key==='darurat'){
+          document.querySelectorAll('#daruratBody .darurat-status').forEach((s,i)=>{
+            const item=details[i]||{};
+            s.value=item.status||'';
+            s.classList.toggle('status-yes',s.value==='YA');
+            s.classList.toggle('status-no',s.value==='TIDAK');
+          });
+          document.querySelectorAll('#daruratBody .darurat-note').forEach((t,i)=>{
+            t.value=(details[i]||{}).keterangan||'';
+          });
+          calcPLB3Darurat();
+        }
+        else if(cfg.key==='b3'){
+          const statuses=[...document.querySelectorAll('#b3Forms .b3-status')];
+          const notes=[...document.querySelectorAll('#b3Forms .b3-note')];
+          statuses.forEach((s,i)=>{
+            const item=details[i]||{};
+            s.value=item.status||'';
+            s.classList.toggle('status-yes',s.value==='YA');
+            s.classList.toggle('status-no',s.value==='TIDAK');
+          });
+          notes.forEach((t,i)=>t.value=(details[i]||{}).keterangan||'');
+          calcB3();
+        }
+        else if(cfg.key==='sampah'){
+          document.querySelectorAll('#sampahBody .sampah-status').forEach((s,i)=>{
+            const item=details[i]||{};
+            s.value=item.status||'';
+            s.classList.toggle('status-yes',s.value==='YA');
+            s.classList.toggle('status-no',s.value==='TIDAK');
+          });
+          document.querySelectorAll('#sampahBody .sampah-note').forEach((t,i)=>{
+            t.value=(details[i]||{}).keterangan||'';
+          });
+          calcSampah();
+        }
+
+        toast('Mode edit aktif. Ubah data lalu klik Update.');
+        const button=document.querySelector(`#${cfg.page} .actions .btn.primary`);
+        if(button){
+          button.textContent='✎ Update Penilaian';
+          button.classList.add('editing-btn');
+        }
+      }catch(err){
+        console.error('[PROPER] Populate edit:',err);
+        toast('Form edit gagal dimuat.');
+      }
+    });
+
+  }catch(e){
+    toast('Gagal membuka data untuk diedit: '+(e.message||String(e)));
+  }
+}
+
+function cancelAssessmentEdit(){
+  clearEditMode();
+  const today=new Date().toISOString().slice(0,10);
+  const pairs=[
+    ['ppa','assessor','site','assessmentDate'],
+    ['emisi','emisiAssessor','emisiSite','emisiDate'],
+    ['plb3','plb3Assessor','plb3Site','plb3Date'],
+    ['plb3darurat','daruratAssessor','daruratSite','daruratDate'],
+    ['b3','b3Assessor','b3Site','b3Date'],
+    ['sampah','sampahAssessor','sampahSite','sampahDate']
+  ];
+  pairs.forEach(([page,a,s,d])=>{
+    const btn=document.querySelector(`#${page} .actions .btn.primary`);
+    if(btn)btn.textContent=page==='ppa'?'☁ Simpan ke Google Sheet':
+      page==='emisi'?'☁ Simpan Emisi':
+      page==='plb3'?'☁ Simpan Penilaian PLB3':
+      page==='plb3darurat'?'☁ Simpan ke Google Sheet':
+      page==='b3'?'☁ Simpan B3 ke Google Sheet':
+      '☁ Simpan ke Google Sheet';
+    if($(a))$(a).value=(getCurrentUser()||{}).name||'';
+    if($(s))$(s).value='';
+    if($(d))$(d).value='';
+  });
+  toast('Mode edit dibatalkan.');
+}
 
 function escapeHtml(value){
   return String(value == null ? '' : value).replace(/[&<>"']/g, function(c){
@@ -2921,15 +3048,10 @@ function renderData(data,rebuild=true){
    <td>${r.timestamp||'-'}</td><td><b>${escapeHtml(r.assessor||'-')}</b></td><td>${escapeHtml(displaySite(r.site)||'-')}</td>
    <td>${r.total||11}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td><b>${r.percentage||0}%</b></td>
    <td>${statusBadge(Number(r.percentage||0))}</td>
-   <td>
-     ${canManageAssessment(Object.assign({},r,{module:'PPA',moduleKey:'PPA'}))?
-       `<div class="history-actions"><button type="button" class="edit-btn sm" onclick='editAssessment(${JSON.stringify(Object.assign({},r,{module:"PPA",moduleKey:"PPA"})).replace(/'/g,"&#39;")},event)'>✎ Edit</button><button type="button" class="delete-btn sm" onclick='deleteAssessment(${JSON.stringify(Object.assign({},r,{module:"PPA",moduleKey:"PPA"})).replace(/'/g,"&#39;")},event)'>🗑 Hapus</button></div>`:
-       `<button class="action-eye" onclick="openDetail('${escapeHtml(r.siteKey||normalizeSite(r.site))}')">◉</button>`
-     }
-   </td>
+   <td><button class="action-eye" onclick="openDetail('${escapeHtml(r.siteKey||normalizeSite(r.site))}')">◉</button></td>
  </tr>`).join(''):'<tr><td colspan="9" style="text-align:center;padding:25px;color:#64756f">Belum ada data penilaian.</td></tr>';
 
- if($('monitorBody'))$('monitorBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td><b>${escapeHtml(displaySite(r.site)||'-')}</b></td><td>${r.total||11}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.timestamp||'-'}</td><td>${canManageAssessment(Object.assign({},r,{module:"PPA",moduleKey:"PPA"}))?`<div class="history-actions"><button type="button" class="edit-btn sm" onclick='editAssessment(${JSON.stringify(Object.assign({},r,{module:"PPA",moduleKey:"PPA"})).replace(/\'/g,"&#39;")},event)'>✎ Edit</button><button type="button" class="delete-btn sm" onclick='deleteAssessment(${JSON.stringify(Object.assign({},r,{module:"PPA",moduleKey:"PPA"})).replace(/\'/g,"&#39;")},event)'>🗑 Hapus</button></div>`:'<span class="muted-action">—</span>'}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
+ if($('monitorBody'))$('monitorBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td><b>${escapeHtml(displaySite(r.site)||'-')}</b></td><td>${r.total||11}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${r.timestamp||'-'}</td><td>${canManageAssessment(r)?`<button class="edit-outline sm" type="button" onclick='editModuleAssessment(${JSON.stringify(Object.assign({},r,{module:"PPA",moduleKey:"PPA"})).replace(/\'/g,"&#39;")});event.stopPropagation()'>✎ Edit</button><button class="danger-outline sm" type="button" onclick='deleteAssessment(${JSON.stringify(Object.assign({},r,{module:"PPA",moduleKey:"PPA"})).replace(/\'/g,"&#39;")},event)'>🗑 Hapus</button>`:'<span class="muted-action">—</span>'}</td></tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
  if($('rekapBody'))$('rekapBody').innerHTML=data.length?data.slice().sort((a,b)=>String(b.timestamp).localeCompare(String(a.timestamp))).map(r=>`<tr><td>${r.timestamp||'-'}</td><td>${escapeHtml(r.assessor||'-')}</td><td>${escapeHtml(displaySite(r.site)||'-')}</td><td>${r.yes||0}</td><td>${r.no||0}</td><td>${r.percentage||0}%</td><td>${statusBadge(Number(r.percentage||0))}</td></tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:25px;color:#64756f">Belum ada data.</td></tr>';
  if($('lastSync'))$('lastSync').textContent='Sinkron terakhir: '+new Date().toLocaleString('id-ID');
  if($('topLastSync'))$('topLastSync').textContent='Terakhir diperbarui: '+new Date().toLocaleTimeString('id-ID');
@@ -2998,8 +3120,8 @@ async function loadPPAFullData(){
 let currentUser=null;
 function getAuthToken(){return localStorage.getItem('properAuthToken')||''}
 function getCurrentUser(){try{return JSON.parse(localStorage.getItem('properCurrentUser')||'null')}catch(_){return null}}
-function setCurrentUser(u,t){currentUser=u;window.currentUser=u||null;localStorage.setItem('properCurrentUser',JSON.stringify(u));localStorage.setItem('properAuthToken',t||'')}
-function clearCurrentUser(){currentUser=null;window.currentUser=null;localStorage.removeItem('properCurrentUser');localStorage.removeItem('properAuthToken')}
+function setCurrentUser(u,t){currentUser=u;localStorage.setItem('properCurrentUser',JSON.stringify(u));localStorage.setItem('properAuthToken',t||'')}
+function clearCurrentUser(){currentUser=null;localStorage.removeItem('properCurrentUser');localStorage.removeItem('properAuthToken')}
 function switchAuth(which){
  document.querySelectorAll('.auth-tabs button').forEach((b,i)=>b.classList.toggle('active',['login','register','reset'][i]===which));
  document.querySelectorAll('.auth-form').forEach(x=>x.classList.remove('active'));
@@ -3543,157 +3665,6 @@ function openExecutiveRecord(r){
 function closeExecutiveDetail(){$('execDetailModal')?.classList.remove('show')}
 function closeAssessmentChecklist(){ $('assessmentChecklistModal')?.classList.remove('show'); }
 async 
-window.properEditState={module:'',submissionId:''};
-
-function setEditState(module,submissionId){
-  window.properEditState={
-    module:String(module||''),
-    submissionId:String(submissionId||'')
-  };
-  setEditButtonLabels(true);
-}
-
-function clearEditState(){
-  window.properEditState={module:'',submissionId:''};
-  setEditButtonLabels(false);
-}
-
-function modulePageId(module){
-  const m=String(module||'');
-  if(m==='PPA')return 'ppa';
-  if(m==='Emisi')return 'emisi';
-  if(m==='PLB3')return 'plb3';
-  if(m==='PLB3 Tanggap Darurat')return 'plb3darurat';
-  if(m==='B3')return 'b3';
-  if(m==='Sampah')return 'sampah';
-  return '';
-}
-
-function setEditButtonLabels(isEdit){
-  const labels={
-    ppa:['☁ Simpan ke Google Sheet','✓ Update Penilaian PPA'],
-    emisi:['☁ Simpan Emisi','✓ Update Penilaian Emisi'],
-    plb3:['☁ Simpan Penilaian PLB3','✓ Update Penilaian PLB3'],
-    plb3darurat:['☁ Simpan ke Google Sheet','✓ Update Tanggap Darurat'],
-    b3:['☁ Simpan B3 ke Google Sheet','✓ Update Penilaian B3'],
-    sampah:['☁ Simpan ke Google Sheet','✓ Update Penilaian Sampah']
-  };
-  Object.keys(labels).forEach(id=>{
-    const page=document.getElementById(id);
-    if(!page)return;
-    const btn=page.querySelector('.actions .primary');
-    if(btn)btn.textContent=isEdit?labels[id][1]:labels[id][0];
-  });
-}
-
-async function editAssessment(row,ev){
-  if(ev){ev.preventDefault();ev.stopPropagation();}
-  if(!row||!row.submissionId){
-    toast('Submission ID tidak ditemukan.');
-    return;
-  }
-  if(!canManageAssessment(row)){
-    toast('Assessment ini hanya dapat diedit oleh penilai yang membuatnya.');
-    return;
-  }
-
-  const module=row.moduleKey||row.module||'';
-  const pageId=modulePageId(module);
-
-  try{
-    const result=await jsonpGet('getAssessmentDetails',{
-      module:module,
-      submissionId:row.submissionId
-    });
-
-    if(!result||result.status!=='success'){
-      throw new Error((result&&result.message)||'Detail assessment tidak dapat dibaca.');
-    }
-
-    const data=result.data||{};
-    const details=Array.isArray(data.details)?data.details:[];
-
-    if(!details.length){
-      throw new Error('Detail checklist assessment tidak ditemukan.');
-    }
-
-    setEditState(module,row.submissionId);
-
-    showPage(pageId);
-
-    const info={
-      PPA:['assessor','site','assessmentDate'],
-      Emisi:['emisiAssessor','emisiSite','emisiDate'],
-      PLB3:['plb3Assessor','plb3Site','plb3Date'],
-      'PLB3 Tanggap Darurat':['daruratAssessor','daruratSite','daruratDate'],
-      B3:['b3Assessor','b3Site','b3Date'],
-      Sampah:['sampahAssessor','sampahSite','sampahDate']
-    };
-
-    const ids=info[module]||[];
-
-    if($(ids[0]))$(ids[0]).value=String(data.assessor||row.assessor||'');
-    if($(ids[1]))$(ids[1]).value=String(data.site||row.site||'');
-    if($(ids[2]))$(ids[2]).value=String(data.assessmentDate||row.assessmentDate||'');
-
-    /*
-     * Isi status + keterangan sesuai urutan checklist
-     * masing-masing modul.
-     */
-    let statuses=[];
-    let notes=[];
-
-    if(module==='PPA'){
-      statuses=[...document.querySelectorAll('#ppa .status-select')];
-      notes=[...document.querySelectorAll('#ppa [data-k]')];
-    }else if(module==='Emisi'){
-      statuses=[...document.querySelectorAll('#emisiBody .emisi-status')];
-      notes=[...document.querySelectorAll('#emisiBody .emisi-note')];
-    }else if(module==='PLB3'){
-      statuses=[...document.querySelectorAll('#plb3 .plb3-status')];
-      notes=[...document.querySelectorAll('#plb3 .plb3-note')];
-    }else if(module==='PLB3 Tanggap Darurat'){
-      statuses=[...document.querySelectorAll('#plb3darurat .darurat-status')];
-      notes=[...document.querySelectorAll('#plb3darurat .darurat-note')];
-    }else if(module==='B3'){
-      statuses=[...document.querySelectorAll('#b3 .b3-status')];
-      notes=[...document.querySelectorAll('#b3 .b3-note')];
-    }else if(module==='Sampah'){
-      statuses=[...document.querySelectorAll('#sampah .sampah-status')];
-      notes=[...document.querySelectorAll('#sampah .sampah-note')];
-    }
-
-    details.forEach((d,i)=>{
-      const st=statuses[i];
-      const nt=notes[i];
-
-      if(st){
-        st.value=String(d.status||'').toUpperCase();
-        st.dispatchEvent(new Event('change',{bubbles:true}));
-      }
-
-      if(nt){
-        nt.value=String(d.keterangan||'');
-      }
-    });
-
-    /*
-     * Naik ke bagian atas form supaya user langsung melihat
-     * assessment yang sedang diedit.
-     */
-    setTimeout(()=>{
-      const page=document.getElementById(pageId);
-      if(page)page.scrollIntoView({behavior:'smooth',block:'start'});
-    },50);
-
-    toast('✎ Mode edit aktif. Ubah checklist lalu klik Update.');
-
-  }catch(e){
-    clearEditState();
-    toast('Gagal membuka mode edit: '+(e.message||String(e)));
-  }
-}
-
 function canManageAssessment(row){
   const u=window.currentUser||null;
   if(!u||!row)return false;
@@ -3718,7 +3689,6 @@ async function deleteAssessment(row, ev){
     if(result.status!=='success') throw new Error(result.message||'Assessment gagal dihapus.');
     toast('✓ Assessment berhasil dihapus permanen.');
     window.__allRecapData=null;
-    clearEditState();
     closeAssessmentChecklist();
     if(typeof loadExecutiveAnalyticsV2==='function'){
       try{await loadExecutiveAnalyticsV2(true);}catch(_){}
