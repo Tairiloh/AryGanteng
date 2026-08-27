@@ -1487,7 +1487,7 @@ background-size:auto,18px 18px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwcTgHjqLamlbU3m0NTUDQBk6xPagFen5Pdo-cAsgIzWRoHWFGGPH_fdPInM8k9Ckv2/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxhB6P9qNqT7z9yL38H-IW0Xcy-p-5ksiYEFgR-_oCtakjqvS_lf6zDUEzg9TZAIA/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2880,42 +2880,163 @@ async function testProperApi(){
 }
 
 async function doRegister(){
- const name=$('regName').value.trim(),username=$('regUsername').value.trim().toLowerCase(),p=$('regPassword').value,p2=$('regPassword2').value,recovery=$('regRecovery').value.trim();
- setAuthMsg('regMsg','');
- if(name.length<2||username.length<3||p.length<8||p!==p2||recovery.length<6){setAuthMsg('regMsg','Lengkapi data. Password minimal 8 karakter dan password harus sama.');return}
- let profilePhoto=null;
- const f=$('regPhoto').files&&$('regPhoto').files[0];
- if(f){if(f.size>2500000){setAuthMsg('regMsg','Foto profil maksimal 2.5 MB.');return} profilePhoto={fileName:f.name,mimeType:f.type,data:await fileToDataURL(f)}}
- try{
-  const r=await postJSON({action:'registerUser',name,username,password:p,recoveryCode:recovery,profilePhoto});
-  if(r.status!=='success')throw Error(r.message||'Pendaftaran gagal');
-  setAuthMsg('regMsg','Akun berhasil dibuat. Silakan masuk.');switchAuth('login');$('loginUsername').value=username;
- }catch(e){setAuthMsg('regMsg',e.message||'Pendaftaran gagal.');}
+  const name=$('regName').value.trim();
+  const username=$('regUsername').value.trim().toLowerCase();
+  const password=$('regPassword').value;
+  const password2=$('regPassword2').value;
+  const recovery=$('regRecovery').value.trim();
+
+  setAuthMsg('regMsg','');
+
+  if(name.length<2){
+    setAuthMsg('regMsg','Nama lengkap wajib diisi.');
+    return;
+  }
+
+  if(!/^[a-z0-9._-]{3,24}$/.test(username)){
+    setAuthMsg('regMsg','Username 3-24 karakter: huruf kecil, angka, titik, underscore atau strip.');
+    return;
+  }
+
+  if(password.length<8){
+    setAuthMsg('regMsg','Password minimal 8 karakter.');
+    return;
+  }
+
+  if(password!==password2){
+    setAuthMsg('regMsg','Konfirmasi password tidak sama.');
+    return;
+  }
+
+  if(recovery.length<6){
+    setAuthMsg('regMsg','Kode pemulihan minimal 6 karakter.');
+    return;
+  }
+
+  /*
+   * Registrasi melalui JSONP GET.
+   * Tidak mengirim foto pada tahap ini supaya request kecil dan stabil.
+   * Foto profil dapat dipasang setelah login.
+   */
+  try{
+    const r=await jsonpGet('registerUser',{
+      username:username,
+      name:name,
+      password:password,
+      recoveryCode:recovery
+    });
+
+    if(r.status!=='success'){
+      throw new Error(r.message||'Pendaftaran gagal');
+    }
+
+    setAuthMsg(
+      'regMsg',
+      'Akun berhasil dibuat. Silakan masuk dengan akun baru.'
+    );
+
+    switchAuth('login');
+    $('loginUsername').value=username;
+    $('loginPassword').value='';
+  }catch(e){
+    setAuthMsg(
+      'regMsg',
+      e.message||'Pendaftaran gagal. Pastikan Apps Script sudah di-deploy versi terbaru.'
+    );
+  }
 }
+
 async function doLogin(){
- const username=$('loginUsername').value.trim().toLowerCase(),password=$('loginPassword').value;
- setAuthMsg('loginMsg','');
- if(!username||!password){setAuthMsg('loginMsg','Username dan password wajib diisi.');return}
- try{
-  const r=await postJSON({action:'loginUser',username,password});
-  if(r.status!=='success')throw Error(r.message||'Login gagal');
-  setCurrentUser(r.user,r.token);
-  $('authGate').classList.add('hidden');
-  updateLoggedUserUI();
-  applyAccountToForms();
-  loadAllAfterLogin();
- }catch(e){setAuthMsg('loginMsg',e.message||'Login gagal.');}
+  const username=$('loginUsername').value.trim().toLowerCase();
+  const password=$('loginPassword').value;
+
+  setAuthMsg('loginMsg','');
+
+  if(!username||!password){
+    setAuthMsg('loginMsg','Username dan password wajib diisi.');
+    return;
+  }
+
+  try{
+    /*
+     * LOGIN LANGSUNG JSONP.
+     * Ini menghindari masalah CORS POST GitHub Pages -> Apps Script.
+     */
+    const r=await jsonpGet('loginUser',{
+      username:username,
+      password:password
+    });
+
+    if(r.status!=='success'){
+      throw new Error(r.message||'Username atau password salah.');
+    }
+
+    setCurrentUser(r.user,r.token);
+
+    $('authGate').classList.add('hidden');
+
+    updateLoggedUserUI();
+    applyAccountToForms();
+    loadAllAfterLogin();
+
+  }catch(e){
+    setAuthMsg(
+      'loginMsg',
+      e.message||'Login gagal. Pastikan URL Apps Script dan deployment sudah benar.'
+    );
+  }
 }
+
 async function doResetPassword(){
- const username=$('resetUsername').value.trim().toLowerCase(),recovery=$('resetRecovery').value.trim(),password=$('resetPassword').value;
- setAuthMsg('resetMsg','');
- if(!username||recovery.length<6||password.length<8){setAuthMsg('resetMsg','Username, kode pemulihan dan password baru wajib valid.');return}
- try{
-  const r=await postJSON({action:'resetPassword',username,recoveryCode:recovery,newPassword:password});
-  if(r.status!=='success')throw Error(r.message||'Reset gagal');
-  setAuthMsg('resetMsg','Password berhasil direset. Silakan masuk.');switchAuth('login');$('loginUsername').value=username;
- }catch(e){setAuthMsg('resetMsg',e.message||'Reset password gagal.');}
+  const username=$('resetUsername').value.trim().toLowerCase();
+  const recovery=$('resetRecovery').value.trim();
+  const password=$('resetPassword').value;
+
+  setAuthMsg('resetMsg','');
+
+  if(!username){
+    setAuthMsg('resetMsg','Username wajib diisi.');
+    return;
+  }
+
+  if(recovery.length<6){
+    setAuthMsg('resetMsg','Kode pemulihan minimal 6 karakter.');
+    return;
+  }
+
+  if(password.length<8){
+    setAuthMsg('resetMsg','Password baru minimal 8 karakter.');
+    return;
+  }
+
+  try{
+    const r=await jsonpGet('resetPassword',{
+      username:username,
+      recoveryCode:recovery,
+      newPassword:password
+    });
+
+    if(r.status!=='success'){
+      throw new Error(r.message||'Reset password gagal');
+    }
+
+    setAuthMsg(
+      'resetMsg',
+      'Password berhasil direset. Silakan masuk.'
+    );
+
+    switchAuth('login');
+    $('loginUsername').value=username;
+    $('loginPassword').value='';
+
+  }catch(e){
+    setAuthMsg(
+      'resetMsg',
+      e.message||'Reset password gagal.'
+    );
+  }
 }
+
 function logoutUser(){clearCurrentUser();location.reload()}
 function avatarFallback(name){const s=String(name||'U').trim().split(/\s+/).filter(Boolean);return (s[0]?.[0]||'U')+(s[1]?.[0]||'');}
 function setAvatarElement(el,u){
