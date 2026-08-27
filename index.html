@@ -1066,7 +1066,7 @@ table th:last-child,table td:last-child{min-width:190px}
 <aside class="sidebar" id="sidebar">
   <div class="brand">
       <div class="proper-logo"><img src="logo.png" alt="PROPER" onerror="this.style.opacity=.15"></div>
-      <h2>Inspeksi Ketentuan Teknis Davina</h2>
+      <h2>Inspeksi Ketentuan Teknis PROPER</h2>
       
     </div>
     <div class="user-profile-mini" onclick="openProfileModal()" title="Edit profil" style="cursor:pointer"><img id="sidebarAvatar" src="logo.png" alt=""><div><b id="sidebarUserName">Guest</b><small id="sidebarUserRole">Belum masuk</small></div></div>
@@ -1515,7 +1515,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz34xR5tWtDcZbcQk5s_4zJjFITai2HPUVz40z2DAKnOqXcJL65hZQu0NO5dTf3mlq8/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzaKmLto2I7PtSRd8rdYc0nvbxAzWaw6kFBP3wCRINERaHGWJaa_xPIhI8nI_7QsYpf/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2110,19 +2110,182 @@ async function submitResponseForm(payload){
   });
 }
 
-async function postJSON(payload){
-  payload=Object.assign({},payload,{userToken:getAuthToken()});
+
+async function prepareEvidencePayload(module){
+  const inputs=collectEvidence(module);
+  const evidence=[];
 
   /*
-   * GitHub Pages -> Google Apps Script:
-   * jangan mengandalkan fetch POST karena respons CORS
-   * tidak dapat dibaca browser.
-   *
-   * Gunakan hidden-form POST + postMessage.
-   * Password tetap berada di POST body, bukan di URL.
+   * Satu foto per nomor. Foto dibuat kecil sebelum masuk payload.
    */
-  return await submitResponseForm(payload);
+  for(const input of inputs){
+
+    const original=
+      input.files&&input.files[0];
+
+    if(!original)continue;
+
+    const file=
+      await compressImage(original);
+
+    const base64=
+      await new Promise(
+        (resolve,reject)=>{
+          const fr=new FileReader();
+
+          fr.onload=()=>{
+            const raw=
+              String(fr.result||'');
+
+            const comma=
+              raw.indexOf(',');
+
+            const data=
+              comma>=0
+                ?raw.substring(comma+1)
+                :raw;
+
+            if(!data){
+              reject(
+                new Error(
+                  'Data foto kosong.'
+                )
+              );
+            }else{
+              resolve(data);
+            }
+          };
+
+          fr.onerror=()=>{
+            reject(
+              new Error(
+                'Foto tidak dapat dibaca.'
+              )
+            );
+          };
+
+          fr.readAsDataURL(file);
+        }
+      );
+
+    evidence.push({
+      no:String(
+        input.dataset.no||''
+      ),
+      fileName:String(
+        file.name||
+        'evidence.jpg'
+      ),
+      mimeType:'image/jpeg',
+      data:base64
+    });
+  }
+
+  return evidence;
 }
+
+async function postJSON(payload){
+  payload=Object.assign({},payload,{
+    userToken:getAuthToken()
+  });
+
+  /*
+   * Untuk semua Save/Update assessment, dokumentasi foto
+   * dimasukkan ke request yang sama.
+   */
+  const saveActions=[
+    'savePPA',
+    'saveEmisi',
+    'savePLB3',
+    'savePLB3Darurat',
+    'saveB3',
+    'saveSampah'
+  ];
+
+  if(
+    saveActions.indexOf(String(payload.action||''))>=0 ||
+    payload.action==='updateAssessment'
+  ){
+    let moduleKey=String(
+      payload.module||
+      ''
+    ).trim();
+
+    if(payload.action==='savePPA')moduleKey='ppa';
+    else if(payload.action==='saveEmisi')moduleKey='emisi';
+    else if(payload.action==='savePLB3')moduleKey='plb3';
+    else if(payload.action==='savePLB3Darurat')moduleKey='darurat';
+    else if(payload.action==='saveB3')moduleKey='b3';
+    else if(payload.action==='saveSampah')moduleKey='sampah';
+
+    if(moduleKey){
+      payload.evidence=
+        await prepareEvidencePayload(
+          moduleKey.toLowerCase()
+        );
+    }
+  }
+
+  /*
+   * Tetap gunakan transport existing yang memang sudah
+   * digunakan login/save dan mendapat response server.
+   */
+  const result=await submitResponseForm(payload);
+
+  /*
+   * Simpan hasil evidence agar uploadModuleEvidence()
+   * yang sudah ada tidak mengupload foto kedua kali.
+   */
+  if(
+    result &&
+    result.submissionId &&
+    result.evidence
+  ){
+    window.__lastBundledEvidence=
+      window.__lastBundledEvidence||
+      Object.create(null);
+
+    window.__lastBundledEvidence[
+      String(result.submissionId)
+    ]=result.evidence;
+
+    /*
+     * Hapus entry lama setelah 5 menit.
+     */
+    setTimeout(()=>{
+      if(
+        window.__lastBundledEvidence &&
+        window.__lastBundledEvidence[
+          String(result.submissionId)
+        ]
+      ){
+        delete window.__lastBundledEvidence[
+          String(result.submissionId)
+        ];
+      }
+    },300000);
+  }
+
+  /*
+   * Duplicate dibuat sebagai error yang jelas;
+   * caller existing akan menampilkan toast dengan message server.
+   */
+  if(
+    result &&
+    result.status==='duplicate'
+  ){
+    throw new Error(
+      String(
+        result.message||
+        'Assessment hari ini untuk lokasi tersebut sudah ada. Silakan Edit assessment yang lama.'
+      )
+    );
+  }
+
+  return result;
+}
+
+
 async function submitEmisi(){
   const assessor=$('emisiAssessor').value.trim(),site=canonicalLocationFor('emisi',$('emisiSite').value),date=$('emisiDate').value;
   if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Emisi wajib diisi.');return}
@@ -2816,7 +2979,7 @@ async function compressImage(file){
     throw new Error('File harus berupa gambar.');
   }
 
-  const TARGET=700*1024;
+  const TARGET=300*1024;
 
   /*
    * JPG kecil boleh langsung dipakai.
@@ -2838,7 +3001,7 @@ async function compressImage(file){
 
         URL.revokeObjectURL(url);
 
-        let maxSide=1200;
+        let maxSide=1000;
         let quality=0.72;
         let blob=null;
 
@@ -3024,154 +3187,105 @@ async function waitForEvidenceServer(submissionId,module,no,fileName){
 }
 
 async function uploadModuleEvidence(module,submissionId,files){
+  const bundled=
+    window.__lastBundledEvidence &&
+    window.__lastBundledEvidence[
+      String(submissionId)
+    ];
+
   const inputs=Array.isArray(files)?files:[];
   const uploaded=[];
-  const failed=[];
 
-  if(!submissionId){
-    return {
-      uploaded:0,
-      failed:inputs.length,
-      urls:[],
-      failures:[{
-        message:'Submission ID tidak tersedia.'
-      }]
+  /*
+   * Jika foto sudah disimpan oleh Save/Update bundle,
+   * jangan upload ulang. Hanya tampilkan status.
+   */
+  if(
+    bundled &&
+    Number(bundled.uploaded||0)>0
+  ){
+
+    const saved=Array.isArray(
+      bundled.files
+    )?bundled.files:[];
+
+    saved.forEach(item=>{
+      const input=inputs.find(x=>
+        String(x.dataset.no||'')===
+        String(item.no||'')
+      );
+
+      if(input){
+
+        input.dataset.savedUrl=
+          item.url||'';
+
+        input.dataset.serverSaved='1';
+        input.classList.add(
+          'evidence-saved'
+        );
+
+        const wrap=
+          input.closest('.evidence-wrap');
+
+        if(wrap){
+
+          let status=
+            wrap.querySelector(
+              '.evidence-save-status'
+            );
+
+          if(!status){
+
+            status=
+              document.createElement(
+                'small'
+              );
+
+            status.className=
+              'evidence-save-status';
+
+            wrap.appendChild(status);
+          }
+
+          status.textContent=
+            '✓ Tersimpan di Google Drive & Spreadsheet';
+
+          status.style.color='#087f5b';
+        }
+
+      }
+
+      uploaded.push(item);
+    });
+
+    return{
+      uploaded:saved.length,
+      failed:Number(
+        bundled.failed||0
+      ),
+      urls:saved,
+      failures:
+        Array.isArray(
+          bundled.failures
+        )
+        ?bundled.failures
+        :[]
     };
   }
 
-  for(const input of inputs){
-
-    try{
-
-      const original=input.files&&input.files[0];
-      if(!original)continue;
-
-      const file=await compressImage(original);
-
-      const data=await new Promise((resolve,reject)=>{
-        const fr=new FileReader();
-
-        fr.onload=()=>{
-          const raw=String(fr.result||'');
-          const comma=raw.indexOf(',');
-          const base64=
-            comma>=0
-              ?raw.substring(comma+1)
-              :raw;
-
-          if(!base64){
-            reject(new Error('Data foto kosong.'));
-          }else{
-            resolve(base64);
-          }
-        };
-
-        fr.onerror=()=>{
-          reject(new Error('Browser gagal membaca foto.'));
-        };
-
-        fr.readAsDataURL(file);
-      });
-
-      /*
-       * Kirim raw JSON via text/plain. Tidak memakai form-urlencoded
-       * dan tidak memakai iframe postMessage.
-       */
-      const accepted=await submitEvidenceFormRequest({
-        action:'uploadEvidence',
-        submissionId:String(submissionId),
-        module:String(module||''),
-        no:String(input.dataset.no||''),
-        site:String(input.dataset.site||''),
-        fileName:String(file.name||'evidence.jpg'),
-        mimeType:'image/jpeg',
-        data:data
-      });
-
-      if(!accepted||accepted.status!=='accepted'){
-        throw new Error('Request upload foto tidak diterima browser.');
-      }
-
-      /*
-       * Tunggu sampai Apps Script benar-benar menulis row evidence.
-       */
-      const verified=await waitForEvidenceServer(
-        submissionId,
-        module,
-        String(input.dataset.no||''),
-        String(file.name||'evidence.jpg')
-      );
-
-      if(!verified){
-        throw new Error(
-          'Foto belum terverifikasi di Google Sheet PROPER_Evidence.'
-        );
-      }
-
-      uploaded.push(verified);
-
-      input.dataset.savedUrl=verified.fileUrl||'';
-      input.dataset.serverSaved='1';
-      input.classList.add('evidence-saved');
-
-      const wrap=input.closest('.evidence-wrap');
-
-      if(wrap){
-        let status=wrap.querySelector('.evidence-save-status');
-
-        if(!status){
-          status=document.createElement('small');
-          status.className='evidence-save-status';
-          wrap.appendChild(status);
-        }
-
-        status.textContent=
-          '✓ Tersimpan di Google Drive & Spreadsheet';
-
-        status.style.color='#087f5b';
-      }
-
-    }catch(err){
-
-      console.error(
-        '[PROPER] Evidence upload',
-        module,
-        err
-      );
-
-      failed.push({
-        no:String(input.dataset.no||''),
-        message:err&&err.message
-          ?err.message
-          :String(err)
-      });
-
-      const wrap=input.closest('.evidence-wrap');
-
-      if(wrap){
-
-        let status=wrap.querySelector('.evidence-save-status');
-
-        if(!status){
-          status=document.createElement('small');
-          status.className='evidence-save-status';
-          wrap.appendChild(status);
-        }
-
-        status.textContent='✕ Foto belum tersimpan';
-
-        status.style.color='#b42318';
-      }
-    }
-  }
-
+  /*
+   * Assessment lama/endpoint uploadEvidence terpisah:
+   * tetap ada sebagai fallback.
+   */
   return{
-    uploaded:uploaded.length,
-    failed:failed.length,
-    urls:uploaded,
-    failures:failed
+    uploaded:0,
+    failed:0,
+    urls:[],
+    failures:[]
   };
 }
+
 
 function renderForm(){
  $('ppaBody').innerHTML=items.map((x,i)=>`<tr>
