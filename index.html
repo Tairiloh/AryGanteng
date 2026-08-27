@@ -1488,7 +1488,7 @@ table th:last-child,table td:last-child{min-width:145px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5lJYEiVNRXiaLAPnLtZ2iAhveAwj9t7VL-PKhqyYgue0EDaBjjdH0SYqTGdWLVqI/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxPAVDb_7b2VCiYG_vucPYjVayNIrkP8fEQK8Ovw68twZ1lnWBD9nCgEtkQn1DaQr3j/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -1713,7 +1713,7 @@ function renderPLB3Form(){
  calcPLB3();
 }
 function calcPLB3(){
- const statuses=[...document.querySelectorAll('.plb3-status')];
+ const statuses=[...document.querySelectorAll('#plb3Body .plb3-status')];
  let yes=0,answered=0;
  statuses.forEach(s=>{
    if(s.value)answered++;
@@ -2083,25 +2083,70 @@ function renderHistoryTable(id,data,type){
  }).join('');
 }
 
-function loadEmisi(){
- const old=document.getElementById('emisiJsonp');if(old)old.remove();
- const cb='emisiCallback_'+Date.now();
- window[cb]=d=>{try{if(d.status!=='success')throw Error(d.message||'Error');renderHistoryTable('emisiHistory',d.data||[],'emisi');populateModuleLocationMaster('emisi',d.data||[]);if($('emisiCount'))$('emisiCount').textContent=(d.data||[]).length+' assessment';refreshModuleAnalyticsFor('emisi',d.data||[]);}catch(e){console.warn('[PROPER] Data Emisi gagal dibaca:',e)}finally{delete window[cb];const s=$('emisiJsonp');if(s)s.remove();}};
- const s=document.createElement('script');s.id='emisiJsonp';s.src=SCRIPT_URL+'?action=getEmisi&callback='+cb+'&token='+encodeURIComponent(getAuthToken())+'&t='+Date.now();s.onerror=()=>{console.warn('[PROPER] Data Emisi gagal dibaca dari Google Sheet');s.remove();};document.body.appendChild(s);
+async function loadEmisi(){
+  try{
+    const d=await jsonpGet('getEmisi',{});
+    if(!d||d.status!=='success'){
+      throw new Error((d&&d.message)||'Data Emisi gagal dibaca.');
+    }
+
+    const data=Array.isArray(d.data)?d.data:[];
+
+    renderHistoryTable('emisiHistory',data,'emisi');
+    populateModuleLocationMaster('emisi',data);
+
+    if($('emisiCount')){
+      $('emisiCount').textContent=data.length+' assessment';
+    }
+
+    executiveCache.emisi=data;
+    renderModuleAnalytics('emisi',data);
+
+    if(typeof refreshModuleAnalyticsFor==='function'){
+      /*
+       * Gunakan cache yang baru saja diisi.
+       * Jangan memaksa data 0 dari cache lama.
+       */
+      setTimeout(()=>refreshModuleAnalyticsFor('emisi',data),0);
+    }
+
+  }catch(e){
+    console.warn('[PROPER] Emisi:',e);
+    const body=$('emisiHistory');
+    if(body){
+      body.innerHTML='<tr><td colspan="5" style="text-align:center;padding:25px;color:#64756f">Belum ada data Emisi.</td></tr>';
+    }
+  }
 }
 async function loadPLB3(){
   try{
     const d=await jsonpGet('getPLB3',{});
-    if(!d||d.status!=='success')throw new Error((d&&d.message)||'Data PLB3 gagal dibaca.');
+    if(!d||d.status!=='success'){
+      throw new Error((d&&d.message)||'Data PLB3 gagal dibaca.');
+    }
+
     const data=Array.isArray(d.data)?d.data:[];
+
     renderHistoryTable('plb3History',data,'lb3');
     populateModuleLocationMaster('plb3',data);
-    if($('plb3Count'))$('plb3Count').textContent=data.length+' assessment';
-    refreshModuleAnalyticsFor('plb3',data);
+
+    if($('plb3Count')){
+      $('plb3Count').textContent=data.length+' assessment';
+    }
+
+    executiveCache.plb3=data;
+    renderModuleAnalytics('plb3',data);
+
+    if(typeof refreshModuleAnalyticsFor==='function'){
+      setTimeout(()=>refreshModuleAnalyticsFor('plb3',data),0);
+    }
+
   }catch(e){
-    console.warn('[PROPER] PLB3 read:',e);
+    console.warn('[PROPER] PLB3:',e);
     const body=$('plb3History');
-    if(body)body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data yang dapat ditampilkan.</td></tr>';
+    if(body){
+      body.innerHTML='<tr><td colspan="8" style="text-align:center;padding:25px;color:#64756f">Belum ada data Penyimpanan PLB3.</td></tr>';
+    }
   }
 }
 
@@ -2591,19 +2636,24 @@ function enhanceEvidenceInputs(rootSelector,module){
   });
 }
 function collectEvidence(module){
+  const ids={
+    ppa:'site',
+    emisi:'emisiSite',
+    plb3:'plb3Site',
+    darurat:'daruratSite',
+    b3:'b3Site',
+    sampah:'sampahSite'
+  };
+
+  const siteEl=$(ids[module]||'site');
+  const site=siteEl?String(siteEl.value||''):'';
+
   return [...document.querySelectorAll(
     `.evidence-file[data-module="${module}"]`
-  )].filter(x=>x.files&&x.files[0]).map(x=>{
-    const ids={
-      ppa:'site',
-      emisi:'emisiSite',
-      plb3:'plb3Site',
-      darurat:'daruratSite',
-      b3:'b3Site',
-      sampah:'sampahSite'
-    };
-    const siteEl=$(ids[module]||'site');
-    if(siteEl)x.dataset.site=siteEl.value||'';
+  )]
+  .filter(x=>x.files&&x.files[0])
+  .map(x=>{
+    x.dataset.site=site;
     return x;
   });
 }
@@ -2657,54 +2707,120 @@ async function uploadModuleEvidence(module,submissionId,files){
   const uploaded=[];
   const failed=[];
 
+  if(!submissionId){
+    return {
+      uploaded:0,
+      failed:inputs.length,
+      urls:[],
+      failures:[{message:'Submission ID tidak tersedia.'}]
+    };
+  }
+
   for(const input of inputs){
+
     try{
+
       const original=input.files&&input.files[0];
       if(!original)continue;
 
       const file=await compressImage(original);
 
+      if(!file){
+        throw new Error('Foto tidak dapat diproses.');
+      }
+
       const data=await new Promise((resolve,reject)=>{
         const fr=new FileReader();
+
         fr.onload=()=>{
           const raw=String(fr.result||'');
-          resolve(
+          const base64=
             raw.indexOf(',')>=0
               ?raw.substring(raw.indexOf(',')+1)
-              :raw
-          );
+              :raw;
+
+          if(!base64){
+            reject(new Error('Data foto kosong.'));
+          }else{
+            resolve(base64);
+          }
         };
-        fr.onerror=()=>reject(new Error('Foto tidak dapat dibaca.'));
+
+        fr.onerror=()=>{
+          reject(new Error('Foto tidak dapat dibaca browser.'));
+        };
+
         fr.readAsDataURL(file);
       });
 
-      const r=await postJSON({
+      /*
+       * FOTO:
+       * jangan gunakan postJSON/payloadJson.
+       * Kirim sebagai form field langsung agar Apps Script menerima
+       * e.parameter.data secara konsisten.
+       */
+      const accepted=await submitFormRequest({
         action:'uploadEvidence',
-        module:module,
+        userToken:getAuthToken(),
         submissionId:submissionId,
-        no:input.dataset.no||'',
-        site:input.dataset.site||'',
+        module:module,
+        no:String(input.dataset.no||''),
+        site:String(input.dataset.site||''),
         fileName:file.name||('evidence-'+Date.now()+'.jpg'),
         mimeType:file.type||'image/jpeg',
         data:data
       });
 
-      if(!r||r.status!=='success'){
-        throw new Error(
-          (r&&r.message)||
-          'Server menolak upload foto.'
+      if(!accepted||accepted.status!=='accepted'){
+        throw new Error('Server tidak menerima request upload foto.');
+      }
+
+      /*
+       * VERIFIKASI:
+       * Jangan percaya HTTP selesai.
+       * Pastikan baris benar-benar sudah muncul di PROPER_Evidence.
+       */
+      const started=Date.now();
+      let confirmed=null;
+
+      while(Date.now()-started<30000){
+
+        try{
+
+          const check=await jsonpGet(
+            'getEvidence',
+            {
+              submissionId:submissionId,
+              module:module
+            }
+          );
+
+          if(check&&check.status==='success'){
+
+            const rows=
+              Array.isArray(check.data)
+                ?check.data
+                :[];
+
+            confirmed=rows.find(r=>
+              String(r.no||'')===
+              String(input.dataset.no||'') &&
+              String(r.fileUrl||'').trim()!==''
+            );
+
+            if(confirmed)break;
+          }
+
+        }catch(_){}
+
+        await new Promise(
+          resolve=>setTimeout(resolve,1000)
         );
       }
 
-      const confirmed=await waitForEvidenceServer(
-        submissionId,
-        module,
-        input.dataset.no||''
-      );
-
       if(!confirmed){
         throw new Error(
-          'Foto belum terkonfirmasi di PROPER_Evidence.'
+          'Server belum mengonfirmasi foto masuk ke PROPER_Evidence.'
         );
       }
 
@@ -2715,38 +2831,53 @@ async function uploadModuleEvidence(module,submissionId,files){
       input.classList.add('evidence-saved');
 
       const wrap=input.closest('.evidence-wrap');
+
       if(wrap){
-        let status=wrap.querySelector('.evidence-save-status');
+
+        let status=
+          wrap.querySelector('.evidence-save-status');
+
         if(!status){
           status=document.createElement('small');
           status.className='evidence-save-status';
           wrap.appendChild(status);
         }
+
         status.textContent='✓ Tersimpan di server';
         status.style.color='#087f5b';
       }
 
     }catch(err){
+
       failed.push({
         no:input.dataset.no||'',
-        message:err&&err.message?err.message:String(err)
+        message:
+          err&&err.message
+            ?err.message
+            :String(err)
       });
 
-      const wrap=input.closest('.evidence-wrap');
+      const wrap=
+        input.closest('.evidence-wrap');
+
       if(wrap){
-        let status=wrap.querySelector('.evidence-save-status');
+
+        let status=
+          wrap.querySelector('.evidence-save-status');
+
         if(!status){
           status=document.createElement('small');
           status.className='evidence-save-status';
           wrap.appendChild(status);
         }
+
         status.textContent='✕ Belum tersimpan di server';
         status.style.color='#b42318';
       }
     }
   }
 
-  return {
+  return{
     uploaded:uploaded.length,
     failed:failed.length,
     urls:uploaded,
