@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Inspeksi Ketentuan Teknis PROPER</title>
+<title>Inspeksi Ketentuan Teknis PROPER SHE DEPARTEMENT</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 :root{
@@ -1012,13 +1012,13 @@ table th:last-child,table td:last-child{min-width:190px}
 <datalist id="b3LocationSuggestions"></datalist>
 <datalist id="sampahLocationSuggestions"></datalist>
 
-<div class="mobile-header"><b>Inspeksi Ketentuan Teknis PROPER</b><button onclick="toggleMenu()">☰ Menu</button></div>
+<div class="mobile-header"><b>Inspeksi Ketentuan Teknis PROPER SHE DEPARTEMENT</b><button onclick="toggleMenu()">☰ Menu</button></div>
 
 <div id="authGate" class="auth-gate">
  <div class="auth-shell">
   <section class="auth-visual">
    <div class="auth-logo"><img src="logo.png" alt="PROPER"></div>
-   <h1>Inspeksi Ketentuan Teknis PROPER</h1>
+   <h1>Inspeksi Ketentuan Teknis PROPER SHE DEPARTEMENT</h1>
    <p>Platform monitoring kepatuhan lingkungan untuk PPA, Emisi, PLB3, Tanggap Darurat, B3, dan Sampah.</p>
    <div class="auth-pills"><span>🔐 Akun Personal</span><span>📊 Monitoring Terpusat</span><span>📷 Dokumentasi</span><span>☁ Google Sheet</span></div>
   </section>
@@ -1087,7 +1087,7 @@ table th:last-child,table td:last-child{min-width:190px}
 <aside class="sidebar" id="sidebar">
   <div class="brand">
       <div class="proper-logo"><img src="logo.png" alt="PROPER" onerror="this.style.opacity=.15"></div>
-      <h2>Inspeksi Ketentuan Teknis PROPER</h2>
+      <h2>Inspeksi Ketentuan Teknis PROPER SHE DEPARTEMENT</h2>
       
     </div>
     <div class="user-profile-mini" onclick="openProfileModal()" title="Edit profil" style="cursor:pointer"><img id="sidebarAvatar" src="logo.png" alt=""><div><b id="sidebarUserName">Guest</b><small id="sidebarUserRole">Belum masuk</small></div></div>
@@ -1181,7 +1181,7 @@ table th:last-child,table td:last-child{min-width:190px}
   <div class="portal-analytics-grid">
     <div class="portal-panel portal-wide"><div class="portal-panel-head"><div><span>PERFORMA</span><h3>Trend Kepatuhan Bulanan</h3><p>Rata-rata kepatuhan seluruh aspek.</p></div><b id="execAvg">0%</b></div><div id="execTrend"></div></div>
     <div class="portal-panel"><div class="portal-panel-head"><div><span>ASPEK</span><h3>Performa Aspek</h3><p>Perbandingan kepatuhan.</p></div></div><div id="execModules" class="module-board"></div></div>
-    <div class="portal-panel"><div class="portal-panel-head"><div><span>LOKASI</span><h3>Ranking Lokasi</h3><p>Top lokasi berdasarkan kepatuhan.</p></div></div><div id="execLocations" class="ranking-pro"></div></div>
+    <div class="portal-panel"><div class="portal-panel-head"><div><span>BUSINESS UNIT</span><h3>Total Persentase per Business Unit</h3><p>Perbandingan kepatuhan masing-masing unit.</p></div></div><div id="execBusinessUnitTotals" class="ranking-pro"></div></div>
   </div>
 
   <div class="portal-lower-grid">
@@ -1192,7 +1192,7 @@ table th:last-child,table td:last-child{min-width:190px}
     </div></div>
   </div>
 
-  <div class="portal-panel portal-recap"><div class="portal-panel-head"><div><span>LIVE RECAP</span><h3>Assessment Terbaru Semua Aspek</h3><p>PPA, PPU/Emisi, Penyimpanan PLB3, Tanggap Darurat PLB3, B3 dan Sampah.</p></div><button class="portal-text-btn" onclick="showPage('rekap')">Lihat rekap lengkap →</button></div><div id="dashRecentAllTable" class="table-wrap"><table><thead><tr><th>Aspek</th><th>Business Unit</th><th>Lokasi</th><th>Penilai</th><th>Tanggal</th><th>%</th><th>Status</th></tr></thead><tbody></tbody></table></div></div>
+  <div class="portal-panel portal-recap"><div class="portal-panel-head"><div><span>LIVE RECAP</span><h3>Assessment Terbaru Semua Aspek</h3><p>PPA, PPU/Emisi, Penyimpanan PLB3, Tanggap Darurat PLB3, B3 dan Sampah.</p></div><button class="portal-text-btn" onclick="showPage('rekap')">Lihat rekap lengkap →</button></div><div id="dashRecentAllTable" class="table-wrap"><table><thead><tr><th>Aspek</th><th>Business Unit</th><th>Lokasi</th><th>Auditor</th><th>Auditee</th><th>Tanggal</th><th>%</th><th>Status</th></tr></thead><tbody></tbody></table></div></div>
 
   <!-- Containers retained for existing analytics code -->
   <div style="display:none">
@@ -1205,8 +1205,9 @@ table th:last-child,table td:last-child{min-width:190px}
   <div class="topline"><div><h1>Form Penilaian PPA</h1><p>Isi YA/TIDAK dan keterangan untuk setiap ketentuan teknis.</p></div></div>
   <div class="card">
     <div class="assessor-grid">
-      <div class="field"><label>Nama Penilai</label><input id="assessor" placeholder="Masukkan nama penilai"></div>
+      <div class="field"><label>Auditor</label><input id="assessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Business Unit</label><select id="ppaBusinessUnit" required><option value="">Pilih Business Unit</option><option value="PT GGP">PT GGP</option><option value="PT UJA">PT UJA</option><option value="PT GGL">PT GGL</option><option value="PG4">PG4</option></select></div>
+      <div class="field"><label>Auditee</label><input id="auditee" placeholder="Masukkan nama auditee"></div>
       <div class="field"><label>Lokasi / Area</label><input id="site" list="ppaLocationSuggestions" placeholder="Contoh: IPAL GGP 1" oninput="updateSiteTitle()"></div>
     </div>
   </div>
@@ -1263,8 +1264,9 @@ table th:last-child,table td:last-child{min-width:190px}
   </div>
   <div class="card">
     <div class="assessor-grid">
-      <div class="field"><label>Nama Penilai</label><input id="emisiAssessor" placeholder="Masukkan nama penilai"></div>
+      <div class="field"><label>Auditor</label><input id="emisiAssessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Business Unit</label><select id="emisiBusinessUnit" required><option value="">Pilih Business Unit</option><option value="PT GGP">PT GGP</option><option value="PT UJA">PT UJA</option><option value="PT GGL">PT GGL</option><option value="PG4">PG4</option></select></div>
+      <div class="field"><label>Auditee</label><input id="emisiAuditee" placeholder="Masukkan nama auditee"></div>
       <div class="field"><label>Lokasi / Area</label><input id="emisiSite" list="emisiLocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="emisiDate" type="date"></div>
     </div>
@@ -1304,8 +1306,9 @@ table th:last-child,table td:last-child{min-width:190px}
   <div class="plb3-form-card card">
     <div class="plb3-form-title"><div><span>FORM PENILAIAN</span><h3>Data Inspeksi</h3><p>Pilih satu lokasi/area, lalu isi YA/TIDAK dan bukti pendukung.</p></div><button class="btn secondary" onclick="resetPLB3()">Reset</button></div>
     <div class="assessor-grid">
-      <div class="field"><label>Nama Penilai</label><input id="plb3Assessor" placeholder="Masukkan nama penilai"></div>
+      <div class="field"><label>Auditor</label><input id="plb3Assessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Business Unit</label><select id="plb3BusinessUnit" required><option value="">Pilih Business Unit</option><option value="PT GGP">PT GGP</option><option value="PT UJA">PT UJA</option><option value="PT GGL">PT GGL</option><option value="PG4">PG4</option></select></div>
+      <div class="field"><label>Auditee</label><input id="plb3Auditee" placeholder="Masukkan nama auditee"></div>
       <div class="field"><label>Lokasi / Area</label><input id="plb3Site" list="plb3LocationSuggestions" placeholder="Pilih atau ketik lokasi / area"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="plb3Date" type="date"></div>
     </div>
@@ -1401,8 +1404,9 @@ table th:last-child,table td:last-child{min-width:190px}
   <div class="topline"><div><h1>PLB3 — Tanggap Darurat</h1><p>Aspek ketentuan tanggap darurat pengelolaan Limbah B3.</p></div><button class="btn secondary" onclick="loadPLB3Darurat()">↻ Refresh Data</button></div>
   <div class="card">
     <div class="assessor-grid">
-      <div class="field"><label>Nama Penilai</label><input id="daruratAssessor" placeholder="Masukkan nama penilai"></div>
+      <div class="field"><label>Auditor</label><input id="daruratAssessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Business Unit</label><select id="daruratBusinessUnit" required><option value="">Pilih Business Unit</option><option value="PT GGP">PT GGP</option><option value="PT UJA">PT UJA</option><option value="PT GGL">PT GGL</option><option value="PG4">PG4</option></select></div>
+      <div class="field"><label>Auditee</label><input id="daruratAuditee" placeholder="Masukkan nama auditee"></div>
       <div class="field"><label>Lokasi / Area</label><input id="daruratSite" list="daruratLocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="daruratDate" type="date"></div>
     </div>
@@ -1422,8 +1426,9 @@ table th:last-child,table td:last-child{min-width:190px}
   <div class="topline"><div><h1>B3</h1><p>Aspek penilaian pengangkutan, penyimpanan, pelaporan B3 serta pengelolaan PCBs.</p></div><button class="btn secondary" onclick="loadB3()">↻ Refresh Data</button></div>
   <div class="card">
     <div class="assessor-grid">
-      <div class="field"><label>Nama Penilai</label><input id="b3Assessor" placeholder="Masukkan nama penilai"></div>
+      <div class="field"><label>Auditor</label><input id="b3Assessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Business Unit</label><select id="b3BusinessUnit" required><option value="">Pilih Business Unit</option><option value="PT GGP">PT GGP</option><option value="PT UJA">PT UJA</option><option value="PT GGL">PT GGL</option><option value="PG4">PG4</option></select></div>
+      <div class="field"><label>Auditee</label><input id="b3Auditee" placeholder="Masukkan nama auditee"></div>
       <div class="field"><label>Lokasi / Area</label><input id="b3Site" list="b3LocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="b3Date" type="date"></div>
     </div>
@@ -1447,8 +1452,9 @@ table th:last-child,table td:last-child{min-width:190px}
 
   <div class="card">
     <div class="assessor-grid">
-      <div class="field"><label>Nama Penilai</label><input id="sampahAssessor" placeholder="Masukkan nama penilai"></div>
+      <div class="field"><label>Auditor</label><input id="sampahAssessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Business Unit</label><select id="sampahBusinessUnit" required><option value="">Pilih Business Unit</option><option value="PT GGP">PT GGP</option><option value="PT UJA">PT UJA</option><option value="PT GGL">PT GGL</option><option value="PG4">PG4</option></select></div>
+      <div class="field"><label>Auditee</label><input id="sampahAuditee" placeholder="Masukkan nama auditee"></div>
       <div class="field"><label>Lokasi / Area</label><input id="sampahSite" list="sampahLocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="sampahDate" type="date"></div>
     </div>
@@ -1542,7 +1548,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwR2wwyYjiFLweEAe2S0dyjzTugx4EQLkUeBlFBiQYmBY2wnmHlZLgdr6u951J3DVG9/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx7H9ktn3Ld4JWP5fi_rZ-l9rREkj7o0IxIWu_Rv1uWDOLr3LEAL1UVXy3R4jpncq7s/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2318,6 +2324,7 @@ async function postJSON(payload){
 async function submitEmisi(){
   const assessor=$('emisiAssessor').value.trim(),site=canonicalLocationFor('emisi',$('emisiSite').value),date=$('emisiDate').value;
   const businessUnit=$('emisiBusinessUnit').value;
+  const auditee=$('emisiAuditee').value.trim();
   if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Emisi wajib diisi.');return}
 
@@ -2345,7 +2352,7 @@ async function submitEmisi(){
   });
 
   try{
-    const d=await postJSON(isEditingModule('Emisi')?{action:'updateAssessment',module:'Emisi',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,items:rows}:{action:'saveEmisi',assessor,site,assessmentDate:date,businessUnit:businessUnit,items:rows});
+    const d=await postJSON(isEditingModule('Emisi')?{action:'updateAssessment',module:'Emisi',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:rows}:{action:'saveEmisi',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:rows});
     if(d.status==='success'){
       const evr=await uploadModuleEvidence('emisi',d.submissionId,collectEvidence('emisi')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
       toast('✓ Data Emisi berhasil disimpan.');
@@ -2357,6 +2364,7 @@ async function submitEmisi(){
 async function submitPLB3(){
  const assessor=$('plb3Assessor').value.trim(),site=canonicalLocationFor('plb3',$('plb3Site').value),date=$('plb3Date').value;
   const businessUnit=$('plb3BusinessUnit').value;
+  const auditee=$('plb3Auditee').value.trim();
  if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor||!site||!date){toast('Nama penilai, lokasi/area dan tanggal PLB3 wajib diisi.');return}
  const statuses=[...document.querySelectorAll('.plb3-status')];
@@ -2517,6 +2525,7 @@ function resetPLB3Darurat(){
 async function submitPLB3Darurat(){
  const assessor=$('daruratAssessor').value.trim(),site=canonicalLocationFor('darurat',$('daruratSite').value),date=$('daruratDate').value;
   const businessUnit=$('daruratBusinessUnit').value;
+  const auditee=$('daruratAuditee').value.trim();
  const statuses=[...document.querySelectorAll('.darurat-status')];
  if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal PLB3 Tanggap Darurat wajib diisi.');return}
@@ -2555,6 +2564,7 @@ function resetB3(){
 async function submitB3(){
  const assessor=$('b3Assessor').value.trim(),site=canonicalLocationFor('b3',$('b3Site').value),date=$('b3Date').value;
   const businessUnit=$('b3BusinessUnit').value;
+  const auditee=$('b3Auditee').value.trim();
  if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal B3 wajib diisi.');return}
  const items=[];
@@ -2680,6 +2690,7 @@ async function submitSampah(){
   const site=canonicalLocationFor('sampah',$('sampahSite').value);
   const date=$('sampahDate').value;
   const businessUnit=$('sampahBusinessUnit').value;
+  const auditee=$('sampahAuditee').value.trim();
   const statuses=[...document.querySelectorAll('.sampah-status')];
   if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Sampah wajib diisi.');return;}
@@ -3373,13 +3384,14 @@ async function submitPPA(){
  if(SCRIPT_URL.startsWith('PASTE_')){toast('Masukkan URL Google Apps Script terlebih dahulu.');return}
  const assessor=$('assessor').value.trim(), site=canonicalLocationFor('ppa',$('site').value), date=$('assessmentDate').value;
   const businessUnit=$('ppaBusinessUnit').value;
+  const auditee=$('auditee').value.trim();
  const rows=[...document.querySelectorAll('#ppaBody .status-select')];
  if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor){toast('Nama penilai wajib diisi.');$('assessor').focus();return}
  if(!site){toast('Lokasi IPAL wajib diisi.');$('site').focus();return}
  if(!date){toast('Tanggal penilaian wajib diisi.');$('assessmentDate').focus();return}
  if(rows.some(s=>!s.value)){toast('Lengkapi semua 11 jawaban YA/TIDAK.');return}
- const payload={action:'savePPA',assessor,site,assessmentDate:date,businessUnit:businessUnit,items:rows.map((s,i)=>({no:i+1,ketentuan:items[i],status:s.value,keterangan:document.querySelector(`[data-k="${i}"]`).value.trim()}))};
+ const payload={action:'savePPA',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:rows.map((s,i)=>({no:i+1,ketentuan:items[i],status:s.value,keterangan:document.querySelector(`[data-k="${i}"]`).value.trim()}))};
  const btn=document.querySelector('.actions .primary');btn.disabled=true;btn.textContent='⏳ Menyimpan...';
  try{
    const d=await postJSON(isEditingModule('PPA')?Object.assign({},payload,{action:'updateAssessment',module:'PPA',submissionId:window.editingAssessment.submissionId}):payload);
@@ -3466,12 +3478,12 @@ async function editModuleAssessment(row){
     setEditMode(module,row);
 
     const map={
-      'PPA':{page:'ppa',assessor:'assessor',site:'site',date:'assessmentDate',key:'ppa',businessUnit:'ppaBusinessUnit'},
-      'Emisi':{page:'emisi',assessor:'emisiAssessor',site:'emisiSite',date:'emisiDate',key:'emisi',businessUnit:'emisiBusinessUnit'},
-      'PLB3':{page:'plb3',assessor:'plb3Assessor',site:'plb3Site',date:'plb3Date',key:'plb3',businessUnit:'plb3BusinessUnit'},
-      'PLB3 Tanggap Darurat':{page:'plb3darurat',assessor:'daruratAssessor',site:'daruratSite',date:'daruratDate',key:'darurat',businessUnit:'daruratBusinessUnit'},
-      'B3':{page:'b3',assessor:'b3Assessor',site:'b3Site',date:'b3Date',key:'b3',businessUnit:'b3BusinessUnit'},
-      'Sampah':{page:'sampah',assessor:'sampahAssessor',site:'sampahSite',date:'sampahDate',key:'sampah',businessUnit:'sampahBusinessUnit'}
+      'PPA':{page:'ppa',assessor:'assessor',site:'site',date:'assessmentDate',key:'ppa',businessUnit:'ppaBusinessUnit',auditee:'auditee'},
+      'Emisi':{page:'emisi',assessor:'emisiAssessor',site:'emisiSite',date:'emisiDate',key:'emisi',businessUnit:'emisiBusinessUnit',auditee:'emisiAuditee'},
+      'PLB3':{page:'plb3',assessor:'plb3Assessor',site:'plb3Site',date:'plb3Date',key:'plb3',businessUnit:'plb3BusinessUnit',auditee:'plb3Auditee'},
+      'PLB3 Tanggap Darurat':{page:'plb3darurat',assessor:'daruratAssessor',site:'daruratSite',date:'daruratDate',key:'darurat',businessUnit:'daruratBusinessUnit',auditee:'daruratAuditee'},
+      'B3':{page:'b3',assessor:'b3Assessor',site:'b3Site',date:'b3Date',key:'b3',businessUnit:'b3BusinessUnit',auditee:'b3Auditee'},
+      'Sampah':{page:'sampah',assessor:'sampahAssessor',site:'sampahSite',date:'sampahDate',key:'sampah',businessUnit:'sampahBusinessUnit',auditee:'sampahAuditee'}
     };
 
     const cfg=map[module];
@@ -3491,6 +3503,7 @@ async function editModuleAssessment(row){
     setVal(cfg.assessor,row.assessor||'');
     setVal(cfg.site,row.site||'');
     if(cfg.businessUnit&&$(cfg.businessUnit))$(cfg.businessUnit).value=row.businessUnit||'';
+    if(cfg.auditee&&$(cfg.auditee))$(cfg.auditee).value=row.auditee||'';
     setVal(cfg.date,row.assessmentDate||'');
 
     // Form is rendered by showPage()/tab loader; wait one frame before filling.
@@ -4402,6 +4415,43 @@ function renderAllModuleDashboard(dataMap){
  root.innerHTML=cards||'<div class="module-empty">Belum ada data dari modul.</div>';
 }
 
+function renderBusinessUnitTrend(all){
+  const box=$('execTrend'); if(!box)return;
+  const units=['PT GGP','PT UJA','PT GGL','PG4'];
+  const colors=['#16a777','#1f78c8','#7d5bd6','#eb7a1f'];
+  const groups={}; units.forEach(u=>groups[u]={});
+  (all||[]).forEach(r=>{
+    const bu=String(r.businessUnit||'').trim(); if(!groups[bu])return;
+    const k=monthKey(r); if(!k)return;
+    groups[bu][k]=groups[bu][k]||{sum:0,n:0};
+    groups[bu][k].sum+=scoreOf(r); groups[bu][k].n++;
+  });
+  const months=[...new Set(units.flatMap(u=>Object.keys(groups[u])))].sort().slice(-8);
+  if(!months.length){box.innerHTML='<div class="module-empty">Belum ada data trend Business Unit.</div>';return;}
+  const W=920,H=285,L=55,R=28,T=25,B=44,iw=W-L-R,ih=H-T-B;
+  const X=i=>months.length===1?L+iw/2:L+i*iw/(months.length-1);
+  const Y=v=>T+ih-(Math.max(0,Math.min(100,v))/100)*ih;
+  let svg=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" class="exec-bu-trend">`;
+  [0,25,50,75,100].forEach(v=>svg+=`<line x1="${L}" y1="${Y(v)}" x2="${W-R}" y2="${Y(v)}" stroke="#e5edef"/><text x="${L-10}" y="${Y(v)+3}" text-anchor="end" font-size="10" fill="#7b8b91">${v}%</text>`);
+  units.forEach((u,ui)=>{
+    const pts=months.map((k,i)=>{const z=groups[u][k];return z?{x:X(i),y:Y(z.sum/z.n),v:Math.round(z.sum/z.n)}:null}).filter(Boolean);
+    if(!pts.length)return;
+    if(pts.length>1)svg+=`<path d="${pts.map((p,i)=>(i?'L':'M')+` ${p.x} ${p.y}`).join(' ')}" fill="none" stroke="${colors[ui]}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
+    pts.forEach(p=>svg+=`<circle cx="${p.x}" cy="${p.y}" r="5" fill="#fff" stroke="${colors[ui]}" stroke-width="3"><title>${u}: ${p.v}%</title></circle>`);
+  });
+  months.forEach((k,i)=>svg+=`<text x="${X(i)}" y="${H-15}" text-anchor="middle" font-size="10" fill="#7b8b91">${monthLabel(k).split(' ')[0]}</text>`);
+  svg+='</svg>';
+  box.innerHTML=svg+`<div class="bu-trend-legend-wrap">${units.map((u,i)=>`<span><i style="background:${colors[i]}"></i>${u}</span>`).join('')}</div>`;
+}
+function renderBusinessUnitTotals(all){
+  const box=$('execBusinessUnitTotals'); if(!box)return;
+  const units=['PT GGP','PT UJA','PT GGL','PG4'];
+  box.innerHTML=units.map(u=>{
+    const rows=(all||[]).filter(r=>String(r.businessUnit||'').trim()===u);
+    const pct=avg(rows),yes=rows.reduce((a,r)=>a+Number(r.yes||0),0),no=rows.reduce((a,r)=>a+Number(r.no||0),0);
+    return `<div class="bu-total-card"><div class="bu-total-head"><b>${u}</b><small>${rows.length} assessment</small></div><strong>${pct}%</strong><div class="bu-total-bar"><i style="width:${pct}%"></i></div><div class="bu-total-meta"><span>YA <b>${yes}</b></span><span>TIDAK <b>${no}</b></span></div></div>`;
+  }).join('');
+}
 function renderDashboardV2(dataMap){
   const s=execSummary(dataMap), all=s.all;
   if($('heroOverall'))$('heroOverall').textContent=s.overall+'%';
@@ -4413,17 +4463,15 @@ function renderDashboardV2(dataMap){
   const yes=s.yes,no=s.no,den=yes+no,yp=den?Math.round(yes/den*100):0;
   if($('dashStatusRing'))$('dashStatusRing').style.background=`conic-gradient(#14975f 0 ${yp}%,#e75b5b ${yp}% 100%)`;
   if($('dashYesPct'))$('dashYesPct').textContent=yp+'%'; if($('dashYesTotal'))$('dashYesTotal').textContent=yes; if($('dashNoTotal'))$('dashNoTotal').textContent=no;
-  const loc={};all.forEach(r=>{const k=normalizeSite(siteOf(r));if(!k)return;if(!loc[k])loc[k]={label:siteOf(r),sum:0,n:0};loc[k].sum+=scoreOf(r);loc[k].n++});
-  const lr=Object.values(loc).map(x=>({label:x.label,value:Math.round(x.sum/x.n)})).sort((a,b)=>b.value-a.value).slice(0,6);
-  if($('dashLocationBars'))$('dashLocationBars').innerHTML=lr.length?lr.map(x=>`<div class="loc-row"><b>${escapeHtml(x.label)}</b><div class="loc-track"><i style="width:${x.value}%"></i></div><strong>${x.value}%</strong></div>`).join(''):'<div class="module-empty">Belum ada data lokasi.</div>';
   if($('dashModuleTable'))$('dashModuleTable').innerHTML=s.modules.map(m=>`<tr class="clickable-card" onclick="openExecutiveDetail('module','${m.key}')"><td><b>${escapeHtml(m.label)}</b></td><td>${m.sites}</td><td>${m.count}</td><td><b>${m.pct}%</b></td><td>${(dataMap[m.key]||[]).reduce((a,r)=>a+Number(r.yes||0),0)}</td><td>${(dataMap[m.key]||[]).reduce((a,r)=>a+Number(r.no||0),0)}</td><td>${statusBadge(m.pct)}</td></tr>`).join('');
   const recent=all.slice().sort((a,b)=>String(b.timestamp||b.assessmentDate).localeCompare(String(a.timestamp||a.assessmentDate))).slice(0,5);
   if($('dashActivity'))$('dashActivity').innerHTML=recent.length?recent.map(r=>`<div class="activity-item"><div class="activity-icon">✓</div><div><b>${escapeHtml(siteOf(r))}</b><small>${escapeHtml(r.assessor||'PIC')} · ${escapeHtml(r.timestamp||r.assessmentDate||'-')}</small></div><span class="activity-ok">${scoreOf(r)}%</span></div>`).join(''):'<div class="module-empty">Belum ada aktivitas.</div>';
   const recentAll=Object.keys(dataMap).flatMap(key=>(dataMap[key]||[]).map(r=>({...r,_module:moduleMeta[key].label}))).sort((a,b)=>String(b.timestamp||b.assessmentDate||'').localeCompare(String(a.timestamp||a.assessmentDate||''))).slice(0,8);
-  if($('dashRecentAllTable'))$('dashRecentAllTable').querySelector('tbody').innerHTML=recentAll.length?recentAll.map(r=>`<tr class="clickable-card" onclick="openExecutiveDetail('location','${escapeHtml(normalizeSite(siteOf(r)))}')"><td><b>${escapeHtml(r._module)}</b></td><td>${escapeHtml(siteOf(r))}</td><td>${escapeHtml(r.assessor||'PIC')}</td><td>${escapeHtml(r.assessmentDate||r.timestamp||'-')}</td><td><b>${scoreOf(r)}%</b></td><td>${statusBadge(scoreOf(r))}</td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;padding:22px">Belum ada data.</td></tr>';
+  if($('dashRecentAllTable'))$('dashRecentAllTable').querySelector('tbody').innerHTML=recentAll.length?recentAll.map(r=>`<tr class="clickable-card" onclick="openExecutiveDetail('location','${escapeHtml(normalizeSite(siteOf(r)))}')"><td><b>${escapeHtml(r._module)}</b></td><td>${escapeHtml(r.businessUnit||'-')}</td><td>${escapeHtml(siteOf(r))}</td><td>${escapeHtml(r.auditor||r.assessor||'PIC')}</td><td>${escapeHtml(r.auditee||'-')}</td><td>${escapeHtml(r.assessmentDate||r.timestamp||'-')}</td><td><b>${scoreOf(r)}%</b></td><td>${statusBadge(scoreOf(r))}</td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;padding:22px">Belum ada data.</td></tr>';
   const risks=all.filter(r=>scoreOf(r)<70).sort((a,b)=>scoreOf(a)-scoreOf(b)).slice(0,3);
   if($('dashReminders'))$('dashReminders').innerHTML=risks.length?risks.map(r=>`<div class="reminder"><div class="reminder-icon">!</div><div><b>Perlu tindak lanjut — ${escapeHtml(siteOf(r))}</b><small>${scoreOf(r)}% · ${escapeHtml(r.assessor||'PIC')}</small></div></div>`).join(''):`<div class="reminder"><div class="reminder-icon">✓</div><div><b>Tidak ada risiko kritis</b><small>Semua assessment berada pada kondisi terpantau.</small></div></div>`;
-  renderFollowupChart(all);
+  renderBusinessUnitTrend(all);
+  renderBusinessUnitTotals(all);
   renderAllModuleDashboard(dataMap);
 }
 let executiveRawMap={};
