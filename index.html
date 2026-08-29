@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Inspeksi Ketentuan Teknis PROPER SHE DEPARTEMENT</title>
+<title>Inspeksi Ketentuan Teknis PROPER</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 :root{
@@ -982,26 +982,44 @@ table th:last-child,table td:last-child{min-width:190px}
 .evidence-save-status{display:block!important;margin-top:5px;font-size:8px;font-weight:900}
 .evidence-file.evidence-saved{border-color:#74c69d!important;background:#f0fff8!important}
 </style>
-<style id="proper-bu-final-style">
-.field select[id$="BusinessUnit"]{
-  height:40px;width:100%;
-  border:1px solid #dce7e3;
-  background:#f9fcfb;
-  border-radius:10px;
-  padding:0 11px;
-  color:#17333f;
-  font-weight:800;
-  font-size:11px;
-  outline:none
-}
-.field select[id$="BusinessUnit"]:focus{
-  border-color:#18a978;
-  box-shadow:0 0 0 3px rgba(24,169,120,.1)
-}
-.portal-filter-mini #execFilterBusinessUnit{
-  border-color:#16a37b;
-  background:#f3fbf8
-}
+<style id="proper-dashboard-premium-v3">
+.portal-dashboard{background:linear-gradient(180deg,#f4f9f7 0%,#eef5f3 100%)}
+.portal-header{padding-bottom:8px}
+.portal-header h1{letter-spacing:-1.2px}
+.portal-strip{background:linear-gradient(135deg,#073d52 0%,#087a62 52%,#0b9a72 100%);box-shadow:0 14px 35px rgba(3,52,67,.14);border-radius:18px;overflow:hidden}
+.portal-strip-title b{font-weight:950}
+.portal-module-grid{gap:14px}
+.portal-module{min-height:112px;border:1px solid rgba(255,255,255,.24)!important;box-shadow:0 12px 28px rgba(18,56,64,.08);transition:transform .18s ease,box-shadow .18s ease}
+.portal-module:hover{transform:translateY(-3px);box-shadow:0 18px 32px rgba(18,56,64,.14)}
+.portal-module strong{font-size:15px;letter-spacing:-.2px}
+.portal-analytics-grid{gap:16px}
+.portal-panel{border:1px solid #dfe9e6;box-shadow:0 10px 26px rgba(21,52,62,.055);border-radius:18px;background:rgba(255,255,255,.96)}
+.portal-panel-head h3{font-size:16px;letter-spacing:-.3px}
+.portal-panel-head span{font-size:9px;font-weight:950;letter-spacing:1.4px;color:#0b9270}
+.chart-panel{min-height:360px}
+.chart-score-pill{min-width:74px;padding:8px 10px;border-radius:13px;background:#effaf6;border:1px solid #cbeade;text-align:center}
+.chart-score-pill b{display:block;font-size:22px;color:#08634c;line-height:1}
+.chart-score-pill small{display:block;margin-top:3px;font-size:8px;color:#749087;font-weight:800}
+.executive-chart{padding:4px 0 0}
+.executive-chart svg{width:100%;height:260px;display:block}
+.exec-chart-line{fill:none;stroke:#0a9870;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.exec-chart-area{fill:url(#execTrendFill);opacity:.9}
+.exec-chart-dot{fill:#fff;stroke:#0a9870;stroke-width:3}
+.exec-chart-label{font-size:9px;fill:#74868b;font-weight:700}
+.exec-chart-value{font-size:10px;fill:#0b5d49;font-weight:950}
+.exec-chart-grid{stroke:#e5eeeb;stroke-width:1}
+.bu-summary-card{padding:12px 10px;border:1px solid #e1ebe8;border-radius:14px;background:#fbfdfc;margin-bottom:9px}
+.bu-summary-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bu-summary-name{font-size:11px;font-weight:950;color:#163842}
+.bu-summary-value{font-size:18px;font-weight:950;color:#087a5d}
+.bu-summary-bar{height:7px;background:#eaf1ef;border-radius:99px;overflow:hidden;margin-top:8px}
+.bu-summary-bar i{display:block;height:100%;background:linear-gradient(90deg,#1ca77a,#54d3aa);border-radius:99px}
+.bu-summary-foot{display:flex;justify-content:space-between;margin-top:6px;font-size:8px;color:#82938f}
+.recap-table th{background:#f2f8f5!important}
+.portal-live{box-shadow:0 7px 20px rgba(8,100,78,.09)}
+.portal-filter-mini{display:grid;grid-template-columns:160px 165px 165px 115px 115px auto;gap:8px;align-items:end}
+.portal-filter-mini select,.portal-filter-mini button{min-height:38px}
+@media(max-width:1100px){.portal-filter-mini{grid-template-columns:1fr 1fr}.chart-panel{min-height:320px}}
 </style>
 </head>
 <body>
@@ -1012,13 +1030,13 @@ table th:last-child,table td:last-child{min-width:190px}
 <datalist id="b3LocationSuggestions"></datalist>
 <datalist id="sampahLocationSuggestions"></datalist>
 
-<div class="mobile-header"><b>Inspeksi Ketentuan Teknis PROPER SHE DEPARTEMENT</b><button onclick="toggleMenu()">☰ Menu</button></div>
+<div class="mobile-header"><b>Inspeksi Ketentuan Teknis PROPER</b><button onclick="toggleMenu()">☰ Menu</button></div>
 
 <div id="authGate" class="auth-gate">
  <div class="auth-shell">
   <section class="auth-visual">
    <div class="auth-logo"><img src="logo.png" alt="PROPER"></div>
-   <h1>Inspeksi Ketentuan Teknis PROPER SHE DEPARTEMENT</h1>
+   <h1>Inspeksi Ketentuan Teknis PROPER</h1>
    <p>Platform monitoring kepatuhan lingkungan untuk PPA, Emisi, PLB3, Tanggap Darurat, B3, dan Sampah.</p>
    <div class="auth-pills"><span>🔐 Akun Personal</span><span>📊 Monitoring Terpusat</span><span>📷 Dokumentasi</span><span>☁ Google Sheet</span></div>
   </section>
@@ -1087,7 +1105,7 @@ table th:last-child,table td:last-child{min-width:190px}
 <aside class="sidebar" id="sidebar">
   <div class="brand">
       <div class="proper-logo"><img src="logo.png" alt="PROPER" onerror="this.style.opacity=.15"></div>
-      <h2>Inspeksi Ketentuan Teknis PROPER SHE DEPARTEMENT</h2>
+      <h2>Inspeksi Ketentuan Teknis PROPER</h2>
       
     </div>
     <div class="user-profile-mini" onclick="openProfileModal()" title="Edit profil" style="cursor:pointer"><img id="sidebarAvatar" src="logo.png" alt=""><div><b id="sidebarUserName">Guest</b><small id="sidebarUserRole">Belum masuk</small></div></div>
@@ -1168,20 +1186,51 @@ table th:last-child,table td:last-child{min-width:190px}
   <div class="portal-analytics-head">
     <div><span>EXECUTIVE VIEW</span><h2>Ringkasan Kinerja PROPER</h2><p>Summary otomatis dari data yang diinput seluruh PIC.</p></div>
     <div class="portal-filter-mini">
-      <select id="execFilterBusinessUnit" onchange="applyExecutiveFilters()"><option value="">Semua Business Unit</option></select><select id="execFilterModule" onchange="applyExecutiveFilters()"><option value="">Semua Aspek</option></select>
-      <select id="execFilterSite" onchange="applyExecutiveFilters()"><option value="">Semua Lokasi</option></select>
-      <select id="execFilterYear" onchange="applyExecutiveFilters()"><option value="">Semua Tahun</option></select>
-      <select id="execFilterMonth" onchange="applyExecutiveFilters()"><option value="">Semua Bulan</option></select>
+      <select id="execFilterBusinessUnit" onchange="applyExecutiveFiltersWithBU()"><option value="">Semua Business Unit</option></select>
+      <select id="execFilterModule" onchange="applyExecutiveFiltersWithBU()"><option value="">Semua Aspek</option></select>
+      <select id="execFilterSite" onchange="applyExecutiveFiltersWithBU()"><option value="">Semua Lokasi</option></select>
+      <select id="execFilterYear" onchange="applyExecutiveFiltersWithBU()"><option value="">Semua Tahun</option></select>
+      <select id="execFilterMonth" onchange="applyExecutiveFiltersWithBU()"><option value="">Semua Bulan</option></select>
       <button onclick="resetExecutiveFilters()">Reset</button>
     </div>
   </div>
 
   <div class="exec-kpis dash-kpis" id="execKpis"></div>
 
-  <div class="portal-analytics-grid">
-    <div class="portal-panel portal-wide"><div class="portal-panel-head"><div><span>PERFORMA</span><h3>Trend Kepatuhan Bulanan</h3><p>Rata-rata kepatuhan seluruh aspek.</p></div><b id="execAvg">0%</b></div><div id="execTrend"></div></div>
-    <div class="portal-panel"><div class="portal-panel-head"><div><span>ASPEK</span><h3>Performa Aspek</h3><p>Perbandingan kepatuhan.</p></div></div><div id="execModules" class="module-board"></div></div>
-    <div class="portal-panel"><div class="portal-panel-head"><div><span>BUSINESS UNIT</span><h3>Total Persentase per Business Unit</h3><p>Perbandingan kepatuhan masing-masing unit.</p></div></div><div id="execBusinessUnitTotals" class="ranking-pro"></div></div>
+  <div class="portal-analytics-grid polished-dashboard-grid">
+    <div class="portal-panel portal-wide chart-panel">
+      <div class="portal-panel-head">
+        <div>
+          <span>PERFORMA</span>
+          <h3>Trend Persentase Kepatuhan</h3>
+          <p>Perkembangan rata-rata kepatuhan per bulan.</p>
+        </div>
+        <div class="chart-score-pill"><b id="execAvg">0%</b><small>Overall</small></div>
+      </div>
+      <div id="execTrend" class="executive-chart"></div>
+    </div>
+
+    <div class="portal-panel">
+      <div class="portal-panel-head">
+        <div>
+          <span>ASPEK</span>
+          <h3>Performa Aspek</h3>
+          <p>Ringkasan pencapaian setiap aspek.</p>
+        </div>
+      </div>
+      <div id="execModules" class="module-board"></div>
+    </div>
+
+    <div class="portal-panel">
+      <div class="portal-panel-head">
+        <div>
+          <span>PERBANDINGAN</span>
+          <h3>Total Persentase Business Unit</h3>
+          <p>Performa masing-masing unit usaha.</p>
+        </div>
+      </div>
+      <div id="execLocations" class="ranking-pro"></div>
+    </div>
   </div>
 
   <div class="portal-lower-grid">
@@ -1192,7 +1241,7 @@ table th:last-child,table td:last-child{min-width:190px}
     </div></div>
   </div>
 
-  <div class="portal-panel portal-recap"><div class="portal-panel-head"><div><span>LIVE RECAP</span><h3>Assessment Terbaru Semua Aspek</h3><p>PPA, PPU/Emisi, Penyimpanan PLB3, Tanggap Darurat PLB3, B3 dan Sampah.</p></div><button class="portal-text-btn" onclick="showPage('rekap')">Lihat rekap lengkap →</button></div><div id="dashRecentAllTable" class="table-wrap"><table><thead><tr><th>Aspek</th><th>Business Unit</th><th>Lokasi</th><th>Auditor</th><th>Auditee</th><th>Tanggal</th><th>%</th><th>Status</th></tr></thead><tbody></tbody></table></div></div>
+  <div class="portal-panel portal-recap"><div class="portal-panel-head"><div><span>LIVE RECAP</span><h3>Assessment Terbaru Semua Aspek</h3><p>PPA, PPU/Emisi, Penyimpanan PLB3, Tanggap Darurat PLB3, B3 dan Sampah.</p></div><button class="portal-text-btn" onclick="showPage('rekap')">Lihat rekap lengkap →</button></div><div id="dashRecentAllTable" class="table-wrap"><table><thead><tr><th>Aspek</th><th>Lokasi</th><th>Penilai</th><th>Tanggal</th><th>%</th><th>Status</th></tr></thead><tbody></tbody></table></div></div>
 
   <!-- Containers retained for existing analytics code -->
   <div style="display:none">
@@ -1205,9 +1254,7 @@ table th:last-child,table td:last-child{min-width:190px}
   <div class="topline"><div><h1>Form Penilaian PPA</h1><p>Isi YA/TIDAK dan keterangan untuk setiap ketentuan teknis.</p></div></div>
   <div class="card">
     <div class="assessor-grid">
-      <div class="field"><label>Auditor</label><input id="assessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Business Unit</label><select id="ppaBusinessUnit" required><option value="">Pilih Business Unit</option><option value="PT GGP">PT GGP</option><option value="PT UJA">PT UJA</option><option value="PT GGL">PT GGL</option><option value="PG4">PG4</option></select></div>
-      <div class="field"><label>Auditee</label><input id="auditee" placeholder="Masukkan nama auditee"></div>
+      <div class="field"><label>Nama Penilai</label><input id="assessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Lokasi / Area</label><input id="site" list="ppaLocationSuggestions" placeholder="Contoh: IPAL GGP 1" oninput="updateSiteTitle()"></div>
     </div>
   </div>
@@ -1264,9 +1311,7 @@ table th:last-child,table td:last-child{min-width:190px}
   </div>
   <div class="card">
     <div class="assessor-grid">
-      <div class="field"><label>Auditor</label><input id="emisiAssessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Business Unit</label><select id="emisiBusinessUnit" required><option value="">Pilih Business Unit</option><option value="PT GGP">PT GGP</option><option value="PT UJA">PT UJA</option><option value="PT GGL">PT GGL</option><option value="PG4">PG4</option></select></div>
-      <div class="field"><label>Auditee</label><input id="emisiAuditee" placeholder="Masukkan nama auditee"></div>
+      <div class="field"><label>Nama Penilai</label><input id="emisiAssessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Lokasi / Area</label><input id="emisiSite" list="emisiLocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="emisiDate" type="date"></div>
     </div>
@@ -1306,9 +1351,7 @@ table th:last-child,table td:last-child{min-width:190px}
   <div class="plb3-form-card card">
     <div class="plb3-form-title"><div><span>FORM PENILAIAN</span><h3>Data Inspeksi</h3><p>Pilih satu lokasi/area, lalu isi YA/TIDAK dan bukti pendukung.</p></div><button class="btn secondary" onclick="resetPLB3()">Reset</button></div>
     <div class="assessor-grid">
-      <div class="field"><label>Auditor</label><input id="plb3Assessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Business Unit</label><select id="plb3BusinessUnit" required><option value="">Pilih Business Unit</option><option value="PT GGP">PT GGP</option><option value="PT UJA">PT UJA</option><option value="PT GGL">PT GGL</option><option value="PG4">PG4</option></select></div>
-      <div class="field"><label>Auditee</label><input id="plb3Auditee" placeholder="Masukkan nama auditee"></div>
+      <div class="field"><label>Nama Penilai</label><input id="plb3Assessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Lokasi / Area</label><input id="plb3Site" list="plb3LocationSuggestions" placeholder="Pilih atau ketik lokasi / area"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="plb3Date" type="date"></div>
     </div>
@@ -1404,9 +1447,7 @@ table th:last-child,table td:last-child{min-width:190px}
   <div class="topline"><div><h1>PLB3 — Tanggap Darurat</h1><p>Aspek ketentuan tanggap darurat pengelolaan Limbah B3.</p></div><button class="btn secondary" onclick="loadPLB3Darurat()">↻ Refresh Data</button></div>
   <div class="card">
     <div class="assessor-grid">
-      <div class="field"><label>Auditor</label><input id="daruratAssessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Business Unit</label><select id="daruratBusinessUnit" required><option value="">Pilih Business Unit</option><option value="PT GGP">PT GGP</option><option value="PT UJA">PT UJA</option><option value="PT GGL">PT GGL</option><option value="PG4">PG4</option></select></div>
-      <div class="field"><label>Auditee</label><input id="daruratAuditee" placeholder="Masukkan nama auditee"></div>
+      <div class="field"><label>Nama Penilai</label><input id="daruratAssessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Lokasi / Area</label><input id="daruratSite" list="daruratLocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="daruratDate" type="date"></div>
     </div>
@@ -1426,9 +1467,7 @@ table th:last-child,table td:last-child{min-width:190px}
   <div class="topline"><div><h1>B3</h1><p>Aspek penilaian pengangkutan, penyimpanan, pelaporan B3 serta pengelolaan PCBs.</p></div><button class="btn secondary" onclick="loadB3()">↻ Refresh Data</button></div>
   <div class="card">
     <div class="assessor-grid">
-      <div class="field"><label>Auditor</label><input id="b3Assessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Business Unit</label><select id="b3BusinessUnit" required><option value="">Pilih Business Unit</option><option value="PT GGP">PT GGP</option><option value="PT UJA">PT UJA</option><option value="PT GGL">PT GGL</option><option value="PG4">PG4</option></select></div>
-      <div class="field"><label>Auditee</label><input id="b3Auditee" placeholder="Masukkan nama auditee"></div>
+      <div class="field"><label>Nama Penilai</label><input id="b3Assessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Lokasi / Area</label><input id="b3Site" list="b3LocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="b3Date" type="date"></div>
     </div>
@@ -1452,9 +1491,7 @@ table th:last-child,table td:last-child{min-width:190px}
 
   <div class="card">
     <div class="assessor-grid">
-      <div class="field"><label>Auditor</label><input id="sampahAssessor" placeholder="Masukkan nama penilai"></div>
-      <div class="field"><label>Business Unit</label><select id="sampahBusinessUnit" required><option value="">Pilih Business Unit</option><option value="PT GGP">PT GGP</option><option value="PT UJA">PT UJA</option><option value="PT GGL">PT GGL</option><option value="PG4">PG4</option></select></div>
-      <div class="field"><label>Auditee</label><input id="sampahAuditee" placeholder="Masukkan nama auditee"></div>
+      <div class="field"><label>Nama Penilai</label><input id="sampahAssessor" placeholder="Masukkan nama penilai"></div>
       <div class="field"><label>Lokasi / Area</label><input id="sampahSite" list="sampahLocationSuggestions" placeholder="Ketik atau pilih lokasi"></div>
       <div class="field"><label>Tanggal Penilaian</label><input id="sampahDate" type="date"></div>
     </div>
@@ -1548,7 +1585,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx7H9ktn3Ld4JWP5fi_rZ-l9rREkj7o0IxIWu_Rv1uWDOLr3LEAL1UVXy3R4jpncq7s/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKzuJiRjcb-hiMM4r_P6xh-baP2Akrs_KFbYhB6slNigrBicdJEnYdkAtk_PYViu1G/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -1878,12 +1915,10 @@ function calcPLB3(){
  $('lb3Foot').innerHTML=foot;
 }
 function resetEmisi(){
- if($('emisiBusinessUnit'))$('emisiBusinessUnit'.trim()).value='';
  $('emisiAssessor').value=(getCurrentUser()||{}).name||'';$('emisiSite').value='';$('emisiDate').value='';
  renderEmisiForm();
 }
 function resetPLB3(){
- if($('plb3BusinessUnit'))$('plb3BusinessUnit'.trim()).value='';
  $('plb3Assessor').value=(getCurrentUser()||{}).name||'';$('plb3Site').value='';$('plb3Date').value='';
  renderPLB3Form();
 }
@@ -2323,10 +2358,7 @@ async function postJSON(payload){
 
 async function submitEmisi(){
   const assessor=$('emisiAssessor').value.trim(),site=canonicalLocationFor('emisi',$('emisiSite').value),date=$('emisiDate').value;
-  const businessUnit=$('emisiBusinessUnit').value;
-  const auditee=$('emisiAuditee').value.trim();
-  if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
- if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Emisi wajib diisi.');return}
+  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Emisi wajib diisi.');return}
 
   const statusEls=[...document.querySelectorAll('#emisiBody .emisi-status')];
   if(statusEls.some(s=>!s.value)){
@@ -2352,7 +2384,7 @@ async function submitEmisi(){
   });
 
   try{
-    const d=await postJSON(isEditingModule('Emisi')?{action:'updateAssessment',module:'Emisi',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:rows}:{action:'saveEmisi',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:rows});
+    const d=await postJSON(isEditingModule('Emisi')?{action:'updateAssessment',module:'Emisi',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items:rows}:{action:'saveEmisi',assessor,site,assessmentDate:date,items:rows});
     if(d.status==='success'){
       const evr=await uploadModuleEvidence('emisi',d.submissionId,collectEvidence('emisi')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
       toast('✓ Data Emisi berhasil disimpan.');
@@ -2363,9 +2395,6 @@ async function submitEmisi(){
 }
 async function submitPLB3(){
  const assessor=$('plb3Assessor').value.trim(),site=canonicalLocationFor('plb3',$('plb3Site').value),date=$('plb3Date').value;
-  const businessUnit=$('plb3BusinessUnit').value;
-  const auditee=$('plb3Auditee').value.trim();
- if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor||!site||!date){toast('Nama penilai, lokasi/area dan tanggal PLB3 wajib diisi.');return}
  const statuses=[...document.querySelectorAll('.plb3-status')];
  if(statuses.some(s=>!s.value)){toast('Lengkapi semua status YA/TIDAK pada penilaian PLB3.');return}
@@ -2375,7 +2404,7 @@ async function submitPLB3(){
    return {no:i+1,ketentuan,status:s?s.value:'',keterangan:n?n.value.trim():''};
  });
  try{
-   const d=await postJSON(isEditingModule('PLB3')?{action:'updateAssessment',module:'PLB3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,items}:{action:'savePLB3',assessor,site,assessmentDate:date,businessUnit:businessUnit,items});
+   const d=await postJSON(isEditingModule('PLB3')?{action:'updateAssessment',module:'PLB3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'savePLB3',assessor,site,assessmentDate:date,items});
    if(d.status==='success'){
      const evr=await uploadModuleEvidence('plb3',d.submissionId,collectEvidence('plb3')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
      toast(isEditingModule('PLB3')?'✓ Data Penyimpanan PLB3 berhasil diperbarui.':'✓ Data Penyimpanan PLB3 berhasil disimpan.');clearEditMode();resetPLB3();loadPLB3();
@@ -2520,18 +2549,14 @@ function calcPLB3Darurat(){
  s.forEach(x=>{if(x.value)filled++;if(x.value==='YA')yes++;x.classList.toggle('status-yes',x.value==='YA');x.classList.toggle('status-no',x.value==='TIDAK')});
  const pct=s.length?Math.round(yes/s.length*100):0;$('daruratPct').textContent=pct+'%';$('daruratScore').textContent=pct+'%';$('daruratBar').style.width=pct+'%';
 }
-function resetPLB3Darurat(){
- if($('daruratBusinessUnit'))$('daruratBusinessUnit'.trim()).value='';$('daruratAssessor').value=(getCurrentUser()||{}).name||'';$('daruratSite').value='';$('daruratDate').value='';renderPLB3DaruratForm();}
+function resetPLB3Darurat(){$('daruratAssessor').value=(getCurrentUser()||{}).name||'';$('daruratSite').value='';$('daruratDate').value='';renderPLB3DaruratForm();}
 async function submitPLB3Darurat(){
  const assessor=$('daruratAssessor').value.trim(),site=canonicalLocationFor('darurat',$('daruratSite').value),date=$('daruratDate').value;
-  const businessUnit=$('daruratBusinessUnit').value;
-  const auditee=$('daruratAuditee').value.trim();
  const statuses=[...document.querySelectorAll('.darurat-status')];
- if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal PLB3 Tanggap Darurat wajib diisi.');return}
  if(statuses.some(s=>!s.value)){toast('Lengkapi semua status YA/TIDAK PLB3 Tanggap Darurat.');return}
  const items=statuses.map((s,i)=>({no:plb3DaruratItems[i][0],ketentuan:plb3DaruratItems[i][2],section:plb3DaruratItems[i][1],status:s.value,documentation:'',keterangan:$(`.darurat-note[data-i="${i}"]`).value.trim()}));
- try{const d=await postJSON(isEditingModule('PLB3 Tanggap Darurat')?{action:'updateAssessment',module:'PLB3 Tanggap Darurat',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,items}:{action:'savePLB3Darurat',assessor,site,assessmentDate:date,businessUnit:businessUnit,items});
+ try{const d=await postJSON(isEditingModule('PLB3 Tanggap Darurat')?{action:'updateAssessment',module:'PLB3 Tanggap Darurat',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'savePLB3Darurat',assessor,site,assessmentDate:date,items});
    if(d.status==='success'){
    const evr=await uploadModuleEvidence('darurat',d.submissionId,collectEvidence('darurat')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
    toast(isEditingModule('PLB3 Tanggap Darurat')?'✓ PLB3 Tanggap Darurat berhasil diperbarui.':'✓ PLB3 Tanggap Darurat tersimpan.');clearEditMode();resetPLB3Darurat();loadPLB3Darurat();
@@ -2559,13 +2584,9 @@ function calcB3(){
    if($(`b3bar-${si}`))$(`b3bar-${si}`).style.width=pct+'%';
  });
 }
-function resetB3(){
- if($('b3BusinessUnit'))$('b3BusinessUnit'.trim()).value='';$('b3Assessor').value=(getCurrentUser()||{}).name||'';$('b3Site').value='';$('b3Date').value='';renderB3Forms();}
+function resetB3(){$('b3Assessor').value=(getCurrentUser()||{}).name||'';$('b3Site').value='';$('b3Date').value='';renderB3Forms();}
 async function submitB3(){
  const assessor=$('b3Assessor').value.trim(),site=canonicalLocationFor('b3',$('b3Site').value),date=$('b3Date').value;
-  const businessUnit=$('b3BusinessUnit').value;
-  const auditee=$('b3Auditee').value.trim();
- if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal B3 wajib diisi.');return}
  const items=[];
  b3Sections.forEach((sec,si)=>[...document.querySelectorAll(`.b3-status[data-s="${si}"]`)].forEach((s,i)=>{
@@ -2573,7 +2594,7 @@ async function submitB3(){
    items.push({section:sec[0],no:sec[1][i][0],ketentuan:sec[1][i][1],status:s.value,keterangan:$(`.b3-note[data-s="${si}"][data-i="${i}"]`).value.trim()});
  }));
  if(items.length===0){toast('Isi minimal satu status YA/TIDAK pada B3.');return}
- try{const d=await postJSON(isEditingModule('B3')?{action:'updateAssessment',module:'B3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,items}:{action:'saveB3',assessor,site,assessmentDate:date,businessUnit:businessUnit,items});
+ try{const d=await postJSON(isEditingModule('B3')?{action:'updateAssessment',module:'B3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'saveB3',assessor,site,assessmentDate:date,items});
    if(d.status==='success'){const evr=await uploadModuleEvidence('b3',d.submissionId,collectEvidence('b3')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');toast(isEditingModule('B3')?'✓ Data B3 berhasil diperbarui.':'✓ Data B3 berhasil disimpan.');clearEditMode();resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan B3: '+e.message)}
 }
@@ -2678,7 +2699,6 @@ function calcSampah(){
 }
 
 function resetSampah(){
- if($('sampahBusinessUnit'))$('sampahBusinessUnit'.trim()).value='';
   if($('sampahAssessor'))$('sampahAssessor').value=(getCurrentUser()||{}).name||'';
   if($('sampahSite'))$('sampahSite').value='';
   if($('sampahDate'))$('sampahDate').value='';
@@ -2689,11 +2709,8 @@ async function submitSampah(){
   const assessor=$('sampahAssessor').value.trim();
   const site=canonicalLocationFor('sampah',$('sampahSite').value);
   const date=$('sampahDate').value;
-  const businessUnit=$('sampahBusinessUnit').value;
-  const auditee=$('sampahAuditee').value.trim();
   const statuses=[...document.querySelectorAll('.sampah-status')];
-  if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
- if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Sampah wajib diisi.');return;}
+  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Sampah wajib diisi.');return;}
   if(statuses.some(s=>!s.value)){toast('Lengkapi semua status YA/TIDAK pada penilaian Sampah.');return;}
   const items=statuses.map((s,i)=>({
     no:i+1,
@@ -2703,7 +2720,7 @@ async function submitSampah(){
     keterangan:$(`.sampah-note[data-i="${i}"]`).value.trim()
   }));
   try{
-    const d=await postJSON(isEditingModule('Sampah')?{action:'updateAssessment',module:'Sampah',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,items}:{action:'saveSampah',assessor,site,assessmentDate:date,businessUnit:businessUnit,items});
+    const d=await postJSON(isEditingModule('Sampah')?{action:'updateAssessment',module:'Sampah',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,items}:{action:'saveSampah',assessor,site,assessmentDate:date,items});
     if(d.status==='success'){
       const evr=await uploadModuleEvidence('sampah',d.submissionId,collectEvidence('sampah'));
       if(evr.failed){
@@ -3362,7 +3379,6 @@ function updateScore(){
  $('answerCount').textContent=filled+'/'+items.length+' terisi';
 }
 function resetForm(){
- if($('ppaBusinessUnit'))$('ppaBusinessUnit'.trim()).value='';
  document.querySelectorAll('#ppaBody .status-select').forEach(s=>s.value='');
  document.querySelectorAll('#ppaBody textarea').forEach(t=>t.value='');
  document.querySelectorAll('#ppaBody input[type=file]').forEach(f=>{
@@ -3383,15 +3399,12 @@ function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setT
 async function submitPPA(){
  if(SCRIPT_URL.startsWith('PASTE_')){toast('Masukkan URL Google Apps Script terlebih dahulu.');return}
  const assessor=$('assessor').value.trim(), site=canonicalLocationFor('ppa',$('site').value), date=$('assessmentDate').value;
-  const businessUnit=$('ppaBusinessUnit').value;
-  const auditee=$('auditee').value.trim();
  const rows=[...document.querySelectorAll('#ppaBody .status-select')];
- if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor){toast('Nama penilai wajib diisi.');$('assessor').focus();return}
  if(!site){toast('Lokasi IPAL wajib diisi.');$('site').focus();return}
  if(!date){toast('Tanggal penilaian wajib diisi.');$('assessmentDate').focus();return}
  if(rows.some(s=>!s.value)){toast('Lengkapi semua 11 jawaban YA/TIDAK.');return}
- const payload={action:'savePPA',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:rows.map((s,i)=>({no:i+1,ketentuan:items[i],status:s.value,keterangan:document.querySelector(`[data-k="${i}"]`).value.trim()}))};
+ const payload={action:'savePPA',assessor,site,assessmentDate:date,items:rows.map((s,i)=>({no:i+1,ketentuan:items[i],status:s.value,keterangan:document.querySelector(`[data-k="${i}"]`).value.trim()}))};
  const btn=document.querySelector('.actions .primary');btn.disabled=true;btn.textContent='⏳ Menyimpan...';
  try{
    const d=await postJSON(isEditingModule('PPA')?Object.assign({},payload,{action:'updateAssessment',module:'PPA',submissionId:window.editingAssessment.submissionId}):payload);
@@ -3478,12 +3491,12 @@ async function editModuleAssessment(row){
     setEditMode(module,row);
 
     const map={
-      'PPA':{page:'ppa',assessor:'assessor',site:'site',date:'assessmentDate',key:'ppa',businessUnit:'ppaBusinessUnit',auditee:'auditee'},
-      'Emisi':{page:'emisi',assessor:'emisiAssessor',site:'emisiSite',date:'emisiDate',key:'emisi',businessUnit:'emisiBusinessUnit',auditee:'emisiAuditee'},
-      'PLB3':{page:'plb3',assessor:'plb3Assessor',site:'plb3Site',date:'plb3Date',key:'plb3',businessUnit:'plb3BusinessUnit',auditee:'plb3Auditee'},
-      'PLB3 Tanggap Darurat':{page:'plb3darurat',assessor:'daruratAssessor',site:'daruratSite',date:'daruratDate',key:'darurat',businessUnit:'daruratBusinessUnit',auditee:'daruratAuditee'},
-      'B3':{page:'b3',assessor:'b3Assessor',site:'b3Site',date:'b3Date',key:'b3',businessUnit:'b3BusinessUnit',auditee:'b3Auditee'},
-      'Sampah':{page:'sampah',assessor:'sampahAssessor',site:'sampahSite',date:'sampahDate',key:'sampah',businessUnit:'sampahBusinessUnit',auditee:'sampahAuditee'}
+      'PPA':{page:'ppa',assessor:'assessor',site:'site',date:'assessmentDate',key:'ppa'},
+      'Emisi':{page:'emisi',assessor:'emisiAssessor',site:'emisiSite',date:'emisiDate',key:'emisi'},
+      'PLB3':{page:'plb3',assessor:'plb3Assessor',site:'plb3Site',date:'plb3Date',key:'plb3'},
+      'PLB3 Tanggap Darurat':{page:'plb3darurat',assessor:'daruratAssessor',site:'daruratSite',date:'daruratDate',key:'darurat'},
+      'B3':{page:'b3',assessor:'b3Assessor',site:'b3Site',date:'b3Date',key:'b3'},
+      'Sampah':{page:'sampah',assessor:'sampahAssessor',site:'sampahSite',date:'sampahDate',key:'sampah'}
     };
 
     const cfg=map[module];
@@ -3502,8 +3515,6 @@ async function editModuleAssessment(row){
 
     setVal(cfg.assessor,row.assessor||'');
     setVal(cfg.site,row.site||'');
-    if(cfg.businessUnit&&$(cfg.businessUnit))$(cfg.businessUnit).value=row.businessUnit||'';
-    if(cfg.auditee&&$(cfg.auditee))$(cfg.auditee).value=row.auditee||'';
     setVal(cfg.date,row.assessmentDate||'');
 
     // Form is rendered by showPage()/tab loader; wait one frame before filling.
@@ -4415,109 +4426,607 @@ function renderAllModuleDashboard(dataMap){
  root.innerHTML=cards||'<div class="module-empty">Belum ada data dari modul.</div>';
 }
 
-function renderBusinessUnitTrend(all){
-  const box=$('execTrend'); if(!box)return;
-  const units=['PT GGP','PT UJA','PT GGL','PG4'];
-  const colors=['#16a777','#1f78c8','#7d5bd6','#eb7a1f'];
-  const groups={}; units.forEach(u=>groups[u]={});
-  (all||[]).forEach(r=>{
-    const bu=String(r.businessUnit||'').trim(); if(!groups[bu])return;
-    const k=monthKey(r); if(!k)return;
-    groups[bu][k]=groups[bu][k]||{sum:0,n:0};
-    groups[bu][k].sum+=scoreOf(r); groups[bu][k].n++;
-  });
-  const months=[...new Set(units.flatMap(u=>Object.keys(groups[u])))].sort().slice(-8);
-  if(!months.length){box.innerHTML='<div class="module-empty">Belum ada data trend Business Unit.</div>';return;}
-  const W=920,H=285,L=55,R=28,T=25,B=44,iw=W-L-R,ih=H-T-B;
-  const X=i=>months.length===1?L+iw/2:L+i*iw/(months.length-1);
-  const Y=v=>T+ih-(Math.max(0,Math.min(100,v))/100)*ih;
-  let svg=`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" class="exec-bu-trend">`;
-  [0,25,50,75,100].forEach(v=>svg+=`<line x1="${L}" y1="${Y(v)}" x2="${W-R}" y2="${Y(v)}" stroke="#e5edef"/><text x="${L-10}" y="${Y(v)+3}" text-anchor="end" font-size="10" fill="#7b8b91">${v}%</text>`);
-  units.forEach((u,ui)=>{
-    const pts=months.map((k,i)=>{const z=groups[u][k];return z?{x:X(i),y:Y(z.sum/z.n),v:Math.round(z.sum/z.n)}:null}).filter(Boolean);
-    if(!pts.length)return;
-    if(pts.length>1)svg+=`<path d="${pts.map((p,i)=>(i?'L':'M')+` ${p.x} ${p.y}`).join(' ')}" fill="none" stroke="${colors[ui]}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;
-    pts.forEach(p=>svg+=`<circle cx="${p.x}" cy="${p.y}" r="5" fill="#fff" stroke="${colors[ui]}" stroke-width="3"><title>${u}: ${p.v}%</title></circle>`);
-  });
-  months.forEach((k,i)=>svg+=`<text x="${X(i)}" y="${H-15}" text-anchor="middle" font-size="10" fill="#7b8b91">${monthLabel(k).split(' ')[0]}</text>`);
-  svg+='</svg>';
-  box.innerHTML=svg+`<div class="bu-trend-legend-wrap">${units.map((u,i)=>`<span><i style="background:${colors[i]}"></i>${u}</span>`).join('')}</div>`;
-}
-function renderBusinessUnitTotals(all){
-  const box=$('execBusinessUnitTotals'); if(!box)return;
-  const units=['PT GGP','PT UJA','PT GGL','PG4'];
-  box.innerHTML=units.map(u=>{
-    const rows=(all||[]).filter(r=>String(r.businessUnit||'').trim()===u);
-    const pct=avg(rows),yes=rows.reduce((a,r)=>a+Number(r.yes||0),0),no=rows.reduce((a,r)=>a+Number(r.no||0),0);
-    return `<div class="bu-total-card"><div class="bu-total-head"><b>${u}</b><small>${rows.length} assessment</small></div><strong>${pct}%</strong><div class="bu-total-bar"><i style="width:${pct}%"></i></div><div class="bu-total-meta"><span>YA <b>${yes}</b></span><span>TIDAK <b>${no}</b></span></div></div>`;
-  }).join('');
-}
-function renderDashboardV2(dataMap){
-  const s=execSummary(dataMap), all=s.all;
-  if($('heroOverall'))$('heroOverall').textContent=s.overall+'%';
-  if($('dashStatusDonut'))$('dashStatusDonut').style.background=`conic-gradient(#14975f 0 ${s.overall}%,#f1b34c ${s.overall}% ${Math.min(100,s.overall+Math.max(0,100-s.overall)*.45)}%,#e75b5b 0 100%)`;
-  const good=all.filter(r=>scoreOf(r)>=85).length,warn=all.filter(r=>scoreOf(r)>=70&&scoreOf(r)<85).length,bad=all.filter(r=>scoreOf(r)<70).length,total=all.length;
-  if($('dashStatusDonut'))$('dashStatusDonut').style.background=`conic-gradient(#14975f 0 ${total?good/total*100:0}%,#f1b34c ${total?(good+warn)/total*100:0}%,#e75b5b ${total?(good+warn)/total*100:0}% 100%)`;
-  if($('dashDonutPct'))$('dashDonutPct').textContent=s.overall+'%';
-  if($('dashStatusLegend'))$('dashStatusLegend').innerHTML=`<span><b>Sangat Baik</b><b>${good}</b></span><span><b>Perlu Perbaikan</b><b>${warn}</b></span><span><b>Belum Memenuhi</b><b>${bad}</b></span>`;
-  const yes=s.yes,no=s.no,den=yes+no,yp=den?Math.round(yes/den*100):0;
-  if($('dashStatusRing'))$('dashStatusRing').style.background=`conic-gradient(#14975f 0 ${yp}%,#e75b5b ${yp}% 100%)`;
-  if($('dashYesPct'))$('dashYesPct').textContent=yp+'%'; if($('dashYesTotal'))$('dashYesTotal').textContent=yes; if($('dashNoTotal'))$('dashNoTotal').textContent=no;
-  if($('dashModuleTable'))$('dashModuleTable').innerHTML=s.modules.map(m=>`<tr class="clickable-card" onclick="openExecutiveDetail('module','${m.key}')"><td><b>${escapeHtml(m.label)}</b></td><td>${m.sites}</td><td>${m.count}</td><td><b>${m.pct}%</b></td><td>${(dataMap[m.key]||[]).reduce((a,r)=>a+Number(r.yes||0),0)}</td><td>${(dataMap[m.key]||[]).reduce((a,r)=>a+Number(r.no||0),0)}</td><td>${statusBadge(m.pct)}</td></tr>`).join('');
-  const recent=all.slice().sort((a,b)=>String(b.timestamp||b.assessmentDate).localeCompare(String(a.timestamp||a.assessmentDate))).slice(0,5);
-  if($('dashActivity'))$('dashActivity').innerHTML=recent.length?recent.map(r=>`<div class="activity-item"><div class="activity-icon">✓</div><div><b>${escapeHtml(siteOf(r))}</b><small>${escapeHtml(r.assessor||'PIC')} · ${escapeHtml(r.timestamp||r.assessmentDate||'-')}</small></div><span class="activity-ok">${scoreOf(r)}%</span></div>`).join(''):'<div class="module-empty">Belum ada aktivitas.</div>';
-  const recentAll=Object.keys(dataMap).flatMap(key=>(dataMap[key]||[]).map(r=>({...r,_module:moduleMeta[key].label}))).sort((a,b)=>String(b.timestamp||b.assessmentDate||'').localeCompare(String(a.timestamp||a.assessmentDate||''))).slice(0,8);
-  if($('dashRecentAllTable'))$('dashRecentAllTable').querySelector('tbody').innerHTML=recentAll.length?recentAll.map(r=>`<tr class="clickable-card" onclick="openExecutiveDetail('location','${escapeHtml(normalizeSite(siteOf(r)))}')"><td><b>${escapeHtml(r._module)}</b></td><td>${escapeHtml(r.businessUnit||'-')}</td><td>${escapeHtml(siteOf(r))}</td><td>${escapeHtml(r.auditor||r.assessor||'PIC')}</td><td>${escapeHtml(r.auditee||'-')}</td><td>${escapeHtml(r.assessmentDate||r.timestamp||'-')}</td><td><b>${scoreOf(r)}%</b></td><td>${statusBadge(scoreOf(r))}</td></tr>`).join(''):'<tr><td colspan="6" style="text-align:center;padding:22px">Belum ada data.</td></tr>';
-  const risks=all.filter(r=>scoreOf(r)<70).sort((a,b)=>scoreOf(a)-scoreOf(b)).slice(0,3);
-  if($('dashReminders'))$('dashReminders').innerHTML=risks.length?risks.map(r=>`<div class="reminder"><div class="reminder-icon">!</div><div><b>Perlu tindak lanjut — ${escapeHtml(siteOf(r))}</b><small>${scoreOf(r)}% · ${escapeHtml(r.assessor||'PIC')}</small></div></div>`).join(''):`<div class="reminder"><div class="reminder-icon">✓</div><div><b>Tidak ada risiko kritis</b><small>Semua assessment berada pada kondisi terpantau.</small></div></div>`;
-  renderBusinessUnitTrend(all);
-  renderBusinessUnitTotals(all);
-  renderAllModuleDashboard(dataMap);
-}
-let executiveRawMap={};
-let executiveFilteredMap={};
-function businessUnitOptionsHtml(){
-  return ['PT GGP','PT UJA','PT GGL','PG4']
-    .map(x=>`<option value="${x}">${x}</option>`)
-    .join('');
+
+function parseDashboardDate(value){
+  if(value instanceof Date&&!isNaN(value.getTime()))return value;
+
+  const s=String(value||'').trim();
+  if(!s)return null;
+
+  if(/^\d{4}-\d{2}-\d{2}/.test(s)){
+    const d=new Date(s.substring(0,10)+'T12:00:00');
+    if(!isNaN(d.getTime()))return d;
+  }
+
+  const m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(m){
+    const d=new Date(
+      Number(m[3]),
+      Number(m[2])-1,
+      Number(m[1]),
+      12
+    );
+    if(!isNaN(d.getTime()))return d;
+  }
+
+  const d=new Date(s);
+  return isNaN(d.getTime())?null:d;
 }
 
-function buildExecutiveFilterOptions(dataMap){
-  const buSel=$('execFilterBusinessUnit'),moduleSel=$('execFilterModule'),siteSel=$('execFilterSite'),yearSel=$('execFilterYear'),monthSel=$('execFilterMonth');
-  if(!buSel||!moduleSel||!siteSel||!yearSel||!monthSel)return;
-  const currentBU=buSel.value,currentM=moduleSel.value,currentS=siteSel.value,currentY=yearSel.value,currentMo=monthSel.value;
-  const sites=new Map(),years=new Set(),months=new Set();
-  Object.entries(dataMap).forEach(([key,rows])=>rows.forEach(r=>{
-    const sk=normalizeSite(siteOf(r)); if(sk&&!sites.has(sk))sites.set(sk,siteOf(r));
-    const d=dateOf(r); if(d){years.add(d.getFullYear());months.add(d.getMonth()+1)}
-  }));
-  buSel.innerHTML='<option value="">Semua Business Unit</option>'+businessUnitOptionsHtml();
-  moduleSel.innerHTML='<option value="">Semua Aspek</option>'+Object.entries(moduleMeta).map(([k,m])=>`<option value="${k}">${escapeHtml(m.label)}</option>`).join('');
-  siteSel.innerHTML='<option value="">Semua Lokasi</option>'+[...sites.entries()].sort((a,b)=>a[1].localeCompare(b[1])).map(([k,v])=>`<option value="${escapeHtml(k)}">${escapeHtml(v)}</option>`).join('');
-  yearSel.innerHTML='<option value="">Semua Tahun</option>'+[...years].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('');
-  monthSel.innerHTML='<option value="">Semua Bulan</option>'+[...months].sort((a,b)=>a-b).map(m=>`<option value="${m}">${monthName(m)}</option>`).join('');
-  if([...buSel.options].some(o=>o.value===currentBU))buSel.value=currentBU;
-  if([...moduleSel.options].some(o=>o.value===currentM))moduleSel.value=currentM;
-  if([...siteSel.options].some(o=>o.value===currentS))siteSel.value=currentS;
-  if([...yearSel.options].some(o=>o.value===currentY))yearSel.value=currentY;
-  if([...monthSel.options].some(o=>o.value===currentMo))monthSel.value=currentMo;
+function dashboardMonthKey(r){
+  const d=
+    parseDashboardDate(
+      r.assessmentDate||
+      r.timestamp||
+      r.tanggal
+    );
+
+  if(!d)return '';
+
+  return (
+    String(d.getFullYear())+
+    '-'+
+    String(d.getMonth()+1).padStart(2,'0')
+  );
 }
+
+function dashboardMonthLabel(key){
+  const p=String(key||'').split('-');
+  if(p.length!==2)return key||'';
+  const months=[
+    'Jan','Feb','Mar','Apr','Mei','Jun',
+    'Jul','Agu','Sep','Okt','Nov','Des'
+  ];
+  return (
+    months[Number(p[1])-1]||
+    p[1]
+  )+' '+p[0];
+}
+
+function buildDashboardMonthlyTrend(rows){
+  const map={};
+
+  (rows||[]).forEach(r=>{
+    const key=dashboardMonthKey(r);
+    const pct=Number(r.percentage);
+
+    if(!key||!isFinite(pct))return;
+
+    if(!map[key]){
+      map[key]={
+        sum:0,
+        n:0
+      };
+    }
+
+    map[key].sum+=pct;
+    map[key].n++;
+  });
+
+  return Object.keys(map)
+    .sort()
+    .slice(-12)
+    .map(k=>({
+      key:k,
+      label:dashboardMonthLabel(k),
+      value:Math.round(
+        map[k].sum/
+        Math.max(1,map[k].n)
+      )
+    }));
+}
+
+function renderExecutivePercentageChart(rows){
+  const root=$('execTrend');
+  if(!root)return;
+
+  const trend=
+    buildDashboardMonthlyTrend(rows);
+
+  if(!trend.length){
+    root.innerHTML=
+      `<div class="module-empty" style="min-height:220px;display:grid;place-items:center">
+        Belum ada data persentase bulanan.
+      </div>`;
+    return;
+  }
+
+  const W=920,H=270;
+  const L=46,R=22,T=22,B=42;
+  const IW=W-L-R;
+  const IH=H-T-B;
+
+  const x=i=>
+    trend.length===1
+      ?L+IW/2
+      :L+i*IW/(trend.length-1);
+
+  const y=v=>
+    T+
+    IH-
+    (Math.max(0,Math.min(100,v))/100)*IH;
+
+  const pts=
+    trend.map((p,i)=>({
+      x:x(i),
+      y:y(p.value),
+      value:p.value,
+      label:p.label
+    }));
+
+  const lineD=
+    pts.map((p,i)=>
+      `${i?'L':'M'} ${p.x} ${p.y}`
+    ).join(' ');
+
+  const areaD=
+    `M ${pts[0].x} ${H-B} `+
+    pts.map(
+      p=>`L ${p.x} ${p.y}`
+    ).join(' ')+
+    ` L ${pts[pts.length-1].x} ${H-B} Z`;
+
+  const grids=[0,25,50,75,100].map(v=>
+    `<line class="exec-chart-grid" x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}"/>`+
+    `<text class="exec-chart-label" x="${L-10}" y="${y(v)+3}" text-anchor="end">${v}%</text>`
+  ).join('');
+
+  const labels=pts.map(p=>
+    `<text class="exec-chart-label" x="${p.x}" y="${H-16}" text-anchor="middle">${escapeHtml(p.label.split(' ')[0])}</text>`+
+    `<text class="exec-chart-value" x="${p.x}" y="${p.y-12}" text-anchor="middle">${p.value}%</text>`+
+    `<circle class="exec-chart-dot" cx="${p.x}" cy="${p.y}" r="5"><title>${escapeHtml(p.label)} · ${p.value}%</title></circle>`
+  ).join('');
+
+  root.innerHTML=`
+    <svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Trend persentase kepatuhan per bulan">
+      <defs>
+        <linearGradient id="execTrendFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#66d5b2" stop-opacity=".42"/>
+          <stop offset="100%" stop-color="#66d5b2" stop-opacity=".02"/>
+        </linearGradient>
+      </defs>
+      ${grids}
+      <path class="exec-chart-area" d="${areaD}"></path>
+      <path class="exec-chart-line" d="${lineD}"></path>
+      ${labels}
+    </svg>`;
+}
+
+function renderExecutiveBusinessUnitCards(rows){
+  const root=$('execLocations');
+  if(!root)return;
+
+  /*
+   * BU mengikuti 4 unit permanen yang sudah digunakan sistem.
+   */
+  const units=['PT GGP','PT UJA','PT GGL','PG4'];
+
+  root.innerHTML=
+    units.map(unit=>{
+
+      const subset=
+        (rows||[]).filter(
+          r=>String(
+            r.businessUnit||
+            r.bisnisUnit||
+            ''
+          ).trim()===unit
+        );
+
+      const pct=
+        subset.length
+          ?Math.round(
+              subset.reduce(
+                (s,r)=>s+Number(r.percentage||0),
+                0
+              )/
+              subset.length
+            )
+          :0;
+
+      const yes=
+        subset.reduce(
+          (s,r)=>s+Number(r.yes||0),
+          0
+        );
+
+      const no=
+        subset.reduce(
+          (s,r)=>s+Number(r.no||0),
+          0
+        );
+
+      return `
+        <div class="bu-summary-card clickable-card"
+          onclick="openExecutiveDetail('businessUnit','${unit}')">
+          <div class="bu-summary-head">
+            <span class="bu-summary-name">${unit}</span>
+            <span class="bu-summary-value">${pct}%</span>
+          </div>
+          <div class="bu-summary-bar">
+            <i style="width:${Math.max(0,Math.min(100,pct))}%"></i>
+          </div>
+          <div class="bu-summary-foot">
+            <span>${subset.length} assessment</span>
+            <span>YA ${yes} · TIDAK ${no}</span>
+          </div>
+        </div>`;
+    }).join('');
+}
+
+function renderDashboardV2(dataMap){
+  const s=execSummary(dataMap);
+  const all=s.all||[];
+
+  if($('heroOverall'))$('heroOverall').textContent=s.overall+'%';
+  if($('execAvg'))$('execAvg').textContent=s.overall+'%';
+
+  /*
+   * Trend selalu dihitung ulang dari raw assessment sehingga
+   * persentase tidak bergantung pada chart lama/cache.
+   */
+  renderExecutivePercentageChart(all);
+
+  /*
+   * Performa aspek.
+   */
+  if($('execModules')){
+    $('execModules').innerHTML=
+      s.modules.map(m=>{
+        const data=dataMap[m.key]||[];
+        const pct=avg(data);
+        return `
+          <div class="module-tile clickable-card"
+            onclick="openExecutiveDetail('module','${m.key}')">
+            <div class="mtop">
+              <b>${escapeHtml(m.label)}</b>
+              <strong>${pct}%</strong>
+            </div>
+            <small>${data.length} assessment · ${uniqueSites(data)} lokasi</small>
+            <div class="meter">
+              <i style="width:${Math.max(0,Math.min(100,pct))}%"></i>
+            </div>
+            <small style="display:block;margin-top:7px;color:#087f5b;font-weight:800">
+              Lihat detail →
+            </small>
+          </div>`;
+      }).join('')||
+      '<div class="module-empty">Belum ada data aspek.</div>';
+  }
+
+  /*
+   * Ganti panel Ranking Lokasi menjadi 4 Business Unit.
+   */
+  renderExecutiveBusinessUnitCards(all);
+
+  /*
+   * Risiko.
+   */
+  const risks=
+    all
+      .filter(r=>scoreOf(r)<70)
+      .sort((a,b)=>scoreOf(a)-scoreOf(b))
+      .slice(0,4);
+
+  if($('dashReminders')){
+    $('dashReminders').innerHTML=
+      risks.length
+        ?risks.map(r=>`
+          <div class="reminder">
+            <div class="reminder-icon">!</div>
+            <div>
+              <b>${escapeHtml(siteOf(r))}</b>
+              <small>${scoreOf(r)}% · ${escapeHtml(r.assessor||'PIC')}</small>
+            </div>
+          </div>`).join('')
+        :`<div class="reminder">
+            <div class="reminder-icon">✓</div>
+            <div>
+              <b>Tidak ada risiko kritis</b>
+              <small>Semua assessment berada pada kondisi terpantau.</small>
+            </div>
+          </div>`;
+  }
+
+  /*
+   * Coverage.
+   */
+  renderAllModuleDashboard(dataMap);
+
+  /*
+   * Live recap.
+   */
+  const recentAll=
+    Object.keys(dataMap)
+      .flatMap(key=>
+        (dataMap[key]||[]).map(
+          r=>({
+            ...r,
+            _module:moduleMeta[key].label
+          })
+        )
+      )
+      .sort(
+        (a,b)=>
+          String(
+            b.timestamp||b.assessmentDate||''
+          ).localeCompare(
+            String(
+              a.timestamp||a.assessmentDate||''
+            )
+          )
+      )
+      .slice(0,8);
+
+  if($('dashRecentAllTable')){
+    const tbody=
+      $('dashRecentAllTable')
+        .querySelector('tbody');
+
+    tbody.innerHTML=
+      recentAll.length
+        ?recentAll.map(r=>`
+          <tr class="clickable-card"
+            onclick="openExecutiveDetail(
+              'location',
+              '${escapeHtml(
+                normalizeSite(siteOf(r))
+              )}'
+            )">
+            <td><b>${escapeHtml(r._module)}</b></td>
+            <td>${escapeHtml(siteOf(r))}</td>
+            <td>${escapeHtml(r.assessor||'PIC')}</td>
+            <td>${escapeHtml(r.assessmentDate||r.timestamp||'-')}</td>
+            <td><b>${scoreOf(r)}%</b></td>
+            <td>${statusBadge(scoreOf(r))}</td>
+          </tr>
+        `).join('')
+        :'<tr><td colspan="6" style="text-align:center;padding:24px">Belum ada data.</td></tr>';
+  }
+}
+
+
+let executiveRawMap={};
+let executiveFilteredMap={};
+function buildExecutiveFilterOptions(dataMap){
+  const buSel=$('execFilterBusinessUnit');
+  const moduleSel=$('execFilterModule');
+  const siteSel=$('execFilterSite');
+  const yearSel=$('execFilterYear');
+  const monthSel=$('execFilterMonth');
+
+  if(
+    !moduleSel||
+    !siteSel||
+    !yearSel||
+    !monthSel
+  )return;
+
+  const old={
+    bu:buSel?buSel.value:'',
+    module:moduleSel.value,
+    site:siteSel.value,
+    year:yearSel.value,
+    month:monthSel.value
+  };
+
+  const sites=new Map();
+  const years=new Set();
+  const months=new Set();
+
+  Object.values(
+    dataMap||{}
+  ).forEach(rows=>
+    (rows||[]).forEach(r=>{
+
+      const sk=
+        normalizeSite(
+          siteOf(r)
+        );
+
+      if(
+        sk&&!sites.has(sk)
+      ){
+        sites.set(
+          sk,
+          siteOf(r)
+        );
+      }
+
+      const d=
+        parseDashboardDate(
+          r.assessmentDate||
+          r.timestamp||
+          r.tanggal
+        );
+
+      if(d){
+        years.add(
+          d.getFullYear()
+        );
+        months.add(
+          d.getMonth()+1
+        );
+      }
+    })
+  );
+
+  if(buSel){
+    buSel.innerHTML=
+      '<option value="">Semua Business Unit</option>'+
+      ['PT GGP','PT UJA','PT GGL','PG4']
+        .map(
+          x=>`<option value="${x}">${x}</option>`
+        )
+        .join('');
+  }
+
+  moduleSel.innerHTML=
+    '<option value="">Semua Aspek</option>'+
+    Object.entries(
+      moduleMeta
+    )
+    .map(
+      ([k,m])=>
+        `<option value="${k}">${escapeHtml(m.label)}</option>`
+    )
+    .join('');
+
+  siteSel.innerHTML=
+    '<option value="">Semua Lokasi</option>'+
+    [...sites.entries()]
+      .sort(
+        (a,b)=>
+          String(a[1]).localeCompare(
+            String(b[1])
+          )
+      )
+      .map(
+        ([k,v])=>
+          `<option value="${escapeHtml(k)}">${escapeHtml(v)}</option>`
+      )
+      .join('');
+
+  yearSel.innerHTML=
+    '<option value="">Semua Tahun</option>'+
+    [...years]
+      .sort((a,b)=>b-a)
+      .map(
+        y=>`<option value="${y}">${y}</option>`
+      )
+      .join('');
+
+  monthSel.innerHTML=
+    '<option value="">Semua Bulan</option>'+
+    [...months]
+      .sort((a,b)=>a-b)
+      .map(
+        m=>`<option value="${m}">${monthName(m)}</option>`
+      )
+      .join('');
+
+  if(
+    buSel&&
+    [...buSel.options].some(
+      o=>o.value===old.bu
+    )
+  )buSel.value=old.bu;
+
+  if(
+    [...moduleSel.options].some(
+      o=>o.value===old.module
+    )
+  )moduleSel.value=old.module;
+
+  if(
+    [...siteSel.options].some(
+      o=>o.value===old.site
+    )
+  )siteSel.value=old.site;
+
+  if(
+    [...yearSel.options].some(
+      o=>o.value===old.year
+    )
+  )yearSel.value=old.year;
+
+  if(
+    [...monthSel.options].some(
+      o=>o.value===old.month
+    )
+  )monthSel.value=old.month;
+}
+
+
 function applyExecutiveFilters(){
-  const bu=$('execFilterBusinessUnit')?.value||'',mk=$('execFilterModule')?.value||'',sk=$('execFilterSite')?.value||'',yr=$('execFilterYear')?.value||'',mo=$('execFilterMonth')?.value||'';
+  const mk=$('execFilterModule')?.value||'',sk=$('execFilterSite')?.value||'',yr=$('execFilterYear')?.value||'',mo=$('execFilterMonth')?.value||'';
   const out={};Object.entries(executiveRawMap).forEach(([key,rows])=>{
     if(mk&&key!==mk){out[key]=[];return}
-    out[key]=(rows||[]).filter(r=>{const d=dateOf(r);return (!bu||String(r.businessUnit||'')===bu)&&(!sk||normalizeSite(siteOf(r))===sk)&&(!yr||String(d?.getFullYear()||'')===String(yr))&&(!mo||String((d?.getMonth()??-1)+1)===String(mo));});
+    out[key]=(rows||[]).filter(r=>{const d=dateOf(r);return (!sk||normalizeSite(siteOf(r))===sk)&&(!yr||String(d?.getFullYear()||'')===String(yr))&&(!mo||String((d?.getMonth()??-1)+1)===String(mo));});
   });
   executiveFilteredMap=out;renderExecutive(out);renderDashboardV2(out);
 }
+
+function applyExecutiveFiltersWithBU(){
+  const bu=$('execFilterBusinessUnit')?.value||'';
+  const mk=$('execFilterModule')?.value||'';
+  const sk=$('execFilterSite')?.value||'';
+  const yr=$('execFilterYear')?.value||'';
+  const mo=$('execFilterMonth')?.value||'';
+
+  const out={};
+
+  Object.entries(
+    executiveRawMap||{}
+  ).forEach(([key,rows])=>{
+
+    if(
+      mk&&
+      key!==mk
+    ){
+      out[key]=[];
+      return;
+    }
+
+    out[key]=(rows||[]).filter(r=>{
+      const d=parseDashboardDate(
+        r.assessmentDate||
+        r.timestamp||
+        r.tanggal
+      );
+
+      const okBU=
+        !bu||
+        String(
+          r.businessUnit||
+          r.bisnisUnit||
+          ''
+        ).trim()===bu;
+
+      const okSite=
+        !sk||
+        normalizeSite(
+          siteOf(r)
+        )===sk;
+
+      const okYear=
+        !yr||
+        String(
+          d?
+          d.getFullYear():
+          ''
+        )===String(yr);
+
+      const okMonth=
+        !mo||
+        String(
+          d?
+          d.getMonth()+1:
+          ''
+        )===String(mo);
+
+      return okBU&&
+        okSite&&
+        okYear&&
+        okMonth;
+    });
+  });
+
+  executiveFilteredMap=out;
+  renderExecutive(out);
+  renderDashboardV2(out);
+}
+
 function resetExecutiveFilters(){
   if($('execFilterBusinessUnit'))$('execFilterBusinessUnit').value='';
   if($('execFilterModule'))$('execFilterModule').value='';
   if($('execFilterSite'))$('execFilterSite').value='';
   if($('execFilterYear'))$('execFilterYear').value='';
   if($('execFilterMonth'))$('execFilterMonth').value='';
-  applyExecutiveFilters();
+  applyExecutiveFiltersWithBU();
 }
+
+
 function openExecutiveDetail(type,value){
   const map=executiveFilteredMap||executiveRawMap;let rows=[];let title='Detail Dashboard';
   if(type==='module'){rows=map[value]||[];title=moduleMeta[value]?.label||'Detail Modul'}
