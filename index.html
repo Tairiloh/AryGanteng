@@ -1041,6 +1041,16 @@ table th:last-child,table td:last-child{min-width:190px}
   box-shadow:0 0 0 3px rgba(16,163,116,.1);
 }
 </style>
+<style id="proper-bu-trend-chart-final">
+.bu-trend-wrap{width:100%;overflow:hidden;padding:4px 0}
+.bu-trend-svg{display:block;width:100%;height:265px}
+.bu-grid{stroke:#e5ecef;stroke-width:1}
+.bu-axis{font-size:9px;fill:#8a989e;font-weight:700}
+.bu-value{font-size:9px;fill:#27444f;font-weight:900}
+.bu-legend{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.bu-legend-item{display:inline-flex;align-items:center;gap:6px;font-size:9px;color:#5f727a;font-weight:850}
+.bu-legend-item i{width:9px;height:9px;border-radius:50%;display:inline-block}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1217,7 +1227,7 @@ table th:last-child,table td:last-child{min-width:190px}
   <div class="exec-kpis dash-kpis" id="execKpis"></div>
 
   <div class="portal-analytics-grid">
-    <div class="portal-panel portal-wide"><div class="portal-panel-head"><div><span>PERFORMA</span><h3>Trend Kepatuhan Bulanan</h3><p>Rata-rata kepatuhan seluruh aspek.</p></div><b id="execAvg">0%</b></div><div id="execTrend"></div></div>
+    <div class="portal-panel portal-wide"><div class="portal-panel-head"><div><span>PERFORMA</span><h3>Trend Persentase per Business Unit</h3><p>Perbandingan persentase kepatuhan PT GGP, PT UJA, PT GGL dan PG4 per bulan.</p></div><b id="execAvg">0%</b></div><div id="execTrend"></div></div>
     <div class="portal-panel"><div class="portal-panel-head"><div><span>ASPEK</span><h3>Performa Aspek</h3><p>Perbandingan kepatuhan.</p></div></div><div id="execModules" class="module-board"></div></div>
     <div class="portal-panel"><div class="portal-panel-head"><div><span>LOKASI</span><h3>Ranking Lokasi</h3><p>Top lokasi berdasarkan kepatuhan.</p></div></div><div id="execLocations" class="ranking-pro"></div></div>
   </div>
@@ -1658,7 +1668,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx6LsdzJY1dm4W_nLQ5DNp8DIA3JINtQ-cCnfiV3f9iQ_LT2r6dyiaFnJnRdcyYPZ94/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxflMjoGXx7B_UbDSAYrzv9kx0L4CYOz1hFrkuM4zA4bcabMrXu8Y2vCQbE-BcirY21/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2525,9 +2535,9 @@ async function submitEmisi(){
 
   try{
     const d=await postJSON(isEditingModule('Emisi')?{action:'updateAssessment',module:'Emisi',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:rows.concat(getManualFindingItems('emisi'))}:{action:'saveEmisi',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:rows});
-    if(d.status==='success'){
+    if(d.status==='success'||d.status==='partial'){
       const evr=await uploadModuleEvidence('emisi',d.submissionId,collectEvidence('emisi')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
-      toast('✓ Data Emisi berhasil disimpan.');
+      showServerSaveToast(d,'Data Emisi');
       resetEmisi();
       loadEmisi();
     } else throw new Error(d.message||'Gagal menyimpan');
@@ -2548,9 +2558,9 @@ async function submitPLB3(){
  });
  try{
    const d=await postJSON(isEditingModule('PLB3')?{action:'updateAssessment',module:'PLB3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('plb3'))}:{action:'savePLB3',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items});
-   if(d.status==='success'){
+   if(d.status==='success'||d.status==='partial'){
      const evr=await uploadModuleEvidence('plb3',d.submissionId,collectEvidence('plb3')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
-     toast(isEditingModule('PLB3')?'✓ Data Penyimpanan PLB3 berhasil diperbarui.':'✓ Data Penyimpanan PLB3 berhasil disimpan.');clearEditMode();resetPLB3();loadPLB3();
+     showServerSaveToast(d,'Penyimpanan PLB3');clearEditMode();resetPLB3();loadPLB3();
    }
    else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan LB3: '+e.message)}
@@ -2708,9 +2718,9 @@ async function submitPLB3Darurat(){
  if(statuses.some(s=>!s.value)){toast('Lengkapi semua status YA/TIDAK PLB3 Tanggap Darurat.');return}
  const items=statuses.map((s,i)=>({no:plb3DaruratItems[i][0],ketentuan:plb3DaruratItems[i][2],section:plb3DaruratItems[i][1],status:s.value,documentation:'',keterangan:$(`.darurat-note[data-i="${i}"]`).value.trim()}));
  try{const d=await postJSON(isEditingModule('PLB3 Tanggap Darurat')?{action:'updateAssessment',module:'PLB3 Tanggap Darurat',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('darurat'))}:{action:'savePLB3Darurat',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items});
-   if(d.status==='success'){
+   if(d.status==='success'||d.status==='partial'){
    const evr=await uploadModuleEvidence('darurat',d.submissionId,collectEvidence('darurat')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
-   toast(isEditingModule('PLB3 Tanggap Darurat')?'✓ PLB3 Tanggap Darurat berhasil diperbarui.':'✓ PLB3 Tanggap Darurat tersimpan.');clearEditMode();resetPLB3Darurat();loadPLB3Darurat();
+   showServerSaveToast(d,'Tanggap Darurat PLB3');clearEditMode();resetPLB3Darurat();loadPLB3Darurat();
  } else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan PLB3 Tanggap Darurat: '+e.message)}
 }
@@ -2752,7 +2762,7 @@ async function submitB3(){
  }));
  if(items.length===0){toast('Isi minimal satu status YA/TIDAK pada B3.');return}
  try{const d=await postJSON(isEditingModule('B3')?{action:'updateAssessment',module:'B3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('b3'))}:{action:'saveB3',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items});
-   if(d.status==='success'){const evr=await uploadModuleEvidence('b3',d.submissionId,collectEvidence('b3')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');toast(isEditingModule('B3')?'✓ Data B3 berhasil diperbarui.':'✓ Data B3 berhasil disimpan.');clearEditMode();resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
+   if(d.status==='success'||d.status==='partial'){const evr=await uploadModuleEvidence('b3',d.submissionId,collectEvidence('b3')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');showServerSaveToast(d,'Data B3');clearEditMode();resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan B3: '+e.message)}
 }
 function renderGenericHistory(id,data,typeHint){
@@ -2884,12 +2894,12 @@ async function submitSampah(){
   }));
   try{
     const d=await postJSON(isEditingModule('Sampah')?{action:'updateAssessment',module:'Sampah',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('sampah'))}:{action:'saveSampah',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items});
-    if(d.status==='success'){
+    if(d.status==='success'||d.status==='partial'){
       const evr=await uploadModuleEvidence('sampah',d.submissionId,collectEvidence('sampah'));
       if(evr.failed){
         toast('Data Sampah tersimpan. '+evr.failed+' foto gagal tersimpan ke server.');
       }else{
-        toast(isEditingModule('Sampah')?'✓ Penilaian Sampah berhasil diperbarui.':'✓ Penilaian Sampah berhasil disimpan.');
+        showServerSaveToast(d,'Penilaian Sampah');
       }
       clearEditMode();
       resetSampah();
@@ -3777,6 +3787,30 @@ function resetForm(){
  updateScore();
 }
 function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2800)}
+
+function showServerSaveToast(d,label){
+  if(!d)return;
+
+  if(d.status==='partial'){
+    toast(
+      '✓ '+label+' tersimpan di server. '+
+      String(d.message||'Ada sebagian data tambahan yang perlu diperiksa.')
+    );
+    return;
+  }
+
+  const ev=d.evidence||{};
+  const photoText=
+    Number(ev.uploaded||0)>0
+      ?' · '+ev.uploaded+' foto tersimpan'
+      :'';
+
+  toast(
+    '✓ '+label+' berhasil tersimpan ke server'+
+    photoText+'.'
+  );
+}
+
 async function submitPPA(){
  if(SCRIPT_URL.startsWith('PASTE_')){toast('Masukkan URL Google Apps Script terlebih dahulu.');return}
  const assessor=$('assessor').value.trim(), site=canonicalLocationFor('ppa',$('site').value), date=$('assessmentDate').value;
@@ -3792,9 +3826,9 @@ async function submitPPA(){
  const btn=document.querySelector('.actions .primary');btn.disabled=true;btn.textContent='⏳ Menyimpan...';
  try{
    const d=await postJSON(isEditingModule('PPA')?Object.assign({},payload,{action:'updateAssessment',module:'PPA',submissionId:window.editingAssessment.submissionId}):payload);
-   if(d.status==='success'){
+   if(d.status==='success'||d.status==='partial'){
      const evr=await uploadModuleEvidence('ppa',d.submissionId,collectEvidence('ppa')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
-     toast(isEditingModule('PPA')?'✓ Penilaian PPA berhasil diperbarui.':'✓ Penilaian berhasil tersimpan ke Google Sheet.');clearEditMode();localStorage.setItem('ppaLastSubmit',JSON.stringify(payload));resetForm();loadData();showPage('monitoring')
+     showServerSaveToast(d,'Penilaian PPA');clearEditMode();localStorage.setItem('ppaLastSubmit',JSON.stringify(payload));resetForm();loadData();showPage('monitoring')
    } else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal terhubung ke server: '+e.message)}
  finally{btn.disabled=false;btn.textContent='☁ Simpan ke Google Sheet'}
@@ -4810,6 +4844,197 @@ function renderAllModuleDashboard(dataMap){
    return `<div class="all-module-card"><div class="all-module-top"><div><b>${escapeHtml(meta.label)}</b><div class="muted-small">${escapeHtml(meta.desc)}</div></div><span class="all-module-pct">${pct}%</span></div><div class="all-module-meta"><span>Assessment <strong>${data.length}</strong></span><span>Lokasi <strong>${sites}</strong></span><span>YA <strong>${yes}</strong></span><span>TIDAK <strong>${no}</strong></span></div><div class="all-module-bar"><i style="width:${pct}%"></i></div><div class="all-module-status">${statusBadge(pct)}</div></div>`;
  }).join('');
  root.innerHTML=cards||'<div class="module-empty">Belum ada data dari modul.</div>';
+}
+
+
+function renderBusinessUnitTrendChart(rows){
+  const root=$('execTrend');
+  if(!root)return;
+
+  const units=[
+    {name:'PT GGP',color:'#16a77b'},
+    {name:'PT UJA',color:'#2477c5'},
+    {name:'PT GGL',color:'#7a57c8'},
+    {name:'PG4',color:'#e28527'}
+  ];
+
+  const buckets={};
+
+  units.forEach(u=>{
+    buckets[u.name]={};
+  });
+
+  (rows||[]).forEach(r=>{
+    const bu=String(
+      r.businessUnit||
+      ''
+    ).trim();
+
+    if(!buckets[bu])return;
+
+    const d=dateOf(r);
+    if(!d)return;
+
+    const key=
+      d.getFullYear()+
+      '-'+
+      String(
+        d.getMonth()+1
+      ).padStart(2,'0');
+
+    const pct=Number(
+      r.percentage!=null
+        ?r.percentage
+        :scoreOf(r)
+    );
+
+    if(!isFinite(pct))return;
+
+    if(!buckets[bu][key]){
+      buckets[bu][key]={
+        sum:0,
+        n:0
+      };
+    }
+
+    buckets[bu][key].sum+=pct;
+    buckets[bu][key].n++;
+  });
+
+  const monthKeys=
+    [...new Set(
+      units.flatMap(
+        u=>Object.keys(
+          buckets[u.name]
+        )
+      )
+    )]
+      .sort()
+      .slice(-12);
+
+  if(!monthKeys.length){
+    root.innerHTML=
+      '<div class="module-empty" style="height:220px;display:grid;place-items:center">Belum ada data trend Business Unit.</div>';
+    return;
+  }
+
+  const W=920;
+  const H=265;
+  const L=46;
+  const R=22;
+  const T=20;
+  const B=46;
+  const IW=W-L-R;
+  const IH=H-T-B;
+
+  const x=i=>
+    monthKeys.length===1
+      ?L+IW/2
+      :L+
+       i*IW/
+       (monthKeys.length-1);
+
+  const y=v=>
+    T+
+    IH-
+    (Math.max(0,Math.min(100,v))/100)*IH;
+
+  const monthLabelLocal=k=>{
+    const p=String(k).split('-');
+    const names=[
+      'Jan','Feb','Mar','Apr','Mei','Jun',
+      'Jul','Agu','Sep','Okt','Nov','Des'
+    ];
+    return (
+      names[
+        Number(p[1])-1
+      ]||
+      p[1]
+    )+
+    ' '+
+    p[0];
+  };
+
+  let svg=
+    `<svg class="bu-trend-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">`;
+
+  [0,25,50,75,100].forEach(v=>{
+    svg+=
+      `<line x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}" class="bu-grid"/>`+
+      `<text x="${L-9}" y="${y(v)+3}" text-anchor="end" class="bu-axis">${v}%</text>`;
+  });
+
+  units.forEach(unit=>{
+    const pts=[];
+
+    monthKeys.forEach((k,i)=>{
+      const b=buckets[unit.name][k];
+
+      if(!b||!b.n){
+        pts.push(null);
+        return;
+      }
+
+      const value=
+        b.sum/b.n;
+
+      pts.push({
+        x:x(i),
+        y:y(value),
+        value:Math.round(value)
+      });
+    });
+
+    let segment=[];
+
+    const flush=()=>{
+      if(segment.length<1){
+        segment=[];
+        return;
+      }
+
+      const d=segment.map(
+        (p,i)=>`${i?'L':'M'} ${p.x} ${p.y}`
+      ).join(' ');
+
+      svg+=
+        `<path d="${d}" fill="none" stroke="${unit.color}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+      segment.forEach(p=>{
+        svg+=
+          `<circle cx="${p.x}" cy="${p.y}" r="4.2" fill="#fff" stroke="${unit.color}" stroke-width="2.5"/>`+
+          `<text x="${p.x}" y="${p.y-9}" text-anchor="middle" class="bu-value">${p.value}%</text>`;
+      });
+
+      segment=[];
+    };
+
+    pts.forEach(p=>{
+      if(p){
+        segment.push(p);
+      }else{
+        flush();
+      }
+    });
+
+    flush();
+  });
+
+  monthKeys.forEach((k,i)=>{
+    svg+=
+      `<text x="${x(i)}" y="${H-16}" text-anchor="middle" class="bu-axis">${escapeHtml(monthLabelLocal(k).split(' ')[0])}</text>`;
+  });
+
+  svg+='</svg>';
+
+  const legend=
+    units.map(u=>
+      `<span class="bu-legend-item"><i style="background:${u.color}"></i>${u.name}</span>`
+    ).join('');
+
+  root.innerHTML=
+    `<div class="bu-trend-wrap">${svg}</div>`+
+    `<div class="bu-legend">${legend}</div>`;
 }
 
 function renderDashboardV2(dataMap){
