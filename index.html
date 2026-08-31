@@ -1079,6 +1079,69 @@ table th:last-child,table td:last-child{min-width:190px}
 .trend-empty-icon{font-size:26px;color:#12a37a}
 @media(max-width:900px){.bu-legend-grid{grid-template-columns:1fr 1fr}}
 </style>
+<style id="proper-genz-corporate-dashboard">
+.dashboard-modern-grid{grid-template-columns:1.6fr .95fr .95fr!important;gap:16px!important}
+.chart-main-card{min-height:420px!important}
+.chart-head{align-items:flex-start!important}
+.chart-toolbar{display:flex;align-items:center;gap:6px}
+.chart-switch{height:32px;border:1px solid #dce9e5;background:#f5faf8;color:#55706a;border-radius:9px;padding:0 10px;font-size:9px;font-weight:900;cursor:pointer;transition:.18s}
+.chart-switch:hover{transform:translateY(-1px);border-color:#b7d9cd}
+.chart-switch.active{background:#083f37;color:#fff;border-color:#083f37;box-shadow:0 5px 14px rgba(8,63,55,.16)}
+.chart-overall{margin-left:5px;padding:6px 10px;border-radius:11px;background:linear-gradient(135deg,#edf9f4,#f6fffb);border:1px solid #d5ebe2;min-width:70px;text-align:center}
+.chart-overall small{display:block;font-size:7px;color:#79918b;font-weight:900;text-transform:uppercase;letter-spacing:.7px}
+.chart-overall b{display:block;margin-top:2px;font-size:20px;color:#0a7358;letter-spacing:-.6px}
+.executive-chart-stage{padding-top:2px}
+.premium-bu-svg{width:100%;height:285px;display:block}
+.performance-card{min-height:420px}
+.module-board-modern{display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important}
+.module-board-modern .module-tile{border-radius:13px!important;background:linear-gradient(180deg,#fff,#f9fcfb)!important;border:1px solid #e2ece8!important;box-shadow:0 5px 14px rgba(12,52,44,.045)!important}
+.module-board-modern .module-tile:hover{transform:translateY(-2px);box-shadow:0 11px 20px rgba(12,52,44,.08)!important}
+.bu-summary-list{gap:8px!important}
+.bu-summary-card{padding:11px!important;border:1px solid #e1ebe7!important;background:linear-gradient(180deg,#fff,#fbfdfc)!important;border-radius:13px!important;box-shadow:0 5px 14px rgba(12,52,44,.045)!important}
+.bu-summary-card:hover{transform:translateY(-2px);box-shadow:0 11px 20px rgba(12,52,44,.08)!important}
+.bu-summary-head{display:flex;justify-content:space-between;align-items:center}
+.bu-summary-head>div{display:flex;flex-direction:column;gap:2px}
+.bu-summary-head b{font-size:11px;color:#163e48}
+.bu-summary-head small{font-size:8px;color:#85958f}
+.bu-summary-head strong{font-size:22px;color:#087f5b;letter-spacing:-.6px}
+.bu-summary-bar{height:7px;border-radius:99px;background:#edf2ef;overflow:hidden;margin:8px 0}
+.bu-summary-bar i{display:block;height:100%;background:linear-gradient(90deg,#12a579,#62d7b4);border-radius:99px}
+.bu-summary-foot{display:flex;justify-content:space-between;font-size:8px;color:#758982}
+.bu-bar-board{display:flex;flex-direction:column;gap:14px;padding:9px 5px 3px}
+.bu-bar-group{padding:9px 10px;border:1px solid #e2ece8;border-radius:13px;background:#fbfdfc}
+.bu-bar-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.bu-bar-title b{font-size:9px;color:#183f49}
+.bu-bar-title span{font-size:8px;color:#8a9994}
+.bu-bars{display:grid;grid-auto-columns:minmax(27px,1fr);grid-auto-flow:column;gap:6px;height:175px;align-items:end}
+.bu-bar-col{height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px}
+.bu-bar-col>span{font-size:8px;color:#6c8079;font-weight:900;min-height:11px}
+.bu-bar-track{width:100%;max-width:36px;height:132px;background:#edf2ef;border-radius:8px 8px 5px 5px;display:flex;align-items:flex-end;overflow:hidden}
+.bu-bar-track i{display:block;width:100%;border-radius:8px 8px 4px 4px}
+.bu-bar-col small{font-size:7px;color:#84938e;font-weight:800}
+.bu-donut-layout{display:grid;grid-template-columns:1fr .9fr;align-items:center;gap:16px;padding:24px 20px 15px}
+.bu-donut{width:190px;height:190px;border-radius:50%;display:grid;place-items:center;box-shadow:0 12px 30px rgba(8,67,56,.12)}
+.bu-donut-hole{width:116px;height:116px;border-radius:50%;background:#fff;display:grid;place-items:center;align-content:center;box-shadow:inset 0 0 0 1px #edf3f0}
+.bu-donut-hole small{font-size:7px;color:#80928b;font-weight:900;letter-spacing:.8px}
+.bu-donut-hole b{font-size:28px;color:#093c34;line-height:1}
+.bu-donut-hole span{font-size:8px;color:#83908c;margin-top:2px}
+.bu-donut-list{display:flex;flex-direction:column;gap:11px}
+.bu-donut-row{display:flex;align-items:center;justify-content:space-between;padding:9px 11px;border:1px solid #e2ece8;background:#fbfdfc;border-radius:11px}
+.bu-donut-row span{display:flex;align-items:center;gap:7px;font-size:9px;font-weight:900;color:#23454c}
+.bu-donut-row i{width:9px;height:9px;border-radius:50%;display:block}
+.bu-donut-row b{font-size:14px;color:#087f5b}
+.dashboard-chart-note{font-size:8px!important;margin-top:5px!important}
+.premium-dashboard-empty{min-height:250px!important}
+@media(max-width:1100px){
+  .dashboard-modern-grid{grid-template-columns:1fr!important}
+  .performance-card{min-height:auto}
+  .chart-toolbar{flex-wrap:wrap;justify-content:flex-end}
+}
+@media(max-width:700px){
+  .module-board-modern{grid-template-columns:1fr!important}
+  .bu-donut-layout{grid-template-columns:1fr}
+  .bu-donut{margin:auto}
+}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1254,10 +1317,37 @@ table th:last-child,table td:last-child{min-width:190px}
 
   <div class="exec-kpis dash-kpis" id="execKpis"></div>
 
-  <div class="portal-analytics-grid">
-    <div class="portal-panel portal-wide"><div class="portal-panel-head"><div><span>PERFORMA</span><h3>Trend Persentase per Business Unit</h3><p>Perbandingan persentase kepatuhan PT GGP, PT UJA, PT GGL dan PG4 per bulan.</p></div><b id="execAvg">0%</b></div><div id="execTrend"></div></div>
-    <div class="portal-panel"><div class="portal-panel-head"><div><span>ASPEK</span><h3>Performa Aspek</h3><p>Perbandingan kepatuhan.</p></div></div><div id="execModules" class="module-board"></div></div>
-    <div class="portal-panel"><div class="portal-panel-head"><div><span>LOKASI</span><h3>Ranking Lokasi</h3><p>Top lokasi berdasarkan kepatuhan.</p></div></div><div id="execLocations" class="ranking-pro"></div></div>
+  <div class="portal-analytics-grid dashboard-modern-grid">
+    <div class="portal-panel portal-wide chart-main-card">
+      <div class="portal-panel-head chart-head">
+        <div>
+          <span>PERFORMA BUSINESS UNIT</span>
+          <h3>Trend Kepatuhan per Business Unit</h3>
+          <p>Perbandingan perkembangan persentase kepatuhan setiap unit dari bulan ke bulan.</p>
+        </div>
+        <div class="chart-toolbar">
+          <button type="button" class="chart-switch active" data-chart-type="line" onclick="setExecutiveChartType('line')">Trend</button>
+          <button type="button" class="chart-switch" data-chart-type="bar" onclick="setExecutiveChartType('bar')">Bar</button>
+          <button type="button" class="chart-switch" data-chart-type="donut" onclick="setExecutiveChartType('donut')">Donut</button>
+          <div class="chart-overall"><small>Overall</small><b id="execAvg">0%</b></div>
+        </div>
+      </div>
+      <div id="execTrend" class="executive-chart-stage"></div>
+    </div>
+
+    <div class="portal-panel performance-card">
+      <div class="portal-panel-head">
+        <div><span>ASPEK</span><h3>Performa Aspek</h3><p>Ringkasan seluruh aspek yang sudah diinspeksi.</p></div>
+      </div>
+      <div id="execModules" class="module-board module-board-modern"></div>
+    </div>
+
+    <div class="portal-panel performance-card">
+      <div class="portal-panel-head">
+        <div><span>BUSINESS UNIT</span><h3>Ringkasan Unit Usaha</h3><p>Rata-rata kepatuhan dan jumlah assessment per unit.</p></div>
+      </div>
+      <div id="execLocations" class="ranking-pro bu-summary-list"></div>
+    </div>
   </div>
 
   <div class="portal-lower-grid">
@@ -1297,14 +1387,14 @@ table th:last-child,table td:last-child{min-width:190px}
     <div class="note" style="margin-top:10px">Gunakan satu tanggal penilaian. Bulan, tahun, dan hari otomatis mengikuti tanggal tersebut.</div>
   </div>
   <div class="card">
-    <div class="card-head"><h3 id="siteTitle">Penilaian — Lokasi belum diisi</h3><span class="badge neutral" id="answerCount">0/11 terisi</span></div>
+    <div class="card-head"><h3 id="siteTitle">Penilaian — Lokasi belum diisi</h3><span class="badge neutral" id="answerCount">0/10 terisi</span></div>
     <div class="table-wrap">
       <table><thead><tr><th style="width:55px">No.</th><th>Ketentuan Teknis</th><th style="width:120px">YA / TIDAK</th><th>Keterangan / Bukti Pendukung</th></tr></thead>
       <tbody id="ppaBody"></tbody></table>
     </div>
     <div class="manual-finding-panel" id="manualFindingPanel_ppa" data-module="ppa"></div>
     <div style="margin-top:18px"><div class="score-box"><div class="progress"><span id="scoreBar"></span></div><div class="score-value" id="scoreValue">0%</div></div>
-      <div class="note" style="margin-top:7px">Persentase = jumlah jawaban YA ÷ 11 ketentuan × 100.</div></div>
+      <div class="note" style="margin-top:7px">Persentase = jumlah jawaban YA ÷ 10 ketentuan template × 100.</div></div>
     <div class="actions"><button class="btn secondary" onclick="resetForm()">Reset</button><button class="btn primary" onclick="submitPPA()">☁ Simpan ke Google Sheet</button></div>
   </div>
 
@@ -1696,7 +1786,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw_e3GizPkaJ9gNkANwZA9sgVGA-xlsZvvLpsrZGL_jNdxKmtKiLmRBCi-2_fKnNMGV/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz1_9bMCiWElNu9pVAeaJtMlYpSNEu_wKIv2sZyd0KjsdPmKVtGpXqGSkDiPttWMNtl/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -1709,7 +1799,6 @@ const items = [
 'MELAKUKAN IDENTIFIKASI TERHADAP SUMBER AIR LIMBAH DAN CARA PENGOLAHANNYA',
 'MENCATAT BAHAN BAKU DAN PRODUKSI SENYATANYA HARIAN',
 'TIDAK MELAKUKAN BY PASS AIR LIMBAH (BUKTI/DOKUMEN: NERACA AIR)',
-'UNTUK PERUSAHAAN YANG TERKENA SANKSI ADMINISTRASI, MEMENUHI SELURUH KETENTUAN YANG DIPERSYARATKAN DALAM SANKSI ADMINISTRASI'
 ];
 
 const __nullEl={
@@ -3837,11 +3926,8 @@ function renderBusinessUnitMonthlyTrend(dataMap){
     ).flat();
 
   const maps={};
-
   units.forEach(
-    u=>{
-      maps[u]={};
-    }
+    u=>maps[u]={}
   );
 
   let unassigned=0;
@@ -3854,9 +3940,7 @@ function renderBusinessUnitMonthlyTrend(dataMap){
         ''
       ).trim();
 
-    if(
-      units.indexOf(bu)<0
-    ){
+    if(units.indexOf(bu)<0){
       unassigned++;
       return;
     }
@@ -3890,44 +3974,212 @@ function renderBusinessUnitMonthlyTrend(dataMap){
   const months=
     [...new Set(
       units.flatMap(
-        u=>Object.keys(
-          maps[u]
-        )
+        u=>Object.keys(maps[u])
       )
     )]
     .sort();
 
   if(!months.length){
 
-    root.innerHTML=
-      `<div class="trend-empty-state premium">
+    root.innerHTML=`
+      <div class="trend-empty-state premium-dashboard-empty">
         <div class="trend-empty-icon">◎</div>
-        <b>Belum ada data Business Unit yang dapat diplot</b>
+        <b>Belum ada data Business Unit untuk divisualisasikan</b>
         <span>Pastikan assessment sudah memiliki Business Unit dan tanggal penilaian.</span>
       </div>`;
 
     return;
   }
 
-  const palette=[
-    '#0E9F77',
-    '#2879C9',
-    '#7955C7',
-    '#E68A24'
+  const colors=[
+    '#12A579',
+    '#2C78C9',
+    '#7A56C8',
+    '#E98A25'
   ];
 
+  const values={};
+
+  units.forEach(u=>{
+    values[u]=months.map(m=>{
+      const g=maps[u][m];
+      return g
+        ?Math.round(g.sum/Math.max(1,g.n))
+        :null;
+    });
+  });
+
+  const validValues=
+    units.flatMap(
+      u=>values[u].filter(
+        x=>x!==null
+      )
+    );
+
+  const overall=
+    validValues.length
+      ?Math.round(
+        validValues.reduce(
+          (a,b)=>a+b,
+          0
+        )/validValues.length
+      )
+      :0;
+
+  if($('execAvg')){
+    $('execAvg').textContent=
+      overall+'%';
+  }
+
+  const type=
+    executiveChartType||
+    'line';
+
+  if(type==='donut'){
+
+    const latest=
+      units.map(
+        u=>{
+          const vals=
+            values[u].filter(
+              x=>x!==null
+            );
+          return {
+            unit:u,
+            value:vals.length
+              ?vals[vals.length-1]
+              :0
+          };
+        }
+      );
+
+    const totalUnits=
+      latest.reduce(
+        (s,x)=>s+x.value,
+        0
+      );
+
+    const conic=
+      totalUnits
+        ?latest.reduce(
+          (arr,x,i)=>{
+            const start=
+              arr.length
+                ?arr[arr.length-1].end
+                :0;
+            const end=
+              start+
+              x.value/
+              totalUnits*
+              100;
+            arr.push({
+              ...x,
+              start,
+              end
+            });
+            return arr;
+          },
+          []
+        )
+        :latest.map(
+          (x,i)=>({
+            ...x,
+            start:i*25,
+            end:(i+1)*25
+          })
+        );
+
+    root.innerHTML=`
+      <div class="bu-donut-layout">
+        <div class="bu-donut"
+          style="background:conic-gradient(${
+            conic.map(
+              (x,i)=>
+                `${colors[i]} ${x.start}% ${x.end}%`
+            ).join(',')
+          })">
+          <div class="bu-donut-hole">
+            <small>AVERAGE</small>
+            <b>${overall}%</b>
+            <span>kepatuhan</span>
+          </div>
+        </div>
+        <div class="bu-donut-list">
+          ${latest.map((x,i)=>`
+            <div class="bu-donut-row">
+              <span><i style="background:${colors[i]}"></i>${x.unit}</span>
+              <b>${x.value}%</b>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="trend-note dashboard-chart-note">
+        Donut memakai persentase periode terbaru yang tersedia untuk setiap Business Unit.
+      </div>`;
+
+    return;
+  }
+
+  if(type==='bar'){
+
+    const maxBars=
+      units.length*
+      months.length;
+
+    const bars=units.map(
+      (u,ui)=>{
+        return `
+          <div class="bu-bar-group">
+            <div class="bu-bar-title">
+              <b>${u}</b>
+              <span>${values[u].filter(x=>x!==null).length} bulan</span>
+            </div>
+            <div class="bu-bars">
+              ${months.map(
+                (m,mi)=>{
+                  const value=
+                    values[u][mi];
+
+                  return `
+                    <div class="bu-bar-col">
+                      <span>${value===null?'—':value+'%'}</span>
+                      <div class="bu-bar-track">
+                        <i style="height:${value===null?0:value}%;background:${colors[ui]}"></i>
+                      </div>
+                      <small>${escapeHtml(
+                        monthLabel(m).split(' ')[0]
+                      )}</small>
+                    </div>`;
+                }
+              ).join('')}
+            </div>
+          </div>`;
+      }
+    ).join('');
+
+    root.innerHTML=
+      `<div class="bu-bar-board">${bars}</div>`;
+
+    if(unassigned){
+      root.innerHTML+=
+        `<div class="trend-note dashboard-chart-note">
+          ℹ ${unassigned} assessment belum memiliki Business Unit dan tidak diplot.
+        </div>`;
+    }
+
+    return;
+  }
+
+  /* LINE / TREND */
   const W=920;
   const H=300;
   const L=56;
   const R=28;
-  const T=28;
-  const B=58;
+  const T=30;
+  const B=54;
 
-  const IW=
-    W-L-R;
-
-  const IH=
-    H-T-B;
+  const IW=W-L-R;
+  const IH=H-T-B;
 
   const x=i=>
     months.length===1
@@ -3953,7 +4205,9 @@ function renderBusinessUnitMonthlyTrend(dataMap){
     );
 
   let svg=
-    `<svg class="premium-bu-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">`;
+    `<svg class="premium-bu-svg"
+      viewBox="0 0 ${W} ${H}"
+      preserveAspectRatio="none">`;
 
   [0,25,50,75,100].forEach(v=>{
 
@@ -3963,49 +4217,40 @@ function renderBusinessUnitMonthlyTrend(dataMap){
         y1="${y(v)}"
         x2="${W-R}"
         y2="${y(v)}"
-        stroke="#e3ede9"
+        stroke="#e5eee9"
         stroke-width="${v===0?1.5:1}"
       />`;
 
     svg+=
       `<text
-        x="${L-12}"
+        x="${L-11}"
         y="${y(v)+4}"
         text-anchor="end"
-        font-size="10"
-        font-weight="700"
         fill="#8b9995"
+        font-size="9"
+        font-weight="700"
       >${v}%</text>`;
 
   });
 
   units.forEach(
-    (unit,ui)=>{
+    (u,ui)=>{
 
       const points=[];
 
       months.forEach(
-        (month,mi)=>{
+        (m,mi)=>{
 
-          const g=
-            maps[unit][month];
+          const v=
+            values[u][mi];
 
-          if(!g)return;
-
-          const value=
-            Math.round(
-              g.sum/
-              Math.max(
-                1,
-                g.n
-              )
-            );
+          if(v===null)return;
 
           points.push({
             x:x(mi),
-            y:y(value),
-            value:value,
-            month:month
+            y:y(v),
+            value:v,
+            month:m
           });
 
         }
@@ -4013,10 +4258,6 @@ function renderBusinessUnitMonthlyTrend(dataMap){
 
       if(!points.length)return;
 
-      /*
-       * Smooth-ish polyline using a Catmull-Rom style cubic
-       * approximation, while keeping values exact.
-       */
       let path='';
 
       points.forEach(
@@ -4032,12 +4273,12 @@ function renderBusinessUnitMonthlyTrend(dataMap){
             const prev=
               points[i-1];
 
-            const midX=
+            const mx=
               (prev.x+p.x)/2;
 
             path+=
-              ` C ${midX.toFixed(1)} ${prev.y.toFixed(1)}, `+
-              `${midX.toFixed(1)} ${p.y.toFixed(1)}, `+
+              ` C ${mx.toFixed(1)} ${prev.y.toFixed(1)}, `+
+              `${mx.toFixed(1)} ${p.y.toFixed(1)}, `+
               `${p.x.toFixed(1)} ${p.y.toFixed(1)}`;
 
           }
@@ -4045,35 +4286,29 @@ function renderBusinessUnitMonthlyTrend(dataMap){
         }
       );
 
-      /*
-       * Soft glow / area only beneath the actual series.
-       */
-      if(points.length>=1){
+      const last=
+        points[points.length-1];
 
-        const last=
-          points[points.length-1];
+      const first=
+        points[0];
 
-        const first=
-          points[0];
+      const area=
+        path+
+        ` L ${last.x.toFixed(1)} ${T+IH}`+
+        ` L ${first.x.toFixed(1)} ${T+IH} Z`;
 
-        const area=
-          path+
-          ` L ${last.x.toFixed(1)} ${T+IH}`+
-          ` L ${first.x.toFixed(1)} ${T+IH} Z`;
-
-        svg+=
-          `<path
-            d="${area}"
-            fill="${palette[ui]}"
-            opacity=".055"
-          />`;
-      }
+      svg+=
+        `<path
+          d="${area}"
+          fill="${colors[ui]}"
+          opacity=".045"
+        />`;
 
       svg+=
         `<path
           d="${path}"
           fill="none"
-          stroke="${palette[ui]}"
+          stroke="${colors[ui]}"
           stroke-width="4"
           stroke-linecap="round"
           stroke-linejoin="round"
@@ -4089,20 +4324,32 @@ function renderBusinessUnitMonthlyTrend(dataMap){
                 cy="${p.y}"
                 r="7"
                 fill="#fff"
-                stroke="${palette[ui]}"
+                stroke="${colors[ui]}"
                 stroke-width="3"
               />
               <circle
                 cx="${p.x}"
                 cy="${p.y}"
                 r="3"
-                fill="${palette[ui]}"
+                fill="${colors[ui]}"
               />
-              <g transform="translate(${p.x-24},${Math.max(5,p.y-31)})">
-                <rect width="48" height="22" rx="11" fill="${palette[ui]}" opacity=".98"/>
-                <text x="24" y="15" text-anchor="middle" font-size="9" font-weight="950" fill="#fff">${p.value}%</text>
-              </g>
-              <title>${escapeHtml(unit)} · ${escapeHtml(monthLabel(p.month))} · ${p.value}%</title>
+              <rect
+                x="${p.x-26}"
+                y="${Math.max(3,p.y-34)}"
+                width="52"
+                height="23"
+                rx="11.5"
+                fill="${colors[ui]}"
+              />
+              <text
+                x="${p.x}"
+                y="${Math.max(19,p.y-18)}"
+                text-anchor="middle"
+                fill="#fff"
+                font-size="9"
+                font-weight="950"
+              >${p.value}%</text>
+              <title>${escapeHtml(u)} · ${escapeHtml(monthLabel(p.month))} · ${p.value}%</title>
             </g>`;
 
         }
@@ -4117,11 +4364,11 @@ function renderBusinessUnitMonthlyTrend(dataMap){
       svg+=
         `<text
           x="${x(i)}"
-          y="${H-21}"
+          y="${H-17}"
           text-anchor="middle"
-          font-size="10"
+          fill="#788984"
+          font-size="9"
           font-weight="700"
-          fill="#73837e"
         >${escapeHtml(
           monthLabel(month)
         )}</text>`;
@@ -4133,27 +4380,37 @@ function renderBusinessUnitMonthlyTrend(dataMap){
 
   const legend=
     units.map(
-      (u,i)=>
-        `<span class="bu-legend-item">
-          <i style="background:${palette[i]}"></i>
-          <b>${u}</b>
-          <em>${
-            Object.keys(maps[u]).length
-              ?Object.keys(maps[u]).length+' bln'
-              :'Belum ada'
-          }</em>
-        </span>`
-    ).join('');
+      (u,i)=>{
+        const vals=
+          values[u].filter(
+            x=>x!==null
+          );
 
-  const note=
-    unassigned
-      ?`<div class="trend-note">ℹ ${unassigned} assessment belum memiliki Business Unit sehingga tidak diplot.</div>`
-      :'';
+        return `
+          <span class="bu-legend-item">
+            <i style="background:${colors[i]}"></i>
+            <b>${u}</b>
+            <em>${
+              vals.length
+                ?Math.round(
+                  vals[vals.length-1]
+                )+'%'
+                :'Belum ada data'
+            }</em>
+          </span>`;
+      }
+    ).join('');
 
   root.innerHTML=
     svg+
     `<div class="bu-legend-grid">${legend}</div>`+
-    note;
+    (
+      unassigned
+        ?`<div class="trend-note dashboard-chart-note">
+          ℹ ${unassigned} assessment belum memiliki Business Unit dan tidak diplot.
+        </div>`
+        :''
+    );
 }
 
 function ensureExecutiveDashboard(){
@@ -4191,10 +4448,72 @@ function renderExecutive(dataMap){
   ].map(x=>`<div class="exec-kpi clickable-card" onclick="openExecutiveDetail('kpi','${x[3]}')"><span>${escapeHtml(x[0])}</span><strong>${x[1]}</strong><small>${escapeHtml(x[2])}</small></div>`).join('');
   renderBusinessUnitMonthlyTrend(dataMap);
   $('execModules').innerHTML=s.modules.map(m=>`<div class="module-tile clickable-card" onclick="openExecutiveDetail('module','${m.key}')"><div class="mtop"><b>${escapeHtml(m.label)}</b><strong>${m.pct}%</strong></div><small>${m.count} assessment · ${m.sites} lokasi</small><div class="meter"><i style="width:${Math.max(0,Math.min(100,m.pct))}%"></i></div><small style="display:block;margin-top:6px;color:#087f5b;font-weight:800">Lihat detail →</small></div>`).join('');
-  const loc={};
-  s.all.forEach(r=>{const k=normalizeSite(siteOf(r));if(!k)return;if(!loc[k])loc[k]={label:siteOf(r),sum:0,n:0};loc[k].sum+=scoreOf(r);loc[k].n++;});
-  const lr=Object.entries(loc).map(([key,x])=>({key,label:x.label,value:Math.round(x.sum/x.n),n:x.n})).sort((a,b)=>b.value-a.value).slice(0,6);
-  $('execLocations').innerHTML=lr.length?lr.map((x,i)=>`<div class="clickable-card" onclick="openExecutiveDetail('location','${escapeHtml(x.key)}')" style="display:flex;justify-content:space-between;align-items:center;padding:11px 8px;border-bottom:1px solid #edf2ef;border-radius:10px"><div><b style="font-size:10px">${i+1}. ${escapeHtml(x.label)}</b><small style="display:block;color:#82918d;font-size:9px">${x.n} assessment · klik untuk detail</small></div><span class="detail-pill"><i class="status-dot ${statusClass(x.value)}"></i>${x.value}%</span></div>`).join(''):'<div class="module-empty">Belum ada data.</div>';
+  const units=['PT GGP','PT UJA','PT GGL','PG4'];
+  const buCards=units.map((unit,i)=>{
+    const rows=
+      s.all.filter(
+        r=>
+          String(
+            r.businessUnit||
+            ''
+          ).trim()===unit
+      );
+
+    const pct=
+      rows.length
+        ?Math.round(
+          rows.reduce(
+            (sum,r)=>
+              sum+
+              scoreOf(r),
+            0
+          )/
+          rows.length
+        )
+        :0;
+
+    const yes=
+      rows.reduce(
+        (sum,r)=>
+          sum+
+          Number(r.yes||0),
+        0
+      );
+
+    const no=
+      rows.reduce(
+        (sum,r)=>
+          sum+
+          Number(r.no||0),
+        0
+      );
+
+    return `
+      <div
+        class="clickable-card bu-summary-card"
+        onclick="openExecutiveDetail('businessUnit','${unit}')"
+      >
+        <div class="bu-summary-head">
+          <div>
+            <b>${unit}</b>
+            <small>${rows.length} assessment</small>
+          </div>
+          <strong>${pct}%</strong>
+        </div>
+        <div class="bu-summary-bar">
+          <i style="width:${pct}%"></i>
+        </div>
+        <div class="bu-summary-foot">
+          <span>YA ${yes}</span>
+          <span>TIDAK ${no}</span>
+        </div>
+      </div>`;
+  }).join('');
+
+  $('execLocations').innerHTML=
+    buCards||
+    '<div class="module-empty">Belum ada data Business Unit.</div>';
+
   const risk=s.all.filter(r=>scoreOf(r)<70).sort((a,b)=>scoreOf(a)-scoreOf(b)).slice(0,6);
   $('execRisk').innerHTML=risk.length?risk.map(r=>`<div class="clickable-card" onclick="openExecutiveRecord(${JSON.stringify(r).replace(/</g,'&lt;')})" style="padding:9px;border-bottom:1px solid #edf2ef;border-radius:10px"><div style="display:flex;justify-content:space-between;gap:8px"><b style="font-size:10px">${escapeHtml(siteOf(r))}</b><span class="detail-pill"><i class="status-dot bad"></i>${scoreOf(r)}%</span></div><small style="color:#82918d;font-size:9px">${escapeHtml(r.assessor||'PIC')} · ${escapeHtml(r.timestamp||r.assessmentDate||'-')}</small></div>`).join(''):'<div class="module-empty">Tidak ada assessment di bawah 70%.</div>';
   $('execCoverage').innerHTML=s.modules.map(m=>`<div class="clickable-card" onclick="openExecutiveDetail('module','${m.key}')" style="margin-bottom:11px;padding:8px;border-radius:10px"><div style="display:flex;justify-content:space-between;font-size:10px"><b>${escapeHtml(m.label)}</b><span>${m.count} assessment</span></div><div class="meter"><i style="width:${Math.min(100,m.count?Math.max(12,m.pct):0)}%"></i></div></div>`).join('');
@@ -5304,7 +5623,7 @@ async function submitPPA(){
  if(!assessor){toast('Nama penilai wajib diisi.');$('assessor').focus();return}
  if(!site){toast('Lokasi IPAL wajib diisi.');$('site').focus();return}
  if(!date){toast('Tanggal penilaian wajib diisi.');$('assessmentDate').focus();return}
- if(rows.some(s=>!s.value)){toast('Lengkapi semua 11 jawaban YA/TIDAK.');return}
+ if(rows.some(s=>!s.value)){toast('Lengkapi semua 10 jawaban YA/TIDAK.');return}
  const payload={action:'savePPA',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:rows.map((s,i)=>({no:i+1,ketentuan:items[i],status:s.value,keterangan:document.querySelector(`[data-k="${i}"]`).value.trim()})).concat(getManualFindingItems('ppa'))};
  const btn=document.querySelector('.actions .primary');btn.disabled=true;btn.textContent='⏳ Menyimpan...';
  syncManualFindingContext('ppa');
@@ -6624,6 +6943,24 @@ function renderDashboardV2(dataMap){
   renderFollowupChart(all);
   renderAllModuleDashboard(dataMap);
 }
+let executiveChartType='line';
+function setExecutiveChartType(type){
+  executiveChartType=type||'line';
+  document.querySelectorAll('.chart-switch').forEach(
+    b=>b.classList.toggle(
+      'active',
+      b.dataset.chartType===executiveChartType
+    )
+  );
+  renderBusinessUnitMonthlyTrend(
+    executiveFilteredMap &&
+    Object.values(executiveFilteredMap).some(
+      rows=>Array.isArray(rows)&&rows.length
+    )
+      ?executiveFilteredMap
+      :executiveRawMap
+  );
+}
 let executiveRawMap={};
 let executiveFilteredMap={};
 function businessUnitOptionsHtml(){
@@ -6658,7 +6995,7 @@ function applyExecutiveFilters(){
     if(mk&&key!==mk){out[key]=[];return}
     out[key]=(rows||[]).filter(r=>{const d=dateOf(r);return (!bu||String(r.businessUnit||'')===bu)&&(!bu||String(r.businessUnit||'')===bu)&&(!sk||normalizeSite(siteOf(r))===sk)&&(!yr||String(d?.getFullYear()||'')===String(yr))&&(!mo||String((d?.getMonth()??-1)+1)===String(mo));});
   });
-  executiveFilteredMap=out;renderExecutive(out);renderDashboardV2(out);
+  executiveFilteredMap=out;renderExecutive(out);renderDashboardV2(out);renderBusinessUnitMonthlyTrend(out);
 }
 function resetExecutiveFilters(){
   if($('execFilterBusinessUnit'))$('execFilterBusinessUnit').value='';
@@ -6734,6 +7071,30 @@ function openExecutiveDetail(type,value){
       rows[0]
         ?siteOf(rows[0])
         :'Detail Lokasi';
+
+  }else if(type==='businessUnit'){
+
+    rows=
+      Object.values(
+        map
+      ).flat().filter(
+        r=>
+          String(
+            r.businessUnit||
+            ''
+          ).trim()===
+          String(
+            value||
+            ''
+          ).trim()
+      );
+
+    title=
+      String(
+        value||
+        'Business Unit'
+      )+
+      ' · Detail';
 
   }else if(type==='kpi'){
 
@@ -6882,7 +7243,7 @@ function openExecutiveDetail(type,value){
   );
 }
 
-function openExecutiveRecord(r){
+async function openExecutiveRecord(r){
 
   if(!r){
     return;
@@ -6923,10 +7284,46 @@ function openExecutiveRecord(r){
       </div>`
   ).join('');
 
-  const details=
+  let details=
     Array.isArray(r.details)
       ?r.details
       :[];
+
+  if(!details.length && r.submissionId){
+
+    try{
+
+      const d=
+        await jsonpGet(
+          'getAssessmentDetails',
+          {
+            module:
+              r._module||
+              r.module||
+              '',
+            submissionId:
+              r.submissionId
+          }
+        );
+
+      details=
+        Array.isArray(
+          d.data?.details
+        )
+          ?d.data.details
+          :[];
+
+    }catch(err){
+
+      $('execDetailRows').innerHTML=
+        '<tr><td colspan="8" style="text-align:center;padding:32px;color:#b42318">Detail checklist gagal dimuat: '+escapeHtml(err.message||String(err))+'</td></tr>';
+
+      $('execDetailModal')?.classList.add('show');
+      return;
+
+    }
+
+  }
 
   if(details.length){
 
