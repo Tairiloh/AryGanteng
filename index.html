@@ -1675,7 +1675,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwCn9Q6I0zvMdxyMa1RPGb-BK0jAc1lkHgq4hL1bM_kPJMSrFvP1E-GAhphK0X51eBC/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZfOtqX4FzKVuEUY9eVEpifBdvUMWVXKc5GrJx7VNlVVF-MxZP0B7lYAbXL2noXyKu/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2292,26 +2292,33 @@ async function submitResponseForm(payload){
     };
 
     function onMessage(event){
-      /*
-       * Jangan menerima message dari iframe lain.
-       */
-      if(event.source!==iframe.contentWindow)return;
 
+      /*
+       * Google Apps Script dapat melewati redirect/sandbox sehingga
+       * event.source tidak selalu identik dengan iframe.contentWindow.
+       * requestId sudah unik dan menjadi pengaman utama.
+       */
       const d=event.data;
 
       if(!d || d.type!=='properResponse')return;
       if(String(d.requestId||'')!==requestId)return;
 
       if(d.data && typeof d.data==='object'){
+
         finish(
-          d.ok===true,
+          true,
           d.data
         );
+
       }else{
+
         finish(
           false,
-          new Error('Respons server tidak valid.')
+          new Error(
+            'Respons server tidak valid.'
+          )
         );
+
       }
     }
 
@@ -2321,7 +2328,9 @@ async function submitResponseForm(payload){
       finish(
         false,
         new Error(
-          'Server tidak merespons. Pastikan deployment Apps Script terbaru sudah digunakan.'
+          'Respons Apps Script tidak kembali ke halaman. '+
+          'Pastikan deployment /exec terbaru sudah aktif. '+
+          'Jika data sudah masuk Google Sheet, jangan klik Simpan ulang.'
         )
       );
     },30000);
