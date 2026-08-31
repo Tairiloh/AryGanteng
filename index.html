@@ -1152,6 +1152,14 @@ table th:last-child,table td:last-child{min-width:190px}
 .dashboard-modern-grid .portal-panel-head h3{letter-spacing:-.45px}
 .dashboard-modern-grid .portal-panel-head p{line-height:1.5}
 </style>
+<style id="proper-chart-finish-v7">
+.executive-chart-stage{padding:8px 8px 5px;min-height:300px}
+.premium-bu-svg{filter:drop-shadow(0 8px 16px rgba(6,82,64,.035))}
+.chart-main-card{overflow:hidden}
+.chart-main-card .portal-panel-head h3{letter-spacing:-.55px}
+.chart-switch.active{transform:translateY(-1px)}
+.trend-empty-state.premium-dashboard-empty{border:1px dashed #cbded8;border-radius:16px;background:linear-gradient(180deg,#fbfefd,#f3faf7)}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1796,7 +1804,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby4-ZumgN9sTx26GxlO5vlCt3d5xUVnC3Dt5kl2EmPUbE_jXOwbEm7XZJ02S8oVp3J2/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxNEY703lZEjkNONTs_5iLsIPM6vNIPsKZJ5uWZ-MXU4v8uGknI6Cb53mL3fa_djeqL/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2280,17 +2288,18 @@ function submitFormRequest(payload){
         Math.random()*100000
       );
 
-    const frameName=
-      'properPostFrame_'+stamp;
-
     const requestId=
       'req_'+stamp;
 
+    const frameName=
+      'properPostFrame_'+stamp;
+
     const iframe=
-      document.createElement('iframe');
+      document.createElement(
+        'iframe'
+      );
 
     iframe.name=frameName;
-    iframe.id=frameName;
     iframe.style.display='none';
 
     document.body.appendChild(
@@ -2298,7 +2307,9 @@ function submitFormRequest(payload){
     );
 
     const form=
-      document.createElement('form');
+      document.createElement(
+        'form'
+      );
 
     form.method='POST';
     form.action=SCRIPT_URL;
@@ -2312,7 +2323,9 @@ function submitFormRequest(payload){
       )return;
 
       const input=
-        document.createElement('input');
+        document.createElement(
+          'input'
+        );
 
       input.type='hidden';
       input.name=name;
@@ -2321,9 +2334,7 @@ function submitFormRequest(payload){
       form.appendChild(input);
     };
 
-    Object.keys(
-      payload||{}
-    ).forEach(
+    Object.keys(payload||{}).forEach(
       key=>{
 
         const value=
@@ -2332,14 +2343,8 @@ function submitFormRequest(payload){
         if(
           value===undefined||
           value===null
-        ){
-          return;
-        }
+        )return;
 
-        /*
-         * File/object payloads are JSON encoded.
-         * profilePhoto keeps backward-compatible fields.
-         */
         if(
           key==='profilePhoto'&&
           value&&
@@ -2348,16 +2353,13 @@ function submitFormRequest(payload){
 
           add(
             'profilePhotoData',
-            value.data||
-            ''
+            value.data||''
           );
-
           add(
             'profilePhotoMimeType',
             value.mimeType||
             'image/jpeg'
           );
-
           add(
             'profilePhotoFileName',
             value.fileName||
@@ -2381,7 +2383,6 @@ function submitFormRequest(payload){
           );
 
         }
-
       }
     );
 
@@ -2399,101 +2400,37 @@ function submitFormRequest(payload){
       form
     );
 
-    let done=false;
-    let timer=null;
-
-    const cleanup=()=>{
-      if(timer){
-        clearTimeout(timer);
-      }
-
-      window.removeEventListener(
-        'message',
-        onMessage
-      );
-
-      setTimeout(()=>{
-        try{form.remove();}catch(_){}
-        try{iframe.remove();}catch(_){}
-      },1000);
-    };
-
-    const finish=(result)=>{
-      if(done)return;
-      done=true;
-      cleanup();
-      resolve(result);
-    };
-
-    function onMessage(event){
-
-      const data=
-        event.data;
-
-      if(
-        !data||
-        data.type!=='properResponse'
-      ){
-        return;
-      }
-
-      if(
-        String(
-          data.requestId||
-          ''
-        )!==requestId
-      ){
-        return;
-      }
-
-      /*
-       * The Apps Script response is authoritative.
-       * Do not run a second read-back request.
-       */
-      finish(
-        data.data||{
-          status:'error',
-          message:'Respons server kosong.'
-        }
-      );
-
-    }
-
-    window.addEventListener(
-      'message',
-      onMessage
-    );
-
-    timer=setTimeout(
-      ()=>{
-
-        if(done)return;
-
-        /*
-         * POST has already been submitted. At this point
-         * do not fabricate "server failed" from a read-back
-         * that may itself be blocked. Return a distinct
-         * acknowledgement so the UI can show "submitted".
-         */
-        finish({
-          status:'submitted',
-          requestId:requestId,
-          message:
-            'Data sudah dikirim ke Apps Script. '+
-            'Konfirmasi halaman tidak diterima, tetapi request tidak dibatalkan.'
-        });
-
-      },
-      12000
-    );
-
     try{
 
       form.submit();
 
+      setTimeout(()=>{
+
+        try{
+          form.remove();
+        }catch(_){}
+
+        try{
+          iframe.remove();
+        }catch(_){}
+
+        resolve({
+          status:'submitted',
+          requestId:requestId
+        });
+
+      },350);
+
     }catch(err){
 
-      cleanup();
+      try{
+        form.remove();
+      }catch(_){}
+
+      try{
+        iframe.remove();
+      }catch(_){}
+
       reject(err);
 
     }
@@ -3306,6 +3243,162 @@ async function verifyAssessmentSaved_(payload){
   );
 }
 
+
+function pollSaveRequestResult_(requestId){
+
+  return new Promise((resolve,reject)=>{
+
+    let attempts=0;
+    let timer=null;
+    let script=null;
+    let finished=false;
+    let callbackName='';
+
+    const cleanup=()=>{
+      if(timer)clearTimeout(timer);
+      try{
+        if(script)script.remove();
+      }catch(_){}
+      try{
+        if(callbackName)
+          delete window[callbackName];
+      }catch(_){}
+    };
+
+    const finish=data=>{
+      if(finished)return;
+      finished=true;
+      cleanup();
+      resolve(data);
+    };
+
+    const fail=err=>{
+      if(finished)return;
+      finished=true;
+      cleanup();
+      reject(err);
+    };
+
+    function poll(){
+
+      if(finished)return;
+
+      attempts++;
+
+      callbackName=
+        'properSaveStatus_'+
+        String(requestId)
+          .replace(
+            /[^a-zA-Z0-9_]/g,
+            ''
+          )+
+        '_'+
+        attempts;
+
+      window[callbackName]=data=>{
+
+        try{
+
+          if(
+            !data||
+            data.status==='pending'
+          ){
+
+            if(attempts>=20){
+
+              fail(
+                new Error(
+                  'Konfirmasi Save server tidak diterima. '+
+                  'Periksa deployment /exec terbaru.'
+                )
+              );
+
+            }else{
+
+              timer=setTimeout(
+                poll,
+                1000
+              );
+
+            }
+
+            return;
+          }
+
+          finish(data);
+
+        }catch(err){
+
+          fail(err);
+
+        }
+
+      };
+
+      const sep=
+        SCRIPT_URL.indexOf('?')>=0
+          ?'&'
+          :'?';
+
+      script=
+        document.createElement(
+          'script'
+        );
+
+      script.async=true;
+
+      script.src=
+        SCRIPT_URL+
+        sep+
+        'action=saveRequestResult'+
+        '&requestId='+
+        encodeURIComponent(
+          requestId
+        )+
+        '&callback='+
+        encodeURIComponent(
+          callbackName
+        )+
+        '&_='+
+        Date.now();
+
+      script.onerror=()=>{
+
+        try{
+          delete window[
+            callbackName
+          ];
+        }catch(_){}
+
+        if(attempts>=20){
+
+          fail(
+            new Error(
+              'Endpoint konfirmasi Save tidak dapat diakses. '+
+              'Pastikan URL /exec deployment terbaru.'
+            )
+          );
+
+        }else{
+
+          timer=setTimeout(
+            poll,
+            1000
+          );
+
+        }
+      };
+
+      document.body.appendChild(
+        script
+      );
+    }
+
+    poll();
+
+  });
+}
+
 async function postJSON(payload){
 
   payload=
@@ -3313,7 +3406,8 @@ async function postJSON(payload){
       {},
       payload,
       {
-        userToken:getAuthToken()
+        userToken:
+          getAuthToken()
       }
     );
 
@@ -3325,9 +3419,14 @@ async function postJSON(payload){
 
   try{
 
-    const result=
+    const submitted=
       await submitFormRequest(
         payload
+      );
+
+    const result=
+      await pollSaveRequestResult_(
+        submitted.requestId
       );
 
     if(
@@ -3339,7 +3438,7 @@ async function postJSON(payload){
         'TERSIMPAN',
         String(
           result.message||
-          'Data berhasil disimpan ke server.'
+          'Data berhasil tersimpan.'
         )
       );
 
@@ -3365,25 +3464,7 @@ async function postJSON(payload){
         'DATA SUDAH ADA',
         String(
           result.message||
-          'Assessment dengan kombinasi yang sama sudah ada.'
-        )
-      );
-
-    }else if(
-      result.status==='submitted'
-    ){
-
-      /*
-       * We do not label this "failed".
-       * The browser successfully submitted the POST;
-       * confirmation could not be read from the iframe.
-       */
-      showSaveServerBanner(
-        'success',
-        'TERKIRIM',
-        String(
-          result.message||
-          'Request Save sudah dikirim ke server.'
+          'Assessment untuk kombinasi yang sama sudah ada.'
         )
       );
 
@@ -3394,7 +3475,7 @@ async function postJSON(payload){
         'GAGAL MENYIMPAN',
         String(
           result.message||
-          'Apps Script menolak proses penyimpanan.'
+          'Apps Script menolak penyimpanan.'
         )
       );
 
