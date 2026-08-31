@@ -1051,6 +1051,13 @@ table th:last-child,table td:last-child{min-width:190px}
 .bu-legend-item{display:inline-flex;align-items:center;gap:6px;font-size:9px;color:#5f727a;font-weight:850}
 .bu-legend-item i{width:9px;height:9px;border-radius:50%;display:inline-block}
 </style>
+<style id="proper-save-status-banner">
+.proper-save-status-banner{position:fixed;right:24px;bottom:24px;z-index:99999;min-width:300px;max-width:440px;padding:14px 16px;border-radius:14px;background:#073b4c;color:#fff;box-shadow:0 16px 40px rgba(0,0,0,.16);font-size:11px;font-weight:800;line-height:1.45}
+.proper-save-status-banner.success{background:#087f5b}
+.proper-save-status-banner.warn{background:#8a5a00}
+.proper-save-status-banner.error{background:#9b2525}
+.proper-save-status-banner b{display:block;font-size:12px;margin-bottom:3px}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1668,7 +1675,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxflMjoGXx7B_UbDSAYrzv9kx0L4CYOz1hFrkuM4zA4bcabMrXu8Y2vCQbE-BcirY21/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwCn9Q6I0zvMdxyMa1RPGb-BK0jAc1lkHgq4hL1bM_kPJMSrFvP1E-GAhphK0X51eBC/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2401,107 +2408,158 @@ async function prepareEvidencePayload(module){
   return evidence;
 }
 
-async function postJSON(payload){
-  payload=Object.assign({},payload,{
-    userToken:getAuthToken()
-  });
 
-  /*
-   * Untuk semua Save/Update assessment, dokumentasi foto
-   * dimasukkan ke request yang sama.
-   */
-  const saveActions=[
-    'savePPA',
-    'saveEmisi',
-    'savePLB3',
-    'savePLB3Darurat',
-    'saveB3',
-    'saveSampah'
-  ];
+function showSaveServerBanner(type,title,message){
+  let el=$('properSaveStatusBanner');
 
-  if(
-    saveActions.indexOf(String(payload.action||''))>=0 ||
-    payload.action==='updateAssessment'
-  ){
-    let moduleKey=String(
-      payload.module||
-      ''
-    ).trim();
-
-    if(payload.action==='savePPA')moduleKey='ppa';
-    else if(payload.action==='saveEmisi')moduleKey='emisi';
-    else if(payload.action==='savePLB3')moduleKey='plb3';
-    else if(payload.action==='savePLB3Darurat')moduleKey='darurat';
-    else if(payload.action==='saveB3')moduleKey='b3';
-    else if(payload.action==='saveSampah')moduleKey='sampah';
-
-    if(moduleKey){
-      payload.evidence=
-        await prepareEvidencePayload(
-          moduleKey.toLowerCase()
-        );
-    }
+  if(!el){
+    el=document.createElement('div');
+    el.id='properSaveStatusBanner';
+    el.className='proper-save-status-banner';
+    document.body.appendChild(el);
   }
 
-  /*
-   * Tetap gunakan transport existing yang memang sudah
-   * digunakan login/save dan mendapat response server.
-   */
-  const result=await submitResponseForm(payload);
+  el.className=
+    'proper-save-status-banner '+
+    (type||'');
 
-  /*
-   * Simpan hasil evidence agar uploadModuleEvidence()
-   * yang sudah ada tidak mengupload foto kedua kali.
-   */
-  if(
-    result &&
-    result.submissionId &&
-    result.evidence
-  ){
-    window.__lastBundledEvidence=
-      window.__lastBundledEvidence||
-      Object.create(null);
+  el.innerHTML=
+    '<b>'+escapeHtml(title||'Status')+'</b>'+
+    '<span>'+escapeHtml(
+      message||''
+    )+'</span>';
 
-    window.__lastBundledEvidence[
-      String(result.submissionId)
-    ]=result.evidence;
+  clearTimeout(
+    window.__properSaveBannerTimer
+  );
 
-    /*
-     * Hapus entry lama setelah 5 menit.
-     */
+  window.__properSaveBannerTimer=
     setTimeout(()=>{
-      if(
-        window.__lastBundledEvidence &&
-        window.__lastBundledEvidence[
-          String(result.submissionId)
-        ]
-      ){
-        delete window.__lastBundledEvidence[
-          String(result.submissionId)
-        ];
-      }
-    },300000);
-  }
-
-  /*
-   * Duplicate dibuat sebagai error yang jelas;
-   * caller existing akan menampilkan toast dengan message server.
-   */
-  if(
-    result &&
-    result.status==='duplicate'
-  ){
-    throw new Error(
-      String(
-        result.message||
-        'Assessment hari ini untuk lokasi tersebut sudah ada. Silakan Edit assessment yang lama.'
-      )
-    );
-  }
-
-  return result;
+      try{el.remove();}catch(_){}
+    },5000);
 }
 
+async function postJSON(payload){
+
+  payload=
+    Object.assign(
+      {},
+      payload,
+      {
+        userToken:getAuthToken()
+      }
+    );
+
+  showSaveServerBanner(
+    '',
+    'MENYIMPAN',
+    'Mengirim data ke server...'
+  );
+
+  try{
+
+    const result=
+      await submitResponseForm(
+        payload
+      );
+
+    if(!result){
+
+      throw new Error(
+        'Server tidak mengembalikan hasil.'
+      );
+
+    }
+
+    if(result.status==='success'){
+
+      const ev=
+        result.evidence||{};
+
+      if(
+        Number(
+          ev.uploaded||0
+        )>0
+      ){
+
+        showSaveServerBanner(
+          'success',
+          'TERSIMPAN',
+          'Assessment berhasil disimpan. '+
+          ev.uploaded+
+          ' foto juga tersimpan ke server.'
+        );
+
+      }else{
+
+        showSaveServerBanner(
+          'success',
+          'TERSIMPAN',
+          'Assessment berhasil disimpan ke server.'
+        );
+
+      }
+
+    }else if(
+      result.status==='partial'
+    ){
+
+      const ev=
+        result.evidence||{};
+
+      showSaveServerBanner(
+        'warn',
+        'TERSIMPAN SEBAGIAN',
+        String(
+          result.message||
+          'Assessment tersimpan.'
+        )
+      );
+
+    }else if(
+      result.status==='duplicate'
+    ){
+
+      showSaveServerBanner(
+        'warn',
+        'DATA SUDAH ADA',
+        String(
+          result.message||
+          'Assessment untuk tanggal/lokasi tersebut sudah ada.'
+        )
+      );
+
+    }else{
+
+      showSaveServerBanner(
+        'error',
+        'GAGAL MENYIMPAN',
+        String(
+          result.message||
+          'Server menolak data.'
+        )
+      );
+
+    }
+
+    return result;
+
+  }catch(err){
+
+    showSaveServerBanner(
+      'error',
+      'GAGAL MENYIMPAN',
+      String(
+        err&&err.message
+          ?err.message
+          :err
+      )
+    );
+
+    throw err;
+
+  }
+}
 
 async function submitEmisi(){
   const assessor=$('emisiAssessor').value.trim(),site=canonicalLocationFor('emisi',$('emisiSite').value),date=$('emisiDate').value;
@@ -3109,6 +3167,194 @@ function execSummary(dataMap){
   const trend=Object.keys(monthMap).sort().map(k=>({label:monthLabel(k),value:Math.round(monthMap[k].sum/monthMap[k].n)}));
   return {all,assessments,siteCount:[...sites].filter(Boolean).length,overall,yes,no,modules,trend};
 }
+
+function renderBusinessUnitMonthlyTrend(dataMap){
+
+  const root=$('execTrend');
+  if(!root)return;
+
+  const units=[
+    'PT GGP',
+    'PT UJA',
+    'PT GGL',
+    'PG4'
+  ];
+
+  const rows=
+    Object.values(
+      dataMap||{}
+    ).flat();
+
+  const maps={};
+  units.forEach(
+    u=>maps[u]={}
+  );
+
+  rows.forEach(r=>{
+
+    const bu=
+      String(
+        r.businessUnit||
+        ''
+      ).trim();
+
+    if(!maps[bu])return;
+
+    const d=dateOf(r);
+
+    if(!d)return;
+
+    const key=
+      d.getFullYear()+
+      '-'+
+      String(
+        d.getMonth()+1
+      ).padStart(2,'0');
+
+    if(!maps[bu][key]){
+      maps[bu][key]={
+        sum:0,
+        n:0
+      };
+    }
+
+    maps[bu][key].sum+=
+      scoreOf(r);
+
+    maps[bu][key].n++;
+
+  });
+
+  const months=
+    [...new Set(
+      units.flatMap(
+        u=>Object.keys(
+          maps[u]
+        )
+      )
+    )]
+    .sort()
+    .slice(-12);
+
+  if(!months.length){
+
+    root.innerHTML=
+      `<div class="trend-empty-state">
+        <div class="trend-empty-icon">⌁</div>
+        <b>Belum ada data trend Business Unit</b>
+        <span>Grafik akan muncul setelah assessment tersimpan.</span>
+      </div>`;
+
+    return;
+  }
+
+  const colors=[
+    '#14a37c',
+    '#2675c9',
+    '#7b55c7',
+    '#e88925'
+  ];
+
+  const W=820,H=260;
+  const L=45,R=20,T=22,B=42;
+  const IW=W-L-R;
+  const IH=H-T-B;
+
+  const x=i=>
+    months.length===1
+      ?L+IW/2
+      :L+i*IW/(months.length-1);
+
+  const y=v=>
+    T+
+    IH-
+    Math.max(
+      0,
+      Math.min(
+        100,
+        v
+      )
+    )/100*
+    IH;
+
+  let svg=
+    `<svg class="svg-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">`;
+
+  [0,25,50,75,100].forEach(v=>{
+    svg+=
+      `<line x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}" stroke="#e5eeeb" stroke-width="1"/>`+
+      `<text x="${L-9}" y="${y(v)+3}" text-anchor="end" font-size="8" fill="#8a9994">${v}%</text>`;
+  });
+
+  units.forEach((u,ui)=>{
+
+    const pts=[];
+
+    months.forEach((m,i)=>{
+
+      const g=
+        maps[u][m];
+
+      if(!g)return;
+
+      const val=
+        Math.round(
+          g.sum/
+          Math.max(
+            1,
+            g.n
+          )
+        );
+
+      pts.push({
+        x:x(i),
+        y:y(val),
+        value:val,
+        month:m
+      });
+
+    });
+
+    if(!pts.length)return;
+
+    const d=
+      pts.map(
+        (p,i)=>
+          `${i?'L':'M'} ${p.x} ${p.y}`
+      ).join(' ');
+
+    svg+=
+      `<path d="${d}" fill="none" stroke="${colors[ui]}" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>`;
+
+    pts.forEach(p=>{
+      svg+=
+        `<circle cx="${p.x}" cy="${p.y}" r="5" fill="#fff" stroke="${colors[ui]}" stroke-width="3">`+
+        `<title>${escapeHtml(u)} · ${escapeHtml(monthLabel(p.month))} · ${p.value}%</title>`+
+        `</circle>`+
+        `<text x="${p.x}" y="${Math.max(13,p.y-10)}" text-anchor="middle" font-size="9" font-weight="900" fill="${colors[ui]}">${p.value}%</text>`;
+    });
+
+  });
+
+  months.forEach((m,i)=>{
+    svg+=
+      `<text x="${x(i)}" y="${H-14}" text-anchor="middle" font-size="8" fill="#7d8d88">${escapeHtml(monthLabel(m).split(' ')[0])}</text>`;
+  });
+
+  svg+='</svg>';
+
+  svg+=
+    `<div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:4px">
+      ${units.map((u,i)=>
+        `<span style="display:inline-flex;align-items:center;gap:5px;font-size:9px;font-weight:800;color:#5d716c">
+          <i style="width:8px;height:8px;border-radius:50%;background:${colors[i]};display:block"></i>${u}
+        </span>`
+      ).join('')}
+    </div>`;
+
+  root.innerHTML=svg;
+}
+
 function ensureExecutiveDashboard(){
   const dash=$('dashboard');if(!dash)return;
   if($('executiveCockpit'))return;
@@ -3142,7 +3388,7 @@ function renderExecutive(dataMap){
     ['Total TIDAK',s.no,'ketentuan belum terpenuhi','no'],
     ['Modul Aktif',s.modules.filter(x=>x.count>0).length+'/6','coverage','modules']
   ].map(x=>`<div class="exec-kpi clickable-card" onclick="openExecutiveDetail('kpi','${x[3]}')"><span>${escapeHtml(x[0])}</span><strong>${x[1]}</strong><small>${escapeHtml(x[2])}</small></div>`).join('');
-  $('execTrend').innerHTML=svgLine(s.trend,760,245);
+  renderBusinessUnitMonthlyTrend(dataMap);
   $('execModules').innerHTML=s.modules.map(m=>`<div class="module-tile clickable-card" onclick="openExecutiveDetail('module','${m.key}')"><div class="mtop"><b>${escapeHtml(m.label)}</b><strong>${m.pct}%</strong></div><small>${m.count} assessment · ${m.sites} lokasi</small><div class="meter"><i style="width:${Math.max(0,Math.min(100,m.pct))}%"></i></div><small style="display:block;margin-top:6px;color:#087f5b;font-weight:800">Lihat detail →</small></div>`).join('');
   const loc={};
   s.all.forEach(r=>{const k=normalizeSite(siteOf(r));if(!k)return;if(!loc[k])loc[k]={label:siteOf(r),sum:0,n:0};loc[k].sum+=scoreOf(r);loc[k].n++;});
@@ -5093,7 +5339,7 @@ function applyExecutiveFilters(){
   const bu=$('execFilterBusinessUnit')?.value||'',mk=$('execFilterModule')?.value||'',sk=$('execFilterSite')?.value||'',yr=$('execFilterYear')?.value||'',mo=$('execFilterMonth')?.value||'';
   const out={};Object.entries(executiveRawMap).forEach(([key,rows])=>{
     if(mk&&key!==mk){out[key]=[];return}
-    out[key]=(rows||[]).filter(r=>{const d=dateOf(r);return (!bu||String(r.businessUnit||'')===bu)&&(!sk||normalizeSite(siteOf(r))===sk)&&(!yr||String(d?.getFullYear()||'')===String(yr))&&(!mo||String((d?.getMonth()??-1)+1)===String(mo));});
+    out[key]=(rows||[]).filter(r=>{const d=dateOf(r);return (!bu||String(r.businessUnit||'')===bu)&&(!bu||String(r.businessUnit||'')===bu)&&(!sk||normalizeSite(siteOf(r))===sk)&&(!yr||String(d?.getFullYear()||'')===String(yr))&&(!mo||String((d?.getMonth()??-1)+1)===String(mo));});
   });
   executiveFilteredMap=out;renderExecutive(out);renderDashboardV2(out);
 }
