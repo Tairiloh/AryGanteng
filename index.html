@@ -1142,6 +1142,16 @@ table th:last-child,table td:last-child{min-width:190px}
   .bu-donut{margin:auto}
 }
 </style>
+<style id="proper-chart-final-v4">
+.chart-main-card{background:linear-gradient(180deg,#ffffff 0%,#fbfdfc 100%)}
+.chart-head{padding-bottom:4px}
+.chart-toolbar{backdrop-filter:blur(8px)}
+.chart-switch{font-family:inherit}
+.executive-chart-stage{min-height:300px;position:relative}
+.premium-bu-svg{overflow:visible}
+.dashboard-modern-grid .portal-panel-head h3{letter-spacing:-.45px}
+.dashboard-modern-grid .portal-panel-head p{line-height:1.5}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1786,7 +1796,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz1_9bMCiWElNu9pVAeaJtMlYpSNEu_wKIv2sZyd0KjsdPmKVtGpXqGSkDiPttWMNtl/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby4-ZumgN9sTx26GxlO5vlCt3d5xUVnC3Dt5kl2EmPUbE_jXOwbEm7XZJ02S8oVp3J2/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2260,21 +2270,27 @@ function jsonpGet(action, params={}){
 }
 
 function submitFormRequest(payload){
+
   return new Promise((resolve,reject)=>{
+
     const stamp=
       Date.now()+
       '_'+
       Math.floor(
-        Math.random()*10000
+        Math.random()*100000
       );
 
     const frameName=
       'properPostFrame_'+stamp;
 
+    const requestId=
+      'req_'+stamp;
+
     const iframe=
       document.createElement('iframe');
 
     iframe.name=frameName;
+    iframe.id=frameName;
     iframe.style.display='none';
 
     document.body.appendChild(
@@ -2305,110 +2321,175 @@ function submitFormRequest(payload){
       form.appendChild(input);
     };
 
-    /*
-     * Payload is sent as hidden form fields.
-     * Objects are JSON-encoded except legacy profilePhoto fields.
-     */
-    Object.keys(payload||{}).forEach(k=>{
+    Object.keys(
+      payload||{}
+    ).forEach(
+      key=>{
 
-      const v=payload[k];
+        const value=
+          payload[key];
 
-      if(
-        k==='profilePhoto'&&
-        v&&
-        typeof v==='object'
-      ){
+        if(
+          value===undefined||
+          value===null
+        ){
+          return;
+        }
 
-        add(
-          'profilePhotoData',
-          v.data||''
-        );
+        /*
+         * File/object payloads are JSON encoded.
+         * profilePhoto keeps backward-compatible fields.
+         */
+        if(
+          key==='profilePhoto'&&
+          value&&
+          typeof value==='object'
+        ){
 
-        add(
-          'profilePhotoMimeType',
-          v.mimeType||
-          'image/jpeg'
-        );
+          add(
+            'profilePhotoData',
+            value.data||
+            ''
+          );
 
-        add(
-          'profilePhotoFileName',
-          v.fileName||
-          ('profile-'+Date.now()+'.jpg')
-        );
+          add(
+            'profilePhotoMimeType',
+            value.mimeType||
+            'image/jpeg'
+          );
 
-      }else if(
-        typeof v==='object'
-      ){
+          add(
+            'profilePhotoFileName',
+            value.fileName||
+            ('profile-'+Date.now()+'.jpg')
+          );
 
-        add(
-          k,
-          JSON.stringify(v)
-        );
+        }else if(
+          typeof value==='object'
+        ){
 
-      }else{
+          add(
+            key,
+            JSON.stringify(value)
+          );
 
-        add(k,v);
+        }else{
+
+          add(
+            key,
+            value
+          );
+
+        }
 
       }
-
-    });
-
-    add(
-      'userToken',
-      getAuthToken()
     );
-
-    /*
-     * requestId helps correlate logs but is not used
-     * as the success signal.
-     */
-    const requestId=
-      'req_'+stamp;
 
     add(
       'requestId',
       requestId
     );
 
+    add(
+      'userToken',
+      getAuthToken()
+    );
+
     document.body.appendChild(
       form
     );
 
-    let resolved=false;
+    let done=false;
+    let timer=null;
 
     const cleanup=()=>{
+      if(timer){
+        clearTimeout(timer);
+      }
+
+      window.removeEventListener(
+        'message',
+        onMessage
+      );
+
       setTimeout(()=>{
         try{form.remove();}catch(_){}
         try{iframe.remove();}catch(_){}
-      },3000);
+      },1000);
     };
 
-    /*
-     * Do NOT wait for iframe onload.
-     * Google Apps Script may keep the navigation open/redirected.
-     * The next layer verifies the saved row by reading the server.
-     */
+    const finish=(result)=>{
+      if(done)return;
+      done=true;
+      cleanup();
+      resolve(result);
+    };
+
+    function onMessage(event){
+
+      const data=
+        event.data;
+
+      if(
+        !data||
+        data.type!=='properResponse'
+      ){
+        return;
+      }
+
+      if(
+        String(
+          data.requestId||
+          ''
+        )!==requestId
+      ){
+        return;
+      }
+
+      /*
+       * The Apps Script response is authoritative.
+       * Do not run a second read-back request.
+       */
+      finish(
+        data.data||{
+          status:'error',
+          message:'Respons server kosong.'
+        }
+      );
+
+    }
+
+    window.addEventListener(
+      'message',
+      onMessage
+    );
+
+    timer=setTimeout(
+      ()=>{
+
+        if(done)return;
+
+        /*
+         * POST has already been submitted. At this point
+         * do not fabricate "server failed" from a read-back
+         * that may itself be blocked. Return a distinct
+         * acknowledgement so the UI can show "submitted".
+         */
+        finish({
+          status:'submitted',
+          requestId:requestId,
+          message:
+            'Data sudah dikirim ke Apps Script. '+
+            'Konfirmasi halaman tidak diterima, tetapi request tidak dibatalkan.'
+        });
+
+      },
+      12000
+    );
+
     try{
 
       form.submit();
-
-      /*
-       * Give the browser enough time to dispatch the POST,
-       * then continue with server read-back verification.
-       */
-      setTimeout(()=>{
-
-        if(resolved)return;
-
-        resolved=true;
-        cleanup();
-
-        resolve({
-          status:'accepted',
-          requestId:requestId
-        });
-
-      },1200);
 
     }catch(err){
 
@@ -2416,7 +2497,9 @@ function submitFormRequest(payload){
       reject(err);
 
     }
+
   });
+
 }
 
 function submitEvidenceFormRequest(payload){
@@ -3237,40 +3320,85 @@ async function postJSON(payload){
   showSaveServerBanner(
     '',
     'MENYIMPAN',
-    'Mengirim data dan memverifikasi ke server...'
+    'Mengirim data ke server...'
   );
 
   try{
 
-    const accepted=
+    const result=
       await submitFormRequest(
         payload
       );
 
-    /*
-     * Do not trust "accepted" by itself.
-     * Re-read the actual Google Sheet endpoint.
-     */
-    const verified=
-      await verifyAssessmentSaved_(
-        payload
+    if(
+      result.status==='success'
+    ){
+
+      showSaveServerBanner(
+        'success',
+        'TERSIMPAN',
+        String(
+          result.message||
+          'Data berhasil disimpan ke server.'
+        )
       );
 
-    const result=
-      Object.assign(
-        {},
-        verified,
-        {
-          requestId:
-            accepted.requestId
-        }
+    }else if(
+      result.status==='partial'
+    ){
+
+      showSaveServerBanner(
+        'warn',
+        'TERSIMPAN SEBAGIAN',
+        String(
+          result.message||
+          'Assessment tersimpan sebagian.'
+        )
       );
 
-    showSaveServerBanner(
-      'success',
-      'TERSIMPAN',
-      'Data benar-benar terbaca kembali dari server.'
-    );
+    }else if(
+      result.status==='duplicate'
+    ){
+
+      showSaveServerBanner(
+        'warn',
+        'DATA SUDAH ADA',
+        String(
+          result.message||
+          'Assessment dengan kombinasi yang sama sudah ada.'
+        )
+      );
+
+    }else if(
+      result.status==='submitted'
+    ){
+
+      /*
+       * We do not label this "failed".
+       * The browser successfully submitted the POST;
+       * confirmation could not be read from the iframe.
+       */
+      showSaveServerBanner(
+        'success',
+        'TERKIRIM',
+        String(
+          result.message||
+          'Request Save sudah dikirim ke server.'
+        )
+      );
+
+    }else{
+
+      showSaveServerBanner(
+        'error',
+        'GAGAL MENYIMPAN',
+        String(
+          result.message||
+          'Apps Script menolak proses penyimpanan.'
+        )
+      );
+
+    }
 
     return result;
 
