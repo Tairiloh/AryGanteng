@@ -1160,6 +1160,11 @@ table th:last-child,table td:last-child{min-width:190px}
 .chart-switch.active{transform:translateY(-1px)}
 .trend-empty-state.premium-dashboard-empty{border:1px dashed #cbded8;border-radius:16px;background:linear-gradient(180deg,#fbfefd,#f3faf7)}
 </style>
+<style id="proper-single-month-chart-fix">
+.executive-chart-stage{background:linear-gradient(180deg,rgba(244,251,248,.35),rgba(255,255,255,0));border-radius:16px}
+.bu-summary-card{border-top:2px solid #d8eee6}
+.chart-toolbar{gap:5px}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1804,7 +1809,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxNEY703lZEjkNONTs_5iLsIPM6vNIPsKZJ5uWZ-MXU4v8uGknI6Cb53mL3fa_djeqL/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwcAgA5z4E4Fy0Y3xORfTC5oVzZ5sIYRwPiQfQIjMpfXFoGf4o7aWEYO2Yy1sfhp2-G/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -3503,7 +3508,7 @@ async function postJSON(payload){
 
 async function submitEmisi(){
   const assessor=$('emisiAssessor').value.trim(),site=canonicalLocationFor('emisi',$('emisiSite').value),date=$('emisiDate').value;
-  const businessUnit=$('emisiBusinessUnit').value;
+  const businessUnit=canonicalBusinessUnit($('emisiBusinessUnit').value);
   const auditee=$('emisiAuditee').value.trim();
   if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal Emisi wajib diisi.');return}
@@ -3544,7 +3549,7 @@ async function submitEmisi(){
 }
 async function submitPLB3(){
  const assessor=$('plb3Assessor').value.trim(),site=canonicalLocationFor('plb3',$('plb3Site').value),date=$('plb3Date').value;
-  const businessUnit=$('plb3BusinessUnit').value;
+  const businessUnit=canonicalBusinessUnit($('plb3BusinessUnit').value);
   const auditee=$('plb3Auditee').value.trim();
  if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor||!site||!date){toast('Nama penilai, lokasi/area dan tanggal PLB3 wajib diisi.');return}
@@ -3710,7 +3715,7 @@ function resetPLB3Darurat(){
  if($('daruratBusinessUnit'))$('daruratBusinessUnit'.trim()).value='';$('daruratAssessor').value=(getCurrentUser()||{}).name||'';$('daruratSite').value='';$('daruratDate').value='';renderPLB3DaruratForm();}
 async function submitPLB3Darurat(){
  const assessor=$('daruratAssessor').value.trim(),site=canonicalLocationFor('darurat',$('daruratSite').value),date=$('daruratDate').value;
-  const businessUnit=$('daruratBusinessUnit').value;
+  const businessUnit=canonicalBusinessUnit($('daruratBusinessUnit').value);
   const auditee=$('daruratAuditee').value.trim();
  const statuses=[...document.querySelectorAll('.darurat-status')];
  if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
@@ -3752,7 +3757,7 @@ function resetB3(){
  if($('b3BusinessUnit'))$('b3BusinessUnit'.trim()).value='';$('b3Assessor').value=(getCurrentUser()||{}).name||'';$('b3Site').value='';$('b3Date').value='';renderB3Forms();}
 async function submitB3(){
  const assessor=$('b3Assessor').value.trim(),site=canonicalLocationFor('b3',$('b3Site').value),date=$('b3Date').value;
-  const businessUnit=$('b3BusinessUnit').value;
+  const businessUnit=canonicalBusinessUnit($('b3BusinessUnit').value);
   const auditee=$('b3Auditee').value.trim();
  if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal B3 wajib diisi.');return}
@@ -3883,7 +3888,7 @@ async function submitSampah(){
   const assessor=$('sampahAssessor').value.trim();
   const site=canonicalLocationFor('sampah',$('sampahSite').value);
   const date=$('sampahDate').value;
-  const businessUnit=$('sampahBusinessUnit').value;
+  const businessUnit=canonicalBusinessUnit($('sampahBusinessUnit').value);
   const auditee=$('sampahAuditee').value.trim();
   const statuses=[...document.querySelectorAll('.sampah-status')];
   if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
@@ -5707,6 +5712,52 @@ function resetManualFindings(module){
 }
 
 
+
+function ensureBusinessUnitSelects(){
+
+  const units=[
+    'PT GGP',
+    'PT UJA',
+    'PT GGL',
+    'PG4'
+  ];
+
+  document
+    .querySelectorAll(
+      'select[id$="BusinessUnit"],select#execFilterBusinessUnit'
+    )
+    .forEach(
+      el=>{
+
+        const current=
+          canonicalBusinessUnit(
+            el.value
+          );
+
+        const isFilter=
+          el.id==='execFilterBusinessUnit';
+
+        el.innerHTML=
+          '<option value="">'+
+          (
+            isFilter
+              ?'Semua Business Unit'
+              :'Pilih Business Unit'
+          )+
+          '</option>'+
+          units.map(
+            u=>
+              `<option value="${u}">${u}</option>`
+          ).join('');
+
+        if(current){
+          el.value=current;
+        }
+
+      }
+    );
+}
+
 function bindManualFindingContextSelectors(){
 
   Object.entries(
@@ -5825,7 +5876,7 @@ function showServerSaveToast(d,label){
 async function submitPPA(){
  if(SCRIPT_URL.startsWith('PASTE_')){toast('Masukkan URL Google Apps Script terlebih dahulu.');return}
  const assessor=$('assessor').value.trim(), site=canonicalLocationFor('ppa',$('site').value), date=$('assessmentDate').value;
-  const businessUnit=$('ppaBusinessUnit').value;
+  const businessUnit=canonicalBusinessUnit($('ppaBusinessUnit').value);
   const auditee=$('auditee').value.trim();
  const rows=[...document.querySelectorAll('#ppaBody .status-select')];
  if(!businessUnit){toast('Pilih Business Unit terlebih dahulu.');return;}
@@ -6466,6 +6517,35 @@ async function loadPPAFullData(){
    ACCOUNT / AUTHENTICATION
    ========================= */
 let currentUser=null;
+
+function canonicalBusinessUnit(value){
+
+  const raw=
+    String(
+      value===undefined||
+      value===null
+        ?''
+        :value
+    )
+    .replace(/\u00a0/g,' ')
+    .replace(/\s+/g,' ')
+    .trim()
+    .toUpperCase();
+
+  const map={
+    'PT GGP':'PT GGP',
+    'GGP':'PT GGP',
+    'PT UJA':'PT UJA',
+    'UJA':'PT UJA',
+    'PT GGL':'PT GGL',
+    'GGL':'PT GGL',
+    'PG4':'PG4',
+    'PG04':'PG4'
+  };
+
+  return map[raw]||'';
+}
+
 function getAuthToken(){return localStorage.getItem('properAuthToken')||''}
 function getCurrentUser(){try{return JSON.parse(localStorage.getItem('properCurrentUser')||'null')}catch(_){return null}}
 function setCurrentUser(u,t){currentUser=u;window.currentUser=u||null;localStorage.setItem('properCurrentUser',JSON.stringify(u));localStorage.setItem('properAuthToken',t||'')}
@@ -8152,6 +8232,6 @@ setTimeout(()=>loadExecutiveAnalyticsV2(false),1200);
   document.addEventListener('input',sync,true);
 })();
 </script>
-</body>
+<script>document.addEventListener('DOMContentLoaded',ensureBusinessUnitSelects);</script></body>
 </html>
 <script>document.addEventListener('DOMContentLoaded',()=>bindManualFindingContextSelectors());</script>
