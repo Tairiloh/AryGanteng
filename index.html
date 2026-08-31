@@ -1675,7 +1675,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz9FoKX1IOySWwpltiz0LmESk56lB2IeC4pjHppWMx-gfBrAAj0I3UvM7Tvw--56r1y/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz5raNUAtSFALXhvdtEcUoQjkEarc5dkuJXfROwZCSSVlCHV-2u9yxg0n2ckSBzZP5I/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
@@ -2881,7 +2881,7 @@ async function submitPLB3(){
    return {no:i+1,ketentuan,status:s?s.value:'',keterangan:n?n.value.trim():''};
  });
  try{
-   const d=await postJSON(isEditingModule('PLB3')?{action:'updateAssessment',module:'PLB3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('plb3'))}:{action:'savePLB3',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items});
+   const d=await postJSON(isEditingModule('PLB3')?{action:'updateAssessment',module:'PLB3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('plb3'))}:{action:'savePLB3',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('plb3'))});
    if(d.status==='success'||d.status==='partial'){
      const evr=await uploadModuleEvidence('plb3',d.submissionId,collectEvidence('plb3')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
      showServerSaveToast(d,'Penyimpanan PLB3');clearEditMode();resetPLB3();loadPLB3();
@@ -3041,7 +3041,7 @@ async function submitPLB3Darurat(){
  if(!assessor||!site||!date){toast('Nama penilai, lokasi dan tanggal PLB3 Tanggap Darurat wajib diisi.');return}
  if(statuses.some(s=>!s.value)){toast('Lengkapi semua status YA/TIDAK PLB3 Tanggap Darurat.');return}
  const items=statuses.map((s,i)=>({no:plb3DaruratItems[i][0],ketentuan:plb3DaruratItems[i][2],section:plb3DaruratItems[i][1],status:s.value,documentation:'',keterangan:$(`.darurat-note[data-i="${i}"]`).value.trim()}));
- try{const d=await postJSON(isEditingModule('PLB3 Tanggap Darurat')?{action:'updateAssessment',module:'PLB3 Tanggap Darurat',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('darurat'))}:{action:'savePLB3Darurat',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items});
+ try{const d=await postJSON(isEditingModule('PLB3 Tanggap Darurat')?{action:'updateAssessment',module:'PLB3 Tanggap Darurat',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('darurat'))}:{action:'savePLB3Darurat',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('darurat'))});
    if(d.status==='success'||d.status==='partial'){
    const evr=await uploadModuleEvidence('darurat',d.submissionId,collectEvidence('darurat')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');
    showServerSaveToast(d,'Tanggap Darurat PLB3');clearEditMode();resetPLB3Darurat();loadPLB3Darurat();
@@ -3085,7 +3085,7 @@ async function submitB3(){
    items.push({section:sec[0],no:sec[1][i][0],ketentuan:sec[1][i][1],status:s.value,keterangan:$(`.b3-note[data-s="${si}"][data-i="${i}"]`).value.trim()});
  }));
  if(items.length===0){toast('Isi minimal satu status YA/TIDAK pada B3.');return}
- try{const d=await postJSON(isEditingModule('B3')?{action:'updateAssessment',module:'B3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('b3'))}:{action:'saveB3',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items});
+ try{const d=await postJSON(isEditingModule('B3')?{action:'updateAssessment',module:'B3',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('b3'))}:{action:'saveB3',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('b3'))});
    if(d.status==='success'||d.status==='partial'){const evr=await uploadModuleEvidence('b3',d.submissionId,collectEvidence('b3')); if(evr.failed)toast('Assessment tersimpan. '+evr.failed+' foto belum tersimpan ke server.');showServerSaveToast(d,'Data B3');clearEditMode();resetB3();loadB3();} else throw new Error(d.message||'Gagal menyimpan');
  }catch(e){toast('Gagal menyimpan B3: '+e.message)}
 }
@@ -3124,7 +3124,9 @@ function renderGenericHistory(id,data,typeHint){
 
    return `<tr>
      <td>${escapeHtml(r.timestamp||'-')}</td>
-     <td><b>${escapeHtml(r.assessor||'-')}</b></td>
+     <td><b>${escapeHtml(r.auditor||r.assessor||'-')}</b></td>
+     <td>${escapeHtml(r.auditee||'-')}</td>
+     <td>${escapeHtml(r.businessUnit||'-')}</td>
      <td>${escapeHtml(r.site||'-')}</td>
      <td>${Number(r.total||0)}</td>
      <td>${Number(r.yes||0)}</td>
@@ -3217,7 +3219,7 @@ async function submitSampah(){
     keterangan:$(`.sampah-note[data-i="${i}"]`).value.trim()
   }));
   try{
-    const d=await postJSON(isEditingModule('Sampah')?{action:'updateAssessment',module:'Sampah',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('sampah'))}:{action:'saveSampah',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items});
+    const d=await postJSON(isEditingModule('Sampah')?{action:'updateAssessment',module:'Sampah',submissionId:window.editingAssessment.submissionId,assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('sampah'))}:{action:'saveSampah',assessor,site,assessmentDate:date,businessUnit:businessUnit,auditor:assessor,auditee:auditee,items:items.concat(getManualFindingItems('sampah'))});
     if(d.status==='success'||d.status==='partial'){
       const evr=await uploadModuleEvidence('sampah',d.submissionId,collectEvidence('sampah'));
       if(evr.failed){
@@ -4221,6 +4223,7 @@ function renderManualFindings(module){
                 placeholder="Keterangan / bukti pendukung..."
                 oninput="updateManualFinding('${module}','${x.id}','note',this.value)"
               >
+              ${x.documentation?`<a href="${escapeHtml(x.documentation)}" target="_blank" class="manual-existing-photo">📎 Foto tersimpan</a>`:''}
 
               <input
                 type="file"
@@ -4443,7 +4446,7 @@ async function editModuleAssessment(row){
       if(el)el.value=val||'';
     };
 
-    setVal(cfg.assessor,row.assessor||'');
+    setVal(cfg.assessor,d.auditor||row.auditor||row.assessor||'');
     setVal(cfg.site,row.site||'');
     if(cfg.businessUnit&&$(cfg.businessUnit))$(cfg.businessUnit).value=row.businessUnit||'';
     if(cfg.auditee&&$(cfg.auditee))$(cfg.auditee).value=row.auditee||'';
@@ -4525,6 +4528,84 @@ async function editModuleAssessment(row){
           });
           calcSampah();
         }
+
+
+        /*
+         * Restore Business Unit/Auditee from server metadata too.
+         */
+        if(
+          cfg.businessUnit &&
+          $(cfg.businessUnit)
+        ){
+          $(cfg.businessUnit).value=
+            d.businessUnit||
+            row.businessUnit||
+            '';
+        }
+
+        if(
+          cfg.auditee &&
+          $(cfg.auditee)
+        ){
+          $(cfg.auditee).value=
+            d.auditee||
+            row.auditee||
+            '';
+        }
+
+        /*
+         * Restore ALL manual findings (No >= 1001 or
+         * text prefixed with TEMUAN MANUAL).
+         */
+        const manualDetails=
+          details.filter(item=>
+            Number(item.no||0)>=1001 ||
+            /^TEMUAN MANUAL\s*:/i.test(
+              String(item.item||item.ketentuan||'')
+            )
+          );
+
+        manualFindingsState[
+          cfg.key
+        ]=manualDetails.map(
+          (item,i)=>({
+            id:'saved_'+
+              String(
+                item.no||
+                (1001+i)
+              ),
+            text:
+              String(
+                item.item||
+                item.ketentuan||
+                ''
+              ).replace(
+                /^TEMUAN MANUAL\s*:\s*/i,
+                ''
+              ),
+            status:String(
+              item.status||''
+            ).toUpperCase(),
+            note:String(
+              item.keterangan||
+              ''
+            ),
+            saved:true,
+            no:Number(
+              item.no||
+              1001+i
+            ),
+            documentation:String(
+              item.dokumentasi||
+              item.documentation||
+              ''
+            )
+          })
+        );
+
+        renderManualFindings(
+          cfg.key
+        );
 
         toast('Mode edit aktif. Ubah data lalu klik Update.');
         const button=document.querySelector(`#${cfg.page} .actions .btn.primary`);
