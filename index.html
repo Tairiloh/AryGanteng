@@ -1163,6 +1163,32 @@ table th:last-child,table td:last-child{min-width:190px}
 <style id="proper-save-hard-fix-v5">
 .proper-save-status-banner{z-index:100000!important}
 </style>
+<style id="sidebar-she-title-style-v3">
+.sidebar-brand-subtitle-v2{
+  margin-top:7px;
+  text-align:center;
+  font-size:12px;
+  line-height:1.15;
+  font-weight:900;
+  letter-spacing:.2px;
+  color:#102f3a;
+  text-transform:uppercase;
+}
+.sidebar-she-title-fallback{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  padding:2px 10px 10px;
+  text-align:center;
+  color:#102f3a;
+  font-weight:900;
+  text-transform:uppercase;
+}
+.sidebar-she-title-fallback div:first-child{font-size:14px;line-height:1.18}
+.sidebar-she-title-fallback div:last-child{font-size:12px;line-height:1.15}
+</style>
 </head>
 <body>
 <datalist id="ppaLocationSuggestions"></datalist>
@@ -1245,6 +1271,11 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <div class="app">
 <aside class="sidebar" id="sidebar">
+<div class="sidebar-she-title-fallback">
+  <div>INSPEKSI KETENTUAN TEKNIS PROPER</div>
+  <div>ENVIRONMENT · SHE DEPARTEMENT</div>
+</div>
+
   <div class="brand">
       <div class="proper-logo"><img src="logo.png" alt="PROPER" onerror="this.style.opacity=.15"></div>
       <h2>Inspeksi Ketentuan Teknis PROPER</h2>
@@ -1807,7 +1838,7 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <script>
 /* GANTI URL INI dengan URL Web App Google Apps Script Anda */
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdGzHeVE3BGPqgCoBTq6basiH4dGhCZx8aRJxnxhx_T9tzl739vk1mktW-wi7s1Hrv/exec';
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbzdGzHeVE3BGPqgCoBTq6basiH4dGhCZx8aRJxnxhx_T9tzl739vk1mktW-wi7s1Hrv/exec';
 
 const items = [
 'MEMENUHI KETENTUAN TEKNIS SALURAN PEMBUANGAN AIR LIMBAH (MELENGKAPI TITIK PENAATAN DENGAN NAMA DAN TITIK KOORDINAT)',
