@@ -1163,31 +1163,27 @@ table th:last-child,table td:last-child{min-width:190px}
 <style id="proper-save-hard-fix-v5">
 .proper-save-status-banner{z-index:100000!important}
 </style>
-<style id="sidebar-she-title-style-v3">
-.sidebar-brand-subtitle-v2{
+<style id="sidebar-she-title-final-v4">
+.brand{display:flex;flex-direction:column;align-items:center;text-align:center}
+.brand h2{
+  margin:12px 0 0;
+  max-width:185px;
+  font-size:14px;
+  line-height:1.2;
+  font-weight:900;
+  letter-spacing:.05px;
+  text-transform:uppercase;
+}
+.sidebar-she-subtitle-final{
   margin-top:7px;
-  text-align:center;
+  max-width:190px;
   font-size:12px;
-  line-height:1.15;
+  line-height:1.18;
   font-weight:900;
-  letter-spacing:.2px;
-  color:#102f3a;
+  letter-spacing:.15px;
+  color:#fff;
   text-transform:uppercase;
 }
-.sidebar-she-title-fallback{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:7px;
-  padding:2px 10px 10px;
-  text-align:center;
-  color:#102f3a;
-  font-weight:900;
-  text-transform:uppercase;
-}
-.sidebar-she-title-fallback div:first-child{font-size:14px;line-height:1.18}
-.sidebar-she-title-fallback div:last-child{font-size:12px;line-height:1.15}
 </style>
 </head>
 <body>
@@ -1271,15 +1267,10 @@ table th:last-child,table td:last-child{min-width:190px}
 </div>
 <div class="app">
 <aside class="sidebar" id="sidebar">
-<div class="sidebar-she-title-fallback">
-  <div>INSPEKSI KETENTUAN TEKNIS PROPER</div>
-  <div>ENVIRONMENT · SHE DEPARTEMENT</div>
-</div>
-
   <div class="brand">
       <div class="proper-logo"><img src="logo.png" alt="PROPER" onerror="this.style.opacity=.15"></div>
-      <h2>Inspeksi Ketentuan Teknis PROPER</h2>
-      
+      <h2>INSPEKSI KETENTUAN TEKNIS PROPER</h2>
+      <div class="sidebar-she-subtitle-final">ENVIRONMENT · SHE DEPARTEMENT</div>
     </div>
     <div class="user-profile-mini" onclick="openProfileModal()" title="Edit profil" style="cursor:pointer"><img id="sidebarAvatar" src="logo.png" alt=""><div><b id="sidebarUserName">Guest</b><small id="sidebarUserRole">Belum masuk</small></div></div>
     
